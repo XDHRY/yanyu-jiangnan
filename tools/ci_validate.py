@@ -18,6 +18,7 @@ import bpy
 
 SCENE_NAME = "烟雨江南 · 雪月江南"
 CONTROL_NAME = "JN_总控_天气0雨1雪_风力"
+EXPECTED_TEXTURE_STEMS = {"plaster", "stone", "bark", "clay", "wood", "petal", "landscape"}
 
 
 def cli_args() -> argparse.Namespace:
@@ -52,6 +53,15 @@ def mesh_signed_volume(obj) -> float:
         ) / 6.0
         for t in mesh.loop_triangles
     )
+
+
+def image_stem(image) -> str:
+    candidates = [image.name, os.path.basename(image.filepath or "")]
+    for value in candidates:
+        stem = Path(value).stem.lower()
+        if stem:
+            return stem
+    return ""
 
 
 def main() -> int:
@@ -151,23 +161,40 @@ def main() -> int:
     if invalid:
         fail(report, f"invalid drivers: {len(invalid)}")
 
-    # Packed source textures and image integrity.
-    texture_images = [im for im in bpy.data.images if "textures" in (im.filepath or "")]
+    # Packed source textures and image integrity. Packed images can keep an empty
+    # filepath depending on how the library was written, so match on datablock
+    # name as well as filepath rather than requiring '/textures/' in filepath.
+    report["image_datablocks"] = [
+        {
+            "name": im.name,
+            "filepath": im.filepath,
+            "packed": bool(im.packed_file),
+            "size": list(im.size),
+        }
+        for im in bpy.data.images
+        if im.type == "IMAGE" and im.name not in {"Render Result", "Viewer Node"}
+    ]
+    texture_images = [im for im in bpy.data.images if image_stem(im) in EXPECTED_TEXTURE_STEMS]
     report["packed_textures"] = {
-        os.path.basename(im.filepath): bool(im.packed_file)
+        image_stem(im): bool(im.packed_file)
         for im in texture_images
     }
-    if len(texture_images) < 7:
-        fail(report, f"expected >=7 texture images, got {len(texture_images)}")
+    missing_texture_stems = sorted(EXPECTED_TEXTURE_STEMS - set(report["packed_textures"]))
+    if missing_texture_stems:
+        fail(report, f"missing texture datablocks: {missing_texture_stems}")
     unpacked = [name for name, packed in report["packed_textures"].items() if not packed]
     if unpacked:
         fail(report, f"unpacked textures: {unpacked}")
 
-    # Scholar stones and representative outward normals.
+    # Scholar stones and representative outward normals. Keep candidates in the
+    # report so a stale .blend can be distinguished from a bad name assertion.
+    report["scholar_stone_candidates"] = [
+        o.name for o in scene.objects if "太湖" in o.name or "叠石" in o.name or "湖石" in o.name
+    ]
     stones = [o for o in scene.objects if o.name.startswith("JN_太湖石_瘦透漏皱")]
     report["pierced_scholar_stones"] = len(stones)
     if len(stones) != 3:
-        fail(report, f"expected 3 scholar stones, got {len(stones)}")
+        fail(report, f"expected 3 upgraded scholar stones, got {len(stones)}")
 
     report["outward_normals"] = {}
     for prefix in ["JN_云团", "JN_明月", "JN_花尖露珠"]:
