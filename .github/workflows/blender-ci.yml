@@ -9,6 +9,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: blender-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   BLENDER_VERSION: "4.5.14"
   BLENDER_DIR: ${{ github.workspace }}/.cache/blender
@@ -50,6 +54,17 @@ jobs:
 
       - name: Blender version
         run: "$BLENDER_DIR/blender --version"
+
+      - name: Bamboo asset factory smoke test
+        shell: bash
+        run: |
+          set -euxo pipefail
+          "$BLENDER_DIR/blender" -b --factory-startup \
+            --python tools/generate_bamboo_asset.py -- \
+            --count 8 \
+            --seed 36 \
+            --output ci_artifacts/JN_BambooFactory.blend \
+            --report ci_artifacts/bamboo-report.json
 
       - name: Headless scene validation
         shell: bash
