@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Apply narrow, reviewable repairs to jiangnan.py.
 
-This is intentionally not a formatter or broad rewriter.  It exists so a CI
+This is intentionally not a formatter or broad rewriter. It exists so a CI
 runner can repair exact defects in the large generated source without needing
 to round-trip the complete ~40 KB file through an API client.
 
@@ -46,12 +46,26 @@ def parse_args():
 
 
 def classify(text: str, old: str, new: str) -> str:
+    """Classify an exact source repair without false ambiguity.
+
+    Some repaired snippets intentionally contain the legacy snippet as a
+    substring (the headless scene-selection repair is the important example).
+    In that case text.count(old) remains non-zero even though the repair is
+    already present. Prefer the complete repaired anchor when it occurs once.
+    """
     old_count = text.count(old)
     new_count = text.count(new)
-    if old_count == 1 and new_count == 0:
+
+    if new_count == 1:
+        # If old is literally embedded in new, one old occurrence is expected.
+        expected_old = 1 if old in new else 0
+        if old_count == expected_old:
+            return "already-repaired"
+        return f"ambiguous(old={old_count},new={new_count})"
+
+    if new_count == 0 and old_count == 1:
         return "needs-repair"
-    if old_count == 0 and new_count == 1:
-        return "already-repaired"
+
     return f"ambiguous(old={old_count},new={new_count})"
 
 
