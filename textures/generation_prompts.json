@@ -1,0 +1,21 @@
+{
+  "tool": "built-in image_gen",
+  "prompts": [
+    {
+      "asset": "clay",
+      "prompt": "Use case: photorealistic-natural. Asset type: seamless base color texture to apply on individual 3D traditional Chinese roof tiles. Square flat orthographic material scan of weathered dark charcoal blue-gray fired clay, subtle fine mineral speckles, tiny pits, faint irregular ancient soot and silvery wear, a little dusty muted sage lichen. Refined old Jiangnan black clay roof material, rich detailed matte surface. Continuous material only, NO tile outlines, NO roof shapes, NO grout lines. Even diffuse neutral cross polarized lighting with NO directional shadows or highlights baked in. Seamless all four sides. No words, borders, objects, perspective, montage or watermarks. High resolution."
+    },
+    {
+      "asset": "wood",
+      "prompt": "Use case: photorealistic-natural. Asset type: seamless albedo for a Blender historic Chinese wooden tea pavilion. Square straight-on orthographic scan of old dark warm walnut-umber timber, vertical long close wood grain, fine worn cracks, restrained traces of age, subtle hand-polished areas, traditional natural oil finish. No separate planks or panel boundaries. Dark desaturated refined wood, not orange, not glossy. Flat neutral diffuse illumination with no baked shadows or specular highlights. Tileable left right and top bottom. Full-frame material only, high detail, no text, no frame, no watermark, no objects."
+    },
+    {
+      "asset": "petal",
+      "prompt": "Use case: photorealistic-natural. Asset type: square albedo texture mapped across one 3D plum blossom petal. Extreme macro close-up of pale blush-white plum petal tissue, entire frame filled with petal material, base at bottom-center gently warmer dusty carmine, outer tip at top softly ivory, extraordinarily fine branching translucent veins fanning upward, subtle silken living cells, restrained soft color variation, delicate waxy natural botanical material, realistic not painted. Flat neutral illumination, no cast shadows, no scenery, no petal outline, no background, no lettering, no grid, no watermark. Image will be applied to curved petal geometry. High resolution."
+    },
+    {
+      "asset": "landscape",
+      "prompt": "Use case: stylized-concept. Asset type: wide panoramic distant background painting used ONLY behind an editable Blender Jiangnan courtyard. Ultra-wide 3:1 landscape, no foreground architecture. Remote Chinese Jiangnan lake and layered low mountain silhouettes, poetic Song dynasty landscape composition rendered with realistic atmospheric depth, nocturnal indigo and charcoal blue-gray, delicate low milky mist drifting between foothills, pale muted blue twilight along horizon, dark open sky in upper 60 percent, still dark lake lower 15 percent. Night, restrained low contrast so foreground garden dominates. No moon (a separate 3D moon will be added), no stars, no boats, no people, no buildings, no dominant trees, no text, no border, no watermark, no bright highlights. Elegant meditative Taoist emptiness, subtle grain, believable landscape, painterly only in distant silhouettes. Horizon level, frontal camera, no perspective distortion."
+    }
+  ]
+}

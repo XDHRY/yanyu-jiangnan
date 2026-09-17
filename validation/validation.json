@@ -1,0 +1,34 @@
+{
+  "weather_0": {
+    "雨丝": 750,
+    "雨落涟漪": 38,
+    "雪粒": 0,
+    "瓦上薄雪": 0,
+    "汀步薄雪": 0
+  },
+  "weather_1": {
+    "雨丝": 0,
+    "雨落涟漪": 0,
+    "雪粒": 480,
+    "瓦上薄雪": 2,
+    "汀步薄雪": 12
+  },
+  "motion_changed": {
+    "JN_风动枝组": true,
+    "JN_雨丝": true,
+    "JN_雪粒": true,
+    "JN_云团": true
+  },
+  "invalid_object_drivers": [],
+  "isolated_scene_count": 1,
+  "objects": 2745,
+  "rerun_verified": true,
+  "renderer": "Cycles CPU",
+  "renders": [
+    {
+      "file": "01_rain_front.png",
+      "seconds": 147.9,
+      "weather": 0
+    }
+  ]
+}
