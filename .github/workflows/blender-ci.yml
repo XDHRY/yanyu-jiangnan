@@ -34,6 +34,9 @@ jobs:
       - name: Validate repository contract
         run: python tools/validate_repo.py
 
+      - name: Verify generator source repairs are landed
+        run: python tools/repair_jiangnan_source.py --check
+
       - name: Cache Blender
         id: cache-blender
         uses: actions/cache@v4
@@ -69,7 +72,7 @@ jobs:
         shell: bash
         run: |
           set -euxo pipefail
-          "$BLENDER_DIR/blender" -b --factory-startup \
+          "$BLENDER_DIR/blender" -b --factory-startup --python-exit-code 1 \
             --python tools/generate_bamboo_asset.py -- \
             --count 8 \
             --seed 36 \
@@ -80,7 +83,7 @@ jobs:
         shell: bash
         run: |
           set -euxo pipefail
-          "$BLENDER_DIR/blender" -b --factory-startup \
+          "$BLENDER_DIR/blender" -b --factory-startup --python-exit-code 1 \
             --python tools/headless_rebuild.py -- \
             --source jiangnan.py \
             --stage 5 \
@@ -91,7 +94,7 @@ jobs:
         shell: bash
         run: |
           set -euxo pipefail
-          "$BLENDER_DIR/blender" -b ci_artifacts/Jiangnan-rebuilt.blend \
+          "$BLENDER_DIR/blender" -b ci_artifacts/Jiangnan-rebuilt.blend --python-exit-code 1 \
             --python tools/ci_validate.py -- \
             --output ci_artifacts/rebuilt-validation.json
 
@@ -100,7 +103,7 @@ jobs:
         shell: bash
         run: |
           set -euxo pipefail
-          "$BLENDER_DIR/blender" -b Jiangnan.blend \
+          "$BLENDER_DIR/blender" -b Jiangnan.blend --python-exit-code 1 \
             --python tools/ci_validate.py -- \
             --output ci_artifacts/committed-blend-audit.json
 
@@ -111,7 +114,7 @@ jobs:
           EGL_PLATFORM: "surfaceless"
         run: |
           set -euxo pipefail
-          "$BLENDER_DIR/blender" -b ci_artifacts/Jiangnan-rebuilt.blend \
+          "$BLENDER_DIR/blender" -b ci_artifacts/Jiangnan-rebuilt.blend --python-exit-code 1 \
             --python tools/render_preview.py -- \
             --camera 三分之四 \
             --weather 0 \
