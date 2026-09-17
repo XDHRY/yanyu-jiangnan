@@ -4,9 +4,10 @@ Why this wrapper exists
 -----------------------
 The original generator was authored for Blender's interactive Text Editor and
 assigns ``bpy.context.window.scene``. GitHub Actions runs Blender in background
-mode where there is no Window. This harness keeps jiangnan.py authoritative and
-applies one tiny in-memory compatibility patch at runtime; it does not rewrite
-jiangnan.py on disk.
+mode where there is no Window. The current source also contains one known
+``uv`` local-name shadowing defect in ``art_upgrade()``. This harness applies
+small, explicit in-memory compatibility/repair patches so CI can prove the rest
+of the generator while the source repair is being landed separately.
 
 Usage:
   blender -b --factory-startup --python tools/headless_rebuild.py -- \
@@ -19,7 +20,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 import sys
 import time
 from pathlib import Path
@@ -29,6 +29,10 @@ import bpy
 
 INTERACTIVE_SCENE_ASSIGN = "S=bpy.data.scenes.new(SCENE);bpy.context.window.scene=S"
 BACKGROUND_SCENE_ASSIGN = "S=bpy.context.scene;S.name=SCENE"
+UV_LAYER_ASSIGN = "uv=o.data.uv_layers.new(name='远山全景UV')"
+UV_LAYER_ASSIGN_FIXED = "uv_layer=o.data.uv_layers.new(name='远山全景UV')"
+UV_LAYER_USE = "for loop in o.data.loops:uv.data[loop.index].uv=uvs[loop.vertex_index]"
+UV_LAYER_USE_FIXED = "for loop in o.data.loops:uv_layer.data[loop.index].uv=uvs[loop.vertex_index]"
 
 
 def parse_args() -> argparse.Namespace:
@@ -55,15 +59,36 @@ def prepare_factory_scene() -> None:
         bpy.data.objects.remove(obj, do_unlink=True)
 
 
+def replace_exactly_once(text: str, old: str, new: str, label: str) -> str:
+    count = text.count(old)
+    if count != 1:
+        raise RuntimeError(f"{label} anchor changed; expected exactly one match, found {count}")
+    return text.replace(old, new, 1)
+
+
 def load_generator(source_path: Path) -> dict:
     text = source_path.read_text(encoding="utf-8")
-    count = text.count(INTERACTIVE_SCENE_ASSIGN)
-    if count != 1:
-        raise RuntimeError(
-            "headless compatibility anchor changed; expected exactly one "
-            f"interactive scene assignment, found {count}"
-        )
-    patched = text.replace(INTERACTIVE_SCENE_ASSIGN, BACKGROUND_SCENE_ASSIGN, 1)
+    patched = replace_exactly_once(
+        text,
+        INTERACTIVE_SCENE_ASSIGN,
+        BACKGROUND_SCENE_ASSIGN,
+        "headless scene assignment",
+    )
+    # Source defect: assigning to local variable `uv` later in art_upgrade()
+    # shadows the global mesh helper function `uv()` used earlier in the same
+    # function. Rename only that local UV-layer variable in-memory.
+    patched = replace_exactly_once(
+        patched,
+        UV_LAYER_ASSIGN,
+        UV_LAYER_ASSIGN_FIXED,
+        "art_upgrade uv-layer assignment",
+    )
+    patched = replace_exactly_once(
+        patched,
+        UV_LAYER_USE,
+        UV_LAYER_USE_FIXED,
+        "art_upgrade uv-layer use",
+    )
     namespace = {
         "__name__": "jiangnan_headless_generator",
         "__file__": str(source_path),
@@ -128,6 +153,10 @@ def main() -> int:
         "image_count": len(images),
         "packed_image_count": sum(bool(i["packed"]) for i in images),
         "upgraded_scholar_stones": scholar_stones,
+        "runtime_repairs": [
+            "interactive_scene_assignment_to_background_scene",
+            "art_upgrade_uv_local_shadowing",
+        ],
     }
     report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
     print("HEADLESS_REBUILD", json.dumps(report, ensure_ascii=False))
