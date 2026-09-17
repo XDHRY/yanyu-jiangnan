@@ -66,19 +66,39 @@ jobs:
             --output ci_artifacts/JN_BambooFactory.blend \
             --report ci_artifacts/bamboo-report.json
 
-      - name: Headless scene validation
+      - name: Rebuild authoritative scene from jiangnan.py
+        shell: bash
+        run: |
+          set -euxo pipefail
+          "$BLENDER_DIR/blender" -b --factory-startup \
+            --python tools/headless_rebuild.py -- \
+            --source jiangnan.py \
+            --stage 5 \
+            --output ci_artifacts/Jiangnan-rebuilt.blend \
+            --report ci_artifacts/rebuild-report.json
+
+      - name: Validate rebuilt scene
+        shell: bash
+        run: |
+          set -euxo pipefail
+          "$BLENDER_DIR/blender" -b ci_artifacts/Jiangnan-rebuilt.blend \
+            --python tools/ci_validate.py -- \
+            --output ci_artifacts/rebuilt-validation.json
+
+      - name: Audit committed blend drift
+        continue-on-error: true
         shell: bash
         run: |
           set -euxo pipefail
           "$BLENDER_DIR/blender" -b Jiangnan.blend \
             --python tools/ci_validate.py -- \
-            --output ci_artifacts/ci-validation.json
+            --output ci_artifacts/committed-blend-audit.json
 
-      - name: Fast Eevee preview
+      - name: Fast Eevee preview from rebuilt scene
         shell: bash
         run: |
           set -euxo pipefail
-          "$BLENDER_DIR/blender" -b Jiangnan.blend \
+          "$BLENDER_DIR/blender" -b ci_artifacts/Jiangnan-rebuilt.blend \
             --python tools/render_preview.py -- \
             --camera 三分之四 \
             --weather 0 \
