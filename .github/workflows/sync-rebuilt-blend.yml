@@ -4,6 +4,11 @@ on:
   push:
     branches: ["ai/asset-pipeline-v1"]
     paths:
+      - "jiangnan.py"
+      - "textures/**"
+      - "tools/headless_rebuild.py"
+      - "tools/ci_validate.py"
+      - "tools/repair_jiangnan_source.py"
       - ".github/workflows/sync-rebuilt-blend.yml"
   workflow_dispatch:
 
@@ -14,6 +19,10 @@ env:
   BLENDER_VERSION: "4.5.14"
   BLENDER_DIR: ${{ github.workspace }}/.cache/blender
 
+concurrency:
+  group: sync-jiangnan-blend-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   sync:
     runs-on: ubuntu-latest
@@ -22,6 +31,9 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Verify source repairs are already landed
+        run: python tools/repair_jiangnan_source.py --check
 
       - name: Cache Blender
         id: cache-blender
@@ -45,20 +57,19 @@ jobs:
         shell: bash
         run: |
           set -euxo pipefail
-          "$BLENDER_DIR/blender" -b --factory-startup \
+          "$BLENDER_DIR/blender" -b --factory-startup --python-exit-code 1 \
             --python tools/headless_rebuild.py -- \
             --source jiangnan.py \
             --stage 5 \
             --output Jiangnan.blend \
             --report /tmp/rebuild-report.json
-          # Never update the manually retained backup snapshot in this workflow.
           git restore -- Jiangnan.blend1 || true
 
       - name: Strictly validate rebuilt blend before commit
         shell: bash
         run: |
           set -euxo pipefail
-          "$BLENDER_DIR/blender" -b Jiangnan.blend \
+          "$BLENDER_DIR/blender" -b Jiangnan.blend --python-exit-code 1 \
             --python tools/ci_validate.py -- \
             --output /tmp/synced-validation.json
 
@@ -67,7 +78,7 @@ jobs:
         run: |
           set -euxo pipefail
           if git diff --quiet -- Jiangnan.blend; then
-            echo "Jiangnan.blend already matches source"
+            echo "Jiangnan.blend already matches authoritative source"
             exit 0
           fi
           git config user.name "github-actions[bot]"
