@@ -107,6 +107,18 @@ jobs:
             --output ci_artifacts/JN_GroundFactory.blend \
             --report ci_artifacts/ground-report.json
 
+      - name: Render factory catalog previews
+        shell: bash
+        env:
+          LIBGL_ALWAYS_SOFTWARE: "1"
+          EGL_PLATFORM: "surfaceless"
+        run: |
+          set -euxo pipefail
+          "$BLENDER_DIR/blender" -b ci_artifacts/JN_BambooFactory.blend --python-exit-code 1 --python tools/render_asset_preview.py -- --resolution 640 --samples 8 --output ci_artifacts/preview-bamboo.png
+          "$BLENDER_DIR/blender" -b ci_artifacts/JN_ArchitectureFactory.blend --python-exit-code 1 --python tools/render_asset_preview.py -- --resolution 640 --samples 8 --output ci_artifacts/preview-architecture.png
+          "$BLENDER_DIR/blender" -b ci_artifacts/JN_PropFactory.blend --python-exit-code 1 --python tools/render_asset_preview.py -- --resolution 640 --samples 8 --output ci_artifacts/preview-props.png
+          "$BLENDER_DIR/blender" -b ci_artifacts/JN_GroundFactory.blend --python-exit-code 1 --python tools/render_asset_preview.py -- --resolution 640 --samples 8 --output ci_artifacts/preview-ground.png
+
       - name: Rebuild authoritative scene from jiangnan.py
         shell: bash
         run: |
