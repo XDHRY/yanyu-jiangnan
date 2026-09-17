@@ -79,6 +79,15 @@ jobs:
             --output ci_artifacts/JN_BambooFactory.blend \
             --report ci_artifacts/bamboo-report.json
 
+      - name: Modular architecture factory smoke test
+        shell: bash
+        run: |
+          set -euxo pipefail
+          "$BLENDER_DIR/blender" -b --factory-startup --python-exit-code 1 \
+            --python tools/generate_architecture_assets.py -- \
+            --output ci_artifacts/JN_ArchitectureFactory.blend \
+            --report ci_artifacts/architecture-report.json
+
       - name: Rebuild authoritative scene from jiangnan.py
         shell: bash
         run: |
