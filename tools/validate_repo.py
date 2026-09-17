@@ -50,7 +50,6 @@ def compile_python(path: str):
         ERRORS.append(f"python compile failed: {path}: {exc}")
 
 
-# Core deliverables.
 require("Jiangnan.blend", 1_000_000)
 require("README.md", 500)
 
@@ -58,6 +57,7 @@ python_sources = [
     "jiangnan.py",
     "tools/ci_validate.py",
     "tools/render_preview.py",
+    "tools/render_asset_preview.py",
     "tools/headless_rebuild.py",
     "tools/repair_jiangnan_source.py",
     "tools/generate_bamboo_asset.py",
@@ -68,7 +68,6 @@ python_sources = [
 for source in python_sources:
     compile_python(source)
 
-# Existing source textures.
 expected_textures = ["plaster", "stone", "bark", "clay", "wood", "petal", "landscape"]
 for name in expected_textures:
     require(f"textures/{name}.png", 10_000)
