@@ -1,13 +1,9 @@
 """Rebuild the authoritative Jiangnan scene from jiangnan.py in headless Blender.
 
-Why this wrapper exists
------------------------
-The original generator was authored for Blender's interactive Text Editor and
-assigns ``bpy.context.window.scene``. GitHub Actions runs Blender in background
-mode where there is no Window. The current source also contains one known
-``uv`` local-name shadowing defect in ``art_upgrade()``. This harness applies
-small, explicit in-memory compatibility/repair patches so CI can prove the rest
-of the generator while the source repair is being landed separately.
+The current generator is headless-safe. This wrapper still understands two
+legacy source defects so older commits can be diagnosed/rebuilt, but it only
+patches them when those exact legacy anchors are present. Current repaired
+source executes without runtime modification.
 
 Usage:
   blender -b --factory-startup --python tools/headless_rebuild.py -- \
@@ -28,7 +24,7 @@ import bpy
 
 
 INTERACTIVE_SCENE_ASSIGN = "S=bpy.data.scenes.new(SCENE);bpy.context.window.scene=S"
-BACKGROUND_SCENE_ASSIGN = "S=bpy.context.scene;S.name=SCENE"
+BACKGROUND_SCENE_FIXED = "if bpy.app.background:\n        S=bpy.context.scene;S.name=SCENE\n    else:\n        S=bpy.data.scenes.new(SCENE);bpy.context.window.scene=S"
 UV_LAYER_ASSIGN = "uv=o.data.uv_layers.new(name='远山全景UV')"
 UV_LAYER_ASSIGN_FIXED = "uv_layer=o.data.uv_layers.new(name='远山全景UV')"
 UV_LAYER_USE = "for loop in o.data.loops:uv.data[loop.index].uv=uvs[loop.vertex_index]"
@@ -52,49 +48,55 @@ def resolve(path: str) -> Path:
 
 
 def prepare_factory_scene() -> None:
-    # Factory startup contains Cube/Camera/Light. Remove them so the rebuilt
-    # artifact contains only assets produced by the authoritative generator.
     scene = bpy.context.scene
     for obj in list(scene.objects):
         bpy.data.objects.remove(obj, do_unlink=True)
 
 
-def replace_exactly_once(text: str, old: str, new: str, label: str) -> str:
-    count = text.count(old)
-    if count != 1:
-        raise RuntimeError(f"{label} anchor changed; expected exactly one match, found {count}")
-    return text.replace(old, new, 1)
+def repair_if_legacy(text: str, old: str, new: str, label: str, applied: list[str]) -> str:
+    old_count = text.count(old)
+    new_count = text.count(new)
+    if old_count == 1 and new_count == 0:
+        applied.append(label)
+        return text.replace(old, new, 1)
+    if old_count == 0 and new_count == 1:
+        return text
+    raise RuntimeError(
+        f"{label} source state ambiguous; old={old_count}, repaired={new_count}. "
+        "Refuse to guess so CI cannot hide a new generator defect."
+    )
 
 
-def load_generator(source_path: Path) -> dict:
+def load_generator(source_path: Path) -> tuple[dict, list[str]]:
     text = source_path.read_text(encoding="utf-8")
-    patched = replace_exactly_once(
+    applied: list[str] = []
+    patched = repair_if_legacy(
         text,
         INTERACTIVE_SCENE_ASSIGN,
-        BACKGROUND_SCENE_ASSIGN,
-        "headless scene assignment",
+        BACKGROUND_SCENE_FIXED,
+        "interactive_scene_assignment_to_background_scene",
+        applied,
     )
-    # Source defect: assigning to local variable `uv` later in art_upgrade()
-    # shadows the global mesh helper function `uv()` used earlier in the same
-    # function. Rename only that local UV-layer variable in-memory.
-    patched = replace_exactly_once(
+    patched = repair_if_legacy(
         patched,
         UV_LAYER_ASSIGN,
         UV_LAYER_ASSIGN_FIXED,
-        "art_upgrade uv-layer assignment",
+        "art_upgrade_uv_layer_assignment",
+        applied,
     )
-    patched = replace_exactly_once(
+    patched = repair_if_legacy(
         patched,
         UV_LAYER_USE,
         UV_LAYER_USE_FIXED,
-        "art_upgrade uv-layer use",
+        "art_upgrade_uv_layer_use",
+        applied,
     )
     namespace = {
         "__name__": "jiangnan_headless_generator",
         "__file__": str(source_path),
     }
     exec(compile(patched, str(source_path), "exec"), namespace)
-    return namespace
+    return namespace, applied
 
 
 def main() -> int:
@@ -106,11 +108,9 @@ def main() -> int:
     report_path.parent.mkdir(parents=True, exist_ok=True)
 
     prepare_factory_scene()
-    module = load_generator(source_path)
+    module, runtime_repairs = load_generator(source_path)
 
     params = module["PARAMS"]
-    # Textures live relative to the repository root. Do not redirect this to
-    # ci_artifacts or art_upgrade() would not see textures/*.png.
     params["output_dir"] = str(Path.cwd())
     params["stage"] = cfg.stage
     params["render"] = False
@@ -122,8 +122,6 @@ def main() -> int:
     elapsed = round(time.time() - started, 2)
     scene = module["S"]
 
-    # Save the rebuilt scene as an artifact, never overwrite the committed
-    # Jiangnan.blend from CI.
     bpy.ops.wm.save_as_mainfile(filepath=str(output_path), compress=True)
 
     stats = module["statistics"]()
@@ -137,10 +135,7 @@ def main() -> int:
         for image in bpy.data.images
         if image.type == "IMAGE" and image.name not in {"Render Result", "Viewer Node"}
     ]
-    scholar_stones = [
-        obj.name for obj in scene.objects
-        if "太湖石_瘦透漏皱" in obj.name
-    ]
+    scholar_stones = [obj.name for obj in scene.objects if "太湖石_瘦透漏皱" in obj.name]
     report = {
         "ok": True,
         "blender_version": bpy.app.version_string,
@@ -153,10 +148,7 @@ def main() -> int:
         "image_count": len(images),
         "packed_image_count": sum(bool(i["packed"]) for i in images),
         "upgraded_scholar_stones": scholar_stones,
-        "runtime_repairs": [
-            "interactive_scene_assignment_to_background_scene",
-            "art_upgrade_uv_local_shadowing",
-        ],
+        "runtime_repairs": runtime_repairs,
     }
     report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
     print("HEADLESS_REBUILD", json.dumps(report, ensure_ascii=False))
