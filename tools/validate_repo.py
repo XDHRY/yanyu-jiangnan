@@ -10,6 +10,7 @@ from __future__ import annotations
 import json
 import py_compile
 import sys
+from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -39,18 +40,33 @@ def load_json(path: str):
         return None
 
 
+def compile_python(path: str):
+    p = require(path, 100)
+    if not p.exists():
+        return
+    try:
+        py_compile.compile(str(p), doraise=True)
+    except Exception as exc:  # noqa: BLE001
+        ERRORS.append(f"python compile failed: {path}: {exc}")
+
+
 # Core deliverables.
 require("Jiangnan.blend", 1_000_000)
-require("jiangnan.py", 1_000)
 require("README.md", 500)
-require("tools/ci_validate.py", 500)
-require("tools/render_preview.py", 500)
 
-# Syntax check without importing bpy.
-try:
-    py_compile.compile(str(ROOT / "jiangnan.py"), doraise=True)
-except Exception as exc:  # noqa: BLE001
-    ERRORS.append(f"jiangnan.py compile failed: {exc}")
+python_sources = [
+    "jiangnan.py",
+    "tools/ci_validate.py",
+    "tools/render_preview.py",
+    "tools/headless_rebuild.py",
+    "tools/repair_jiangnan_source.py",
+    "tools/generate_bamboo_asset.py",
+    "tools/generate_architecture_assets.py",
+    "tools/generate_prop_assets.py",
+    "tools/generate_ground_assets.py",
+]
+for source in python_sources:
+    compile_python(source)
 
 # Existing source textures.
 expected_textures = ["plaster", "stone", "bark", "clay", "wood", "petal", "landscape"]
@@ -64,6 +80,12 @@ if prompts is not None:
         if name not in text:
             WARNINGS.append(f"texture prompt metadata does not mention '{name}'")
 
+texture_jobs = load_json("textures/texture_jobs.json")
+if isinstance(texture_jobs, dict):
+    jobs = texture_jobs.get("jobs", [])
+    if not jobs:
+        WARNINGS.append("texture job queue is empty")
+
 materials = load_json("asset_db/materials.json")
 if isinstance(materials, dict):
     rows = materials.get("materials", [])
@@ -74,9 +96,32 @@ if isinstance(materials, dict):
 
 assets = load_json("asset_db/assets.json")
 if isinstance(assets, dict):
-    rows = assets.get("assets", [])
+    rows = [row for row in assets.get("assets", []) if isinstance(row, dict)]
     if len(rows) < 20:
         ERRORS.append(f"asset manifest expected >=20 MVP assets, found {len(rows)}")
+
+    ids = [row.get("id") for row in rows]
+    duplicates = sorted(k for k, n in Counter(ids).items() if k and n > 1)
+    if duplicates:
+        ERRORS.append(f"duplicate asset ids: {duplicates}")
+
+    p0 = [row for row in rows if row.get("priority") == "P0"]
+    planned_p0 = [row.get("id") for row in p0 if row.get("status") == "planned"]
+    if planned_p0:
+        ERRORS.append(f"P0 assets still lack blockout implementation: {planned_p0}")
+
+    for row in p0:
+        asset_id = row.get("id", "<missing-id>")
+        factory = row.get("factory")
+        if not factory:
+            ERRORS.append(f"P0 asset missing factory mapping: {asset_id}")
+            continue
+        if not (ROOT / factory).exists():
+            ERRORS.append(f"P0 asset factory does not exist: {asset_id} -> {factory}")
+
+    status_counts = Counter(row.get("status", "missing") for row in rows)
+    if status_counts.get("blockout", 0) < 20:
+        WARNINGS.append(f"only {status_counts.get('blockout', 0)} MVP assets are at blockout or beyond")
 
 print(json.dumps({
     "ok": not ERRORS,
