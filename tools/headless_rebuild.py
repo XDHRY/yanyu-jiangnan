@@ -6,7 +6,8 @@ patches them when those exact legacy anchors are present. Current repaired
 source executes without runtime modification.
 
 Usage:
-  blender -b --factory-startup --python tools/headless_rebuild.py -- \
+  blender -b --factory-startup --python-exit-code 1 \
+      --python tools/headless_rebuild.py -- \
       --source jiangnan.py \
       --output ci_artifacts/Jiangnan-rebuilt.blend \
       --report ci_artifacts/rebuild-report.json \
@@ -54,15 +55,25 @@ def prepare_factory_scene() -> None:
 
 
 def repair_if_legacy(text: str, old: str, new: str, label: str, applied: list[str]) -> str:
-    old_count = text.count(old)
+    """Accept a repaired source first; otherwise repair exactly one legacy anchor.
+
+    Some repaired forms intentionally contain the original substring (the
+    interactive branch remains inside an if/else), so checking old/new counts as
+    mutually exclusive is incorrect. Presence of exactly one repaired anchor is
+    authoritative.
+    """
     new_count = text.count(new)
-    if old_count == 1 and new_count == 0:
+    if new_count == 1:
+        return text
+    if new_count > 1:
+        raise RuntimeError(f"{label} repaired anchor duplicated: {new_count}")
+
+    old_count = text.count(old)
+    if old_count == 1:
         applied.append(label)
         return text.replace(old, new, 1)
-    if old_count == 0 and new_count == 1:
-        return text
     raise RuntimeError(
-        f"{label} source state ambiguous; old={old_count}, repaired={new_count}. "
+        f"{label} source state ambiguous; legacy={old_count}, repaired={new_count}. "
         "Refuse to guess so CI cannot hide a new generator defect."
     )
 
