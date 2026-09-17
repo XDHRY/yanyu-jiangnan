@@ -1,0 +1,82 @@
+name: Blender CI
+
+on:
+  push:
+    branches: [main, "ai/**"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  BLENDER_VERSION: "4.5.14"
+  BLENDER_DIR: ${{ github.workspace }}/.cache/blender
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Validate repository contract
+        run: python tools/validate_repo.py
+
+      - name: Cache Blender
+        id: cache-blender
+        uses: actions/cache@v4
+        with:
+          path: .cache/blender
+          key: blender-${{ runner.os }}-${{ env.BLENDER_VERSION }}
+
+      - name: Download Blender 4.5 LTS
+        if: steps.cache-blender.outputs.cache-hit != 'true'
+        shell: bash
+        run: |
+          set -euxo pipefail
+          mkdir -p "$BLENDER_DIR"
+          curl --fail --location --retry 3 \
+            "https://download.blender.org/release/Blender4.5/blender-${BLENDER_VERSION}-linux-x64.tar.xz" \
+            -o /tmp/blender.tar.xz
+          tar -xf /tmp/blender.tar.xz -C "$BLENDER_DIR" --strip-components=1
+
+      - name: Blender version
+        run: "$BLENDER_DIR/blender --version"
+
+      - name: Headless scene validation
+        shell: bash
+        run: |
+          set -euxo pipefail
+          "$BLENDER_DIR/blender" -b Jiangnan.blend \
+            --python tools/ci_validate.py -- \
+            --output ci_artifacts/ci-validation.json
+
+      - name: Fast Eevee preview
+        shell: bash
+        run: |
+          set -euxo pipefail
+          "$BLENDER_DIR/blender" -b Jiangnan.blend \
+            --python tools/render_preview.py -- \
+            --camera 三分之四 \
+            --weather 0 \
+            --engine BLENDER_EEVEE_NEXT \
+            --resolution 640 \
+            --samples 16 \
+            --output ci_artifacts/preview-rain-three-quarter.png
+
+      - name: Upload CI artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: blender-ci-${{ github.sha }}
+          path: ci_artifacts/
+          if-no-files-found: warn
+          retention-days: 14
