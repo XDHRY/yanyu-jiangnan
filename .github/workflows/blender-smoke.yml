@@ -39,26 +39,43 @@ jobs:
         run: |
           set -euxo pipefail
           mkdir -p "${RUNNER_TOOL_CACHE}/blender-4.5.14"
-          curl --fail --location --retry 3             "https://download.blender.org/release/Blender4.5/blender-4.5.14-linux-x64.tar.xz"             -o "${RUNNER_TEMP}/blender.tar.xz"
-          tar -xJf "${RUNNER_TEMP}/blender.tar.xz"             --strip-components=1             -C "${RUNNER_TOOL_CACHE}/blender-4.5.14"
+          curl --fail --location --retry 3 "https://download.blender.org/release/Blender4.5/blender-4.5.14-linux-x64.tar.xz" -o "${RUNNER_TEMP}/blender.tar.xz"
+          tar -xJf "${RUNNER_TEMP}/blender.tar.xz" --strip-components=1 -C "${RUNNER_TOOL_CACHE}/blender-4.5.14"
 
       - name: Blender version
         run: '"${RUNNER_TOOL_CACHE}/blender-4.5.14/blender" --version'
+
+      - name: Prepare isolated build input
+        env:
+          JN_OUT: ${{ runner.temp }}/jiangnan-smoke
+        run: |
+          mkdir -p "${JN_OUT}/textures"
+          cp jiangnan.py "${JN_OUT}/jiangnan.py"
+          cp textures/*.png "${JN_OUT}/textures/"
+
+      - name: Rebuild scene from source in Blender
+        env:
+          JN_OUT: ${{ runner.temp }}/jiangnan-smoke
+        run: |
+          "${RUNNER_TOOL_CACHE}/blender-4.5.14/blender" --background --python-exit-code 1 --python jiangnan.py
+          test -s "${JN_OUT}/Jiangnan.blend"
+          test -s "${JN_OUT}/scene_statistics.json"
 
       - name: Execute scene assertions in Blender
         env:
           JN_SKIP_RENDER: '1'
           JN_OUT: ${{ runner.temp }}/jiangnan-smoke
         run: |
-          mkdir -p "${JN_OUT}"
-          "${RUNNER_TOOL_CACHE}/blender-4.5.14/blender"             --background Jiangnan.blend             --python tools/verify_render.py
+          "${RUNNER_TOOL_CACHE}/blender-4.5.14/blender" --background "${JN_OUT}/Jiangnan.blend" --python-exit-code 1 --python tools/verify_render.py
 
       - name: Inspect smoke report
         run: |
           python - <<'PY'
           import json, os
           from pathlib import Path
-          report = json.loads((Path(os.environ['RUNNER_TEMP']) / 'jiangnan-smoke' / 'validation' / 'validation.json').read_text(encoding='utf-8'))
+          root = Path(os.environ['RUNNER_TEMP']) / 'jiangnan-smoke'
+          report = json.loads((root / 'validation' / 'validation.json').read_text(encoding='utf-8'))
+          stats = json.loads((root / 'scene_statistics.json').read_text(encoding='utf-8'))
           assert report['render_skipped'] is True
           assert report['invalid_object_drivers'] == []
           assert report['isolated_scene_count'] == 1
@@ -67,11 +84,14 @@ jobs:
           assert all(report['outward_normals'].values())
           assert len(report['generated_texture_assets']) == 7
           assert all(v['found'] and v['packed'] for v in report['generated_texture_assets'].values())
+          assert stats['objects'] >= 2700
           print(json.dumps({
               'objects': report['objects'],
+              'mesh_objects': stats['mesh_objects'],
+              'curves': stats['curve_objects'],
+              'drivers': stats['object_drivers'],
               'weather_0': report['weather_0'],
               'weather_1': report['weather_1'],
-              'drivers_invalid': len(report['invalid_object_drivers']),
-              'packed_textures': len(report['generated_texture_assets']),
+              'packed_textures': report['generated_texture_assets'],
           }, ensure_ascii=False, indent=2))
           PY
