@@ -65,7 +65,8 @@ jobs:
           assert report['pierced_scholar_stones'] == 3
           assert all(report['motion_changed'].values())
           assert all(report['outward_normals'].values())
-          assert len(report['generated_texture_assets']) >= 7
+          assert len(report['generated_texture_assets']) == 7
+          assert all(v['found'] and v['packed'] for v in report['generated_texture_assets'].values())
           print(json.dumps({
               'objects': report['objects'],
               'weather_0': report['weather_0'],
