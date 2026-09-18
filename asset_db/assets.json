@@ -23,13 +23,32 @@
     {"id":"JN_PROP_BENCH_01","name_cn":"长凳","category":"prop","family":"furniture","priority":"P0","status":"blockout","parametric":true,"factory":"tools/generate_prop_assets.py"},
     {"id":"JN_PROP_WINE_JAR_01","name_cn":"酒坛","category":"prop","family":"utility_props","priority":"P0","status":"blockout","parametric":true,"factory":"tools/generate_prop_assets.py"},
     {"id":"JN_INT_COUNTER_01","name_cn":"客栈柜台","category":"interior","family":"inn_interior","priority":"P0","status":"blockout","parametric":true,"factory":"tools/generate_prop_assets.py"},
-    {"id":"JN_INT_BED_01","name_cn":"木床榻","category":"interior","family":"inn_interior","priority":"P0","status":"blockout","parametric":true,"factory":"tools/generate_prop_assets.py"}
+    {"id":"JN_INT_BED_01","name_cn":"木床榻","category":"interior","family":"inn_interior","priority":"P0","status":"blockout","parametric":true,"factory":"tools/generate_prop_assets.py"},
+    {"id":"JN_WATER_DOCK_01","name_cn":"青石水埠头","category":"waterside","family":"waterside_access","priority":"P0","status":"validated","parametric":true,"factory":"tools/generate_waterside_assets.py","pack":"generated_assets/JN_WatersideFactory.blend"},
+    {"id":"JN_WATER_MOONGATE_01","name_cn":"月洞门墙段","category":"architecture","family":"wall_gate","priority":"P0","status":"validated","parametric":true,"factory":"tools/generate_waterside_assets.py","pack":"generated_assets/JN_WatersideFactory.blend"},
+    {"id":"JN_WATER_BRIDGE_01","name_cn":"小型石拱桥","category":"architecture","family":"bridge_system","priority":"P0","status":"validated","parametric":true,"factory":"tools/generate_waterside_assets.py","pack":"generated_assets/JN_WatersideFactory.blend"},
+    {"id":"JN_WATER_CORRIDOR_01","name_cn":"临水穿廊","category":"architecture","family":"corridor_system","priority":"P0","status":"validated","parametric":true,"factory":"tools/generate_waterside_assets.py","pack":"generated_assets/JN_WatersideFactory.blend"},
+    {"id":"JN_WATER_BOAT_01","name_cn":"乌篷船","category":"prop","family":"watercraft","priority":"P0","status":"validated","parametric":true,"factory":"tools/generate_waterside_assets.py","pack":"generated_assets/JN_WatersideFactory.blend"},
+    {"id":"JN_WATER_WELL_01","name_cn":"青石井栏","category":"prop","family":"water_utility","priority":"P0","status":"validated","parametric":true,"factory":"tools/generate_waterside_assets.py","pack":"generated_assets/JN_WatersideFactory.blend"},
+    {"id":"JN_WATER_FLUME_01","name_cn":"竹制引水槽","category":"prop","family":"water_feature","priority":"P1","status":"validated","parametric":true,"factory":"tools/generate_waterside_assets.py","pack":"generated_assets/JN_WatersideFactory.blend"},
+    {"id":"JN_WATER_LAMPPOST_01","name_cn":"临水灯架","category":"prop","family":"lighting_prop","priority":"P1","status":"validated","parametric":true,"factory":"tools/generate_waterside_assets.py","pack":"generated_assets/JN_WatersideFactory.blend"}
+  ],
+  "generated_packs": [
+    {
+      "id": "JN_WATERSIDE_PACK_V1",
+      "blend": "generated_assets/JN_WatersideFactory.blend",
+      "preview": "generated_assets/waterside-preview.png",
+      "report": "generated_assets/waterside-report.json",
+      "asset_count": 8,
+      "blender": "4.5.14",
+      "validation": "headless_build_reopen_passed"
+    }
   ],
   "next_families": [
-    "bridge_system",
     "market_stall_system",
     "cloth_and_banner_system",
     "kitchen_system",
-    "moss_and_decal_system"
+    "moss_and_decal_system",
+    "willow_and_shore_vegetation"
   ]
 }
