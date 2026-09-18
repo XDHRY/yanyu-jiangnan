@@ -33,8 +33,21 @@ report['isolated_scene_count']=len(bpy.data.scenes)
 assert report['isolated_scene_count']==1
 report['objects']=len(S.objects)
 report['rerun_verified']=True
-report['generated_texture_assets']={os.path.basename(im.filepath):bool(im.packed_file) for im in bpy.data.images if 'textures' in im.filepath}
-assert len(report['generated_texture_assets'])>=7 and all(report['generated_texture_assets'].values())
+expected_texture_assets=('plaster','stone','bark','clay','wood','petal','landscape')
+file_images=[im for im in bpy.data.images if im.source=='FILE']
+report['generated_texture_assets']={}
+for asset in expected_texture_assets:
+    matches=[
+        im for im in file_images
+        if asset in im.name.lower() or asset in os.path.basename(im.filepath).lower()
+    ]
+    report['generated_texture_assets'][asset]={
+        'found':bool(matches),
+        'packed':any(bool(im.packed_file) for im in matches),
+        'images':[im.name for im in matches],
+    }
+print('TEXTURE_PACK_AUDIT',json.dumps(report['generated_texture_assets'],ensure_ascii=False))
+assert all(v['found'] and v['packed'] for v in report['generated_texture_assets'].values())
 report['pierced_scholar_stones']=sum(o.name.startswith('JN_太湖石_瘦透漏皱') for o in S.objects)
 assert report['pierced_scholar_stones']==3
 report['outward_normals']={}
