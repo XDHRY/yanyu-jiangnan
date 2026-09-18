@@ -2,6 +2,18 @@
   "tool": "built-in image_gen",
   "prompts": [
     {
+      "asset": "plaster",
+      "prompt": "Use case: photorealistic-natural. Asset type: production albedo texture for a Blender Jiangnan classical garden wall. A square, straight-on orthographic material scan of aged off-white lime plaster from a refined historic Suzhou courtyard. Extremely detailed fine chalky lime grains, hairline irregular cracks, restrained pale warm-gray mineral variation and subtly damp cool-gray mottling. Quiet elegant weathering, mostly intact plaster, no exposed bricks. Flat uniform neutral illumination, no cast shadows, no light gradients, no ambient occlusion baked in. Seamlessly tileable on all four sides, non-directional, full bleed. Neutral ivory-gray color, not yellow. No objects, frames, text, grids, watermark, scenery or perspective. Material texture only, high resolution."
+    },
+    {
+      "asset": "stone",
+      "prompt": "Use case: photorealistic-natural. Asset type: production albedo texture for sculpted scholar rocks and garden shore rocks in Blender. Square orthographic close material scan of ancient Jiangnan gray limestone with muted charcoal mineral veins, tiny erosion pits, pale calcite speckles, thin restrained olive-gray moss and lichen scattered irregularly over about twenty percent of the surface. Realistic fine-scale microstructure, substantial natural stone, refined restrained colors, no neon greens. Seamlessly tileable in both directions. Flat diffuse cross-polarized lighting, no baked highlights, shadows or perspective. Full frame continuous rock material only, no isolated rock object, no background, text, borders, grids or watermark. High resolution game environment material."
+    },
+    {
+      "asset": "bark",
+      "prompt": "Use case: photorealistic-natural. Asset type: seamless bark albedo texture for editable 3D ancient plum trunks in Blender. Square orthographic macro material scan of old Chinese flowering plum bark. Deep vertical meandering fissures and fine irregular flaking ridges, subtly twisted age lines, charcoal umber with desaturated warm gray highlights, sparse dusty sage lichen. Detailed but restrained, believable aged tree surface. Grain runs vertically. Seamlessly tileable left-right and top-bottom. Flat neutral diffuse lighting, no shadows or glossy highlights baked in, no cylinder shape or perspective, no tree silhouette, no scenery, no words, border, labels, grid or watermark. High resolution material texture only."
+    },
+    {
       "asset": "clay",
       "prompt": "Use case: photorealistic-natural. Asset type: seamless base color texture to apply on individual 3D traditional Chinese roof tiles. Square flat orthographic material scan of weathered dark charcoal blue-gray fired clay, subtle fine mineral speckles, tiny pits, faint irregular ancient soot and silvery wear, a little dusty muted sage lichen. Refined old Jiangnan black clay roof material, rich detailed matte surface. Continuous material only, NO tile outlines, NO roof shapes, NO grout lines. Even diffuse neutral cross polarized lighting with NO directional shadows or highlights baked in. Seamless all four sides. No words, borders, objects, perspective, montage or watermarks. High resolution."
     },
