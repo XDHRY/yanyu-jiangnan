@@ -95,3 +95,15 @@ jobs:
               'packed_textures': report['generated_texture_assets'],
           }, ensure_ascii=False, indent=2))
           PY
+
+      - name: Publish rebuilt scene artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Jiangnan-Blender-4.5-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/jiangnan-smoke/Jiangnan.blend
+            ${{ runner.temp }}/jiangnan-smoke/scene_statistics.json
+            ${{ runner.temp }}/jiangnan-smoke/validation/validation.json
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 7
