@@ -30,6 +30,7 @@ for o in S.objects:
 report['invalid_object_drivers']=invalid
 assert not invalid
 report['isolated_scene_count']=len(bpy.data.scenes)
+assert report['isolated_scene_count']==1
 report['objects']=len(S.objects)
 report['rerun_verified']=True
 report['generated_texture_assets']={os.path.basename(im.filepath):bool(im.packed_file) for im in bpy.data.images if 'textures' in im.filepath}
