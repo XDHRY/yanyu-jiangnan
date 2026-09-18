@@ -72,9 +72,15 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
+          sep = chr(92)
+          markers = (
+              'C:' + sep + 'Users' + sep,
+              'E:' + sep + 'UserData' + sep,
+              'E:' + sep + 'zhuomian' + sep,
+          )
           for file in [Path('jiangnan.py'), Path('tools/verify_render.py')]:
               text = file.read_text(encoding='utf-8')
-              for marker in (r'C:\Users\', r'E:\UserData\', r'E:\zhuomian\'):
+              for marker in markers:
                   assert marker not in text, f'non-portable local path in {file}: {marker}'
           assert "os.environ.get('JN_OUT')" in Path('jiangnan.py').read_text(encoding='utf-8')
           assert "os.environ.get('JN_OUT')" in Path('tools/verify_render.py').read_text(encoding='utf-8')
