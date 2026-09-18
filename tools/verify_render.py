@@ -34,7 +34,18 @@ assert report['isolated_scene_count']==1
 report['objects']=len(S.objects)
 report['rerun_verified']=True
 expected_texture_assets=('plaster','stone','bark','clay','wood','petal','landscape')
-file_images=[im for im in bpy.data.images if im.source=='FILE']
+image_inventory=[
+    {
+        'name':im.name,
+        'filepath':im.filepath,
+        'source':im.source,
+        'packed':bool(im.packed_file),
+        'size':list(im.size),
+    }
+    for im in bpy.data.images
+]
+print('IMAGE_DATABLOCK_AUDIT',json.dumps(image_inventory,ensure_ascii=False))
+file_images=list(bpy.data.images)
 report['generated_texture_assets']={}
 for asset in expected_texture_assets:
     matches=[
