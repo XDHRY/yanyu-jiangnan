@@ -54,10 +54,14 @@ S.camera=bpy.data.objects['JN_三分之四']
 bpy.ops.wm.save_as_mainfile(filepath=os.path.join(OUT,'Jiangnan.blend'))
 jobs=[('01_rain_front','正面',0),('02_snow_top','顶视',1),('03_rain_three_quarter','三分之四',0),('04_snow_front','正面',1)]
 report['renders']=[]
-for filename,camera,mode in jobs:
-    weather(mode);S.camera=bpy.data.objects['JN_'+camera];S.render.filepath=os.path.join(RENDERS,filename+'.png')
-    start=time.time();bpy.ops.render.render(write_still=True)
-    report['renders'].append({'file':filename+'.png','seconds':round(time.time()-start,2),'weather':mode})
-    with open(os.path.join(VALIDATION,'validation.json'),'w',encoding='utf-8') as f:json.dump(report,f,ensure_ascii=False,indent=2)
+skip_render=os.environ.get('JN_SKIP_RENDER','0').lower() in ('1','true','yes')
+if not skip_render:
+    for filename,camera,mode in jobs:
+        weather(mode);S.camera=bpy.data.objects['JN_'+camera];S.render.filepath=os.path.join(RENDERS,filename+'.png')
+        start=time.time();bpy.ops.render.render(write_still=True)
+        report['renders'].append({'file':filename+'.png','seconds':round(time.time()-start,2),'weather':mode})
+else:
+    report['render_skipped']=True
+with open(os.path.join(VALIDATION,'validation.json'),'w',encoding='utf-8') as f:json.dump(report,f,ensure_ascii=False,indent=2)
 weather(0);S.camera=bpy.data.objects['JN_三分之四'];S.frame_set(80)
-print('ALL_RENDER_JOBS_COMPLETED',json.dumps(report,ensure_ascii=False))
+print('ALL_ASSERTIONS_COMPLETED' if skip_render else 'ALL_RENDER_JOBS_COMPLETED',json.dumps(report,ensure_ascii=False))
