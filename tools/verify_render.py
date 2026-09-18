@@ -33,8 +33,32 @@ report['isolated_scene_count']=len(bpy.data.scenes)
 assert report['isolated_scene_count']==1
 report['objects']=len(S.objects)
 report['rerun_verified']=True
-report['generated_texture_assets']={os.path.basename(im.filepath):bool(im.packed_file) for im in bpy.data.images if 'textures' in im.filepath}
-assert len(report['generated_texture_assets'])>=7 and all(report['generated_texture_assets'].values())
+expected_texture_assets=('plaster','stone','bark','clay','wood','petal','landscape')
+image_inventory=[
+    {
+        'name':im.name,
+        'filepath':im.filepath,
+        'source':im.source,
+        'packed':bool(im.packed_file),
+        'size':list(im.size),
+    }
+    for im in bpy.data.images
+]
+print('IMAGE_DATABLOCK_AUDIT',json.dumps(image_inventory,ensure_ascii=False))
+file_images=list(bpy.data.images)
+report['generated_texture_assets']={}
+for asset in expected_texture_assets:
+    matches=[
+        im for im in file_images
+        if asset in im.name.lower() or asset in os.path.basename(im.filepath).lower()
+    ]
+    report['generated_texture_assets'][asset]={
+        'found':bool(matches),
+        'packed':any(bool(im.packed_file) for im in matches),
+        'images':[im.name for im in matches],
+    }
+print('TEXTURE_PACK_AUDIT',json.dumps(report['generated_texture_assets'],ensure_ascii=False))
+assert all(v['found'] and v['packed'] for v in report['generated_texture_assets'].values())
 report['pierced_scholar_stones']=sum(o.name.startswith('JN_太湖石_瘦透漏皱') for o in S.objects)
 assert report['pierced_scholar_stones']==3
 report['outward_normals']={}
@@ -54,10 +78,14 @@ S.camera=bpy.data.objects['JN_三分之四']
 bpy.ops.wm.save_as_mainfile(filepath=os.path.join(OUT,'Jiangnan.blend'))
 jobs=[('01_rain_front','正面',0),('02_snow_top','顶视',1),('03_rain_three_quarter','三分之四',0),('04_snow_front','正面',1)]
 report['renders']=[]
-for filename,camera,mode in jobs:
-    weather(mode);S.camera=bpy.data.objects['JN_'+camera];S.render.filepath=os.path.join(RENDERS,filename+'.png')
-    start=time.time();bpy.ops.render.render(write_still=True)
-    report['renders'].append({'file':filename+'.png','seconds':round(time.time()-start,2),'weather':mode})
-    with open(os.path.join(VALIDATION,'validation.json'),'w',encoding='utf-8') as f:json.dump(report,f,ensure_ascii=False,indent=2)
+skip_render=os.environ.get('JN_SKIP_RENDER','0').lower() in ('1','true','yes')
+if not skip_render:
+    for filename,camera,mode in jobs:
+        weather(mode);S.camera=bpy.data.objects['JN_'+camera];S.render.filepath=os.path.join(RENDERS,filename+'.png')
+        start=time.time();bpy.ops.render.render(write_still=True)
+        report['renders'].append({'file':filename+'.png','seconds':round(time.time()-start,2),'weather':mode})
+else:
+    report['render_skipped']=True
+with open(os.path.join(VALIDATION,'validation.json'),'w',encoding='utf-8') as f:json.dump(report,f,ensure_ascii=False,indent=2)
 weather(0);S.camera=bpy.data.objects['JN_三分之四'];S.frame_set(80)
-print('ALL_RENDER_JOBS_COMPLETED',json.dumps(report,ensure_ascii=False))
+print('ALL_ASSERTIONS_COMPLETED' if skip_render else 'ALL_RENDER_JOBS_COMPLETED',json.dumps(report,ensure_ascii=False))

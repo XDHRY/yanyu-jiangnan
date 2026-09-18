@@ -527,8 +527,8 @@ def art_upgrade():
             for i in range(65):
                 a=-1.05+2.1*i/64;v.append((65*sin(a),65*cos(a),-10+j*43));uvs.append((i/64,j))
                 if j and i:a0=i-1;f.append((a0,a0+1,a0+66,a0+65))
-        o=mesh('远山环幕_生成贴图',v,f,m,C['sky']);uv=o.data.uv_layers.new(name='远山全景UV')
-        for loop in o.data.loops:uv.data[loop.index].uv=uvs[loop.vertex_index]
+        o=mesh('远山环幕_生成贴图',v,f,m,C['sky']);uv_layer=o.data.uv_layers.new(name='远山全景UV')
+        for loop in o.data.loops:uv_layer.data[loop.index].uv=uvs[loop.vertex_index]
     # Layered lighting: reduce frontal flattening, preserve readable penumbrae.
     bpy.data.objects[PREFIX+'天光_暗部细节'].data.energy=850
     bpy.data.objects[PREFIX+'月光_主塑形'].data.energy=2200
