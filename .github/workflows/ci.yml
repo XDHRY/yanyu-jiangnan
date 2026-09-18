@@ -1,0 +1,82 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  repository-contract:
+    name: Blender source and delivery contract
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Compile Blender Python sources
+        run: python -m py_compile jiangnan.py tools/verify_render.py
+
+      - name: Validate archived scene evidence
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          stats = json.loads(Path('validation/scene_statistics.json').read_text(encoding='utf-8'))
+          assert stats['scene'] == '烟雨江南 · 雪月江南'
+          assert stats['objects'] >= 2700
+          assert stats['mesh_objects'] >= 1300
+          assert stats['curve_objects'] >= 1300
+          assert stats['collections'] == 11
+          assert stats['cameras'] >= 3
+          assert stats['lights'] >= 10
+          assert stats['object_drivers'] >= 4400
+          assert stats['frames'] == [1, 240]
+          assert stats['fps'] == 24
+
+          validation = json.loads(Path('validation/validation.json').read_text(encoding='utf-8'))
+          assert validation.get('invalid_object_drivers') == []
+          assert validation.get('isolated_scene_count') == 1
+          assert validation.get('rerun_verified') is True
+          assert validation['weather_0']['雪粒'] == 0
+          assert validation['weather_0']['雨丝'] > 0
+          assert validation['weather_1']['雨丝'] == 0
+          assert validation['weather_1']['雪粒'] > 0
+          assert all(validation.get('motion_changed', {}).values())
+
+          prompts = json.loads(Path('textures/generation_prompts.json').read_text(encoding='utf-8'))
+          assets = {item['asset'] for item in prompts['prompts']}
+          expected = {'plaster', 'stone', 'bark', 'clay', 'wood', 'petal', 'landscape'}
+          assert assets == expected, f'texture prompt archive mismatch: {assets}'
+
+          required = [
+              Path('Jiangnan.blend'),
+              Path('jiangnan.py'),
+              Path('tools/verify_render.py'),
+              Path('renders/01_rain_front.png'),
+              Path('renders/gallery.html'),
+          ]
+          missing = [str(p) for p in required if not p.exists()]
+          assert not missing, f'missing required delivery files: {missing}'
+          print('scene archive contract OK')
+          PY
+
+      - name: Check source portability
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          for file in [Path('jiangnan.py'), Path('tools/verify_render.py')]:
+              text = file.read_text(encoding='utf-8')
+              for marker in (r'C:\Users\', r'E:\UserData\', r'E:\zhuomian\'):
+                  assert marker not in text, f'non-portable local path in {file}: {marker}'
+          assert "os.environ.get('JN_OUT')" in Path('jiangnan.py').read_text(encoding='utf-8')
+          assert "os.environ.get('JN_OUT')" in Path('tools/verify_render.py').read_text(encoding='utf-8')
+          print('source portability OK')
+          PY
