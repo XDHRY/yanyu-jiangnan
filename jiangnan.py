@@ -541,7 +541,7 @@ def art_upgrade():
     # The former "top" camera is intentionally converted to a high perspective
     # establishing shot so CI catches spatial depth instead of reading like a plan.
     review_cameras={
-        '正面':((4.2,-23.0,4.9),(-1.4,3.4,2.85),46,'PERSP'),
+        '正面':((6.2,-22.0,4.65),(-2.0,3.8,2.70),48,'PERSP'),
         '三分之四':((13.2,-20.5,5.9),(-1.0,3.0,2.55),48,'PERSP'),
         '顶视':((12.0,-7.0,26.5),(-2.0,1.5,1.2),56,'PERSP'),
     }
