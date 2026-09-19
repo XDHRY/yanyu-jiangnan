@@ -28,11 +28,17 @@ for path in FILES:
     stat = ImageStat.Stat(im)
     hist = im.histogram()
     n = im.width * im.height
-    ordered = []
-    for value, count in enumerate(hist):
-        ordered.extend([value] * count)
-    p01 = ordered[max(0, n // 100)]
-    p99 = ordered[min(n - 1, 99 * n // 100)]
+    def percentile(frac: float) -> int:
+        target = min(n - 1, max(0, int(frac * n)))
+        seen = 0
+        for value, count in enumerate(hist):
+            seen += count
+            if seen > target:
+                return value
+        return 255
+
+    p01 = percentile(0.01)
+    p99 = percentile(0.99)
     mean = stat.mean[0]
     stdev = stat.stddev[0]
     row = {
