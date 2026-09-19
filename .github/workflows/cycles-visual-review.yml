@@ -1,0 +1,91 @@
+name: Cycles Visual Review
+
+on:
+  push:
+    branches: [main, "ai/**"]
+    paths:
+      - "jiangnan.py"
+      - "textures/**"
+      - "tools/render_preview.py"
+      - "tools/headless_rebuild.py"
+      - ".github/workflows/cycles-visual-review.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cycles-review-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  BLENDER_VERSION: "4.5.14"
+  BLENDER_DIR: ${{ github.workspace }}/.cache/blender
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache Blender
+        id: cache-blender
+        uses: actions/cache@v4
+        with:
+          path: .cache/blender
+          key: blender-${{ runner.os }}-${{ env.BLENDER_VERSION }}
+
+      - name: Download Blender
+        if: steps.cache-blender.outputs.cache-hit != 'true'
+        shell: bash
+        run: |
+          set -euxo pipefail
+          mkdir -p "$BLENDER_DIR"
+          curl --fail --location --retry 3 \
+            "https://download.blender.org/release/Blender4.5/blender-${BLENDER_VERSION}-linux-x64.tar.xz" \
+            -o "${RUNNER_TEMP}/blender.tar.xz"
+          tar -xJf "${RUNNER_TEMP}/blender.tar.xz" --strip-components=1 -C "$BLENDER_DIR"
+
+      - name: Install headless runtime
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends libegl1 libgl1 libgl1-mesa-dri
+
+      - name: Rebuild authoritative scene
+        run: |
+          set -euxo pipefail
+          mkdir -p cycles_review
+          "$BLENDER_DIR/blender" -b --factory-startup --python-exit-code 1 \
+            --python tools/headless_rebuild.py -- \
+            --source jiangnan.py --stage 5 \
+            --output cycles_review/Jiangnan-rebuilt.blend \
+            --report cycles_review/rebuild-report.json
+
+      - name: Render three Cycles review shots
+        env:
+          LIBGL_ALWAYS_SOFTWARE: "1"
+          EGL_PLATFORM: "surfaceless"
+        run: |
+          set -euxo pipefail
+          "$BLENDER_DIR/blender" -b cycles_review/Jiangnan-rebuilt.blend --python-exit-code 1 \
+            --python tools/render_preview.py -- \
+            --camera 三分之四 --weather 0 --frame 80 --engine CYCLES \
+            --resolution 800 --samples 20 --output cycles_review/cycles-01-rain-three-quarter.png
+          "$BLENDER_DIR/blender" -b cycles_review/Jiangnan-rebuilt.blend --python-exit-code 1 \
+            --python tools/render_preview.py -- \
+            --camera 正面 --weather 1 --frame 80 --engine CYCLES \
+            --resolution 800 --samples 20 --output cycles_review/cycles-02-snow-front.png
+          "$BLENDER_DIR/blender" -b cycles_review/Jiangnan-rebuilt.blend --python-exit-code 1 \
+            --python tools/render_preview.py -- \
+            --camera 顶视 --weather 0 --frame 80 --engine CYCLES \
+            --resolution 800 --samples 20 --output cycles_review/cycles-03-rain-establishing.png
+
+      - name: Upload Cycles review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cycles-review-${{ github.sha }}
+          path: cycles_review/
+          if-no-files-found: error
+          retention-days: 30
