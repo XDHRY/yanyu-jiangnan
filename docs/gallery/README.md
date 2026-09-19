@@ -1,6 +1,6 @@
 # 烟雨江南 · Final 12-View Gallery
 
-> Cycles · 2560×1600 · 320 samples · 16-bit PNG
+> Cycles · 1920×1200 · 128 samples · 16-bit PNG
 
 当前最终渲染工作流已启动；此页面是固定宣传页入口。工作流完成后会自动在下方写入 12 张最终 PNG。
 
