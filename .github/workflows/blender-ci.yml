@@ -147,21 +147,35 @@ jobs:
             --python tools/ci_validate.py -- \
             --output ci_artifacts/committed-blend-audit.json
 
-      - name: Fast Eevee preview from rebuilt scene
+      - name: Fast Eevee multi-angle review from rebuilt scene
         shell: bash
         env:
           LIBGL_ALWAYS_SOFTWARE: "1"
           EGL_PLATFORM: "surfaceless"
         run: |
           set -euxo pipefail
+          # Render both composition and weather coverage on every CI pass.
+          # These are deliberately cheap review frames; formal delivery remains Cycles.
           "$BLENDER_DIR/blender" -b ci_artifacts/Jiangnan-rebuilt.blend --python-exit-code 1 \
             --python tools/render_preview.py -- \
-            --camera 三分之四 \
-            --weather 0 \
-            --engine BLENDER_EEVEE_NEXT \
-            --resolution 640 \
-            --samples 16 \
-            --output ci_artifacts/preview-rain-three-quarter.png
+            --camera 三分之四 --weather 0 --engine BLENDER_EEVEE_NEXT \
+            --resolution 640 --samples 16 \
+            --output ci_artifacts/review-01-rain-three-quarter.png
+          "$BLENDER_DIR/blender" -b ci_artifacts/Jiangnan-rebuilt.blend --python-exit-code 1 \
+            --python tools/render_preview.py -- \
+            --camera 正面 --weather 0 --engine BLENDER_EEVEE_NEXT \
+            --resolution 640 --samples 16 \
+            --output ci_artifacts/review-02-rain-front.png
+          "$BLENDER_DIR/blender" -b ci_artifacts/Jiangnan-rebuilt.blend --python-exit-code 1 \
+            --python tools/render_preview.py -- \
+            --camera 顶视 --weather 1 --engine BLENDER_EEVEE_NEXT \
+            --resolution 640 --samples 16 \
+            --output ci_artifacts/review-03-snow-top.png
+          "$BLENDER_DIR/blender" -b ci_artifacts/Jiangnan-rebuilt.blend --python-exit-code 1 \
+            --python tools/render_preview.py -- \
+            --camera 正面 --weather 1 --engine BLENDER_EEVEE_NEXT \
+            --resolution 640 --samples 16 \
+            --output ci_artifacts/review-04-snow-front.png
 
       - name: Upload CI artifacts
         if: always()
