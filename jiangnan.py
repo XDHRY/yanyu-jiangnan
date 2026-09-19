@@ -385,8 +385,17 @@ def volume_material(name,color,density):
     m.node_tree.links.new(p.outputs['Volume'],out.inputs['Volume']);return m
 def sky():
     c=C['sky']
-    moon=material('月华',(.60,.72,.86),.78,4,0,.72)
-    uv('明月',(1.5,26,9.55),(.84,.84,.84),moon,c,64,32)
+    moon=material('月华',(.60,.72,.86),.82,0,0,.42)
+    # Subtle albedo/emission mottling prevents the moon from reading as a flat UI disk.
+    mn=moon.node_tree.nodes;ml=moon.node_tree.links
+    mb=next(n for n in mn if n.type=='BSDF_PRINCIPLED')
+    mt=mn.new('ShaderNodeTexNoise');mt.inputs['Scale'].default_value=3.4;mt.inputs['Detail'].default_value=5;mt.inputs['Roughness'].default_value=.7
+    mr=mn.new('ShaderNodeValToRGB')
+    mr.color_ramp.elements[0].position=.28;mr.color_ramp.elements[0].color=(.28,.35,.44,1)
+    mr.color_ramp.elements[1].position=.76;mr.color_ramp.elements[1].color=(.72,.80,.90,1)
+    ml.new(mt.outputs['Fac'],mr.inputs[0]);ml.new(mr.outputs['Color'],mb.inputs['Base Color'])
+    ml.new(mr.outputs['Color'],mb.inputs['Emission Color'])
+    uv('明月',(1.5,26,9.55),(.78,.78,.78),moon,c,64,32)
     # Layers of distant ridges make the moon-gate opening a framed landscape.
     for layer in range(3):
         mat=material('远山'+str(layer),(.07+layer*.025,.14+layer*.023,.18+layer*.027),1)
