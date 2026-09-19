@@ -537,8 +537,20 @@ def art_upgrade():
     bpy.data.objects[PREFIX+'月光_主塑形'].data.energy=2200
     bpy.data.objects[PREFIX+'梅梢轮廓'].data.energy=950
     bpy.data.objects[PREFIX+'梅花_柔暖反射'].data.energy=90
-    for name,loc,target,lens in [('正面',(1,-24,5.2),(0,3,3.0),40),('三分之四',(10,-22,7.2),(0,2,2.8),40)]:
-        o=bpy.data.objects[PREFIX+name];o.location=loc;o.rotation_euler=(Vector(target)-o.location).to_track_quat('-Z','Y').to_euler();o.data.lens=lens
+    # Final review cameras favour oblique garden photography over flat elevation views.
+    # The former "top" camera is intentionally converted to a high perspective
+    # establishing shot so CI catches spatial depth instead of reading like a plan.
+    review_cameras={
+        '正面':((4.2,-23.0,4.9),(-1.4,3.4,2.85),46,'PERSP'),
+        '三分之四':((13.2,-20.5,5.9),(-1.0,3.0,2.55),48,'PERSP'),
+        '顶视':((12.0,-7.0,26.5),(-2.0,1.5,1.2),56,'PERSP'),
+    }
+    for name,(loc,target,lens,kind) in review_cameras.items():
+        o=bpy.data.objects[PREFIX+name]
+        o.location=loc
+        o.rotation_euler=(Vector(target)-o.location).to_track_quat('-Z','Y').to_euler()
+        o.data.type=kind
+        o.data.lens=lens
     S.view_settings.exposure=.2
 def statistics():
     obs=list(S.objects);meshes=[o for o in obs if o.type=='MESH'];curves=[o for o in obs if o.type=='CURVE']
