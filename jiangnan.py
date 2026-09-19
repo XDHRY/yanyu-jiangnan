@@ -104,9 +104,39 @@ def start():
       'gold':((.7,.39,.12),.45,0),'paper':((1,.42,.10),.6,0,0,2.4),'snow':((.8,.87,.91),.7,25),
       'water':((.055,.13,.145),.14,0,.35),'dew':((.66,.84,.85),.07,0),
       'rain':((.22,.34,.39),.22,0,0,.025)}.items()}
-    for n in M['plaster'].node_tree.nodes:
-        if n.type=='VALTORGB':n.color_ramp.elements[0].color=(.51,.55,.51,1)
-        if n.type=='BUMP':n.inputs['Strength'].default_value=.12;n.inputs['Distance'].default_value=.018
+    # Rain-aged white plaster: darker base, irregular rising damp and a
+    # slightly glossier wet foot instead of one uniformly bright grey wall.
+    pn=M['plaster'].node_tree.nodes;pl=M['plaster'].node_tree.links
+    for n in pn:
+        if n.type=='VALTORGB':
+            n.color_ramp.elements[0].color=(.36,.40,.37,1)
+            n.color_ramp.elements[1].color=(.56,.59,.55,1)
+        if n.type=='BUMP':
+            n.inputs['Strength'].default_value=.16;n.inputs['Distance'].default_value=.016
+    pb=next(n for n in pn if n.type=='BSDF_PRINCIPLED')
+    base_link=next((x for x in pl if x.to_socket==pb.inputs['Base Color']),None)
+    if base_link:
+        source=base_link.from_socket;pl.remove(base_link)
+        geo=pn.new('ShaderNodeNewGeometry');sep=pn.new('ShaderNodeSeparateXYZ')
+        pl.new(geo.outputs['Position'],sep.inputs['Vector'])
+        damp=pn.new('ShaderNodeMapRange');damp.clamp=True
+        damp.inputs['From Min'].default_value=.15;damp.inputs['From Max'].default_value=1.9
+        damp.inputs['To Min'].default_value=1.0;damp.inputs['To Max'].default_value=0.0
+        pl.new(sep.outputs['Z'],damp.inputs['Value'])
+        mott=pn.new('ShaderNodeTexNoise');mott.inputs['Scale'].default_value=1.7;mott.inputs['Detail'].default_value=5
+        pl.new(geo.outputs['Position'],mott.inputs['Vector'])
+        mottmap=pn.new('ShaderNodeMapRange');mottmap.clamp=True
+        mottmap.inputs['From Min'].default_value=.22;mottmap.inputs['From Max'].default_value=.78
+        mottmap.inputs['To Min'].default_value=.35;mottmap.inputs['To Max'].default_value=1.0
+        pl.new(mott.outputs['Fac'],mottmap.inputs['Value'])
+        mask=pn.new('ShaderNodeMath');mask.operation='MULTIPLY'
+        pl.new(damp.outputs['Result'],mask.inputs[0]);pl.new(mottmap.outputs['Result'],mask.inputs[1])
+        mix=pn.new('ShaderNodeMixRGB');mix.blend_type='MIX';mix.inputs[2].default_value=(.18,.23,.20,1)
+        pl.new(mask.outputs[0],mix.inputs[0]);pl.new(source,mix.inputs[1]);pl.new(mix.outputs[0],pb.inputs['Base Color'])
+        wetrough=pn.new('ShaderNodeMapRange');wetrough.clamp=True
+        wetrough.inputs['From Min'].default_value=0;wetrough.inputs['From Max'].default_value=1
+        wetrough.inputs['To Min'].default_value=.84;wetrough.inputs['To Max'].default_value=.50
+        pl.new(mask.outputs[0],wetrough.inputs['Value']);pl.new(wetrough.outputs['Result'],pb.inputs['Roughness'])
     b=next(n for n in M['dew'].node_tree.nodes if n.type=='BSDF_PRINCIPLED');b.inputs['Transmission Weight'].default_value=.92;b.inputs['IOR'].default_value=1.333
     b=next(n for n in M['water'].node_tree.nodes if n.type=='BSDF_PRINCIPLED');b.inputs['Coat Weight'].default_value=.5
     S.world=bpy.data.worlds.new(PREFIX+'夜色');S.world.use_nodes=True
@@ -355,8 +385,8 @@ def volume_material(name,color,density):
     m.node_tree.links.new(p.outputs['Volume'],out.inputs['Volume']);return m
 def sky():
     c=C['sky']
-    moon=material('月华',(.75,.87,1),.9,4,0,1.8)
-    uv('明月',(1.5,25,10.3),(1.12,1.12,1.12),moon,c,64,32)
+    moon=material('月华',(.60,.72,.86),.78,4,0,.72)
+    uv('明月',(1.5,26,9.55),(.84,.84,.84),moon,c,64,32)
     # Layers of distant ridges make the moon-gate opening a framed landscape.
     for layer in range(3):
         mat=material('远山'+str(layer),(.07+layer*.025,.14+layer*.023,.18+layer*.027),1)
