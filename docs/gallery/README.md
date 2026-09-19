@@ -1,51 +1,24 @@
-# 烟雨江南 · Final 12-View Gallery
+# 烟雨江南 · 36机位 4K 最终画廊
 
-> Cycles final gallery · 1920×1200 · 128 samples · 16-bit PNG · latest frozen scene
+> 3840×2160 · Cycles · 256 samples（关键 Hero 机位 384）· 16-bit PNG
 
-## 01. 01 Rain Hero Three Quarter
+当前 36 机位 4K 最终渲染工作流已经启动。由于使用 GitHub 公共 CPU runner，任务会分批排队执行。
 
-![01 Rain Hero Three Quarter](final/01-rain-hero-three-quarter.png)
+## 最终查看位置
 
-## 02. 02 Rain Front Courtyard
+- 预览宣传页：[`docs/gallery/4k/README.md`](4k/README.md)
+- 完整 4K 原图：仓库 **Releases** 页面
+- 原图将分成 3 个 ZIP，每包 12 张，共 36 张。
+- Actions artifact 同时保留单张 PNG 90 天，作为备用下载渠道。
 
-![02 Rain Front Courtyard](final/02-rain-front-courtyard.png)
+## 渲染策略
 
-## 03. 03 Rain Borrowed Landscape
+- 分辨率：3840×2160
+- 引擎：Cycles
+- 普通最终机位：256 samples
+- Hero 机位：384 samples
+- 16-bit PNG
+- 自适应采样 + 去噪
+- 每个仓库最多 2 个 4K 镜头并行，允许长时间排队，避免公共 runner 被一次占满。
 
-![03 Rain Borrowed Landscape](final/03-rain-borrowed-landscape.png)
-
-## 04. 04 Snow Front Courtyard
-
-![04 Snow Front Courtyard](final/04-snow-front-courtyard.png)
-
-## 05. 05 Snow Three Quarter
-
-![05 Snow Three Quarter](final/05-snow-three-quarter.png)
-
-## 06. 06 Snow Elevated
-
-![06 Snow Elevated](final/06-snow-elevated.png)
-
-## 07. 07 Rain Water Level
-
-![07 Rain Water Level](final/07-rain-water-level.png)
-
-## 08. 08 Rain Moon Gate
-
-![08 Rain Moon Gate](final/08-rain-moon-gate.png)
-
-## 09. 09 Rain Pavilion Detail
-
-![09 Rain Pavilion Detail](final/09-rain-pavilion-detail.png)
-
-## 10. 10 Rain Side Garden
-
-![10 Rain Side Garden](final/10-rain-side-garden.png)
-
-## 11. 11 Snow Water Level
-
-![11 Snow Water Level](final/11-snow-water-level.png)
-
-## 12. 12 Rain High Oblique
-
-![12 Rain High Oblique](final/12-rain-high-oblique.png)
+工作流全部完成后，此入口页会自动更新为 36 张实际预览图与精确 Release 下载链接。
