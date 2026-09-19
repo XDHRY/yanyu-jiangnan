@@ -543,7 +543,7 @@ def art_upgrade():
     review_cameras={
         '正面':((6.2,-22.0,4.65),(-2.0,3.8,2.70),48,'PERSP'),
         '三分之四':((13.2,-20.5,5.9),(-1.0,3.0,2.55),48,'PERSP'),
-        '顶视':((12.0,-7.0,26.5),(-2.0,1.5,1.2),56,'PERSP'),
+        '顶视':((15.5,-12.5,14.8),(-1.6,2.8,2.15),54,'PERSP'),
     }
     for name,(loc,target,lens,kind) in review_cameras.items():
         o=bpy.data.objects[PREFIX+name]
