@@ -61,6 +61,12 @@ print('TEXTURE_PACK_AUDIT',json.dumps(report['generated_texture_assets'],ensure_
 assert all(v['found'] and v['packed'] for v in report['generated_texture_assets'].values())
 report['pierced_scholar_stones']=sum(o.name.startswith('JN_太湖石_瘦透漏皱') for o in S.objects)
 assert report['pierced_scholar_stones']==3
+report['spatial_connectors']={
+    'moon_gate_path':sum(o.name.startswith('JN_月门引路石') for o in S.objects),
+    'pavilion_steps':sum(o.name.startswith('JN_听雨轩入轩踏步') for o in S.objects),
+    'waterside_steps':sum(o.name.startswith('JN_临水踏步') for o in S.objects),
+}
+assert report['spatial_connectors']=={'moon_gate_path':7,'pavilion_steps':3,'waterside_steps':3}
 report['outward_normals']={}
 for prefix in ['JN_云团','JN_明月','JN_花尖露珠']:
     o=next(o for o in S.objects if o.name.startswith(prefix));m=o.data;m.calc_loop_triangles()
@@ -78,14 +84,16 @@ S.camera=bpy.data.objects['JN_三分之四']
 bpy.ops.wm.save_as_mainfile(filepath=os.path.join(OUT,'Jiangnan.blend'))
 jobs=[('01_rain_front','正面',0),('02_snow_top','顶视',1),('03_rain_three_quarter','三分之四',0),('04_snow_front','正面',1)]
 report['renders']=[]
-skip_render=os.environ.get('JN_SKIP_RENDER','0').lower() in ('1','true','yes')
-if not skip_render:
+# Formal multi-view renders are paused by default. Spatial iteration uses tools/diagnostic_review.py.
+formal_render=os.environ.get('JN_FORMAL_RENDER','0').lower() in ('1','true','yes')
+if formal_render:
     for filename,camera,mode in jobs:
         weather(mode);S.camera=bpy.data.objects['JN_'+camera];S.render.filepath=os.path.join(RENDERS,filename+'.png')
         start=time.time();bpy.ops.render.render(write_still=True)
         report['renders'].append({'file':filename+'.png','seconds':round(time.time()-start,2),'weather':mode})
 else:
     report['render_skipped']=True
+    report['render_skip_reason']='formal multi-view rendering paused; use tools/diagnostic_review.py for low-cost spatial review'
 with open(os.path.join(VALIDATION,'validation.json'),'w',encoding='utf-8') as f:json.dump(report,f,ensure_ascii=False,indent=2)
 weather(0);S.camera=bpy.data.objects['JN_三分之四'];S.frame_set(80)
-print('ALL_ASSERTIONS_COMPLETED' if skip_render else 'ALL_RENDER_JOBS_COMPLETED',json.dumps(report,ensure_ascii=False))
+print('ALL_RENDER_JOBS_COMPLETED' if formal_render else 'ALL_ASSERTIONS_COMPLETED',json.dumps(report,ensure_ascii=False))
