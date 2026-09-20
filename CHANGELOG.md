@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-09-20
+
+- 停止以补齐大量正式机位为目标；`verify_render.py` 的正式静帧改为 `JN_FORMAL_RENDER=1` 显式启用。
+- 新增 `tools/diagnostic_review.py` 与 **Jiangnan Spatial Diagnostic** 工作流：每轮输出 10 张低成本空间诊断图和机位 manifest。
+- 第一轮空间修正新增 7 块月门引路石、3 级听雨轩入轩踏步、3 级临水踏步，并纳入 Blender 断言。
+- `renders/gallery.html` 改为直接展示仓库已有正式图和构建过程图，不再用“待渲染”占位推动高成本渲染。
+- 新增 `docs/iteration-loop.md`，把“观察 → 修改 → 再观察”的循环固化为项目协议。
+
+
 ## [1.0.0] - 2026-09-18
 
 初始入库。场景与脚本由 Codex（OpenAI）于 2026-09-17/18 经 Blender MCP 工作流生成，本次提交完成归档整理：
