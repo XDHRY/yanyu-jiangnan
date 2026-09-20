@@ -1,11 +1,22 @@
 <!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>烟雨江南 · 雪月江南</title><style>
-*{box-sizing:border-box}body{margin:0;background:#10191d;color:#dae0dc;font-family:Georgia,'KaiTi',serif}main{max-width:1250px;margin:auto;padding:50px 28px}header{display:flex;justify-content:space-between;align-items:end;gap:30px;margin-bottom:30px}h1{font-size:34px;font-weight:400;letter-spacing:5px;margin:10px 0}p{color:#aab8b8;line-height:1.8}small{color:#bc9c6a;letter-spacing:5px}button,a{color:#d4c5a8;background:none;border:1px solid #576163;padding:10px 20px;text-decoration:none;cursor:pointer;font:inherit}button[aria-pressed=true]{background:#d4c5a8;color:#182329}button[disabled]{opacity:.45;cursor:not-allowed}img{width:100%;display:block}figure{margin:0 0 32px}figcaption{padding:14px 0;font-size:15px;color:#b2bebc}.grid{display:grid;grid-template-columns:1fr 1fr;gap:28px}nav{display:flex;gap:12px;flex-wrap:wrap;margin:25px 0}footer{border-top:1px solid #344147;padding-top:20px}#hero{aspect-ratio:1.6;background:#152027}.pending{aspect-ratio:1.6;background:#152027;border:1px dashed #3a4a50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:#7d8f92;font-size:15px;letter-spacing:3px}.pending b{color:#bc9c6a;font-weight:400;letter-spacing:5px;font-size:18px}@media(max-width:650px){header{display:block}.grid{grid-template-columns:1fr}h1{font-size:25px}}
-</style><main><header><div><small>致虚极 · 守静笃</small><h1>烟雨江南 / 雪月江南</h1><p>一庭月色，半池灯影。听雨轩前，梅枝随风。</p></div><div><button id="rain" aria-pressed="true" onclick="show(false)">烟雨</button> <button id="snow" aria-pressed="false" onclick="show(true)" disabled title="雪夜正面图待渲染">雪月</button></div></header>
-<figure><img id="hero" src="01_rain_front.png" alt="正面烟雨庭院"><figcaption id="caption">正面 · 烟雨：湿石、细雨与静水倒影。</figcaption></figure>
-<div class="grid"><div class="pending"><b>待渲染</b><span>三分之四 · 茶轩、梅枝、月门与水庭的空间关系</span><span>运行 tools/verify_render.py 生成 03_rain_three_quarter.png</span></div><div class="pending"><b>待渲染</b><span>顶视 · 汀步走向与庭院布局</span><span>运行 tools/verify_render.py 生成 02_snow_top.png</span></div></div>
-<footer><p>可编辑 Blender 场景 · 240 帧 / 24 fps · 雨雪互斥切换 · 原生驱动动画</p><nav><a href="../Jiangnan.blend">Blender 场景</a><a href="../jiangnan.py">构建脚本</a><a href="../docs/usage.md">使用说明</a><a href="../validation/validation.json">验证记录</a></nav></footer></main>
-<script>
-// 04_snow_front.png 渲染完成后，删除 snow 按钮的 disabled 即可启用切换。
-function show(snow){var hero=document.getElementById('hero');hero.src=snow?'04_snow_front.png':'01_rain_front.png';hero.alt=snow?'正面雪夜庭院':'正面烟雨庭院';document.getElementById('caption').textContent=snow?'正面 · 雪月：薄雪覆瓦，暖灯照梅。':'正面 · 烟雨：湿石、细雨与静水倒影。';document.getElementById('rain').setAttribute('aria-pressed',!snow);document.getElementById('snow').setAttribute('aria-pressed',snow)}
-</script></html>
+<title>烟雨江南 · 空间诊断档案</title><style>
+*{box-sizing:border-box}body{margin:0;background:#10191d;color:#dae0dc;font-family:Georgia,'KaiTi',serif}main{max-width:1250px;margin:auto;padding:50px 28px}header{display:flex;justify-content:space-between;align-items:end;gap:30px;margin-bottom:30px}h1{font-size:34px;font-weight:400;letter-spacing:5px;margin:10px 0}h2{font-weight:400;letter-spacing:3px;margin:42px 0 20px}p{color:#aab8b8;line-height:1.8}small,.tag{color:#bc9c6a;letter-spacing:4px}.tag{border:1px solid #665943;padding:9px 13px;white-space:nowrap}a{color:#d4c5a8;background:none;border:1px solid #576163;padding:10px 20px;text-decoration:none}img{width:100%;display:block;background:#152027}figure{margin:0 0 32px}figcaption{padding:14px 0;font-size:15px;color:#b2bebc;line-height:1.65}.grid{display:grid;grid-template-columns:1fr 1fr;gap:28px}.page{font-size:12px;color:#bc9c6a;letter-spacing:3px}.note{border-left:2px solid #665943;padding:10px 18px;margin:25px 0;background:#131e22}nav{display:flex;gap:12px;flex-wrap:wrap;margin:25px 0}footer{border-top:1px solid #344147;padding-top:20px}@media(max-width:650px){header{display:block}.grid{grid-template-columns:1fr}h1{font-size:25px}.tag{display:inline-block;margin-top:12px}}
+</style><main>
+<header><div><small>致虚极 · 守静笃</small><h1>烟雨江南 / 空间诊断档案</h1><p>先把空间与建筑关系做对，再做少量高质量成片。</p></div><div class="tag">正式多机位渲染已暂停</div></header>
+
+<div class="note"><p>2026-09-20 起，不再以补齐大量正式机位为目标。下面直接收录仓库已有渲染作为阶段页；新的迭代使用 10 个低成本诊断机位检查路径、尺度、构造和遮挡。</p></div>
+
+<figure><span class="page">页 01 · 当前正式基线</span><img src="01_rain_front.png" alt="正面烟雨庭院"><figcaption>正面 · 烟雨：当前正式基线，用于判断总体气氛与主景关系，不要求后续每轮都做同等成本渲染。</figcaption></figure>
+
+<h2>阶段过程页</h2>
+<div class="grid">
+<figure><span class="page">页 02 · 庭院骨架</span><img src="../progress/01_courtyard.png" alt="庭院骨架"><figcaption>庭院骨架：重点看院墙、池面、月门、听雨轩的基础位置关系。</figcaption></figure>
+<figure><span class="page">页 03 · 植被加入</span><img src="../progress/02_vegetation.png" alt="植被加入"><figcaption>植被阶段：检查梅枝、竹影是否帮助空间分层，而不是遮死通行与主体。</figcaption></figure>
+<figure><span class="page">页 04 · 氛围建立</span><img src="../progress/05_atmosphere.png" alt="氛围建立"><figcaption>氛围阶段：观察月光、灯光、远山与庭院几何之间的主次。</figcaption></figure>
+<figure><span class="page">页 05 · 第一轮精修</span><img src="../progress/06_refined.png" alt="第一轮精修"><figcaption>精修阶段：用于与后续空间修改做前后对照。</figcaption></figure>
+<figure><span class="page">页 06 · 法线与云层修正</span><img src="../progress/07_normals_cloud.png" alt="法线与云层修正"><figcaption>技术修正页：记录法线和云层修复后的阶段结果。</figcaption></figure>
+<figure><span class="page">页 07 · 云层精修</span><img src="../progress/08_cloud_refine.png" alt="云层精修"><figcaption>当前过程图末页：后续不再为“凑页数”渲染，新增图只服务于明确诊断问题。</figcaption></figure>
+</div>
+
+<footer><p>新循环：重建 → 结构断言 → 10 机位低成本诊断 → 修改空间/构造 → 再诊断。</p><nav><a href="../docs/iteration-loop.md">迭代协议</a><a href="../Jiangnan.blend">Blender 场景</a><a href="../jiangnan.py">构建脚本</a><a href="../validation/validation.json">验证记录</a></nav></footer>
+</main></html>
