@@ -63,7 +63,7 @@ jobs:
 
       - name: Execute scene assertions in Blender
         env:
-          JN_SKIP_RENDER: '1'
+          JN_FORMAL_RENDER: '0'
           JN_OUT: ${{ runner.temp }}/jiangnan-smoke
         run: |
           "${RUNNER_TOOL_CACHE}/blender-4.5.14/blender" --background "${JN_OUT}/Jiangnan.blend" --python-exit-code 1 --python tools/verify_render.py
