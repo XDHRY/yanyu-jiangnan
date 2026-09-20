@@ -23,7 +23,7 @@ Blender 4.5.14 CI 重建基线：2924 对象（1464 网格 + 1404 曲线）/ 183
 1. 推荐从 GitHub Actions 的 **Blender 4.5 Scene Smoke** 下载与当前 commit 绑定的 `Jiangnan-Blender-4.5-*` artifact；其中的 `Jiangnan.blend` 是由当前源码和 `textures/` 从零重建并通过断言的可验证产物。
 2. 也可以用 **Blender 4.5 LTS** 直接运行 `jiangnan.py` 全量重建。根目录现有 `Jiangnan.blend` 保留为历史预览快照，不再视为权威构建产物。
 3. 若提示禁用驱动表达式，选择信任并启用脚本自动运行；播放时间轴（1–240 帧）查看动态，并在 `JN_总控_天气0雨1雪_风力` 上切换 `Weather`（0 雨 / 1 雪）与 `Wind`（0–2）。
-4. 浏览器打开 `renders/gallery.html` 查看静帧预览页。
+4. 浏览器打开 `renders/gallery.html` 查看现有正式图与构建阶段图；当前不再补齐高成本多机位静帧。\n5. 空间调整优先运行 `tools/diagnostic_review.py`，用 10 个 640×400 Eevee 诊断机位检查路径、尺度、构造和遮挡。
 
 更多操作细节见 [docs/usage.md](docs/usage.md)。
 
@@ -36,10 +36,10 @@ Blender 4.5.14 CI 重建基线：2924 对象（1464 网格 + 1404 曲线）/ 183
 ```
 
 - `stage` 1–5 分阶段构建（庭院→植被→雨雪→天空→灯光），调试用低 stage 更快。
-- `render=True` 时构建完成后自动渲染正面、顶视、三分之四三个机位到 `renders/`。
+- `render=True` 仍保留为显式人工选项，但默认 `False`；当前迭代不靠批量正式渲染。\n- `tools/verify_render.py` 默认只做断言；只有显式 `JN_FORMAL_RENDER=1` 才会运行旧的正式静帧任务。
 - 输出目录默认取当前 `.blend` 所在目录（仓库内即根目录），需有 `textures/` 子目录；可用环境变量 `JN_OUT` 覆盖。
 
-升级路线、脚本契约与验证清单见 [docs/development.md](docs/development.md)；贴图与美术标准见 [docs/art-direction.md](docs/art-direction.md)。
+升级路线、脚本契约与验证清单见 [docs/development.md](docs/development.md)；当前循环见 [docs/iteration-loop.md](docs/iteration-loop.md)；贴图与美术标准见 [docs/art-direction.md](docs/art-direction.md)。
 
 ## 目录结构
 
@@ -49,7 +49,7 @@ Blender 4.5.14 CI 重建基线：2924 对象（1464 网格 + 1404 曲线）/ 183
 ├── textures/          # 7 张贴图 + 生成提示词存档
 ├── renders/           # 正式静帧 + gallery.html 预览页
 ├── validation/        # 场景统计与验证记录
-├── tools/             # verify_render.py（验证 + 四机位出图）
+├── tools/             # verify_render.py（默认只验证）+ diagnostic_review.py（10 机位低成本诊断）
 ├── progress/          # 构建过程图与渲染日志
 └── docs/              # usage / art-direction / development
 ```
