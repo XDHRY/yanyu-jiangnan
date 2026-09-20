@@ -19,7 +19,7 @@ jobs:
           python-version: '3.12'
 
       - name: Compile Blender Python sources
-        run: python -m py_compile jiangnan.py tools/verify_render.py
+        run: python -m py_compile jiangnan.py tools/verify_render.py tools/diagnostic_review.py
 
       - name: Validate archived scene evidence
         shell: bash
@@ -60,7 +60,7 @@ jobs:
               Path('jiangnan.py'),
               Path('tools/verify_render.py'),
               Path('renders/01_rain_front.png'),
-              Path('renders/gallery.html'),
+              Path('renders/gallery.html'),\n              Path('tools/diagnostic_review.py'),\n              Path('docs/iteration-loop.md'),
           ]
           missing = [str(p) for p in required if not p.exists()]
           assert not missing, f'missing required delivery files: {missing}'
