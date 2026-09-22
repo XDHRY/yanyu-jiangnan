@@ -84,6 +84,7 @@ approach_gap=(moon_pts[0]-pos(stepping[-1])).length
 gate_endpoint_distance=dist_xy(moon_pts[-1],gate_center)
 assert all(moon_pts[i+1].y>moon_pts[i].y for i in range(len(moon_pts)-1))
 assert max(moon_gaps)<0.9
+assert approach_gap<1.0
 assert gate_endpoint_distance<0.8
 
 pavilion=objs('JN_听雨轩入轩踏步')
@@ -139,8 +140,8 @@ report['spatial_semantics']={
     },
 }
 report['spatial_warnings']=[]
-if approach_gap>2.2:
-    report['spatial_warnings'].append('moon gate approach transition is unusually long even across the paved courtyard')
+if approach_gap>0.9:
+    report['spatial_warnings'].append('moon gate approach is close to the maximum allowed transition gap')
 if gate_clear_width_at_path_top<1.0:
     report['spatial_warnings'].append('moon gate circular opening is nearly tangent to the path top; inspect human-height clearance')
 print('SPATIAL_SEMANTICS',json.dumps(report['spatial_semantics'],ensure_ascii=False))
