@@ -9,8 +9,10 @@ CTRL=bpy.data.objects['JN_总控_天气0雨1雪_风力']
 def weather(v):
     CTRL['Weather']=v;CTRL.update_tag();S.frame_set(S.frame_current);bpy.context.view_layer.update()
 def count(prefix):return sum(not o.hide_render for o in S.objects if o.name.startswith(prefix))
-def objs(prefix):return sorted([o for o in S.objects if o.name.startswith(prefix)],key=lambda o:o.matrix_world.translation.y)
-def pos(o):return o.matrix_world.translation.copy()
+def pos(o):
+    corners=[o.matrix_world @ Vector(corner) for corner in o.bound_box]
+    return sum(corners,Vector((0,0,0)))/len(corners)
+def objs(prefix):return sorted([o for o in S.objects if o.name.startswith(prefix)],key=lambda o:pos(o).y)
 def dist_xy(a,b):return ((a.x-b.x)**2+(a.y-b.y)**2)**0.5
 report={}
 for state in [0,1]:
