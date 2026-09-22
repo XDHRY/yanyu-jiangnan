@@ -171,8 +171,10 @@ def courtyard():
     # This prevents the gate from reading as isolated scenery when viewed from human-height diagnostic cameras.
     for i in range(7):
         t=i/6
-        x=.08+(1.4-.08)*t+.07*sin(i*.9);y=.75+i*.66
-        box('月门引路石',(x,y,.19),(1.08,.56,.12),M['stone'] if i%3 else M['darkstone'],w,.045)
+        # Continue the pond's S-curve instead of jumping sideways onto a second, unrelated axis.
+        # Keep these stones almost flush with the courtyard paving: they should read as guidance, not obstacles.
+        x=-1.05+(1.4+1.05)*t+.06*sin(i*.9);y=.62+i*.68
+        box('月门引路石',(x,y,.14),(1.04,.54,.10),M['stone'] if i%3 else M['darkstone'],w,.04)
     # Rear wall segments surround a genuine circular aperture, no boolean dependency.
     gx=1.4;gy=5.2;zc=2.0;rad=2.0;H=4.75
     box('白墙_西',(-5.3,gy,H/2),(9.4,.48,H),M['plaster'],c,.035)
