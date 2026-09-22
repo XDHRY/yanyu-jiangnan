@@ -9,6 +9,9 @@ CTRL=bpy.data.objects['JN_总控_天气0雨1雪_风力']
 def weather(v):
     CTRL['Weather']=v;CTRL.update_tag();S.frame_set(S.frame_current);bpy.context.view_layer.update()
 def count(prefix):return sum(not o.hide_render for o in S.objects if o.name.startswith(prefix))
+def objs(prefix):return sorted([o for o in S.objects if o.name.startswith(prefix)],key=lambda o:o.matrix_world.translation.y)
+def pos(o):return o.matrix_world.translation.copy()
+def dist_xy(a,b):return ((a.x-b.x)**2+(a.y-b.y)**2)**0.5
 report={}
 for state in [0,1]:
     weather(state)
@@ -67,6 +70,80 @@ report['spatial_connectors']={
     'waterside_steps':sum(o.name.startswith('JN_临水踏步') for o in S.objects),
 }
 assert report['spatial_connectors']=={'moon_gate_path':7,'pavilion_steps':3,'waterside_steps':3}
+
+# Spatial semantics: verify that connectors are not merely present, but actually connect in plausible order.
+bpy.context.view_layer.update()
+moon=objs('JN_月门引路石')
+moon_pts=[pos(o) for o in moon]
+moon_gaps=[(moon_pts[i+1]-moon_pts[i]).length for i in range(len(moon_pts)-1)]
+gate_center=Vector((1.4,5.2,0.0))
+stepping=objs('JN_曲水汀步')
+approach_gap=(moon_pts[0]-pos(stepping[-1])).length
+gate_endpoint_distance=dist_xy(moon_pts[-1],gate_center)
+assert all(moon_pts[i+1].y>moon_pts[i].y for i in range(len(moon_pts)-1))
+assert max(moon_gaps)<0.9
+assert gate_endpoint_distance<0.8
+
+pavilion=objs('JN_听雨轩入轩踏步')
+pavilion_pts=[pos(o) for o in pavilion]
+platform=next(o for o in S.objects if o.name.startswith('JN_听雨轩台基'))
+platform_front=pos(platform).y-platform.dimensions.y/2
+nearest_pavilion=pavilion[-1]
+nearest_min=pos(nearest_pavilion).y-nearest_pavilion.dimensions.y/2
+nearest_max=pos(nearest_pavilion).y+nearest_pavilion.dimensions.y/2
+platform_edge_overlap=nearest_min<=platform_front<=nearest_max
+assert all(pavilion_pts[i+1].y>pavilion_pts[i].y for i in range(len(pavilion_pts)-1))
+assert all(pavilion_pts[i+1].z>pavilion_pts[i].z for i in range(len(pavilion_pts)-1))
+assert platform_edge_overlap
+
+waterside=objs('JN_临水踏步')
+waterside_pts=[pos(o) for o in waterside]
+pond=next(o for o in S.objects if o.name.startswith('JN_静水'))
+pond_near_edge=pos(pond).y+pond.dimensions.y/2
+land_step=waterside[-1]
+land_step_min=pos(land_step).y-land_step.dimensions.y/2
+land_step_max=pos(land_step).y+land_step.dimensions.y/2
+crosses_pond_edge=land_step_min<=pond_near_edge<=land_step_max
+water_step_inside=waterside_pts[0].y<pond_near_edge
+assert all(waterside_pts[i+1].y>waterside_pts[i].y for i in range(len(waterside_pts)-1))
+assert all(waterside_pts[i+1].z>waterside_pts[i].z for i in range(len(waterside_pts)-1))
+assert crosses_pond_edge and water_step_inside
+
+last_moon=max(moon,key=lambda o:pos(o).y)
+path_top=pos(last_moon).z+last_moon.dimensions.z/2
+gate_zc=2.25;gate_radius=2.0
+gate_radial=max(0.0,gate_radius**2-(path_top-gate_zc)**2)
+gate_clear_width_at_path_top=2*(gate_radial**0.5)
+
+report['spatial_semantics']={
+    'moon_gate_path':{
+        'monotonic_to_gate':True,
+        'max_internal_gap':round(max(moon_gaps),3),
+        'gate_endpoint_distance':round(gate_endpoint_distance,3),
+        'approach_gap_from_stepping_stones':round(approach_gap,3),
+        'gate_clear_width_at_path_top':round(gate_clear_width_at_path_top,3),
+    },
+    'pavilion_steps':{
+        'rise_toward_platform':True,
+        'platform_edge_overlap':platform_edge_overlap,
+        'platform_front_y':round(platform_front,3),
+    },
+    'waterside_steps':{
+        'rise_toward_land':True,
+        'crosses_pond_edge':crosses_pond_edge,
+        'water_step_inside_pond':water_step_inside,
+        'pond_near_edge_y':round(pond_near_edge,3),
+    },
+}
+report['spatial_warnings']=[]
+if approach_gap>1.25:
+    report['spatial_warnings'].append('moon gate approach has a large transition gap from the last pond stepping stone')
+if gate_clear_width_at_path_top<1.0:
+    report['spatial_warnings'].append('moon gate circular opening is nearly tangent to the path top; inspect human-height clearance')
+print('SPATIAL_SEMANTICS',json.dumps(report['spatial_semantics'],ensure_ascii=False))
+if report['spatial_warnings']:
+    print('SPATIAL_WARNINGS',json.dumps(report['spatial_warnings'],ensure_ascii=False))
+
 report['outward_normals']={}
 for prefix in ['JN_云团','JN_明月','JN_花尖露珠']:
     o=next(o for o in S.objects if o.name.startswith(prefix));m=o.data;m.calc_loop_triangles()
