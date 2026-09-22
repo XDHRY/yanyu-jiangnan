@@ -68,8 +68,14 @@ for name,loc,target,lens,ortho,question in VIEWS:
         'ortho_scale':ortho or None,'question':question,'seconds':round(time.time()-start,2)
     })
 
+def world_center(o):
+    # Procedural boxes bake world coordinates into mesh vertices, so object origins remain at (0,0,0).
+    # Derive evidence from transformed bounding-box corners rather than matrix_world.translation.
+    corners=[o.matrix_world @ Vector(corner) for corner in o.bound_box]
+    return sum(corners,Vector((0,0,0)))/len(corners)
 def centers(prefix):
-    return [list(o.matrix_world.translation) for o in S.objects if o.name.startswith(prefix)]
+    objects=sorted([o for o in S.objects if o.name.startswith(prefix)],key=lambda o:world_center(o).y)
+    return [[round(v,4) for v in world_center(o)] for o in objects]
 manifest['spatial_evidence']={
     'stepping_stones':centers('JN_曲水汀步'),
     'moon_gate_path':centers('JN_月门引路石'),
