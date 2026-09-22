@@ -75,9 +75,15 @@ jobs:
           m=json.loads((root/'manifest.json').read_text(encoding='utf-8'))
           assert len(m['views']) == 10
           assert len({v['file'] for v in m['views']}) == 10
-          assert len(m['spatial_evidence']['moon_gate_path']) == 7
-          assert len(m['spatial_evidence']['pavilion_steps']) == 3
-          assert len(m['spatial_evidence']['waterside_steps']) == 3
+          evidence=m['spatial_evidence']
+          assert len(evidence['stepping_stones']) == 12
+          assert len(evidence['moon_gate_path']) == 7
+          assert len(evidence['pavilion_steps']) == 3
+          assert len(evidence['waterside_steps']) == 3
+          for key,pts in evidence.items():
+              assert all(len(p)==3 for p in pts), (key,pts)
+              assert any(any(abs(c)>1e-6 for c in p) for p in pts), f'{key} contains only origin placeholders'
+          assert all(b[1] > a[1] for a,b in zip(evidence['moon_gate_path'],evidence['moon_gate_path'][1:]))
           missing=[v['file'] for v in m['views'] if not (root/v['file']).exists()]
           assert not missing, missing
           tiny=[v['file'] for v in m['views'] if (root/v['file']).stat().st_size < 1024]
