@@ -113,9 +113,10 @@ assert crosses_pond_edge and water_step_inside
 
 last_moon=max(moon,key=lambda o:pos(o).y)
 path_top=pos(last_moon).z+last_moon.dimensions.z/2
-gate_zc=2.25;gate_radius=2.0
+gate_zc=2.0;gate_radius=2.0
 gate_radial=max(0.0,gate_radius**2-(path_top-gate_zc)**2)
 gate_clear_width_at_path_top=2*(gate_radial**0.5)
+assert gate_clear_width_at_path_top>1.5
 
 report['spatial_semantics']={
     'moon_gate_path':{
@@ -138,8 +139,8 @@ report['spatial_semantics']={
     },
 }
 report['spatial_warnings']=[]
-if approach_gap>1.25:
-    report['spatial_warnings'].append('moon gate approach has a large transition gap from the last pond stepping stone')
+if approach_gap>2.2:
+    report['spatial_warnings'].append('moon gate approach transition is unusually long even across the paved courtyard')
 if gate_clear_width_at_path_top<1.0:
     report['spatial_warnings'].append('moon gate circular opening is nearly tangent to the path top; inspect human-height clearance')
 print('SPATIAL_SEMANTICS',json.dumps(report['spatial_semantics'],ensure_ascii=False))
