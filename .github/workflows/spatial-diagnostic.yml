@@ -18,6 +18,14 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
+      - name: Install headless graphics runtime
+        shell: bash
+        run: |
+          set -euxo pipefail
+          sudo apt-get update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+            xvfb xauth libegl1 libgl1 libglx-mesa0 libegl-mesa0 mesa-vulkan-drivers
+
       - name: Cache Blender
         id: blender-cache
         uses: actions/cache@v4
@@ -52,8 +60,9 @@ jobs:
       - name: Render ten low-cost diagnostic views
         env:
           JN_OUT: ${{ runner.temp }}/jiangnan-diagnostic
+          LIBGL_ALWAYS_SOFTWARE: '1'
         run: |
-          "${RUNNER_TOOL_CACHE}/blender-4.5.14/blender" --background "${JN_OUT}/Jiangnan.blend" --python-exit-code 1 --python tools/diagnostic_review.py
+          xvfb-run -a "${RUNNER_TOOL_CACHE}/blender-4.5.14/blender" --background "${JN_OUT}/Jiangnan.blend" --python-exit-code 1 --python tools/diagnostic_review.py
 
       - name: Validate diagnostic manifest
         env:
@@ -65,12 +74,15 @@ jobs:
           root=Path(os.environ['JN_OUT'])/'diagnostics'
           m=json.loads((root/'manifest.json').read_text(encoding='utf-8'))
           assert len(m['views']) == 10
+          assert len({v['file'] for v in m['views']}) == 10
           assert len(m['spatial_evidence']['moon_gate_path']) == 7
           assert len(m['spatial_evidence']['pavilion_steps']) == 3
           assert len(m['spatial_evidence']['waterside_steps']) == 3
           missing=[v['file'] for v in m['views'] if not (root/v['file']).exists()]
           assert not missing, missing
-          print('diagnostic views OK')
+          tiny=[v['file'] for v in m['views'] if (root/v['file']).stat().st_size < 1024]
+          assert not tiny, f'empty/tiny diagnostic images: {tiny}'
+          print('diagnostic views OK', [(v['file'], (root/v['file']).stat().st_size) for v in m['views']])
           PY
 
       - name: Publish spatial diagnostic artifact
@@ -80,4 +92,4 @@ jobs:
           path: ${{ runner.temp }}/jiangnan-diagnostic/diagnostics/
           if-no-files-found: error
           compression-level: 6
-          retention-days: 7
+          retention-days: 14
