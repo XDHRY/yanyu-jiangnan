@@ -167,8 +167,16 @@ def courtyard():
     for i in range(12):
         y=-7.3+i*.68;x=1.3*sin(i*.37)-.6
         o=box('曲水汀步',(x,y,.22),(1.32,.57,.25),M['stone'],w,.08)
+    # Continue the walking logic from pond to moon gate with a restrained, slightly offset stone axis.
+    # This prevents the gate from reading as isolated scenery when viewed from human-height diagnostic cameras.
+    for i in range(7):
+        t=i/6
+        # Continue the pond's S-curve instead of jumping sideways onto a second, unrelated axis.
+        # Keep these stones almost flush with the courtyard paving: they should read as guidance, not obstacles.
+        x=-1.05+(1.4+1.05)*t+.06*sin(i*.9);y=.62+i*.68
+        box('月门引路石',(x,y,.14),(1.04,.54,.10),M['stone'] if i%3 else M['darkstone'],w,.04)
     # Rear wall segments surround a genuine circular aperture, no boolean dependency.
-    gx=1.4;gy=5.2;zc=2.25;rad=2.0;H=4.75
+    gx=1.4;gy=5.2;zc=2.0;rad=2.0;H=4.75
     box('白墙_西',(-5.3,gy,H/2),(9.4,.48,H),M['plaster'],c,.035)
     box('白墙_东',(7.3,gy,H/2),(7.8,.48,H),M['plaster'],c,.035)
     v=[];f=[]
@@ -209,6 +217,9 @@ def courtyard():
     for y in [-.8,3.2]:box('轩梁',(-7,y,3.8),(4.7,.24,.32),M['wood'],c,.035)
     for x in [-9,-5]:box('轩梁',(x,1.2,3.8),(.24,4.5,.32),M['wood'],c,.035)
     roof('听雨轩',-7,1.2,3.9,6,5.8,c)
+    # Three shallow entrance steps make the pavilion platform physically legible from the courtyard.
+    for y,z,width in [(-1.56,.24,2.15),(-1.82,.16,2.55),(-2.08,.09,2.95)]:
+        box('听雨轩入轩踏步',(-7,y,z),(width,.40,.18),M['stone'],c,.045)
     for i in range(15):
         x=-8.8+i*.26;box('轩后竹格',(x,3.2,2.0),(.055,.08,2.8),M['wood'],c,.012)
     box('茶案',(-7,1.5,1.05),(2.3,.85,.16),M['wood'],c,.05)
@@ -216,6 +227,9 @@ def courtyard():
     uv('茶壶',(-7,1.5,1.25),(.16,.13,.14),M['darkstone'],c)
     for x in [-7.5,-6.5]:uv('茶盏',(x,1.45,1.19),(.075,.075,.05),M['bronze'],c)
     for x,y,s in [(-3.2,-2.2,1.0),(5.2,.3,1.15),(3.8,6.9,.85),(-8.2,-5.8,.8)]:lantern(x,y,s)
+    # A compact waterside landing explains how a person reaches the pond edge instead of stopping at a hard rectangle.
+    for y,z,width in [(-.45,.18,1.55),(-.82,.14,1.42),(-1.18,.11,1.30)]:
+        box('临水踏步',(5.15,y,z),(width,.48,.16),M['stone'],w,.05)
     # Borrowed scenery behind the opening and scholar stones by water.
     for i in range(7):box('门后石径',(1.4+.25*sin(i),6+i*.8,.12),(1.5,.7,.18),M['stone'],w,.05)
     for x,y,s in [(-4.2,-.4,1.0),(6.7,-1.4,1.5),(7.4,-2.0,.8),(-8.1,-3.5,.7)]:
