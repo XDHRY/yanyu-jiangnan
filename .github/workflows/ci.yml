@@ -19,7 +19,7 @@ jobs:
           python-version: '3.12'
 
       - name: Compile Blender Python sources
-        run: python -m py_compile jiangnan.py tools/verify_render.py tools/diagnostic_review.py
+        run: python -m py_compile jiangnan.py tools/verify_render.py tools/diagnostic_review.py tools/asset_budget.py
 
       - name: Validate archived scene evidence
         shell: bash
@@ -63,6 +63,8 @@ jobs:
               Path('renders/gallery.html'),
               Path('tools/diagnostic_review.py'),
               Path('docs/iteration-loop.md'),
+              Path('docs/asset-production-loop.md'),
+              Path('tools/asset_budget.py'),
           ]
           missing = [str(p) for p in required if not p.exists()]
           assert not missing, f'missing required delivery files: {missing}'
@@ -80,11 +82,12 @@ jobs:
               'E:' + sep + 'UserData' + sep,
               'E:' + sep + 'zhuomian' + sep,
           )
-          for file in [Path('jiangnan.py'), Path('tools/verify_render.py')]:
+          for file in [Path('jiangnan.py'), Path('tools/verify_render.py'), Path('tools/diagnostic_review.py'), Path('tools/asset_budget.py')]:
               text = file.read_text(encoding='utf-8')
               for marker in markers:
                   assert marker not in text, f'non-portable local path in {file}: {marker}'
           assert "os.environ.get('JN_OUT')" in Path('jiangnan.py').read_text(encoding='utf-8')
           assert "os.environ.get('JN_OUT')" in Path('tools/verify_render.py').read_text(encoding='utf-8')
+          assert "os.environ.get(\"JN_OUT\")" in Path('tools/asset_budget.py').read_text(encoding='utf-8')
           print('source portability OK')
           PY
