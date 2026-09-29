@@ -7,6 +7,7 @@ on:
       - 'jiangnan.py'
       - 'tools/diagnostic_review.py'
       - 'tools/verify_render.py'
+      - 'tools/asset_budget.py'
       - 'textures/**'
       - '.github/workflows/spatial-diagnostic.yml'
   workflow_dispatch:
@@ -57,6 +58,12 @@ jobs:
         run: |
           "${RUNNER_TOOL_CACHE}/blender-4.5.14/blender" --background "${JN_OUT}/Jiangnan.blend" --python-exit-code 1 --python tools/verify_render.py
 
+      - name: Measure asset and texture budget
+        env:
+          JN_OUT: ${{ runner.temp }}/jiangnan-diagnostic
+        run: |
+          "${RUNNER_TOOL_CACHE}/blender-4.5.14/blender" --background "${JN_OUT}/Jiangnan.blend" --python-exit-code 1 --python tools/asset_budget.py
+
       - name: Render ten low-cost diagnostic views
         env:
           JN_OUT: ${{ runner.temp }}/jiangnan-diagnostic
@@ -95,7 +102,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Jiangnan-Spatial-Diagnostics-${{ github.sha }}
-          path: ${{ runner.temp }}/jiangnan-diagnostic/diagnostics/
+          path: |
+            ${{ runner.temp }}/jiangnan-diagnostic/diagnostics/
+            ${{ runner.temp }}/jiangnan-diagnostic/validation/asset_budget.json
           if-no-files-found: error
           compression-level: 6
           retention-days: 14
