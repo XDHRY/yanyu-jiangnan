@@ -255,10 +255,11 @@ def petals(name,positions,col,parent=None):
             a=angle+2*pi*k/5;axis=u*cos(a)+v*sin(a);side=-u*sin(a)+v*cos(a)
             center=Vector(pos);idx=len(vv)
             vv.append(tuple(center+normal*.009));uvs.append((.5,.16))
-            for j in range(9):
-                t=2*pi*j/8;p=center+axis*size*(.53+.53*cos(t))+side*size*.43*sin(t)+normal*size*.15*(1+cos(t))
+            petal_segments=6
+            for j in range(petal_segments+1):
+                t=2*pi*j/petal_segments;p=center+axis*size*(.53+.53*cos(t))+side*size*.43*sin(t)+normal*size*.15*(1+cos(t))
                 vv.append(tuple(p));uvs.append((.5+.33*sin(t),.5+.33*cos(t)))
-            for j in range(8):ff.append((idx,idx+j+1,idx+j+2))
+            for j in range(petal_segments):ff.append((idx,idx+j+1,idx+j+2))
         # Raised pollen centers remain 3D instead of being painted into albedo.
         center=Vector(pos)+normal*size*.17;idx=len(stamenv);r=size*.14
         stamenv.extend([tuple(center+v*r),tuple(center-v*r),tuple(center+u*r),tuple(center-u*r),tuple(center+normal*r)])
