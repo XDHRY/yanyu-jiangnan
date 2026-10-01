@@ -340,7 +340,7 @@ def weather():
         for i in range(count):
             x=R.uniform(-10,10);y=R.uniform(-8,9);z=R.uniform(.3,10)
             if proto is None:
-                if snow:proto=uv('雪粒',(0,0,0),(.024,.018,.024),M['snow'],col,6,4)
+                if snow:proto=uv('雪粒',(0,0,0),(.024,.018,.024),M['snow'],col,4,3)
                 else:proto=line('雨丝',[(0,0,0),(.016,.008,-.17)],.0017,M['rain'],col)
                 o=proto
             else:o=bpy.data.objects.new(PREFIX+('雪粒' if snow else '雨丝'),proto.data);col.objects.link(o)
