@@ -41,13 +41,20 @@ def uv(name,loc,scale,mat,col,seg=16,rings=8):
     o=mesh(name,v,f,mat,col)
     for p in o.data.polygons:p.use_smooth=True
     return o
-def line(name,pts,radius,mat,col,radii=None):
-    d=bpy.data.curves.new(PREFIX+name,'CURVE'); d.dimensions='3D'; d.resolution_u=12; d.bevel_depth=radius; d.bevel_resolution=3
+def line(name,pts,radius,mat,col,radii=None,res=12,bevel_res=3):
+    d=bpy.data.curves.new(PREFIX+name,'CURVE'); d.dimensions='3D'; d.resolution_u=res; d.bevel_depth=radius; d.bevel_resolution=bevel_res
     s=d.splines.new('BEZIER'); s.bezier_points.add(len(pts)-1)
     for i,(p,co) in enumerate(zip(s.bezier_points,pts)):
         p.co=co
         enum(p,'handle_left_type','AUTO'); enum(p,'handle_right_type','AUTO')
         if radii:p.radius=radii[i]
+    o=bpy.data.objects.new(PREFIX+name,d);col.objects.link(o);d.materials.append(mat);return o
+def lines(name,paths,radius,mat,col,res=3,bevel_res=1):
+    d=bpy.data.curves.new(PREFIX+name,'CURVE');d.dimensions='3D';d.resolution_u=res;d.bevel_depth=radius;d.bevel_resolution=bevel_res
+    for pts in paths:
+        sp=d.splines.new('BEZIER');sp.bezier_points.add(len(pts)-1)
+        for p,co in zip(sp.bezier_points,pts):
+            p.co=co;enum(p,'handle_left_type','AUTO');enum(p,'handle_right_type','AUTO')
     o=bpy.data.objects.new(PREFIX+name,d);col.objects.link(o);d.materials.append(mat);return o
 def material(name,color,rough=.5,noise=0,metal=0,emit=0):
     m=bpy.data.materials.new(PREFIX+name);m.use_nodes=True;m.diffuse_color=(*color,1)
@@ -131,14 +138,15 @@ def roof(name,cx,cy,z,w,d,col):
                     zz=z+1.15*(1-t)**1.8+.24*(abs(x)/(w/2))**8*t**3
                     v.append((cx+x,cy+side*(d/2)*t,zz))
                 f.append(tuple(range(k,k+4)))
+        tile_paths=[]
         for i in range(nx+1):
             x=-w/2+w*i/nx
-            pts=[(cx+x,cy+side*d/2*t,z+1.15*(1-t)**1.8+.24*(abs(x)/(w/2))**8*t**3+.025) for t in [0,.2,.4,.6,.8,1]]
-            line(name+'_筒瓦',pts,.045,M['tile'],col)
+            tile_paths.append([(cx+x,cy+side*d/2*t,z+1.15*(1-t)**1.8+.24*(abs(x)/(w/2))**8*t**3+.025) for t in [0,.2,.4,.6,.8,1]])
+        lines(name+('_筒瓦_南' if side<0 else '_筒瓦_北'),tile_paths,.045,M['tile'],col,3,1)
     o=mesh(name+'_瓦面',v,f,M['tile'],col)
-    line(name+'_正脊',[(cx-w/2-.1,cy,z+1.45),(cx-w/2+.5,cy,z+1.23),(cx,cy,z+1.22),(cx+w/2-.5,cy,z+1.23),(cx+w/2+.1,cy,z+1.45)],.11,M['edge'],col)
+    line(name+'_正脊',[(cx-w/2-.1,cy,z+1.45),(cx-w/2+.5,cy,z+1.23),(cx,cy,z+1.22),(cx+w/2-.5,cy,z+1.23),(cx+w/2+.1,cy,z+1.45)],.11,M['edge'],col,res=6,bevel_res=2)
     for side in [-1,1]:
-        line(name+'_檐口',[(cx+x,cy+side*d/2,z+.24*(abs(x)/(w/2))**8) for x in [-w/2,-w/3,0,w/3,w/2]],.075,M['edge'],col)
+        line(name+'_檐口',[(cx+x,cy+side*d/2,z+.24*(abs(x)/(w/2))**8) for x in [-w/2,-w/3,0,w/3,w/2]],.075,M['edge'],col,res=6,bevel_res=2)
     return o
 def lantern(x,y,h=1):
     c=C['court'];s=h
@@ -167,8 +175,16 @@ def courtyard():
     for i in range(12):
         y=-7.3+i*.68;x=1.3*sin(i*.37)-.6
         o=box('曲水汀步',(x,y,.22),(1.32,.57,.25),M['stone'],w,.08)
+    # Continue the walking logic from pond to moon gate with a restrained, slightly offset stone axis.
+    # This prevents the gate from reading as isolated scenery when viewed from human-height diagnostic cameras.
+    for i in range(7):
+        t=i/6
+        # Continue the pond's S-curve instead of jumping sideways onto a second, unrelated axis.
+        # Keep these stones almost flush with the courtyard paving: they should read as guidance, not obstacles.
+        x=-1.05+(1.4+1.05)*t+.06*sin(i*.9);y=.62+i*.68
+        box('月门引路石',(x,y,.14),(1.04,.54,.10),M['stone'] if i%3 else M['darkstone'],w,.04)
     # Rear wall segments surround a genuine circular aperture, no boolean dependency.
-    gx=1.4;gy=5.2;zc=2.25;rad=2.0;H=4.75
+    gx=1.4;gy=5.2;zc=2.0;rad=2.0;H=4.75
     box('白墙_西',(-5.3,gy,H/2),(9.4,.48,H),M['plaster'],c,.035)
     box('白墙_东',(7.3,gy,H/2),(7.8,.48,H),M['plaster'],c,.035)
     v=[];f=[]
@@ -209,6 +225,9 @@ def courtyard():
     for y in [-.8,3.2]:box('轩梁',(-7,y,3.8),(4.7,.24,.32),M['wood'],c,.035)
     for x in [-9,-5]:box('轩梁',(x,1.2,3.8),(.24,4.5,.32),M['wood'],c,.035)
     roof('听雨轩',-7,1.2,3.9,6,5.8,c)
+    # Three shallow entrance steps make the pavilion platform physically legible from the courtyard.
+    for y,z,width in [(-1.56,.24,2.15),(-1.82,.16,2.55),(-2.08,.09,2.95)]:
+        box('听雨轩入轩踏步',(-7,y,z),(width,.40,.18),M['stone'],c,.045)
     for i in range(15):
         x=-8.8+i*.26;box('轩后竹格',(x,3.2,2.0),(.055,.08,2.8),M['wood'],c,.012)
     box('茶案',(-7,1.5,1.05),(2.3,.85,.16),M['wood'],c,.05)
@@ -216,6 +235,9 @@ def courtyard():
     uv('茶壶',(-7,1.5,1.25),(.16,.13,.14),M['darkstone'],c)
     for x in [-7.5,-6.5]:uv('茶盏',(x,1.45,1.19),(.075,.075,.05),M['bronze'],c)
     for x,y,s in [(-3.2,-2.2,1.0),(5.2,.3,1.15),(3.8,6.9,.85),(-8.2,-5.8,.8)]:lantern(x,y,s)
+    # A compact waterside landing explains how a person reaches the pond edge instead of stopping at a hard rectangle.
+    for y,z,width in [(-.45,.18,1.55),(-.82,.14,1.42),(-1.18,.11,1.30)]:
+        box('临水踏步',(5.15,y,z),(width,.48,.16),M['stone'],w,.05)
     # Borrowed scenery behind the opening and scholar stones by water.
     for i in range(7):box('门后石径',(1.4+.25*sin(i),6+i*.8,.12),(1.5,.7,.18),M['stone'],w,.05)
     for x,y,s in [(-4.2,-.4,1.0),(6.7,-1.4,1.5),(7.4,-2.0,.8),(-8.1,-3.5,.7)]:
@@ -241,10 +263,11 @@ def petals(name,positions,col,parent=None):
             a=angle+2*pi*k/5;axis=u*cos(a)+v*sin(a);side=-u*sin(a)+v*cos(a)
             center=Vector(pos);idx=len(vv)
             vv.append(tuple(center+normal*.009));uvs.append((.5,.16))
-            for j in range(9):
-                t=2*pi*j/8;p=center+axis*size*(.53+.53*cos(t))+side*size*.43*sin(t)+normal*size*.15*(1+cos(t))
+            petal_segments=5
+            for j in range(petal_segments+1):
+                t=2*pi*j/petal_segments;p=center+axis*size*(.53+.53*cos(t))+side*size*.43*sin(t)+normal*size*.15*(1+cos(t))
                 vv.append(tuple(p));uvs.append((.5+.33*sin(t),.5+.33*cos(t)))
-            for j in range(8):ff.append((idx,idx+j+1,idx+j+2))
+            for j in range(petal_segments):ff.append((idx,idx+j+1,idx+j+2))
         # Raised pollen centers remain 3D instead of being painted into albedo.
         center=Vector(pos)+normal*size*.17;idx=len(stamenv);r=size*.14
         stamenv.extend([tuple(center+v*r),tuple(center-v*r),tuple(center+u*r),tuple(center-u*r),tuple(center+normal*r)])
@@ -283,7 +306,7 @@ def vegetation():
                     p=start.lerp(tip,R.uniform(.2,1))+Vector((R.uniform(-.05,.05),R.uniform(-.05,.05),R.uniform(-.05,.05)))
                     size=R.uniform(.048,.085)*scale;blooms.append((p,size))
                     if R.random()<.15:
-                        dew=uv('花尖露珠',p+Vector((0,-.02,-.045*scale)),(.012*scale,.012*scale,.019*scale),M['dew'],C['dew'],8,6);attach(dew,pivot)
+                        dew=uv('花尖露珠',p+Vector((0,-.02,-.045*scale)),(.012*scale,.012*scale,.019*scale),M['dew'],C['dew'],6,4);attach(dew,pivot)
             petals('五瓣梅_枝组',blooms,c,pivot)
         for j in range(8):
             a=R.random()*6.28;uv('树脚苔石',(bx+cos(a)*.6,by+sin(a)*.5,.15),(.3,.2,.15),M['moss'],C['water'],12,6)
@@ -317,7 +340,7 @@ def weather():
         for i in range(count):
             x=R.uniform(-10,10);y=R.uniform(-8,9);z=R.uniform(.3,10)
             if proto is None:
-                if snow:proto=uv('雪粒',(0,0,0),(.024,.018,.024),M['snow'],col,6,4)
+                if snow:proto=uv('雪粒',(0,0,0),(.024,.018,.024),M['snow'],col,4,3)
                 else:proto=line('雨丝',[(0,0,0),(.016,.008,-.17)],.0017,M['rain'],col)
                 o=proto
             else:o=bpy.data.objects.new(PREFIX+('雪粒' if snow else '雨丝'),proto.data);col.objects.link(o)
@@ -460,7 +483,7 @@ def art_upgrade():
     for o in list(C['cover'].objects):
         if o.name.startswith(PREFIX+'石上残雪'):bpy.data.objects.remove(o,do_unlink=True)
     for idx,(x,y,h,w) in enumerate([(6.8,-1.1,2.85,.95),(-4.1,-.35,1.5,.67),(-8.1,-3.5,1.2,.55)]):
-        rock=uv('太湖石_瘦透漏皱',(0,0,0),(w,.48,h/2),M['stone'],C['water'],48,36)
+        rock=uv('太湖石_瘦透漏皱',(0,0,0),(w,.48,h/2),M['stone'],C['water'],32,24)
         for v in rock.data.vertices:
             q=v.co.copy();t=q.z/(h/2)
             dis=noise.noise_vector(q*3.4+Vector((idx,0,0)))*.12
