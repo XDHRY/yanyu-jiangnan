@@ -306,7 +306,7 @@ def vegetation():
                     p=start.lerp(tip,R.uniform(.2,1))+Vector((R.uniform(-.05,.05),R.uniform(-.05,.05),R.uniform(-.05,.05)))
                     size=R.uniform(.048,.085)*scale;blooms.append((p,size))
                     if R.random()<.15:
-                        dew=uv('花尖露珠',p+Vector((0,-.02,-.045*scale)),(.012*scale,.012*scale,.019*scale),M['dew'],C['dew'],8,6);attach(dew,pivot)
+                        dew=uv('花尖露珠',p+Vector((0,-.02,-.045*scale)),(.012*scale,.012*scale,.019*scale),M['dew'],C['dew'],6,4);attach(dew,pivot)
             petals('五瓣梅_枝组',blooms,c,pivot)
         for j in range(8):
             a=R.random()*6.28;uv('树脚苔石',(bx+cos(a)*.6,by+sin(a)*.5,.15),(.3,.2,.15),M['moss'],C['water'],12,6)
