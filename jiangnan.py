@@ -263,7 +263,7 @@ def petals(name,positions,col,parent=None):
             a=angle+2*pi*k/5;axis=u*cos(a)+v*sin(a);side=-u*sin(a)+v*cos(a)
             center=Vector(pos);idx=len(vv)
             vv.append(tuple(center+normal*.009));uvs.append((.5,.16))
-            petal_segments=6
+            petal_segments=5
             for j in range(petal_segments+1):
                 t=2*pi*j/petal_segments;p=center+axis*size*(.53+.53*cos(t))+side*size*.43*sin(t)+normal*size*.15*(1+cos(t))
                 vv.append(tuple(p));uvs.append((.5+.33*sin(t),.5+.33*cos(t)))
