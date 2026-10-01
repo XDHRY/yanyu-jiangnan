@@ -41,13 +41,20 @@ def uv(name,loc,scale,mat,col,seg=16,rings=8):
     o=mesh(name,v,f,mat,col)
     for p in o.data.polygons:p.use_smooth=True
     return o
-def line(name,pts,radius,mat,col,radii=None):
-    d=bpy.data.curves.new(PREFIX+name,'CURVE'); d.dimensions='3D'; d.resolution_u=12; d.bevel_depth=radius; d.bevel_resolution=3
+def line(name,pts,radius,mat,col,radii=None,res=12,bevel_res=3):
+    d=bpy.data.curves.new(PREFIX+name,'CURVE'); d.dimensions='3D'; d.resolution_u=res; d.bevel_depth=radius; d.bevel_resolution=bevel_res
     s=d.splines.new('BEZIER'); s.bezier_points.add(len(pts)-1)
     for i,(p,co) in enumerate(zip(s.bezier_points,pts)):
         p.co=co
         enum(p,'handle_left_type','AUTO'); enum(p,'handle_right_type','AUTO')
         if radii:p.radius=radii[i]
+    o=bpy.data.objects.new(PREFIX+name,d);col.objects.link(o);d.materials.append(mat);return o
+def lines(name,paths,radius,mat,col,res=3,bevel_res=1):
+    d=bpy.data.curves.new(PREFIX+name,'CURVE');d.dimensions='3D';d.resolution_u=res;d.bevel_depth=radius;d.bevel_resolution=bevel_res
+    for pts in paths:
+        sp=d.splines.new('BEZIER');sp.bezier_points.add(len(pts)-1)
+        for p,co in zip(sp.bezier_points,pts):
+            p.co=co;enum(p,'handle_left_type','AUTO');enum(p,'handle_right_type','AUTO')
     o=bpy.data.objects.new(PREFIX+name,d);col.objects.link(o);d.materials.append(mat);return o
 def material(name,color,rough=.5,noise=0,metal=0,emit=0):
     m=bpy.data.materials.new(PREFIX+name);m.use_nodes=True;m.diffuse_color=(*color,1)
@@ -131,14 +138,15 @@ def roof(name,cx,cy,z,w,d,col):
                     zz=z+1.15*(1-t)**1.8+.24*(abs(x)/(w/2))**8*t**3
                     v.append((cx+x,cy+side*(d/2)*t,zz))
                 f.append(tuple(range(k,k+4)))
+        tile_paths=[]
         for i in range(nx+1):
             x=-w/2+w*i/nx
-            pts=[(cx+x,cy+side*d/2*t,z+1.15*(1-t)**1.8+.24*(abs(x)/(w/2))**8*t**3+.025) for t in [0,.2,.4,.6,.8,1]]
-            line(name+'_筒瓦',pts,.045,M['tile'],col)
+            tile_paths.append([(cx+x,cy+side*d/2*t,z+1.15*(1-t)**1.8+.24*(abs(x)/(w/2))**8*t**3+.025) for t in [0,.2,.4,.6,.8,1]])
+        lines(name+('_筒瓦_南' if side<0 else '_筒瓦_北'),tile_paths,.045,M['tile'],col,3,1)
     o=mesh(name+'_瓦面',v,f,M['tile'],col)
-    line(name+'_正脊',[(cx-w/2-.1,cy,z+1.45),(cx-w/2+.5,cy,z+1.23),(cx,cy,z+1.22),(cx+w/2-.5,cy,z+1.23),(cx+w/2+.1,cy,z+1.45)],.11,M['edge'],col)
+    line(name+'_正脊',[(cx-w/2-.1,cy,z+1.45),(cx-w/2+.5,cy,z+1.23),(cx,cy,z+1.22),(cx+w/2-.5,cy,z+1.23),(cx+w/2+.1,cy,z+1.45)],.11,M['edge'],col,res=6,bevel_res=2)
     for side in [-1,1]:
-        line(name+'_檐口',[(cx+x,cy+side*d/2,z+.24*(abs(x)/(w/2))**8) for x in [-w/2,-w/3,0,w/3,w/2]],.075,M['edge'],col)
+        line(name+'_檐口',[(cx+x,cy+side*d/2,z+.24*(abs(x)/(w/2))**8) for x in [-w/2,-w/3,0,w/3,w/2]],.075,M['edge'],col,res=6,bevel_res=2)
     return o
 def lantern(x,y,h=1):
     c=C['court'];s=h
