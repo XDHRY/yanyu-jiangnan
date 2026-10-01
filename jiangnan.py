@@ -483,7 +483,7 @@ def art_upgrade():
     for o in list(C['cover'].objects):
         if o.name.startswith(PREFIX+'石上残雪'):bpy.data.objects.remove(o,do_unlink=True)
     for idx,(x,y,h,w) in enumerate([(6.8,-1.1,2.85,.95),(-4.1,-.35,1.5,.67),(-8.1,-3.5,1.2,.55)]):
-        rock=uv('太湖石_瘦透漏皱',(0,0,0),(w,.48,h/2),M['stone'],C['water'],48,36)
+        rock=uv('太湖石_瘦透漏皱',(0,0,0),(w,.48,h/2),M['stone'],C['water'],32,24)
         for v in rock.data.vertices:
             q=v.co.copy();t=q.z/(h/2)
             dis=noise.noise_vector(q*3.4+Vector((idx,0,0)))*.12
