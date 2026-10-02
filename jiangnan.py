@@ -584,7 +584,26 @@ def village_phase1_skeleton():
     step=box('村落河埠踏步_原型',(0,0,-100),(1.1,2.1,.16),stone,c); step.hide_render=True; step.hide_viewport=True
     for i in range(6):
         o=bpy.data.objects.new(PREFIX+f'村落河埠踏步_{i+1:02d}',step.data); c.objects.link(o); o.location=(4.4+i*.42,20.2,.38-i*.055)
-    S['JN_village_phase']='phase_1_skeleton'; S['JN_village_phase1_tris_budget']=18000
+
+    # First real waterside settlement: eight linked low-cost Jiangnan houses.
+    body=box('村落民居墙体_原型',(0,0,-100),(5.2,4.0,3.2),M['plaster'],c); body.hide_render=True; body.hide_viewport=True
+    base=box('村落民居台基_原型',(0,0,-100),(5.6,4.4,.24),stone,c); base.hide_render=True; base.hide_viewport=True
+    door=box('村落民居木门_原型',(0,0,-100),(.12,1.08,2.15),wood,c); door.hide_render=True; door.hide_viewport=True
+    window=box('村落民居格窗_原型',(0,0,-100),(.10,.92,1.0),wood,c); window.hide_render=True; window.hide_viewport=True
+    rv=[(-3,-2.3,0),(3,-2.3,0),(3,2.3,0),(-3,2.3,0),(0,-2.3,1.05),(0,2.3,1.05)]
+    rf=[(0,1,4),(3,5,2),(0,4,5,3),(4,1,2,5),(0,3,2,1)]
+    roof_proto=mesh('村落民居黛瓦屋面_原型',rv,rf,M['tile'],c); roof_proto.hide_render=True; roof_proto.hide_viewport=True
+    house_specs=[(-2.4,10.2,1.00),(-2.7,15.1,.94),(-2.2,20.1,1.04),(-2.8,25.1,.98),
+                 (12.9,10.1,.96),(13.2,15.0,1.02),(12.8,20.0,.93),(13.1,25.0,1.05)]
+    for i,(hx,hy,hs) in enumerate(house_specs,1):
+        facing=1 if hx<7.3 else -1
+        for proto,label,z in [(base,'台基',.12),(body,'墙体',1.72),(roof_proto,'屋面',3.30)]:
+            o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_{label}',proto.data); c.objects.link(o); o.location=(hx,hy,z); o.scale=(hs,hs,1)
+        o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_木门',door.data); c.objects.link(o); o.location=(hx+facing*2.62*hs,hy-.45,1.12)
+        for wy in (-1.15,1.05):
+            o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_格窗',window.data); c.objects.link(o); o.location=(hx+facing*2.63*hs,hy+wy,1.72)
+    S['JN_village_phase']='phase_1_houses'; S['JN_village_phase1_houses']=8
+    S['JN_village_phase1_tris_budget']=18000
     S['JN_village_phase1_texture_mib_delta']=0.0
 
 def statistics():
