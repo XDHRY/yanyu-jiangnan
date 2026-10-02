@@ -565,31 +565,31 @@ def village_phase1_skeleton():
     c=C.get('water') or next(iter(C.values()))
     stone=M['stone']; water=M['water']; wood=M['wood']
     # Lane uses one shared mesh datablock; all repeats are linked instances.
-    lane=box('村落青石巷_原型',(0,0,-100),(.72,.70,.16),stone,c)
+    lane=box('村落青石巷_原型',(0,0,0),(.72,.70,.16),stone,c)
     lane.hide_render=True; lane.hide_viewport=True
     for i in range(24):
         o=bpy.data.objects.new(PREFIX+f'村落青石巷_{i+1:02d}',lane.data); c.objects.link(o); o.location=(1.4,7+i*.76,.10)
     box('村落水巷',(7.3,20.5,.03),(5,25,.06),water,c)
-    bank=box('村落驳岸_原型',(0,0,-100),(.42,.82,.36),stone,c); bank.hide_render=True; bank.hide_viewport=True
+    bank=box('村落驳岸_原型',(0,0,0),(.42,.82,.36),stone,c); bank.hide_render=True; bank.hide_viewport=True
     for side in (-1,1):
         for i in range(31):
             o=bpy.data.objects.new(PREFIX+f'村落驳岸_{side}_{i+1:02d}',bank.data); c.objects.link(o); o.location=(7.3+side*2.65,8+i*.82,.18)
-    plank=box('村落桥板_原型',(0,0,-100),(.62,4.9,.16),wood,c); plank.hide_render=True; plank.hide_viewport=True
+    plank=box('村落桥板_原型',(0,0,0),(.62,4.9,.16),wood,c); plank.hide_render=True; plank.hide_viewport=True
     for i in range(11):
         o=bpy.data.objects.new(PREFIX+f'村落桥板_{i+1:02d}',plank.data); c.objects.link(o); o.location=(4.7+i*.60,15.1,.55)
-    post=box('村落桥栏柱_原型',(0,0,-100),(.12,.12,1),wood,c); post.hide_render=True; post.hide_viewport=True
+    post=box('村落桥栏柱_原型',(0,0,0),(.12,.12,1),wood,c); post.hide_render=True; post.hide_viewport=True
     for side in (-1,1):
         for i in range(6):
             o=bpy.data.objects.new(PREFIX+f'村落桥栏柱_{side}_{i+1:02d}',post.data); c.objects.link(o); o.location=(4.7+i*1.2,15.1+side*2.15,1)
-    step=box('村落河埠踏步_原型',(0,0,-100),(1.1,2.1,.16),stone,c); step.hide_render=True; step.hide_viewport=True
+    step=box('村落河埠踏步_原型',(0,0,0),(1.1,2.1,.16),stone,c); step.hide_render=True; step.hide_viewport=True
     for i in range(6):
         o=bpy.data.objects.new(PREFIX+f'村落河埠踏步_{i+1:02d}',step.data); c.objects.link(o); o.location=(4.4+i*.42,20.2,.38-i*.055)
 
     # First real waterside settlement: eight linked low-cost Jiangnan houses.
-    body=box('村落民居墙体_原型',(0,0,-100),(5.2,4.0,3.2),M['plaster'],c); body.hide_render=True; body.hide_viewport=True
-    base=box('村落民居台基_原型',(0,0,-100),(5.6,4.4,.24),stone,c); base.hide_render=True; base.hide_viewport=True
-    door=box('村落民居木门_原型',(0,0,-100),(.12,1.08,2.15),wood,c); door.hide_render=True; door.hide_viewport=True
-    window=box('村落民居格窗_原型',(0,0,-100),(.10,.92,1.0),wood,c); window.hide_render=True; window.hide_viewport=True
+    body=box('村落民居墙体_原型',(0,0,0),(5.2,4.0,3.2),M['plaster'],c); body.hide_render=True; body.hide_viewport=True
+    base=box('村落民居台基_原型',(0,0,0),(5.6,4.4,.24),stone,c); base.hide_render=True; base.hide_viewport=True
+    door=box('村落民居木门_原型',(0,0,0),(.12,1.08,2.15),wood,c); door.hide_render=True; door.hide_viewport=True
+    window=box('村落民居格窗_原型',(0,0,0),(.10,.92,1.0),wood,c); window.hide_render=True; window.hide_viewport=True
     rv=[(-3,-2.3,0),(3,-2.3,0),(3,2.3,0),(-3,2.3,0),(0,-2.3,1.05),(0,2.3,1.05)]
     rf=[(0,1,4),(3,5,2),(0,4,5,3),(4,1,2,5),(0,3,2,1)]
     roof_proto=mesh('村落民居黛瓦屋面_原型',rv,rf,M['tile'],c); roof_proto.hide_render=True; roof_proto.hide_viewport=True
