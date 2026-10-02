@@ -560,6 +560,33 @@ def art_upgrade():
     for name,loc,target,lens in [('正面',(1,-24,5.2),(0,3,3.0),40),('三分之四',(10,-22,7.2),(0,2,2.8),40)]:
         o=bpy.data.objects[PREFIX+name];o.location=loc;o.rotation_euler=(Vector(target)-o.location).to_track_quat('-Z','Y').to_euler();o.data.lens=lens
     S.view_settings.exposure=.2
+def village_phase1_skeleton():
+    """Low-cost first expansion: moon-gate lane -> canal -> bridge -> landing."""
+    c=C.get('water') or next(iter(C.values()))
+    stone=M['stone']; water=M['water']; wood=M['wood']
+    # Lane uses one shared mesh datablock; all repeats are linked instances.
+    lane=box('村落青石巷_原型',(0,0,-100),(.72,.70,.16),stone,c)
+    lane.hide_render=True; lane.hide_viewport=True
+    for i in range(24):
+        o=bpy.data.objects.new(PREFIX+f'村落青石巷_{i+1:02d}',lane.data); c.objects.link(o); o.location=(1.4,7+i*.76,.10)
+    box('村落水巷',(7.3,20.5,.03),(5,25,.06),water,c)
+    bank=box('村落驳岸_原型',(0,0,-100),(.42,.82,.36),stone,c); bank.hide_render=True; bank.hide_viewport=True
+    for side in (-1,1):
+        for i in range(31):
+            o=bpy.data.objects.new(PREFIX+f'村落驳岸_{side}_{i+1:02d}',bank.data); c.objects.link(o); o.location=(7.3+side*2.65,8+i*.82,.18)
+    plank=box('村落桥板_原型',(0,0,-100),(.62,4.9,.16),wood,c); plank.hide_render=True; plank.hide_viewport=True
+    for i in range(11):
+        o=bpy.data.objects.new(PREFIX+f'村落桥板_{i+1:02d}',plank.data); c.objects.link(o); o.location=(4.7+i*.60,15.1,.55)
+    post=box('村落桥栏柱_原型',(0,0,-100),(.12,.12,1),wood,c); post.hide_render=True; post.hide_viewport=True
+    for side in (-1,1):
+        for i in range(6):
+            o=bpy.data.objects.new(PREFIX+f'村落桥栏柱_{side}_{i+1:02d}',post.data); c.objects.link(o); o.location=(4.7+i*1.2,15.1+side*2.15,1)
+    step=box('村落河埠踏步_原型',(0,0,-100),(1.1,2.1,.16),stone,c); step.hide_render=True; step.hide_viewport=True
+    for i in range(6):
+        o=bpy.data.objects.new(PREFIX+f'村落河埠踏步_{i+1:02d}',step.data); c.objects.link(o); o.location=(4.4+i*.42,20.2,.38-i*.055)
+    S['JN_village_phase']='phase_1_skeleton'; S['JN_village_phase1_tris_budget']=18000
+    S['JN_village_phase1_texture_mib_delta']=0.0
+
 def statistics():
     obs=list(S.objects);meshes=[o for o in obs if o.type=='MESH'];curves=[o for o in obs if o.type=='CURVE']
     mats=set(m for o in obs if hasattr(o.data,'materials') for m in o.data.materials if m)
@@ -587,7 +614,7 @@ def viewport():
                 a.spaces.active.region_3d.view_camera_zoom=0
     bpy.context.view_layer.update()
 def build(stage=None):
-    start();courtyard()
+    start();courtyard();village_phase1_skeleton()
     level=P['stage'] if stage is None else stage
     if level>=2:vegetation()
     if level>=3:weather()
