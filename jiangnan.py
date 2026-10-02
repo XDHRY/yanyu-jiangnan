@@ -594,7 +594,14 @@ def village_phase1_skeleton():
     body=box('村落民居墙体_原型',(0,0,0),(5.2,4.0,3.2),M['plaster'],c); body.hide_render=True; body.hide_viewport=True
     base=box('村落民居台基_原型',(0,0,0),(5.6,4.4,.24),stone,c); base.hide_render=True; base.hide_viewport=True
     door=box('村落民居木门_原型',(0,0,0),(.12,1.08,2.15),wood,c); door.hide_render=True; door.hide_viewport=True
-    window=box('村落民居格窗_原型',(0,0,0),(.10,.92,1.0),wood,c); window.hide_render=True; window.hide_viewport=True
+    window=box('村落民居格窗暗底_原型',(0,0,0),(.10,.92,1.0),wood,c); window.hide_render=True; window.hide_viewport=True
+    # Shared low-poly lattice overlay: silhouette/detail geometry only; wood grain remains material detail.
+    lv=[]; lf=[]
+    def lattice_bar(y0,y1,z0,z1):
+        k=len(lv); lv.extend([(0,y0,z0),(0,y1,z0),(0,y1,z1),(0,y0,z1)]); lf.append((k,k+1,k+2,k+3))
+    for yy in (-.31,0,.31): lattice_bar(yy-.035,yy+.035,-.45,.45)
+    for zz in (-.23,.23): lattice_bar(-.44,.44,zz-.035,zz+.035)
+    lattice=mesh('村落民居格窗棂_原型',lv,lf,M['edge'],c); lattice.hide_render=True; lattice.hide_viewport=True
     rv=[(-3,-2.3,0),(3,-2.3,0),(3,2.3,0),(-3,2.3,0),(0,-2.3,1.05),(0,2.3,1.05)]
     rf=[(0,1,4),(3,5,2),(0,4,5,3),(4,1,2,5),(0,3,2,1)]
     roof_proto=mesh('村落民居黛瓦屋面_原型',rv,rf,M['tile'],c); roof_proto.hide_render=True; roof_proto.hide_viewport=True
@@ -606,7 +613,8 @@ def village_phase1_skeleton():
             o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_{label}',proto.data); c.objects.link(o); o.location=(hx,hy,z); o.scale=(hs,hs,1)
         o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_木门',door.data); c.objects.link(o); o.location=(hx+facing*2.62*hs,hy-.45,1.12)
         for wy in (-1.15,1.05):
-            o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_格窗',window.data); c.objects.link(o); o.location=(hx+facing*2.63*hs,hy+wy,1.72)
+            o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_格窗暗底',window.data); c.objects.link(o); o.location=(hx+facing*2.63*hs,hy+wy,1.72)
+            g=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_格窗棂',lattice.data); c.objects.link(g); g.location=(hx+facing*2.70*hs,hy+wy,1.72)
     S['JN_village_phase']='phase_1_houses'; S['JN_village_phase1_houses']=8
     S['JN_village_phase1_tris_budget']=18000
     S['JN_village_phase1_texture_mib_delta']=0.0
