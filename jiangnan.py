@@ -29,6 +29,18 @@ def box(name,loc,size,mat,col,bev=0):
     if bev:
         m=o.modifiers.new('柔化石缘','BEVEL'); m.width=bev; m.segments=2
     return o
+def boxes(name,specs,mat,col,bev=0):
+    """Batch many static boxes with one material into one mesh object to cut object/draw-call overhead."""
+    v=[];f=[]
+    cube_faces=[(0,4,6,2),(1,3,7,5),(0,1,5,4),(2,6,7,3),(0,2,3,1),(4,5,7,6)]
+    for loc,size in specs:
+        x,y,z=[q/2 for q in size];k=len(v)
+        v.extend((a*x+loc[0],b*y+loc[1],c*z+loc[2]) for a,b,c in [(-1,-1,-1),(-1,-1,1),(-1,1,-1),(-1,1,1),(1,-1,-1),(1,-1,1),(1,1,-1),(1,1,1)])
+        f.extend(tuple(k+i for i in face) for face in cube_faces)
+    o=mesh(name,v,f,mat,col)
+    if bev:
+        m=o.modifiers.new('批量柔化石缘','BEVEL');m.width=bev;m.segments=2
+    return o
 def uv(name,loc,scale,mat,col,seg=16,rings=8):
     v=[]; f=[]
     for j in range(rings+1):
@@ -167,10 +179,13 @@ def courtyard():
     for side in [-1,1]:
         for j in range(15):box('池岸石',(side*8.2,-7.5+j*.49,.13),(.55,.46,.3),M['stone'],w,.055)
     for j in range(32):box('池沿',( -7.8+j*.5,-7.75,.13),(.47,.35,.3),M['stone'],w,.04)
+    paving_light=[];paving_dark=[]
     for row in range(6):
         for i in range(26):
             x=-9.5+i*.76+(row%2)*.34;y=.05+row*.65
-            box('庭院青石',(x,y,.09),(.73,.62,.16),M['stone'] if R.random()>.23 else M['darkstone'],w,.025)
+            (paving_light if R.random()>.23 else paving_dark).append(((x,y,.09),(.73,.62,.16)))
+    boxes('庭院青石_浅',paving_light,M['stone'],w,.025)
+    boxes('庭院青石_深',paving_dark,M['darkstone'],w,.025)
     # Stepping stones describe a gentle S across the pond.
     for i in range(12):
         y=-7.3+i*.68;x=1.3*sin(i*.37)-.6
@@ -201,11 +216,13 @@ def courtyard():
             v.extend([(inner[0][0],y,inner[0][1]),(inner[1][0],y,inner[1][1]),(outer[1][0],y,outer[1][1]),(outer[0][0],y,outer[0][1])])
         f.extend([(k,k+1,k+2,k+3),(k+7,k+6,k+5,k+4),(k,k+4,k+5,k+1)])
     mesh('月洞门_贯通墙体',v,f,M['plaster'],c)
+    gate_v=[];gate_f=[]
     for i in range(64):
-        a=2*pi*i/64;b=2*pi*(i+.94)/64;v=[]
+        a=2*pi*i/64;b=2*pi*(i+.94)/64;k=len(gate_v)
         for y in [gy-.32,gy+.32]:
-            for r,t in [(rad,a),(rad,b),(rad+.19,b),(rad+.19,a)]:v.append((gx+r*cos(t),y,zc+r*sin(t)))
-        mesh('月门_弧形砖券',v,[(0,1,2,3),(4,7,6,5),(0,4,5,1),(3,2,6,7)],M['edge'],c)
+            for r,t in [(rad,a),(rad,b),(rad+.19,b),(rad+.19,a)]:gate_v.append((gx+r*cos(t),y,zc+r*sin(t)))
+        gate_f.extend(tuple(k+j for j in face) for face in [(0,1,2,3),(4,7,6,5),(0,4,5,1),(3,2,6,7)])
+    mesh('月门_弧形砖券',gate_v,gate_f,M['edge'],c)
     for x,width in [(-5.3,9.4),(7.3,7.8)]:
         box('墙脚勒石',(x,gy-.02,.23),(width,.57,.46),M['darkstone'],c,.03)
     roof('院墙黛瓦',.5,gy,4.77,22,1.6,c)
@@ -281,6 +298,9 @@ def petals(name,positions,col,parent=None):
     return o
 def vegetation():
     c=C['tree']
+    # Dew uses one shared mesh datablock: per-drop transforms stay editable while ~250 duplicate meshes disappear.
+    dew_proto=uv('花尖露珠_原型',(0,0,0),(.012,.012,.019),M['dew'],C['dew'],6,4)
+    dew_proto.hide_render=True;dew_proto.hide_viewport=True
     def tree(base,scale,mirror=1):
         bx,by,bz=base
         def pt(x,y,z):return Vector((bx+x*scale*mirror,by+y*scale,bz+z*scale))
@@ -306,7 +326,8 @@ def vegetation():
                     p=start.lerp(tip,R.uniform(.2,1))+Vector((R.uniform(-.05,.05),R.uniform(-.05,.05),R.uniform(-.05,.05)))
                     size=R.uniform(.048,.085)*scale;blooms.append((p,size))
                     if R.random()<.15:
-                        dew=uv('花尖露珠',p+Vector((0,-.02,-.045*scale)),(.012*scale,.012*scale,.019*scale),M['dew'],C['dew'],6,4);attach(dew,pivot)
+                        dew=bpy.data.objects.new(PREFIX+'花尖露珠',dew_proto.data);C['dew'].objects.link(dew)
+                        dew.location=p+Vector((0,-.02,-.045*scale));dew.scale=(scale,scale,scale);attach(dew,pivot)
             petals('五瓣梅_枝组',blooms,c,pivot)
         for j in range(8):
             a=R.random()*6.28;uv('树脚苔石',(bx+cos(a)*.6,by+sin(a)*.5,.15),(.3,.2,.15),M['moss'],C['water'],12,6)
