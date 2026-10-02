@@ -628,10 +628,26 @@ def optimize_static_batches():
     dark=[o for o in paving if o.data.materials and o.data.materials[0]==M['darkstone']]
     batch_static_objects('庭院青石_浅批处理',light,M['stone'],C['water'],.025)
     batch_static_objects('庭院青石_深批处理',dark,M['darkstone'],C['water'],.025)
+
     gate=[o for o in list(C['court'].objects) if o.name.startswith(PREFIX+'月门_弧形砖券')]
     batch_static_objects('月门_弧形砖券_批处理',gate,M['edge'],C['court'])
-    S['JN_static_batching']='post_art_generation'
-    S['JN_static_batch_sources']=len(paving)+len(gate)
+
+    # These repeats are visually static and never need independent interaction.  Keep
+    # their source generation explicit above, but collapse them after art generation
+    # to reduce object submission / mesh-datablock overhead without changing layout.
+    pond_banks=[o for o in list(C['water'].objects) if o.name.startswith(PREFIX+'池岸石')]
+    pond_edges=[o for o in list(C['water'].objects) if o.name.startswith(PREFIX+'池沿')]
+    window_lattice=[o for o in list(C['court'].objects) if o.name.startswith(PREFIX+'漏窗格')]
+    pavilion_lattice=[o for o in list(C['court'].objects) if o.name.startswith(PREFIX+'轩后竹格')]
+    batch_static_objects('池岸石_批处理',pond_banks,M['stone'],C['water'],.055)
+    batch_static_objects('池沿_批处理',pond_edges,M['stone'],C['water'],.04)
+    batch_static_objects('漏窗格_批处理',window_lattice,M['edge'],C['court'],.01)
+    batch_static_objects('轩后竹格_批处理',pavilion_lattice,M['wood'],C['court'],.012)
+
+    groups=(paving,gate,pond_banks,pond_edges,window_lattice,pavilion_lattice)
+    S['JN_static_batching']='post_art_generation_v2'
+    S['JN_static_batch_sources']=sum(len(g) for g in groups)
+    S['JN_static_batch_groups']=7
 
 def statistics():
     obs=list(S.objects);meshes=[o for o in obs if o.type=='MESH'];curves=[o for o in obs if o.type=='CURVE']
