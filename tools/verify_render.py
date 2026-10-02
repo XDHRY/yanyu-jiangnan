@@ -73,6 +73,28 @@ report['spatial_connectors']={
 }
 assert report['spatial_connectors']=={'moon_gate_path':7,'pavilion_steps':3,'waterside_steps':3}
 
+# Village Phase 1 must exist above ground.  Hidden prototype objects do not count;
+# this catches the failure mode where linked instances inherit mesh vertices authored at z=-100.
+village_groups={
+    'lane': [o for o in S.objects if o.name.startswith('JN_村落青石巷_') and not o.hide_render],
+    'banks': [o for o in S.objects if o.name.startswith('JN_村落驳岸_') and not o.hide_render],
+    'bridge_planks': [o for o in S.objects if o.name.startswith('JN_村落桥板_') and not o.hide_render],
+    'bridge_posts': [o for o in S.objects if o.name.startswith('JN_村落桥栏柱_') and not o.hide_render],
+    'landing_steps': [o for o in S.objects if o.name.startswith('JN_村落河埠踏步_') and not o.hide_render],
+    'houses': [o for o in S.objects if o.name.startswith('JN_村落民居_') and not o.hide_render],
+}
+expected_village_counts={'lane':24,'banks':62,'bridge_planks':11,'bridge_posts':12,'landing_steps':6,'houses':48}
+actual_village_counts={k:len(v) for k,v in village_groups.items()}
+assert actual_village_counts==expected_village_counts, actual_village_counts
+village_z_ranges={}
+for key,group in village_groups.items():
+    zs=[pos(o).z for o in group]
+    village_z_ranges[key]=[round(min(zs),3),round(max(zs),3)]
+    assert min(zs)>-1.0, f'{key} buried below scene: {village_z_ranges[key]}'
+    assert max(zs)<10.0, f'{key} unexpectedly high: {village_z_ranges[key]}'
+report['village_phase1']={'counts':actual_village_counts,'z_ranges':village_z_ranges}
+print('VILLAGE_PHASE1',json.dumps(report['village_phase1'],ensure_ascii=False))
+
 # Spatial semantics: verify that connectors are not merely present, but actually connect in plausible order.
 bpy.context.view_layer.update()
 moon=objs('JN_月门引路石')
