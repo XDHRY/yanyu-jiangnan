@@ -574,13 +574,18 @@ def village_phase1_skeleton():
     for side in (-1,1):
         for i in range(31):
             o=bpy.data.objects.new(PREFIX+f'村落驳岸_{side}_{i+1:02d}',bank.data); c.objects.link(o); o.location=(7.3+side*2.65,8+i*.82,.18)
-    plank=box('村落桥板_原型',(0,0,0),(.62,4.9,.16),wood,c); plank.hide_render=True; plank.hide_viewport=True
+    plank=box('村落桥板_原型',(0,0,0),(.62,3.25,.16),wood,c); plank.hide_render=True; plank.hide_viewport=True
     for i in range(11):
         o=bpy.data.objects.new(PREFIX+f'村落桥板_{i+1:02d}',plank.data); c.objects.link(o); o.location=(4.7+i*.60,15.1,.55)
     post=box('村落桥栏柱_原型',(0,0,0),(.12,.12,1),wood,c); post.hide_render=True; post.hide_viewport=True
     for side in (-1,1):
         for i in range(6):
-            o=bpy.data.objects.new(PREFIX+f'村落桥栏柱_{side}_{i+1:02d}',post.data); c.objects.link(o); o.location=(4.7+i*1.2,15.1+side*2.15,1)
+            o=bpy.data.objects.new(PREFIX+f'村落桥栏柱_{side}_{i+1:02d}',post.data); c.objects.link(o); o.location=(4.7+i*1.2,15.1+side*1.42,1)
+    # Continuous linked rails make the crossing read as a bridge instead of a timber platform.
+    rail=box('村落桥扶手_原型',(0,0,0),(6.15,.12,.14),wood,c); rail.hide_render=True; rail.hide_viewport=True
+    for side in (-1,1):
+        for z in (1.28,1.72):
+            o=bpy.data.objects.new(PREFIX+f'村落桥扶手_{side}_{z:.2f}',rail.data); c.objects.link(o); o.location=(7.7,15.1+side*1.42,z)
     step=box('村落河埠踏步_原型',(0,0,0),(1.1,2.1,.16),stone,c); step.hide_render=True; step.hide_viewport=True
     for i in range(6):
         o=bpy.data.objects.new(PREFIX+f'村落河埠踏步_{i+1:02d}',step.data); c.objects.link(o); o.location=(4.4+i*.42,20.2,.38-i*.055)
