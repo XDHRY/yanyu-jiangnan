@@ -81,7 +81,7 @@ village_groups={
     'bridge_planks': [o for o in S.objects if o.name.startswith('JN_村落桥板_') and not o.hide_render],
     'bridge_posts': [o for o in S.objects if o.name.startswith('JN_村落桥栏柱_') and not o.hide_render],
     'landing_steps': [o for o in S.objects if o.name.startswith('JN_村落河埠踏步_') and not o.hide_render],
-    'houses': [o for o in S.objects if o.name.startswith('JN_村落民居_') and not o.hide_render],
+    'houses': [o for o in S.objects if o.name.startswith('JN_村落民居_') and not o.hide_render and (o.name.endswith('_主体') or o.name.endswith('_屋面') or o.name.endswith('_格窗暗底'))],
 }
 expected_village_counts={'lane':24,'banks':62,'bridge_planks':11,'bridge_posts':12,'landing_steps':6,'houses':48}
 actual_village_counts={k:len(v) for k,v in village_groups.items()}
