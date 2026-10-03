@@ -595,9 +595,9 @@ def village_phase1_skeleton():
     for side in (-1,1):
         for z in (1.28,1.72):
             o=bpy.data.objects.new(PREFIX+f'村落桥扶手_{side}_{z:.2f}',rail.data); c.objects.link(o); o.location=(7.7,15.1+side*.82,z)
-    step=box('村落河埠踏步_原型',(0,0,0),(1.1,2.1,.16),stone,c); step.hide_render=True; step.hide_viewport=True
+    step=box('村落河埠踏步_原型',(0,0,0),(1.15,.72,.16),stone,c); step.hide_render=True; step.hide_viewport=True
     for i in range(6):
-        o=bpy.data.objects.new(PREFIX+f'村落河埠踏步_{i+1:02d}',step.data); c.objects.link(o); o.location=(4.4+i*.42,20.2,.38-i*.055)
+        o=bpy.data.objects.new(PREFIX+f'村落河埠踏步_{i+1:02d}',step.data); c.objects.link(o); o.location=(4.4,19.72+i*.48,.38-i*.075)
 
     # First real waterside settlement: eight linked low-cost Jiangnan houses.
     body=box('村落民居墙体_原型',(0,0,0),(5.2,4.0,3.2),M['plaster'],c); body.hide_render=True; body.hide_viewport=True
