@@ -263,7 +263,11 @@ def petals(name,positions,col,parent=None):
             a=angle+2*pi*k/5;axis=u*cos(a)+v*sin(a);side=-u*sin(a)+v*cos(a)
             center=Vector(pos);idx=len(vv)
             vv.append(tuple(center+normal*.009));uvs.append((.5,.16))
-            petal_segments=5
+            # LOD0 blossom silhouette: three perimeter segments are sufficient at the
+            # 5–10 cm flower scale. Keep five distinct petals and the raised pollen
+            # center, but avoid spending five fan triangles on every tiny petal.
+            # This cuts blossom petal triangles by 40% without reducing bloom count.
+            petal_segments=3
             for j in range(petal_segments+1):
                 t=2*pi*j/petal_segments;p=center+axis*size*(.53+.53*cos(t))+side*size*.43*sin(t)+normal*size*.15*(1+cos(t))
                 vv.append(tuple(p));uvs.append((.5+.33*sin(t),.5+.33*cos(t)))
