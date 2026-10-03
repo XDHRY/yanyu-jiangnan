@@ -611,12 +611,26 @@ def village_phase1_skeleton():
     for yy in (-.31,0,.31): lattice_bar(yy-.035,yy+.035,-.45,.45)
     for zz in (-.23,.23): lattice_bar(-.44,.44,zz-.035,zz+.035)
     lattice=mesh('村落民居格窗棂_原型',lv,lf,M['edge'],c); lattice.hide_render=True; lattice.hide_viewport=True
-    rv=[(-3,-2.3,0),(3,-2.3,0),(3,2.3,0),(-3,2.3,0),(0,-2.3,1.05),(0,2.3,1.05)]
-    rf=[(0,1,4),(3,5,2),(0,4,5,3),(4,1,2,5),(0,3,2,1)]
+    # Shared low-cost roof with restrained Jiangnan eave lift.  Geometry carries only
+    # silhouette/structural turns; tile wear and micro relief stay in the PBR material.
+    xs=(-3.15,-2.35,0,2.35,3.15); ys=(-2.38,0,2.38)
+    rv=[]; rf=[]
+    def roof_z(x,y):
+        # ridge at y=0; a subtle 9 cm corner lift avoids a flat shed-like silhouette
+        slope=1.05*(1-abs(y)/2.38)
+        corner=.09*(abs(x)/3.15)**4*(abs(y)/2.38)**2
+        return max(0,slope)+corner
+    for y in ys:
+        for x in xs: rv.append((x,y,roof_z(x,y)))
+    for j in range(len(ys)-1):
+        for i in range(len(xs)-1):
+            a=j*len(xs)+i; rf.append((a,a+1,a+1+len(xs),a+len(xs)))
     roof_proto=mesh('村落民居黛瓦屋面_原型',rv,rf,M['tile'],c); roof_proto.hide_render=True; roof_proto.hide_viewport=True
-    # P1 roof silhouette kit: shared eave/ridge meshes; micro tile wear stays in PBR.
-    eave=box('村落民居深檐_原型',(0,0,0),(6.35,.22,.20),M['edge'],c); eave.hide_render=True; eave.hide_viewport=True
-    ridge=box('村落民居正脊_原型',(0,0,0),(6.15,.18,.18),M['tile'],c); ridge.hide_render=True; ridge.hide_viewport=True
+    # Three-segment shared eave/ridge strips keep the upturn readable without per-tile geometry.
+    ev=[(-3.18,0,.09),(-2.35,0,.025),(0,0,0),(2.35,0,.025),(3.18,0,.09)]
+    eave=line('村落民居深檐_原型',ev,.09,M['edge'],c,res=2,bevel_res=1); eave.hide_render=True; eave.hide_viewport=True
+    rg=[(-3.18,0,.10),(-2.35,0,.035),(0,0,0),(2.35,0,.035),(3.18,0,.10)]
+    ridge=line('村落民居正脊_原型',rg,.095,M['tile'],c,res=2,bevel_res=1); ridge.hide_render=True; ridge.hide_viewport=True
     house_specs=[(-2.4,10.2,1.00),(-2.7,15.1,.94),(-2.2,20.1,1.04),(-2.8,25.1,.98),
                  (12.9,10.1,.96),(13.2,15.0,1.02),(12.8,20.0,.93),(13.1,25.0,1.05)]
     for i,(hx,hy,hs) in enumerate(house_specs,1):
