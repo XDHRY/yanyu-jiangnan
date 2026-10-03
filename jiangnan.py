@@ -285,6 +285,10 @@ def petals(name,positions,col,parent=None):
     return o
 def vegetation():
     c=C['tree']
+    # All droplets share one tiny mesh datablock; only transforms/parents differ.
+    # Keep the prototype hidden: visible droplet count and silhouette stay unchanged.
+    dew_proto=uv('花尖露珠_原型',(0,0,0),(1,1,1),M['dew'],C['dew'],6,4)
+    dew_proto.hide_render=True;dew_proto.hide_viewport=True
     def tree(base,scale,mirror=1):
         bx,by,bz=base
         def pt(x,y,z):return Vector((bx+x*scale*mirror,by+y*scale,bz+z*scale))
@@ -310,7 +314,8 @@ def vegetation():
                     p=start.lerp(tip,R.uniform(.2,1))+Vector((R.uniform(-.05,.05),R.uniform(-.05,.05),R.uniform(-.05,.05)))
                     size=R.uniform(.048,.085)*scale;blooms.append((p,size))
                     if R.random()<.15:
-                        dew=uv('花尖露珠',p+Vector((0,-.02,-.045*scale)),(.012*scale,.012*scale,.019*scale),M['dew'],C['dew'],6,4);attach(dew,pivot)
+                        dew=bpy.data.objects.new(PREFIX+'花尖露珠',dew_proto.data);C['dew'].objects.link(dew)
+                        dew.location=p+Vector((0,-.02,-.045*scale));dew.scale=(.012*scale,.012*scale,.019*scale);attach(dew,pivot)
             petals('五瓣梅_枝组',blooms,c,pivot)
         for j in range(8):
             a=R.random()*6.28;uv('树脚苔石',(bx+cos(a)*.6,by+sin(a)*.5,.15),(.3,.2,.15),M['moss'],C['water'],12,6)
