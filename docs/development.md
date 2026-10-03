@@ -13,7 +13,8 @@ yanyu-jiangnan/
 ├── renders/              # 正式渲染静帧 + gallery.html 预览页
 ├── validation/           # scene_statistics.json / validation.json
 ├── tools/
-│   └── verify_render.py  # 验证 + 四机位出图脚本（在 Blender 内运行）
+│   ├── verify_render.py       # 默认只做断言；正式静帧显式 opt-in
+│   └── diagnostic_review.py   # 10 机位低成本空间诊断
 ├── progress/             # 构建过程记录（过程图 / 渲染日志）
 └── docs/                 # usage.md / art-direction.md / 本文
 ```
@@ -34,18 +35,16 @@ yanyu-jiangnan/
 
 ## 3. 常见升级路径
 
-### 3.1 补齐剩余三机位渲染（当前最优先）
+### 3.1 低成本空间诊断（当前最优先）
 
-交付时仅完成 `renders/01_rain_front.png`（148 秒 / 帧，Cycles CPU 1600×1000@96spp）。补齐方法：在打开 `Jiangnan.blend` 的 Blender 中运行 `tools/verify_render.py`，将依次产出：
+正式多机位高采样渲染已经暂停。当前每轮修改后优先运行 `tools/diagnostic_review.py`：
 
-| 文件 | 机位 | 天气 |
-|---|---|---|
-| `renders/01_rain_front.png` | 正面 | 雨 |
-| `renders/02_snow_top.png` | 顶视 | 雪 |
-| `renders/03_rain_three_quarter.png` | 三分之四 | 雨 |
-| `renders/04_snow_front.png` | 正面 | 雪 |
+- Eevee Next，640×400；
+- 10 个机位分别检查总平面、月门轴线、听雨轩入口、池面、临水区、月门背面、东墙、屋顶轮廓、轩侧构造、人眼动线；
+- 输出到 `diagnostics/`，同时生成 `manifest.json` 记录机位、目标点和每张图要回答的问题；
+- GitHub Actions 的 **Jiangnan Spatial Diagnostic** 会在 PR 中从源码重建后自动执行，并把整组诊断图作为 artifact 发布。
 
-完成后：`renders/gallery.html` 中删除雪月按钮的 `disabled` 属性、把两个「待渲染」占位块换成对应 `<figure>` 即可。`verify_render.py` 同时会重写 `validation/validation.json` 并把场景另存回根目录 `Jiangnan.blend`。
+`tools/verify_render.py` 也改为默认不渲染。只有明确设置 `JN_FORMAL_RENDER=1` 时才会执行旧的四张正式静帧任务。详细循环见 [iteration-loop.md](iteration-loop.md)。
 
 ### 3.2 调整场景参数
 

@@ -63,7 +63,7 @@ jobs:
 
       - name: Execute scene assertions in Blender
         env:
-          JN_SKIP_RENDER: '1'
+          JN_FORMAL_RENDER: '0'
           JN_OUT: ${{ runner.temp }}/jiangnan-smoke
         run: |
           "${RUNNER_TOOL_CACHE}/blender-4.5.14/blender" --background "${JN_OUT}/Jiangnan.blend" --python-exit-code 1 --python tools/verify_render.py
@@ -84,7 +84,8 @@ jobs:
           assert all(report['outward_normals'].values())
           assert len(report['generated_texture_assets']) == 7
           assert all(v['found'] and v['packed'] for v in report['generated_texture_assets'].values())
-          assert stats['objects'] >= 2700
+          # Static batching intentionally lowers object count while preserving scene semantics; keep only a broad non-empty-scene regression floor.
+          assert stats['objects'] >= 2450
           print(json.dumps({
               'objects': report['objects'],
               'mesh_objects': stats['mesh_objects'],

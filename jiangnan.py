@@ -41,13 +41,20 @@ def uv(name,loc,scale,mat,col,seg=16,rings=8):
     o=mesh(name,v,f,mat,col)
     for p in o.data.polygons:p.use_smooth=True
     return o
-def line(name,pts,radius,mat,col,radii=None):
-    d=bpy.data.curves.new(PREFIX+name,'CURVE'); d.dimensions='3D'; d.resolution_u=12; d.bevel_depth=radius; d.bevel_resolution=3
+def line(name,pts,radius,mat,col,radii=None,res=12,bevel_res=3):
+    d=bpy.data.curves.new(PREFIX+name,'CURVE'); d.dimensions='3D'; d.resolution_u=res; d.bevel_depth=radius; d.bevel_resolution=bevel_res
     s=d.splines.new('BEZIER'); s.bezier_points.add(len(pts)-1)
     for i,(p,co) in enumerate(zip(s.bezier_points,pts)):
         p.co=co
         enum(p,'handle_left_type','AUTO'); enum(p,'handle_right_type','AUTO')
         if radii:p.radius=radii[i]
+    o=bpy.data.objects.new(PREFIX+name,d);col.objects.link(o);d.materials.append(mat);return o
+def lines(name,paths,radius,mat,col,res=3,bevel_res=1):
+    d=bpy.data.curves.new(PREFIX+name,'CURVE');d.dimensions='3D';d.resolution_u=res;d.bevel_depth=radius;d.bevel_resolution=bevel_res
+    for pts in paths:
+        sp=d.splines.new('BEZIER');sp.bezier_points.add(len(pts)-1)
+        for p,co in zip(sp.bezier_points,pts):
+            p.co=co;enum(p,'handle_left_type','AUTO');enum(p,'handle_right_type','AUTO')
     o=bpy.data.objects.new(PREFIX+name,d);col.objects.link(o);d.materials.append(mat);return o
 def material(name,color,rough=.5,noise=0,metal=0,emit=0):
     m=bpy.data.materials.new(PREFIX+name);m.use_nodes=True;m.diffuse_color=(*color,1)
@@ -131,14 +138,15 @@ def roof(name,cx,cy,z,w,d,col):
                     zz=z+1.15*(1-t)**1.8+.24*(abs(x)/(w/2))**8*t**3
                     v.append((cx+x,cy+side*(d/2)*t,zz))
                 f.append(tuple(range(k,k+4)))
+        tile_paths=[]
         for i in range(nx+1):
             x=-w/2+w*i/nx
-            pts=[(cx+x,cy+side*d/2*t,z+1.15*(1-t)**1.8+.24*(abs(x)/(w/2))**8*t**3+.025) for t in [0,.2,.4,.6,.8,1]]
-            line(name+'_筒瓦',pts,.045,M['tile'],col)
+            tile_paths.append([(cx+x,cy+side*d/2*t,z+1.15*(1-t)**1.8+.24*(abs(x)/(w/2))**8*t**3+.025) for t in [0,.2,.4,.6,.8,1]])
+        lines(name+('_筒瓦_南' if side<0 else '_筒瓦_北'),tile_paths,.045,M['tile'],col,3,1)
     o=mesh(name+'_瓦面',v,f,M['tile'],col)
-    line(name+'_正脊',[(cx-w/2-.1,cy,z+1.45),(cx-w/2+.5,cy,z+1.23),(cx,cy,z+1.22),(cx+w/2-.5,cy,z+1.23),(cx+w/2+.1,cy,z+1.45)],.11,M['edge'],col)
+    line(name+'_正脊',[(cx-w/2-.1,cy,z+1.45),(cx-w/2+.5,cy,z+1.23),(cx,cy,z+1.22),(cx+w/2-.5,cy,z+1.23),(cx+w/2+.1,cy,z+1.45)],.11,M['edge'],col,res=6,bevel_res=2)
     for side in [-1,1]:
-        line(name+'_檐口',[(cx+x,cy+side*d/2,z+.24*(abs(x)/(w/2))**8) for x in [-w/2,-w/3,0,w/3,w/2]],.075,M['edge'],col)
+        line(name+'_檐口',[(cx+x,cy+side*d/2,z+.24*(abs(x)/(w/2))**8) for x in [-w/2,-w/3,0,w/3,w/2]],.075,M['edge'],col,res=6,bevel_res=2)
     return o
 def lantern(x,y,h=1):
     c=C['court'];s=h
@@ -167,8 +175,16 @@ def courtyard():
     for i in range(12):
         y=-7.3+i*.68;x=1.3*sin(i*.37)-.6
         o=box('曲水汀步',(x,y,.22),(1.32,.57,.25),M['stone'],w,.08)
+    # Continue the walking logic from pond to moon gate with a restrained, slightly offset stone axis.
+    # This prevents the gate from reading as isolated scenery when viewed from human-height diagnostic cameras.
+    for i in range(7):
+        t=i/6
+        # Continue the pond's S-curve instead of jumping sideways onto a second, unrelated axis.
+        # Keep these stones almost flush with the courtyard paving: they should read as guidance, not obstacles.
+        x=-1.05+(1.4+1.05)*t+.06*sin(i*.9);y=.62+i*.68
+        box('月门引路石',(x,y,.14),(1.04,.54,.10),M['stone'] if i%3 else M['darkstone'],w,.04)
     # Rear wall segments surround a genuine circular aperture, no boolean dependency.
-    gx=1.4;gy=5.2;zc=2.25;rad=2.0;H=4.75
+    gx=1.4;gy=5.2;zc=2.0;rad=2.0;H=4.75
     box('白墙_西',(-5.3,gy,H/2),(9.4,.48,H),M['plaster'],c,.035)
     box('白墙_东',(7.3,gy,H/2),(7.8,.48,H),M['plaster'],c,.035)
     v=[];f=[]
@@ -209,6 +225,9 @@ def courtyard():
     for y in [-.8,3.2]:box('轩梁',(-7,y,3.8),(4.7,.24,.32),M['wood'],c,.035)
     for x in [-9,-5]:box('轩梁',(x,1.2,3.8),(.24,4.5,.32),M['wood'],c,.035)
     roof('听雨轩',-7,1.2,3.9,6,5.8,c)
+    # Three shallow entrance steps make the pavilion platform physically legible from the courtyard.
+    for y,z,width in [(-1.56,.24,2.15),(-1.82,.16,2.55),(-2.08,.09,2.95)]:
+        box('听雨轩入轩踏步',(-7,y,z),(width,.40,.18),M['stone'],c,.045)
     for i in range(15):
         x=-8.8+i*.26;box('轩后竹格',(x,3.2,2.0),(.055,.08,2.8),M['wood'],c,.012)
     box('茶案',(-7,1.5,1.05),(2.3,.85,.16),M['wood'],c,.05)
@@ -216,6 +235,9 @@ def courtyard():
     uv('茶壶',(-7,1.5,1.25),(.16,.13,.14),M['darkstone'],c)
     for x in [-7.5,-6.5]:uv('茶盏',(x,1.45,1.19),(.075,.075,.05),M['bronze'],c)
     for x,y,s in [(-3.2,-2.2,1.0),(5.2,.3,1.15),(3.8,6.9,.85),(-8.2,-5.8,.8)]:lantern(x,y,s)
+    # A compact waterside landing explains how a person reaches the pond edge instead of stopping at a hard rectangle.
+    for y,z,width in [(-.45,.18,1.55),(-.82,.14,1.42),(-1.18,.11,1.30)]:
+        box('临水踏步',(5.15,y,z),(width,.48,.16),M['stone'],w,.05)
     # Borrowed scenery behind the opening and scholar stones by water.
     for i in range(7):box('门后石径',(1.4+.25*sin(i),6+i*.8,.12),(1.5,.7,.18),M['stone'],w,.05)
     for x,y,s in [(-4.2,-.4,1.0),(6.7,-1.4,1.5),(7.4,-2.0,.8),(-8.1,-3.5,.7)]:
@@ -241,10 +263,15 @@ def petals(name,positions,col,parent=None):
             a=angle+2*pi*k/5;axis=u*cos(a)+v*sin(a);side=-u*sin(a)+v*cos(a)
             center=Vector(pos);idx=len(vv)
             vv.append(tuple(center+normal*.009));uvs.append((.5,.16))
-            for j in range(9):
-                t=2*pi*j/8;p=center+axis*size*(.53+.53*cos(t))+side*size*.43*sin(t)+normal*size*.15*(1+cos(t))
+            # LOD0 blossom silhouette: three perimeter segments are sufficient at the
+            # 5–10 cm flower scale. Keep five distinct petals and the raised pollen
+            # center, but avoid spending five fan triangles on every tiny petal.
+            # This cuts blossom petal triangles by 40% without reducing bloom count.
+            petal_segments=3
+            for j in range(petal_segments+1):
+                t=2*pi*j/petal_segments;p=center+axis*size*(.53+.53*cos(t))+side*size*.43*sin(t)+normal*size*.15*(1+cos(t))
                 vv.append(tuple(p));uvs.append((.5+.33*sin(t),.5+.33*cos(t)))
-            for j in range(8):ff.append((idx,idx+j+1,idx+j+2))
+            for j in range(petal_segments):ff.append((idx,idx+j+1,idx+j+2))
         # Raised pollen centers remain 3D instead of being painted into albedo.
         center=Vector(pos)+normal*size*.17;idx=len(stamenv);r=size*.14
         stamenv.extend([tuple(center+v*r),tuple(center-v*r),tuple(center+u*r),tuple(center-u*r),tuple(center+normal*r)])
@@ -258,6 +285,10 @@ def petals(name,positions,col,parent=None):
     return o
 def vegetation():
     c=C['tree']
+    # All droplets share one tiny mesh datablock; only transforms/parents differ.
+    # Keep the prototype hidden: visible droplet count and silhouette stay unchanged.
+    dew_proto=uv('花尖露珠_原型',(0,0,0),(1,1,1),M['dew'],C['dew'],6,4)
+    dew_proto.hide_render=True;dew_proto.hide_viewport=True
     def tree(base,scale,mirror=1):
         bx,by,bz=base
         def pt(x,y,z):return Vector((bx+x*scale*mirror,by+y*scale,bz+z*scale))
@@ -283,7 +314,8 @@ def vegetation():
                     p=start.lerp(tip,R.uniform(.2,1))+Vector((R.uniform(-.05,.05),R.uniform(-.05,.05),R.uniform(-.05,.05)))
                     size=R.uniform(.048,.085)*scale;blooms.append((p,size))
                     if R.random()<.15:
-                        dew=uv('花尖露珠',p+Vector((0,-.02,-.045*scale)),(.012*scale,.012*scale,.019*scale),M['dew'],C['dew'],8,6);attach(dew,pivot)
+                        dew=bpy.data.objects.new(PREFIX+'花尖露珠',dew_proto.data);C['dew'].objects.link(dew)
+                        dew.location=p+Vector((0,-.02,-.045*scale));dew.scale=(.012*scale,.012*scale,.019*scale);attach(dew,pivot)
             petals('五瓣梅_枝组',blooms,c,pivot)
         for j in range(8):
             a=R.random()*6.28;uv('树脚苔石',(bx+cos(a)*.6,by+sin(a)*.5,.15),(.3,.2,.15),M['moss'],C['water'],12,6)
@@ -317,7 +349,7 @@ def weather():
         for i in range(count):
             x=R.uniform(-10,10);y=R.uniform(-8,9);z=R.uniform(.3,10)
             if proto is None:
-                if snow:proto=uv('雪粒',(0,0,0),(.024,.018,.024),M['snow'],col,6,4)
+                if snow:proto=uv('雪粒',(0,0,0),(.024,.018,.024),M['snow'],col,4,3)
                 else:proto=line('雨丝',[(0,0,0),(.016,.008,-.17)],.0017,M['rain'],col)
                 o=proto
             else:o=bpy.data.objects.new(PREFIX+('雪粒' if snow else '雨丝'),proto.data);col.objects.link(o)
@@ -460,7 +492,7 @@ def art_upgrade():
     for o in list(C['cover'].objects):
         if o.name.startswith(PREFIX+'石上残雪'):bpy.data.objects.remove(o,do_unlink=True)
     for idx,(x,y,h,w) in enumerate([(6.8,-1.1,2.85,.95),(-4.1,-.35,1.5,.67),(-8.1,-3.5,1.2,.55)]):
-        rock=uv('太湖石_瘦透漏皱',(0,0,0),(w,.48,h/2),M['stone'],C['water'],48,36)
+        rock=uv('太湖石_瘦透漏皱',(0,0,0),(w,.48,h/2),M['stone'],C['water'],32,24)
         for v in rock.data.vertices:
             q=v.co.copy();t=q.z/(h/2)
             dis=noise.noise_vector(q*3.4+Vector((idx,0,0)))*.12
@@ -537,6 +569,129 @@ def art_upgrade():
     for name,loc,target,lens in [('正面',(1,-24,5.2),(0,3,3.0),40),('三分之四',(10,-22,7.2),(0,2,2.8),40)]:
         o=bpy.data.objects[PREFIX+name];o.location=loc;o.rotation_euler=(Vector(target)-o.location).to_track_quat('-Z','Y').to_euler();o.data.lens=lens
     S.view_settings.exposure=.2
+def village_phase1_skeleton():
+    """Low-cost first expansion: moon-gate lane -> canal -> bridge -> landing."""
+    c=C.get('water') or next(iter(C.values()))
+    stone=M['stone']; water=M['water']; wood=M['wood']
+    # Lane uses one shared mesh datablock; all repeats are linked instances.
+    lane=box('村落青石巷_原型',(0,0,0),(.72,.70,.16),stone,c)
+    lane.hide_render=True; lane.hide_viewport=True
+    for i in range(24):
+        o=bpy.data.objects.new(PREFIX+f'村落青石巷_{i+1:02d}',lane.data); c.objects.link(o); o.location=(1.4,7+i*.76,.10)
+    box('村落水巷',(7.3,20.5,.03),(5,25,.06),water,c)
+    bank=box('村落驳岸_原型',(0,0,0),(.42,.82,.36),stone,c); bank.hide_render=True; bank.hide_viewport=True
+    for side in (-1,1):
+        for i in range(31):
+            o=bpy.data.objects.new(PREFIX+f'村落驳岸_{side}_{i+1:02d}',bank.data); c.objects.link(o); o.location=(7.3+side*2.65,8+i*.82,.18)
+    plank=box('村落桥板_原型',(0,0,0),(.62,1.90,.16),wood,c); plank.hide_render=True; plank.hide_viewport=True
+    for i in range(11):
+        o=bpy.data.objects.new(PREFIX+f'村落桥板_{i+1:02d}',plank.data); c.objects.link(o); o.location=(4.7+i*.60,15.1,.55)
+    post=box('村落桥栏柱_原型',(0,0,0),(.12,.12,1),wood,c); post.hide_render=True; post.hide_viewport=True
+    for side in (-1,1):
+        for i in range(6):
+            o=bpy.data.objects.new(PREFIX+f'村落桥栏柱_{side}_{i+1:02d}',post.data); c.objects.link(o); o.location=(4.7+i*1.2,15.1+side*.82,1)
+    # Continuous linked rails make the crossing read as a bridge instead of a timber platform.
+    rail=box('村落桥扶手_原型',(0,0,0),(6.15,.12,.14),wood,c); rail.hide_render=True; rail.hide_viewport=True
+    for side in (-1,1):
+        for z in (1.28,1.72):
+            o=bpy.data.objects.new(PREFIX+f'村落桥扶手_{side}_{z:.2f}',rail.data); c.objects.link(o); o.location=(7.7,15.1+side*.82,z)
+    step=box('村落河埠踏步_原型',(0,0,0),(1.1,2.1,.16),stone,c); step.hide_render=True; step.hide_viewport=True
+    for i in range(6):
+        o=bpy.data.objects.new(PREFIX+f'村落河埠踏步_{i+1:02d}',step.data); c.objects.link(o); o.location=(4.4+i*.42,20.2,.38-i*.055)
+
+    # First real waterside settlement: eight linked low-cost Jiangnan houses.
+    body=box('村落民居墙体_原型',(0,0,0),(5.2,4.0,3.2),M['plaster'],c); body.hide_render=True; body.hide_viewport=True
+    base=box('村落民居台基_原型',(0,0,0),(5.6,4.4,.24),stone,c); base.hide_render=True; base.hide_viewport=True
+    door=box('村落民居木门_原型',(0,0,0),(.12,1.08,2.15),wood,c); door.hide_render=True; door.hide_viewport=True
+    window=box('村落民居格窗暗底_原型',(0,0,0),(.10,.92,1.0),wood,c); window.hide_render=True; window.hide_viewport=True
+    # Shared low-poly lattice overlay: silhouette/detail geometry only; wood grain remains material detail.
+    lv=[]; lf=[]
+    def lattice_bar(y0,y1,z0,z1):
+        k=len(lv); lv.extend([(0,y0,z0),(0,y1,z0),(0,y1,z1),(0,y0,z1)]); lf.append((k,k+1,k+2,k+3))
+    for yy in (-.31,0,.31): lattice_bar(yy-.035,yy+.035,-.45,.45)
+    for zz in (-.23,.23): lattice_bar(-.44,.44,zz-.035,zz+.035)
+    lattice=mesh('村落民居格窗棂_原型',lv,lf,M['edge'],c); lattice.hide_render=True; lattice.hide_viewport=True
+    # Shared low-cost roof with restrained Jiangnan eave lift.  Geometry carries only
+    # silhouette/structural turns; tile wear and micro relief stay in the PBR material.
+    xs=(-3.15,-2.35,0,2.35,3.15); ys=(-2.38,0,2.38)
+    rv=[]; rf=[]
+    def roof_z(x,y):
+        # ridge at y=0; a subtle 9 cm corner lift avoids a flat shed-like silhouette
+        slope=1.05*(1-abs(y)/2.38)
+        corner=.09*(abs(x)/3.15)**4*(abs(y)/2.38)**2
+        return max(0,slope)+corner
+    for y in ys:
+        for x in xs: rv.append((x,y,roof_z(x,y)))
+    for j in range(len(ys)-1):
+        for i in range(len(xs)-1):
+            a=j*len(xs)+i; rf.append((a,a+1,a+1+len(xs),a+len(xs)))
+    roof_proto=mesh('村落民居黛瓦屋面_原型',rv,rf,M['tile'],c); roof_proto.hide_render=True; roof_proto.hide_viewport=True
+    # Three-segment shared eave/ridge strips keep the upturn readable without per-tile geometry.
+    ev=[(-3.18,0,.09),(-2.35,0,.025),(0,0,0),(2.35,0,.025),(3.18,0,.09)]
+    eave=line('村落民居深檐_原型',ev,.09,M['edge'],c,res=2,bevel_res=1); eave.hide_render=True; eave.hide_viewport=True
+    rg=[(-3.18,0,.10),(-2.35,0,.035),(0,0,0),(2.35,0,.035),(3.18,0,.10)]
+    ridge=line('村落民居正脊_原型',rg,.095,M['tile'],c,res=2,bevel_res=1); ridge.hide_render=True; ridge.hide_viewport=True
+    house_specs=[(-2.4,10.2,1.00),(-2.7,15.1,.94),(-2.2,20.1,1.04),(-2.8,25.1,.98),
+                 (12.9,10.1,.96),(13.2,15.0,1.02),(12.8,20.0,.93),(13.1,25.0,1.05)]
+    for i,(hx,hy,hs) in enumerate(house_specs,1):
+        facing=1 if hx<7.3 else -1
+        for proto,label,z in [(base,'台基',.12),(body,'墙体',1.72),(roof_proto,'屋面',3.30)]:
+            o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_{label}',proto.data); c.objects.link(o); o.location=(hx,hy,z); o.scale=(hs,hs,1)
+        # Two linked eaves create a readable shadow line; one linked ridge strengthens the roof silhouette.
+        for side in (-1,1):
+            o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_深檐_{side:+d}',eave.data); c.objects.link(o); o.location=(hx,hy+side*2.24*hs,3.34); o.scale=(hs,1,1)
+        o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_正脊',ridge.data); c.objects.link(o); o.location=(hx,hy,4.39); o.scale=(hs,1,1)
+        o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_木门',door.data); c.objects.link(o); o.location=(hx+facing*2.62*hs,hy-.45,1.12)
+        for wy in (-1.15,1.05):
+            o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_格窗暗底',window.data); c.objects.link(o); o.location=(hx+facing*2.63*hs,hy+wy,1.72)
+            g=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_格窗棂',lattice.data); c.objects.link(g); g.location=(hx+facing*2.70*hs,hy+wy,1.72)
+    S['JN_village_phase']='phase_1_houses'; S['JN_village_phase1_houses']=8
+    S['JN_village_phase1_tris_budget']=18000
+    S['JN_village_phase1_texture_mib_delta']=0.0
+
+def batch_static_objects(name,objects,mat,col,bev=0):
+    """Combine already-built static meshes after art generation so optimization cannot perturb procedural build order."""
+    objects=[o for o in objects if o and o.type=='MESH']
+    if not objects:return None
+    bpy.context.view_layer.update();verts=[];faces=[]
+    for o in objects:
+        k=len(verts);mw=o.matrix_world
+        verts.extend(tuple(mw @ v.co) for v in o.data.vertices)
+        faces.extend(tuple(k+i for i in p.vertices) for p in o.data.polygons)
+    for o in objects:bpy.data.objects.remove(o,do_unlink=True)
+    out=mesh(name,verts,faces,mat,col)
+    if bev:
+        mod=out.modifiers.new('静态批处理柔化','BEVEL');mod.width=bev;mod.segments=2
+    return out
+
+def optimize_static_batches():
+    """Late, deterministic draw-call pass: preserve source build/boolean order, then batch purely static repeats."""
+    paving=[o for o in list(C['water'].objects) if o.name.startswith(PREFIX+'庭院青石')]
+    light=[o for o in paving if o.data.materials and o.data.materials[0]==M['stone']]
+    dark=[o for o in paving if o.data.materials and o.data.materials[0]==M['darkstone']]
+    batch_static_objects('庭院青石_浅批处理',light,M['stone'],C['water'],.025)
+    batch_static_objects('庭院青石_深批处理',dark,M['darkstone'],C['water'],.025)
+
+    gate=[o for o in list(C['court'].objects) if o.name.startswith(PREFIX+'月门_弧形砖券')]
+    batch_static_objects('月门_弧形砖券_批处理',gate,M['edge'],C['court'])
+
+    # These repeats are visually static and never need independent interaction.  Keep
+    # their source generation explicit above, but collapse them after art generation
+    # to reduce object submission / mesh-datablock overhead without changing layout.
+    pond_banks=[o for o in list(C['water'].objects) if o.name.startswith(PREFIX+'池岸石')]
+    pond_edges=[o for o in list(C['water'].objects) if o.name.startswith(PREFIX+'池沿')]
+    window_lattice=[o for o in list(C['court'].objects) if o.name.startswith(PREFIX+'漏窗格')]
+    pavilion_lattice=[o for o in list(C['court'].objects) if o.name.startswith(PREFIX+'轩后竹格')]
+    batch_static_objects('池岸石_批处理',pond_banks,M['stone'],C['water'],.055)
+    batch_static_objects('池沿_批处理',pond_edges,M['stone'],C['water'],.04)
+    batch_static_objects('漏窗格_批处理',window_lattice,M['edge'],C['court'],.01)
+    batch_static_objects('轩后竹格_批处理',pavilion_lattice,M['wood'],C['court'],.012)
+
+    groups=(paving,gate,pond_banks,pond_edges,window_lattice,pavilion_lattice)
+    S['JN_static_batching']='post_art_generation_v2'
+    S['JN_static_batch_sources']=sum(len(g) for g in groups)
+    S['JN_static_batch_groups']=7
+
 def statistics():
     obs=list(S.objects);meshes=[o for o in obs if o.type=='MESH'];curves=[o for o in obs if o.type=='CURVE']
     mats=set(m for o in obs if hasattr(o.data,'materials') for m in o.data.materials if m)
@@ -564,7 +719,7 @@ def viewport():
                 a.spaces.active.region_3d.view_camera_zoom=0
     bpy.context.view_layer.update()
 def build(stage=None):
-    start();courtyard()
+    start();courtyard();village_phase1_skeleton()
     level=P['stage'] if stage is None else stage
     if level>=2:vegetation()
     if level>=3:weather()
@@ -572,6 +727,7 @@ def build(stage=None):
     if level>=5:
         atmosphere();refine_clouds()
         if P.get('art_upgrade',False):art_upgrade()
+    optimize_static_batches()
     S.frame_set(80);viewport()
     print('STAGE',level,'OBJECTS',len(S.objects))
 if __name__=='__main__':
