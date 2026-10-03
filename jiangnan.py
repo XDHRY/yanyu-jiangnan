@@ -605,12 +605,19 @@ def village_phase1_skeleton():
     rv=[(-3,-2.3,0),(3,-2.3,0),(3,2.3,0),(-3,2.3,0),(0,-2.3,1.05),(0,2.3,1.05)]
     rf=[(0,1,4),(3,5,2),(0,4,5,3),(4,1,2,5),(0,3,2,1)]
     roof_proto=mesh('村落民居黛瓦屋面_原型',rv,rf,M['tile'],c); roof_proto.hide_render=True; roof_proto.hide_viewport=True
+    # P1 roof silhouette kit: shared eave/ridge meshes; micro tile wear stays in PBR.
+    eave=box('村落民居深檐_原型',(0,0,0),(6.35,.22,.20),M['edge'],c); eave.hide_render=True; eave.hide_viewport=True
+    ridge=box('村落民居正脊_原型',(0,0,0),(6.15,.18,.18),M['tile'],c); ridge.hide_render=True; ridge.hide_viewport=True
     house_specs=[(-2.4,10.2,1.00),(-2.7,15.1,.94),(-2.2,20.1,1.04),(-2.8,25.1,.98),
                  (12.9,10.1,.96),(13.2,15.0,1.02),(12.8,20.0,.93),(13.1,25.0,1.05)]
     for i,(hx,hy,hs) in enumerate(house_specs,1):
         facing=1 if hx<7.3 else -1
         for proto,label,z in [(base,'台基',.12),(body,'墙体',1.72),(roof_proto,'屋面',3.30)]:
             o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_{label}',proto.data); c.objects.link(o); o.location=(hx,hy,z); o.scale=(hs,hs,1)
+        # Two linked eaves create a readable shadow line; one linked ridge strengthens the roof silhouette.
+        for side in (-1,1):
+            o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_深檐_{side:+d}',eave.data); c.objects.link(o); o.location=(hx,hy+side*2.24*hs,3.34); o.scale=(hs,1,1)
+        o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_正脊',ridge.data); c.objects.link(o); o.location=(hx,hy,4.39); o.scale=(hs,1,1)
         o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_木门',door.data); c.objects.link(o); o.location=(hx+facing*2.62*hs,hy-.45,1.12)
         for wy in (-1.15,1.05):
             o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_格窗暗底',window.data); c.objects.link(o); o.location=(hx+facing*2.63*hs,hy+wy,1.72)
