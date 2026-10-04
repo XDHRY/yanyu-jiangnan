@@ -83,8 +83,13 @@ village_groups={
     'landing_steps': [o for o in S.objects if o.name.startswith('JN_村落河埠踏步_') and not o.hide_render],
     'houses': [o for o in S.objects if o.name.startswith('JN_村落民居_') and not o.hide_render and (o.name.endswith('_主体') or o.name.endswith('_屋面') or o.name.endswith('_格窗暗底'))],
 }
+# Lane/revetment may be explicit editable instances or a deterministic late batch.
+# Preserve semantic source counts in batch metadata so validation still catches loss.
 expected_village_counts={'lane':24,'banks':62,'bridge_planks':11,'bridge_posts':12,'landing_steps':6,'houses':16}
 actual_village_counts={k:len(v) for k,v in village_groups.items()}
+for key,batch_name in [('lane','JN_村落青石巷_批处理'),('banks','JN_村落驳岸_批处理')]:
+    if actual_village_counts[key]==1 and village_groups[key][0].name.startswith(batch_name):
+        actual_village_counts[key]=int(village_groups[key][0].get('JN_source_count',0))
 assert actual_village_counts==expected_village_counts, actual_village_counts
 village_z_ranges={}
 for key,group in village_groups.items():
