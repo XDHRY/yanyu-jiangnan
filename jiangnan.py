@@ -580,9 +580,13 @@ def village_phase1_skeleton():
         o=bpy.data.objects.new(PREFIX+f'村落青石巷_{i+1:02d}',lane.data); c.objects.link(o); o.location=(1.4,7+i*.76,.10)
     box('村落水巷',(7.3,20.5,.03),(5,25,.06),water,c)
     bank=box('村落驳岸_原型',(0,0,0),(.42,.82,.36),stone,c); bank.hide_render=True; bank.hide_viewport=True
+    # Low-cost wet waterline: one shared mesh + one procedural material, no new image texture.
+    wetstone=material('湿润青石',(0.115,0.145,0.14),.22)
+    wet=box('村落湿润驳岸_原型',(0,0,0),(.435,.82,.105),wetstone,c); wet.hide_render=True; wet.hide_viewport=True
     for side in (-1,1):
         for i in range(31):
             o=bpy.data.objects.new(PREFIX+f'村落驳岸_{side}_{i+1:02d}',bank.data); c.objects.link(o); o.location=(7.3+side*2.65,8+i*.82,.18)
+            w=bpy.data.objects.new(PREFIX+f'村落湿润驳岸_{side}_{i+1:02d}',wet.data); c.objects.link(w); w.location=(7.3+side*2.65,8+i*.82,.055)
     plank=box('村落桥板_原型',(0,0,0),(.62,1.90,.16),wood,c); plank.hide_render=True; plank.hide_viewport=True
     for i in range(11):
         o=bpy.data.objects.new(PREFIX+f'村落桥板_{i+1:02d}',plank.data); c.objects.link(o); o.location=(4.7+i*.60,15.1,.55)
