@@ -105,15 +105,22 @@ print('VILLAGE_PHASE1',json.dumps(report['village_phase1'],ensure_ascii=False))
 wet_banks=[o for o in S.objects if o.name.startswith('JN_村落湿润驳岸_') and not o.hide_render]
 report['village_wet_revetment']={'present':bool(wet_banks),'count':len(wet_banks)}
 if wet_banks:
-    assert len(wet_banks)==62, f'wet revetment count mismatch: {len(wet_banks)}'
+    wet_batch=(len(wet_banks)==1 and wet_banks[0].name.startswith('JN_村落湿润驳岸_批处理'))
+    semantic_count=int(wet_banks[0].get('JN_source_count',0)) if wet_batch else len(wet_banks)
+    assert semantic_count==62, f'wet revetment semantic count mismatch: {semantic_count}'
     wet_meshes={o.data.name for o in wet_banks}
     assert len(wet_meshes)==1, f'wet revetments must share one mesh datablock: {wet_meshes}'
     assert all(len(o.data.materials)==1 for o in wet_banks), 'wet revetments must use exactly one material slot'
-    wet_z=[pos(o).z for o in wet_banks]
     water_obj=next(o for o in S.objects if o.name.startswith('JN_村落水巷'))
     water_z=pos(water_obj).z
-    assert max(abs(z-water_z) for z in wet_z)<0.12, f'wet revetment too far from waterline: {wet_z[:3]} vs {water_z}'
-    report['village_wet_revetment'].update({'shared_mesh':next(iter(wet_meshes)),'z_range':[round(min(wet_z),3),round(max(wet_z),3)],'water_z':round(water_z,3),'material_slots':1})
+    if wet_batch:
+        zs=[(wet_banks[0].matrix_world @ v.co).z for v in wet_banks[0].data.vertices]
+        assert min(zs)<water_z+0.12 and max(zs)>water_z-0.12, f'wet batch misses waterline: {min(zs),max(zs)} vs {water_z}'
+        wet_z=[sum(zs)/len(zs)]
+    else:
+        wet_z=[pos(o).z for o in wet_banks]
+        assert max(abs(z-water_z) for z in wet_z)<0.12, f'wet revetment too far from waterline: {wet_z[:3]} vs {water_z}'
+    report['village_wet_revetment'].update({'semantic_count':semantic_count,'batched':wet_batch,'shared_mesh':next(iter(wet_meshes)),'z_range':[round(min(wet_z),3),round(max(wet_z),3)],'water_z':round(water_z,3),'material_slots':1})
 print('VILLAGE_WET_REVETMENT',json.dumps(report['village_wet_revetment'],ensure_ascii=False))
 
 # Spatial semantics: verify that connectors are not merely present, but actually connect in plausible order.
