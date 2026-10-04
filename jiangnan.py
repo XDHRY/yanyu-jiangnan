@@ -604,6 +604,9 @@ def village_phase1_skeleton():
     base=box('村落民居台基_原型',(0,0,0),(5.6,4.4,.24),stone,c); base.hide_render=True; base.hide_viewport=True
     door=box('村落民居木门_原型',(0,0,0),(.12,1.08,2.15),wood,c); door.hide_render=True; door.hide_viewport=True
     window=box('村落民居格窗暗底_原型',(0,0,0),(.10,.92,1.0),wood,c); window.hide_render=True; window.hide_viewport=True
+    # Shared timber edging breaks up broad plaster boxes at near-water eye level without new textures.
+    corner_post=box('村落民居墙角木柱_原型',(0,0,0),(.14,.14,3.05),wood,c); corner_post.hide_render=True; corner_post.hide_viewport=True
+    sill=box('村落民居墙脚木收边_原型',(0,0,0),(.12,3.70,.14),wood,c); sill.hide_render=True; sill.hide_viewport=True
     # Shared low-poly lattice overlay: silhouette/detail geometry only; wood grain remains material detail.
     lv=[]; lf=[]
     def lattice_bar(y0,y1,z0,z1):
@@ -641,6 +644,10 @@ def village_phase1_skeleton():
         for side in (-1,1):
             o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_深檐_{side:+d}',eave.data); c.objects.link(o); o.location=(hx,hy+side*2.24*hs,3.34); o.scale=(hs,1,1)
         o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_正脊',ridge.data); c.objects.link(o); o.location=(hx,hy,4.39); o.scale=(hs,1,1)
+        # Two facade corner posts plus a low timber sill give the white wall a readable structural frame.
+        for wy in (-1.82,1.82):
+            o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_墙角木柱_{wy:+.2f}',corner_post.data); c.objects.link(o); o.location=(hx+facing*2.63*hs,hy+wy*hs,1.64); o.scale=(1,1,1)
+        o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_墙脚木收边',sill.data); c.objects.link(o); o.location=(hx+facing*2.64*hs,hy,.40); o.scale=(1,hs,1)
         o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_木门',door.data); c.objects.link(o); o.location=(hx+facing*2.62*hs,hy-.45,1.12)
         for wy in (-1.15,1.05):
             o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_格窗暗底',window.data); c.objects.link(o); o.location=(hx+facing*2.63*hs,hy+wy,1.72)
