@@ -611,6 +611,8 @@ def village_phase1_skeleton():
     # Shared timber edging breaks up broad plaster boxes at near-water eye level without new textures.
     corner_post=box('村落民居墙角木柱_原型',(0,0,0),(.14,.14,3.05),wood,c); corner_post.hide_render=True; corner_post.hide_viewport=True
     sill=box('村落民居墙脚木收边_原型',(0,0,0),(.12,3.70,.14),wood,c); sill.hide_render=True; sill.hide_viewport=True
+    # Shared low-poly tie beam completes the visible post-beam frame under the eave.
+    eave_beam=box('村落民居檐下额枋_原型',(0,0,0),(.14,3.70,.18),wood,c); eave_beam.hide_render=True; eave_beam.hide_viewport=True
     # Shared blue-stone plinth keeps plaster clear of the wet canal edge; structural silhouette only, no new texture.
     plinth=box('村落民居青石勒脚_原型',(0,0,0),(.16,3.92,.36),wetstone,c); plinth.hide_render=True; plinth.hide_viewport=True
     # Shared low-poly lattice overlay: silhouette/detail geometry only; wood grain remains material detail.
@@ -655,6 +657,7 @@ def village_phase1_skeleton():
             o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_墙角木柱_{wy:+.2f}',corner_post.data); c.objects.link(o); o.location=(hx+facing*2.63*hs,hy+wy*hs,1.64); o.scale=(1,1,1)
         o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_青石勒脚',plinth.data); c.objects.link(o); o.location=(hx+facing*2.61*hs,hy,.30); o.scale=(1,hs,1)
         o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_墙脚木收边',sill.data); c.objects.link(o); o.location=(hx+facing*2.64*hs,hy,.50); o.scale=(1,hs,1)
+        o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_檐下额枋',eave_beam.data); c.objects.link(o); o.location=(hx+facing*2.64*hs,hy,3.08); o.scale=(1,hs,1)
         o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_木门',door.data); c.objects.link(o); o.location=(hx+facing*2.62*hs,hy-.45,1.12)
         for wy in (-1.15,1.05):
             o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_格窗暗底',window.data); c.objects.link(o); o.location=(hx+facing*2.63*hs,hy+wy,1.72)
