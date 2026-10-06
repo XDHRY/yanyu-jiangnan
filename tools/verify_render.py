@@ -135,7 +135,10 @@ for col in columns:
     shoe=world_bounds(candidates[0]);cb=world_bounds(col)
     assert abs(shoe[0][2]-tea_base[1][2])<.005 and abs(cb[0][2]-shoe[1][2])<.005
 assert len([o for o in S.objects if o.name.startswith('JN_北街摊亭_') and o.name.endswith('_平台')])==2
-assert len([o for o in S.objects if o.name.startswith('JN_村落民居_') and o.name.endswith('_格窗暗底')])==16
+house_windows=[o for o in S.objects if o.name.startswith('JN_村落民居_') and '_格窗暗底' in o.name]
+assert len(house_windows)==16
+for i in range(1,9):
+    assert len([o for o in house_windows if o.name.startswith(f'JN_村落民居_{i:02d}_格窗暗底')])==2
 report['town_phase2']={'phase':S['JN_town_phase'],'grounded_houses':len(plinths),'street_segments':street_segments,'street_batches':len(streets),'tea_pavilion_columns':4,'market_stalls':2,'bridge_risers_per_side':3,'canal_preserved':True,'new_image_texture_bytes':0}
 print('TOWN_PHASE2',json.dumps(report['town_phase2'],ensure_ascii=False))
 
