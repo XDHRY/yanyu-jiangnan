@@ -645,6 +645,7 @@ def village_phase1_skeleton():
     floor=house_parts('村落民居室内地坪_原型',[(0,0,.25,4.72,3.76,.02)],stone)
     # Door leaf parked at 90 degrees inside, hinged at the jamb. Portal clear.
     door=house_parts('村落民居开门扇_原型',[(2.16,.50,1.36,.72,.08,2.16)],wood)
+    bearing=house_parts('村落民居承檩_原型',[(0,0,4.25,5.12,.16,.20),(0,-1.88,3.47,5.12,.16,.20),(0,1.88,3.47,5.12,.16,.20)],wood)
     table=house_parts('村落民居案几_原型',[(-.8,.8,.81,1.4,.65,.06)]+[(-.8+dx,.8+dy,.52,.08,.08,.52) for dx in (-.56,.56) for dy in (-.23,.23)],wood)
     bench=house_parts('村落民居长凳_原型',[(-.8,-.20,.54,1.30,.32,.08)]+[(-.8+dx,-.20,.38,.09,.26,.24) for dx in (-.50,.50)],wood)
     # Shared timber edging breaks up broad plaster boxes at near-water eye level without new textures.
@@ -685,9 +686,11 @@ def village_phase1_skeleton():
                  (15.9,10.1,.96),(16.2,15.0,1.02),(15.8,20.0,.93),(16.1,25.0,1.05)]
     for i,(hx,hy,hs) in enumerate(house_specs,1):
         facing=1 if hx<7.3 else -1
-        for proto,label,z in [(base,'台基',.12),(body,'墙体',0),(gable,'山墙',0),(floor,'室内地坪',0),(table,'案几',0),(bench,'长凳',0),(roof_proto,'屋面',3.30)]:
+        for proto,label,z in [(base,'台基',.12),(body,'墙体',0),(gable,'山墙',0),(floor,'室内地坪',0),(table,'案几',0),(bench,'长凳',0),(bearing,'承檩',0),(roof_proto,'屋面',3.30)]:
             o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_{label}',proto.data); c.objects.link(o); o.location=(hx,hy,z); o.scale=(hs,hs,1)
-            if label in ('墙体','山墙','案几','长凳'):o.rotation_euler.z=0 if facing==1 else pi
+            if label=='屋面':
+                thickness=o.modifiers.new('黛瓦屋面厚度','SOLIDIFY');thickness.thickness=.07;thickness.offset=-1
+            if label in ('墙体','山墙','案几','长凳','承檩'):o.rotation_euler.z=0 if facing==1 else pi
         # Two linked eaves create a readable shadow line; one linked ridge strengthens the roof silhouette.
         for side in (-1,1):
             o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_深檐_{side:+d}',eave.data); c.objects.link(o); o.location=(hx,hy+side*2.24*hs,3.34); o.scale=(hs,1,1)

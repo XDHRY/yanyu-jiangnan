@@ -173,8 +173,14 @@ tea_approach=world_bounds(bpy.data.objects['JN_小镇茶亭连接石街'])
 assert abs(tea_step[1][2]-tea_approach[1][2]-.10)<.002
 assert abs(tea_base[1][2]-tea_step[1][2]-.10)<.002
 assert tea_step[0][0]<=tea_base[1][0]<=tea_step[1][0]
-assert tea_step[0][0]<=tea_approach[0][0]<=tea_step[1][0]
-report['inhabited_houses']={'shells':8,'true_door_openings':8,'true_window_openings':16,'shared_wall_meshes':1,'door_clear_width_min':min(o['JN_door_clear_width'] for o in shells),'interior_depth_min':min(o['JN_interior_depth'] for o in shells),'ray_tests_passed':40,'floor_support_passed':8,'tea_east_risers_m':[.10,.10],'new_image_texture_bytes':0}
+assert min(tea_step[1][0],tea_approach[1][0])-max(tea_step[0][0],tea_approach[0][0])>.30
+house_meshes=[o for o in S.objects if o.name.startswith('JN_村落民居_') and not o.hide_render and o.type=='MESH']
+house_tris=0
+for o in house_meshes:
+    o.data.calc_loop_triangles();house_tris+=len(o.data.loop_triangles)
+assert house_tris<=S['JN_village_phase1_tris_budget'], house_tris
+assert all(bpy.data.objects[f'JN_村落民居_{i:02d}_屋面'].modifiers.get('黛瓦屋面厚度') for i in range(1,9))
+report['inhabited_houses']={'mesh_triangles_with_instances':house_tris,'triangle_budget':18000,'shells':8,'true_door_openings':8,'true_window_openings':16,'shared_wall_meshes':1,'door_clear_width_min':min(o['JN_door_clear_width'] for o in shells),'interior_depth_min':min(o['JN_interior_depth'] for o in shells),'ray_tests_passed':40,'floor_support_passed':8,'tea_east_risers_m':[.10,.10],'new_image_texture_bytes':0}
 print('INHABITED_HOUSES',json.dumps(report['inhabited_houses'],ensure_ascii=False))
 report['town_phase2']={'phase':S['JN_town_phase'],'grounded_houses':len(plinths),'street_segments':street_segments,'street_batches':len(streets),'tea_pavilion_columns':4,'market_stalls':2,'bridge_risers_per_side':3,'market_ceramics':len(ceramics),'teacups':len(teacups),'canal_preserved':True,'new_image_texture_bytes':0}
 print('TOWN_PHASE2',json.dumps(report['town_phase2'],ensure_ascii=False))
