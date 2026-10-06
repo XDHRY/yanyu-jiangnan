@@ -12,6 +12,10 @@ on:
       - '.github/workflows/spatial-diagnostic.yml'
   workflow_dispatch:
 
+concurrency:
+  group: jiangnan-spatial-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   spatial-diagnostic:
     runs-on: ubuntu-latest
