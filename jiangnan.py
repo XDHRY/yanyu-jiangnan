@@ -645,7 +645,7 @@ def village_phase1_skeleton():
     floor=house_parts('村落民居室内地坪_原型',[(0,0,.25,4.72,3.76,.02)],stone)
     # Door leaf parked at 90 degrees inside, hinged at the jamb. Portal clear.
     door=house_parts('村落民居开门扇_原型',[(2.16,.50,1.36,.72,.08,2.16)],wood)
-    bearing=house_parts('村落民居承檩_原型',[(0,0,4.25,5.12,.16,.20),(0,-1.88,3.47,5.12,.16,.20),(0,1.88,3.47,5.12,.16,.20)],wood)
+    bearing=house_parts('村落民居承檩_原型',[(0,0,4.20,5.12,.16,.16),(0,-1.88,3.36,5.12,.16,.16),(0,1.88,3.36,5.12,.16,.16)],wood)
     table=house_parts('村落民居案几_原型',[(-.8,.8,.81,1.4,.65,.06)]+[(-.8+dx,.8+dy,.52,.08,.08,.52) for dx in (-.56,.56) for dy in (-.23,.23)],wood)
     bench=house_parts('村落民居长凳_原型',[(-.8,-.20,.54,1.30,.32,.08)]+[(-.8+dx,-.20,.38,.09,.26,.24) for dx in (-.50,.50)],wood)
     # Shared timber edging breaks up broad plaster boxes at near-water eye level without new textures.
