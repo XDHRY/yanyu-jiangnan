@@ -714,7 +714,7 @@ def village_phase1_skeleton():
         if i in (3,7):
             lx=hx-facing*.8*hs;ly=hy+facing*.8*hs
             box(f'村落民居_{i:02d}_油灯盘',(lx,ly,.85),(.16,.13,.02),M['bronze'],c)
-            sphere(f'村落民居_{i:02d}_灯芯',(lx,ly,.90),(.014,.014,.040),M['paper'],c,8,4)
+            uv(f'村落民居_{i:02d}_灯芯',(lx,ly,.90),(.014,.014,.040),M['paper'],c,8,4)
             light(f'村落民居_{i:02d}_室内灯火',(lx,ly,.97),(1,.65,.32),28,.09,kind='POINT')
         body_instance=bpy.data.objects[PREFIX+f'村落民居_{i:02d}_墙体']
         body_instance['JN_door_clear_width']=1.10*hs;body_instance['JN_door_clear_height']=2.22
