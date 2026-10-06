@@ -672,6 +672,25 @@ def village_phase1_skeleton():
 def town_phase2_market():
     """Connected north tea market, grounded streets and a readable night hierarchy."""
     c=C['water']; stone=M['stone']; wood=M['wood']
+    # A continuous revolved wall gives cups/jars actual open mouths and
+    # thickness, rather than using closed spheres as finished ceramics.
+    glaze=material('北街茶集_青灰陶釉',(.105,.145,.133),.29)
+    gb=next(n for n in glaze.node_tree.nodes if n.type=='BSDF_PRINCIPLED')
+    gb.inputs['Coat Weight'].default_value=.24
+    def ceramic(name,loc,profile):
+        seg=20;verts=[];faces=[]
+        for r,z in profile:
+            verts.extend((loc[0]+r*cos(2*pi*i/seg),loc[1]+r*sin(2*pi*i/seg),loc[2]+z) for i in range(seg))
+        for j in range(len(profile)-1):
+            for i in range(seg):
+                a=j*seg+i;b=j*seg+(i+1)%seg
+                faces.append((a,b,b+seg,a+seg))
+        faces.append(tuple(reversed(range(seg))))
+        faces.append(tuple((len(profile)-1)*seg+i for i in range(seg)))
+        o=mesh(name,verts,faces,glaze,c)
+        for p in o.data.polygons:p.use_smooth=len(p.vertices)==4
+        o['JN_function']='open_mouth_ceramic';o['JN_bottom_z']=loc[2]
+        return o
     # Continuous banks carry every existing house plinth at z=0.  The canal
     # remains an actual gap; neither slab crosses the x=4.8..9.8 water ribbon.
     for name,x0,x1 in [('西岸',-8.4,4.44),('东岸',10.16,20.4)]:
@@ -731,11 +750,18 @@ def town_phase2_market():
     for dx in (-.67,.67):
         for dy in (-.28,.28):box('北街茶亭_茶案腿',(cx+dx,cy-.12+dy,.6975),(.095,.095,.755),wood,c)
     box('北街茶亭_茶盘',(cx,cy-.12,1.18),(.54,.33,.045),wood,c,.007)
-    for dx in (-.16,.16):uv('北街茶亭_茶盏',(cx+dx,cy-.12,1.235),(.052,.052,.040),M['ivory'],c,12,6)
+    cup=[(.025,0),(.030,.012),(.045,.044),(.052,.062),(.046,.062),(.039,.044),(.025,.017)]
+    for dx in (-.16,.16):ceramic('北街茶亭_茶盏',(cx+dx,cy-.12,1.2025),cup)
 
     # Two small vendors stand beside, rather than across, the main walking
     # line.  Muted linen awnings stay below the tea pavilion roof.
     linen=material('北街茶集_灰麻布',(.30,.28,.21),.86)
+    ln=linen.node_tree.nodes;ll=linen.node_tree.links
+    lb=next(n for n in ln if n.type=='BSDF_PRINCIPLED')
+    coord=ln.new('ShaderNodeTexCoord');weave=ln.new('ShaderNodeTexNoise')
+    weave.inputs['Scale'].default_value=110;weave.inputs['Detail'].default_value=2
+    bump=ln.new('ShaderNodeBump');bump.inputs['Strength'].default_value=.11;bump.inputs['Distance'].default_value=.003
+    ll.new(coord.outputs['Object'],weave.inputs['Vector']);ll.new(weave.outputs['Fac'],bump.inputs['Height']);ll.new(bump.outputs['Normal'],lb.inputs['Normal'])
     for j,sy in enumerate((30.00,34.10),1):
         sx=3.25;tag=f'北街摊亭_{j}'
         box(tag+'_平台',(sx,sy,.105),(1.75,1.85,.21),stone,c,.012)
@@ -744,14 +770,30 @@ def town_phase2_market():
         for dy in (-.76,.76):box(tag+'_承梁',(sx,sy+dy,2.585),(1.58,.12,.14),wood,c)
         for dy in (-.76,.76):box(tag+'_脊下短撑',(sx,sy+dy,2.67),(.08,.08,.13),wood,c)
         box(tag+'_脊下承枋',(sx,sy,2.72),(.08,1.75,.10),wood,c)
-        v=[(sx+x,sy+y,z) for y in (-1.0,1.0) for x,z in [(-1.03,2.62),(0,2.79),(1.03,2.62)]]
-        o=mesh(tag+'_麻布雨棚',v,[(0,3,4,1),(1,4,5,2)],linen,c)
+        xs=(-1.03,-.55,0,.55,1.03);ys=(-1.0,-.76,-.38,0,.38,.76,1.0)
+        v=[];faces=[]
+        for y in ys:
+            for x in xs:
+                sag=.035*sin(pi*(y+.76)/1.52)**2*sin(pi*abs(x)/1.03) if abs(y)<.76 else 0
+                v.append((sx+x,sy+y,2.79-.17*abs(x)/1.03-sag))
+        for row in range(len(ys)-1):
+            for col in range(len(xs)-1):
+                a=row*len(xs)+col;faces.append((a,a+1,a+1+len(xs),a+len(xs)))
+        o=mesh(tag+'_麻布雨棚',v,faces,linen,c)
         mod=o.modifiers.new('麻布厚度','SOLIDIFY');mod.thickness=.018
+        for x in (-1.03,1.03):line(tag+'_雨棚缝边',[(sx+x,sy+y,2.62) for y in ys],.010,linen,c,res=1,bevel_res=0)
+        for y in (-1.0,1.0):
+            line(tag+'_雨棚端边',[(sx+x,sy+y,2.79-.17*abs(x)/1.03) for x in xs],.010,linen,c,res=1,bevel_res=0)
+        for dx in (-.70,.70):
+            for dy in (-.76,.76):
+                z=2.79-.17*abs(dx)/1.03
+                line(tag+'_雨棚系绳',[(sx+dx,sy+dy,z),(sx+dx,sy+dy,2.53)],.008,wood,c,res=1,bevel_res=0)
         box(tag+'_柜台',(sx-.29,sy,.94),(.69,1.40,.09),wood,c,.012)
         for dy in (-.55,.55):box(tag+'_柜腿',(sx-.29,sy+dy,.5525),(.10,.10,.685),wood,c)
         box(tag+'_低背板',(sx+.70,sy,.81),(.09,1.53,1.20),wood,c)
+        jar=[(.062,0),(.082,.018),(.106,.070),(.110,.120),(.097,.190),(.055,.235),(.053,.265),(.060,.272),(.044,.272),(.044,.246),(.083,.188),(.093,.115),(.071,.041),(.040,.027)]
         for k,dy in enumerate((-.40,0,.40)):
-            uv(tag+'_陶罐',(sx-.29,sy+dy,1.10),(.11,.11,.13),M['stone'] if j==1 else M['ivory'],c,12,6)
+            ceramic(tag+'_陶罐',(sx-.29,sy+dy,.985),jar)
 
     # The old courtyard remains the compositional hero.  Local cold moon
     # fill and three restrained warm pools make the new quarter readable.

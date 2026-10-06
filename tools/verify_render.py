@@ -135,11 +135,21 @@ for col in columns:
     shoe=world_bounds(candidates[0]);cb=world_bounds(col)
     assert abs(shoe[0][2]-tea_base[1][2])<.005 and abs(cb[0][2]-shoe[1][2])<.005
 assert len([o for o in S.objects if o.name.startswith('JN_北街摊亭_') and o.name.endswith('_平台')])==2
+ceramics=[o for o in S.objects if o.name.startswith('JN_北街摊亭_') and '_陶罐' in o.name]
+teacups=[o for o in S.objects if o.name.startswith('JN_北街茶亭_茶盏')]
+assert len(ceramics)==6 and len(teacups)==2
+for j in (1,2):
+    top=world_bounds(bpy.data.objects[f'JN_北街摊亭_{j}_柜台'])[1][2]
+    for o in ceramics:
+        if o.name.startswith(f'JN_北街摊亭_{j}_陶罐'):
+            assert abs(world_bounds(o)[0][2]-top)<.002, 'ceramic must rest on counter: '+o.name
+tray_top=world_bounds(bpy.data.objects['JN_北街茶亭_茶盘'])[1][2]
+assert all(abs(world_bounds(o)[0][2]-tray_top)<.002 for o in teacups), 'tea cups must rest on tray'
 house_windows=[o for o in S.objects if o.name.startswith('JN_村落民居_') and '_格窗暗底' in o.name]
 assert len(house_windows)==16
 for i in range(1,9):
     assert len([o for o in house_windows if o.name.startswith(f'JN_村落民居_{i:02d}_格窗暗底')])==2
-report['town_phase2']={'phase':S['JN_town_phase'],'grounded_houses':len(plinths),'street_segments':street_segments,'street_batches':len(streets),'tea_pavilion_columns':4,'market_stalls':2,'bridge_risers_per_side':3,'canal_preserved':True,'new_image_texture_bytes':0}
+report['town_phase2']={'phase':S['JN_town_phase'],'grounded_houses':len(plinths),'street_segments':street_segments,'street_batches':len(streets),'tea_pavilion_columns':4,'market_stalls':2,'bridge_risers_per_side':3,'market_ceramics':len(ceramics),'teacups':len(teacups),'canal_preserved':True,'new_image_texture_bytes':0}
 print('TOWN_PHASE2',json.dumps(report['town_phase2'],ensure_ascii=False))
 
 # Optional wet revetment contract: once the art patch exists, enforce one shared
