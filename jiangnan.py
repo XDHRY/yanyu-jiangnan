@@ -320,7 +320,8 @@ def vegetation():
             a=R.random()*6.28;uv('树脚苔石',(bx+cos(a)*.6,by+sin(a)*.5,.15),(.3,.2,.15),M['moss'],C['water'],12,6)
     tree((-3.55,1.65,.18),1.25,1)
     tree((7.4,2.2,.18),1.05,-1)
-    # Background plum uses LOD1 two-segment petals: same bloom count, 33% fewer petal triangles.\n    tree((3.9,8.2,.1),.8,-1,2)
+    # Background plum uses LOD1 two-segment petals: same bloom count, 33% fewer petal triangles.
+    tree((3.9,8.2,.1),.8,-1,2)
     # Bamboo borrowed beyond the wall, arranged as sparse calligraphic strokes.
     for j in range(22):
         x=R.uniform(-8,9);y=R.uniform(7.8,10);h=R.uniform(4.4,7.4)
