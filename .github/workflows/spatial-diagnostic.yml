@@ -64,7 +64,7 @@ jobs:
         run: |
           "${RUNNER_TOOL_CACHE}/blender-4.5.14/blender" --background "${JN_OUT}/Jiangnan.blend" --python-exit-code 1 --python tools/asset_budget.py
 
-      - name: Render fourteen low-cost diagnostic views
+      - name: Render fourteen core views and two focused review views
         env:
           JN_OUT: ${{ runner.temp }}/jiangnan-diagnostic
           LIBGL_ALWAYS_SOFTWARE: '1'
@@ -80,8 +80,8 @@ jobs:
           from pathlib import Path
           root=Path(os.environ['JN_OUT'])/'diagnostics'
           m=json.loads((root/'manifest.json').read_text(encoding='utf-8'))
-          assert len(m['views']) == 14
-          assert len({v['file'] for v in m['views']}) == 14
+          assert len(m['views']) == 16
+          assert len({v['file'] for v in m['views']}) == 16
           assert m['resolution'] == [1024,640]
           evidence=m['spatial_evidence']
           assert len(evidence['stepping_stones']) == 12

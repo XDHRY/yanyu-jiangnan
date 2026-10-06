@@ -27,6 +27,8 @@ VIEWS=[
     ('12_village_lane',(1.4,8.4,1.75),(1.4,31.5,1.35),42,0,'村巷人眼：月门北巷通往茶集的连续地面、民居侧廊、桥前横巷和远端茶亭'),
     ('13_canal_bridge',(13.2,11.2,8.6),(7.3,15.1,.9),46,0,'水巷木桥：高位斜俯视完整检查桥板、栏柱、双岸驳岸、桥头落地与临水民居尺度'),
     ('14_village_waterfront',(7.3,29.0,2.25),(7.3,16.0,1.35),40,0,'临水回望：检查八栋民居沿水巷的聚落节奏、河埠和木桥是否形成江南村落层次'),
+    ('15_north_tea_pavilion',(-10.8,25.2,4.3),(-4.8,31.6,1.9),40,0,'北街茶亭：完整观察屋脊、屋面、承托椽、梁檩、柱础、台基和入亭踏步，检查茶案与长凳的用途和入口净空'),
+    ('16_north_market_stalls',(-3.0,28.5,3.5),(3.25,32.0,1.3),38,0,'北街茶集：检查两处摊亭的麻布雨棚、真实承梁、柜台陈设、落地平台与主巷通行关系'),
 ]
 
 for o in list(bpy.data.objects):
@@ -67,11 +69,20 @@ for name,loc,target,lens,ortho,question in VIEWS:
     cam=add_cam(name,loc,target,lens,ortho)
     S.camera=cam
     S.render.filepath=os.path.join(DIAG,name+'.png')
+    excluded=[]
+    if name=='11_village_plan':
+        # Survey view only: remove celestial/fog occlusion, never architecture.
+        excluded=[(o,o.hide_render) for o in S.objects if o.name.startswith(('JN_明月','JN_云团','JN_轻岚'))]
+        for o,_ in excluded:o.hide_render=True
     start=time.time()
-    bpy.ops.render.render(write_still=True)
+    try:
+        bpy.ops.render.render(write_still=True)
+    finally:
+        for o,state in excluded:o.hide_render=state
     manifest['views'].append({
         'file':name+'.png','camera':list(loc),'target':list(target),'lens':lens,
-        'ortho_scale':ortho or None,'question':question,'seconds':round(time.time()-start,2)
+        'ortho_scale':ortho or None,'question':question,'seconds':round(time.time()-start,2),
+        'diagnostic_exclusions':[o.name for o,_ in excluded],
     })
 
 def world_center(o):
