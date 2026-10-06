@@ -646,7 +646,7 @@ def village_phase1_skeleton():
     rg=[(-3.18,0,.10),(-2.35,0,.035),(0,0,0),(2.35,0,.035),(3.18,0,.10)]
     ridge=line('村落民居正脊_原型',rg,.095,M['tile'],c,res=2,bevel_res=1); ridge.hide_render=True; ridge.hide_viewport=True
     house_specs=[(-2.4,10.2,1.00),(-2.7,15.1,.94),(-2.2,20.1,1.04),(-2.8,25.1,.98),
-                 (12.9,10.1,.96),(13.2,15.0,1.02),(12.8,20.0,.93),(13.1,25.0,1.05)]
+                 (15.9,10.1,.96),(16.2,15.0,1.02),(15.8,20.0,.93),(16.1,25.0,1.05)]
     for i,(hx,hy,hs) in enumerate(house_specs,1):
         facing=1 if hx<7.3 else -1
         for proto,label,z in [(base,'台基',.12),(body,'墙体',1.72),(roof_proto,'屋面',3.30)]:
@@ -668,6 +668,105 @@ def village_phase1_skeleton():
     S['JN_village_phase']='phase_1_houses'; S['JN_village_phase1_houses']=8
     S['JN_village_phase1_tris_budget']=18000
     S['JN_village_phase1_texture_mib_delta']=0.0
+
+def town_phase2_market():
+    """Connected north tea market, grounded streets and a readable night hierarchy."""
+    c=C['water']; stone=M['stone']; wood=M['wood']
+    # Continuous banks carry every existing house plinth at z=0.  The canal
+    # remains an actual gap; neither slab crosses the x=4.8..9.8 water ribbon.
+    for name,x0,x1 in [('西岸',-8.4,4.44),('东岸',10.16,20.4)]:
+        o=box('小镇地基_'+name,((x0+x1)/2,22.0,-.30),(x1-x0,30.0,.60),M['darkstone'],c)
+        o['JN_function']='continuous_land_support';o['JN_ground_top']=0.0
+    # Shared low-profile stone courses extend the narrow original stepping
+    # lane into real streets.  Each piece carries its support and route name.
+    course=box('小镇石街_原型',(0,0,0),(1.0,1.0,.12),stone,c)
+    course.hide_render=True;course.hide_viewport=True
+    street_count=0
+    for route,x,w,y0,y1 in [('西水街',3.50,1.82,7.0,36.9),('东水街',12.40,2.20,7.0,36.9),('月门北巷',1.40,1.52,6.5,36.9)]:
+        for i in range(math.ceil((y1-y0)/.80)):
+            a=y0+i*.80;b=min(y1,a+.80)
+            o=bpy.data.objects.new(PREFIX+f'小镇石街_{route}_{i:02d}',course.data);c.objects.link(o)
+            o.location=(x,(a+b)/2,.06);o.scale=(w,b-a-.012,1)
+            o['JN_route']=route;street_count+=1
+    # A cross lane joins the door-side lane, waterfront street and bridge.
+    box('小镇桥前横巷',(2.20,15.10,.06),(2.50,1.82,.12),stone,c)
+    box('小镇北街茶集广场',(-.10,31.80,.06),(3.00,9.40,.12),stone,c)
+    box('小镇茶亭连接石街',(-1.45,31.70,.06),(1.80,2.20,.12),stone,c)
+    # Three real risers at each bridge end, fully supported by the bank.
+    for side,centers in [('西',(3.67,3.99,4.31)),('东',(11.73,11.41,11.09))]:
+        for i,x in enumerate(centers):
+            top=.29+.17*i
+            o=box(f'小镇桥头踏步_{side}_{i+1}',(x,15.10,top/2),(.52,1.90,top),stone,c)
+            o['JN_step_top']=top;o['JN_destination']='village_bridge'
+
+    # Open tea pavilion: a complete post/beam/plinth roof hierarchy.  It is
+    # intentionally open on every side; no flat wall masquerades as a door.
+    cx,cy=-4.80,32.0
+    box('北街茶亭_台基',(cx,cy,.16),(5.70,4.80,.32),stone,c,.025)
+    for i,top in enumerate((.107,.213,.320)):
+        box(f'北街茶亭_入口踏步_{i+1}',(cx,29.07+i*.24,top/2),(1.84,.36,top),stone,c,.012)
+    for dx in (-2.25,2.25):
+        for dy in (-1.85,1.85):
+            tag=f'{dx:+.2f}_{dy:+.2f}'
+            box('北街茶亭_柱础_'+tag,(cx+dx,cy+dy,.42),(.30,.30,.20),stone,c,.016)
+            box('北街茶亭_木柱_'+tag,(cx+dx,cy+dy,1.78),(.18,.18,2.52),wood,c,.008)
+    for dy in (-1.85,1.85):box('北街茶亭_长檩',(cx,cy+dy,3.11),(4.70,.18,.18),wood,c)
+    for dx in (-2.25,2.25):
+        box('北街茶亭_横梁',(cx+dx,cy,3.10),(.18,3.88,.18),wood,c)
+        box('北街茶亭_脊下承柱',(cx+dx,cy,3.58),(.14,.14,.78),wood,c)
+    box('北街茶亭_脊檩',(cx,cy,4.13),(4.70,.18,.24),wood,c)
+    r=roof('北街茶亭',cx,cy,3.22,5.80,4.80,c)
+    solid=r.modifiers.new('真实屋面厚度','SOLIDIFY');solid.thickness=.085;solid.offset=-1
+    for dx in (-2.25,-1.12,0,1.12,2.25):
+        for side in (-1,1):
+            pts=[]
+            for t in (0,.2,.4,.6,.8,1):
+                z=3.22+1.15*(1-t)**1.8+.24*(abs(dx)/2.90)**8*t**3-.11
+                pts.append((cx+dx,cy+side*2.40*t,z))
+            line('北街茶亭_承托椽',pts,.040,wood,c,res=2,bevel_res=1)
+    # A northern bench faces the tea table, leaving the south arrival open.
+    box('北街茶亭_长凳坐面',(cx,cy+1.20,.75),(2.80,.40,.10),wood,c,.012)
+    for dx in (-1.12,1.12):box('北街茶亭_长凳腿',(cx+dx,cy+1.20,.51),(.12,.30,.38),wood,c)
+    box('北街茶亭_茶案',(cx,cy-.12,1.12),(1.65,.82,.09),wood,c,.015)
+    for dx in (-.67,.67):
+        for dy in (-.28,.28):box('北街茶亭_茶案腿',(cx+dx,cy-.12+dy,.6975),(.095,.095,.755),wood,c)
+    box('北街茶亭_茶盘',(cx,cy-.12,1.18),(.54,.33,.045),wood,c,.007)
+    for dx in (-.16,.16):uv('北街茶亭_茶盏',(cx+dx,cy-.12,1.235),(.052,.052,.040),M['ivory'],c,12,6)
+
+    # Two small vendors stand beside, rather than across, the main walking
+    # line.  Muted linen awnings stay below the tea pavilion roof.
+    linen=material('北街茶集_灰麻布',(.30,.28,.21),.86)
+    for j,sy in enumerate((30.00,34.10),1):
+        sx=3.25;tag=f'北街摊亭_{j}'
+        box(tag+'_平台',(sx,sy,.105),(1.75,1.85,.21),stone,c,.012)
+        for dx in (-.70,.70):
+            for dy in (-.76,.76):box(tag+'_支柱',(sx+dx,sy+dy,1.405),(.09,.09,2.39),wood,c)
+        for dy in (-.76,.76):box(tag+'_承梁',(sx,sy+dy,2.585),(1.58,.12,.14),wood,c)
+        for dy in (-.76,.76):box(tag+'_脊下短撑',(sx,sy+dy,2.67),(.08,.08,.13),wood,c)
+        box(tag+'_脊下承枋',(sx,sy,2.72),(.08,1.75,.10),wood,c)
+        v=[(sx+x,sy+y,z) for y in (-1.0,1.0) for x,z in [(-1.03,2.62),(0,2.79),(1.03,2.62)]]
+        o=mesh(tag+'_麻布雨棚',v,[(0,3,4,1),(1,4,5,2)],linen,c)
+        mod=o.modifiers.new('麻布厚度','SOLIDIFY');mod.thickness=.018
+        box(tag+'_柜台',(sx-.29,sy,.94),(.69,1.40,.09),wood,c,.012)
+        for dy in (-.55,.55):box(tag+'_柜腿',(sx-.29,sy+dy,.5525),(.10,.10,.685),wood,c)
+        box(tag+'_低背板',(sx+.70,sy,.81),(.09,1.53,1.20),wood,c)
+        for k,dy in enumerate((-.40,0,.40)):
+            uv(tag+'_陶罐',(sx-.29,sy+dy,1.10),(.11,.11,.13),M['stone'] if j==1 else M['ivory'],c,12,6)
+
+    # The old courtyard remains the compositional hero.  Local cold moon
+    # fill and three restrained warm pools make the new quarter readable.
+    light('北街月光',(2.0,23.0,12.0),(.48,.65,.86),1500,14,(3,24,0))
+    for tag,x,y,hook_z in [('茶亭',cx,cy,4.02),('摊亭一',3.25,30.0,2.69),('摊亭二',3.25,34.1,2.69)]:
+        z=hook_z-.39
+        uv('北街纱灯_'+tag,(x,y,z),(.12,.12,.20),M['paper'],c,12,8)
+        line('北街纱灯悬绳_'+tag,[(x,y,z+.20),(x,y,hook_z)],.012,wood,c,res=1,bevel_res=0)
+        for dz in (-.20,.20):box('北街纱灯铜口_'+tag,(x,y,z+dz),(.15,.15,.025),M['bronze'],c)
+        light('北街灯火_'+tag,(x,y,z),(1,.49,.23),55,.20,kind='POINT')
+    S['JN_town_phase']='phase_2_north_tea_market'
+    S['JN_town_street_count']=street_count
+    S['JN_town_new_functional_buildings']=3
+    S['JN_town_ground_bounds']='west -8.4..4.44; east 10.16..20.4; y 7..37'
+    S['JN_town_new_texture_mib']=0.0
 
 def batch_static_objects(name,objects,mat,col,bev=0):
     """Combine already-built static meshes after art generation so optimization cannot perturb procedural build order."""
@@ -707,6 +806,11 @@ def optimize_static_batches():
     batch_static_objects('漏窗格_批处理',window_lattice,M['edge'],C['court'],.01)
     batch_static_objects('轩后竹格_批处理',pavilion_lattice,M['wood'],C['court'],.012)
 
+    for route in ('西水街','东水街','月门北巷'):
+        pieces=[o for o in list(C['water'].objects) if o.name.startswith(PREFIX+'小镇石街_'+route+'_') and not o.hide_render]
+        out=batch_static_objects('小镇石街_'+route+'_批处理',pieces,M['stone'],C['water'])
+        if out:out['JN_source_count']=len(pieces);out['JN_route']=route
+
     groups=(paving,gate,pond_banks,pond_edges,window_lattice,pavilion_lattice)
     S['JN_static_batching']='post_art_generation_v2'
     S['JN_static_batch_sources']=sum(len(g) for g in groups)
@@ -739,7 +843,7 @@ def viewport():
                 a.spaces.active.region_3d.view_camera_zoom=0
     bpy.context.view_layer.update()
 def build(stage=None):
-    start();courtyard();village_phase1_skeleton()
+    start();courtyard();village_phase1_skeleton();town_phase2_market()
     level=P['stage'] if stage is None else stage
     if level>=2:vegetation()
     if level>=3:weather()

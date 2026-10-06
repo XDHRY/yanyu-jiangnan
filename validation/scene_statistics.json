@@ -1,0 +1,19 @@
+{
+  "scene": "烟雨江南 · 雪月江南",
+  "objects": 2924,
+  "mesh_objects": 1464,
+  "curve_objects": 1404,
+  "vertices": 183539,
+  "polygons": 137577,
+  "materials": 22,
+  "collections": 11,
+  "cameras": 3,
+  "lights": 11,
+  "object_drivers": 4444,
+  "frames": [
+    1,
+    240
+  ],
+  "fps": 24,
+  "weather": 0
+}

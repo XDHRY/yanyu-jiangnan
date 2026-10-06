@@ -1,0 +1,15 @@
+# 文本文件统一按内容自动识别换行
+* text=auto
+
+# 二进制资产禁止换行转换
+*.blend  binary
+*.blend1 binary
+*.png    binary
+*.jpg    binary
+*.jpeg   binary
+
+# 脚本与文档统一 LF
+*.py   text eol=lf
+*.md   text eol=lf
+*.html text eol=lf
+*.json text eol=lf
