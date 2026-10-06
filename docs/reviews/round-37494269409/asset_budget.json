@@ -1,0 +1,431 @@
+{
+  "scene": "烟雨江南 · 雪月江南",
+  "frame": 80,
+  "totals": {
+    "objects": 2833,
+    "mesh_objects": 1563,
+    "curve_objects": 1210,
+    "triangles_with_instances": 121571,
+    "faces_with_instances": 77556,
+    "vertices_with_instances": 125971,
+    "unique_mesh_datablocks": 542,
+    "unique_mesh_triangles": 94319,
+    "unique_mesh_faces": 63930,
+    "unique_mesh_vertices": 108069,
+    "materials_used": 25,
+    "images_loaded": 7,
+    "estimated_texture_rgba8_bytes": 44030496,
+    "estimated_texture_rgba8_mib": 41.99,
+    "estimated_mesh_draw_calls": 1563,
+    "object_drivers": 4444,
+    "mesh_objects_using_reused_datablocks": 1041,
+    "instance_reuse_ratio": 0.666
+  },
+  "top_mesh_objects": [
+    {
+      "name": "JN_庭院延展地形",
+      "mesh": "JN_庭院延展地形",
+      "triangles": 4428,
+      "faces": 2214,
+      "vertices": 2310,
+      "material_slots": 1
+    },
+    {
+      "name": "JN_明月",
+      "mesh": "JN_明月",
+      "triangles": 4096,
+      "faces": 2048,
+      "vertices": 2112,
+      "material_slots": 1
+    },
+    {
+      "name": "JN_太湖石_瘦透漏皱",
+      "mesh": "JN_太湖石_瘦透漏皱",
+      "triangles": 3042,
+      "faces": 1362,
+      "vertices": 1517,
+      "material_slots": 1
+    },
+    {
+      "name": "JN_太湖石_瘦透漏皱.002",
+      "mesh": "JN_太湖石_瘦透漏皱.002",
+      "triangles": 2598,
+      "faces": 1165,
+      "vertices": 1297,
+      "material_slots": 1
+    },
+    {
+      "name": "JN_太湖石_瘦透漏皱.001",
+      "mesh": "JN_太湖石_瘦透漏皱.001",
+      "triangles": 2584,
+      "faces": 1175,
+      "vertices": 1290,
+      "material_slots": 1
+    },
+    {
+      "name": "JN_院墙黛瓦_瓦面",
+      "mesh": "JN_院墙黛瓦_瓦面",
+      "triangles": 2400,
+      "faces": 1200,
+      "vertices": 4800,
+      "material_slots": 1
+    },
+    {
+      "name": "JN_瓦上薄雪",
+      "mesh": "JN_院墙黛瓦_瓦面.001",
+      "triangles": 2400,
+      "faces": 1200,
+      "vertices": 4800,
+      "material_slots": 1
+    },
+    {
+      "name": "JN_听雨轩_瓦面",
+      "mesh": "JN_听雨轩_瓦面",
+      "triangles": 2052,
+      "faces": 1026,
+      "vertices": 4104,
+      "material_slots": 1
+    },
+    {
+      "name": "JN_瓦上薄雪.001",
+      "mesh": "JN_听雨轩_瓦面.001",
+      "triangles": 2052,
+      "faces": 1026,
+      "vertices": 4104,
+      "material_slots": 1
+    },
+    {
+      "name": "JN_横斜梅花",
+      "mesh": "JN_横斜梅花",
+      "triangles": 1755,
+      "faces": 1755,
+      "vertices": 2925,
+      "material_slots": 1
+    },
+    {
+      "name": "JN_北街茶亭_瓦面",
+      "mesh": "JN_北街茶亭_瓦面",
+      "triangles": 1664,
+      "faces": 832,
+      "vertices": 3328,
+      "material_slots": 1
+    },
+    {
+      "name": "JN_庭院青石_浅批处理",
+      "mesh": "JN_庭院青石_浅批处理",
+      "triangles": 1524,
+      "faces": 762,
+      "vertices": 1016,
+      "material_slots": 1
+    },
+    {
+      "name": "JN_水上落梅",
+      "mesh": "JN_水上落梅",
+      "triangles": 1425,
+      "faces": 1425,
+      "vertices": 2375,
+      "material_slots": 1
+    },
+    {
+      "name": "JN_五瓣梅_枝组.006",
+      "mesh": "JN_五瓣梅_枝组.006",
+      "triangles": 840,
+      "faces": 840,
+      "vertices": 1400,
+      "material_slots": 1
+    },
+    {
+      "name": "JN_五瓣梅_枝组.018",
+      "mesh": "JN_五瓣梅_枝组.018",
+      "triangles": 840,
+      "faces": 840,
+      "vertices": 1400,
+      "material_slots": 1
+    },
+    {
+      "name": "JN_五瓣梅_枝组.008",
+      "mesh": "JN_五瓣梅_枝组.008",
+      "triangles": 825,
+      "faces": 825,
+      "vertices": 1375,
+      "material_slots": 1
+    },
+    {
+      "name": "JN_五瓣梅_枝组.020",
+      "mesh": "JN_五瓣梅_枝组.020",
+      "triangles": 825,
+      "faces": 825,
+      "vertices": 1375,
+      "material_slots": 1
+    },
+    {
+      "name": "JN_五瓣梅_枝组.002",
+      "mesh": "JN_五瓣梅_枝组.002",
+      "triangles": 795,
+      "faces": 795,
+      "vertices": 1325,
+      "material_slots": 1
+    },
+    {
+      "name": "JN_五瓣梅_枝组.021",
+      "mesh": "JN_五瓣梅_枝组.021",
+      "triangles": 795,
+      "faces": 795,
+      "vertices": 1325,
+      "material_slots": 1
+    },
+    {
+      "name": "JN_五瓣梅_枝组",
+      "mesh": "JN_五瓣梅_枝组",
+      "triangles": 780,
+      "faces": 780,
+      "vertices": 1300,
+      "material_slots": 1
+    },
+    {
+      "name": "JN_五瓣梅_枝组.019",
+      "mesh": "JN_五瓣梅_枝组.019",
+      "triangles": 780,
+      "faces": 780,
+      "vertices": 1300,
+      "material_slots": 1
+    },
+    {
+      "name": "JN_轩内纱灯",
+      "mesh": "JN_轩内纱灯",
+      "triangles": 768,
+      "faces": 384,
+      "vertices": 408,
+      "material_slots": 1
+    },
+    {
+      "name": "JN_五瓣梅_枝组.001",
+      "mesh": "JN_五瓣梅_枝组.001",
+      "triangles": 765,
+      "faces": 765,
+      "vertices": 1275,
+      "material_slots": 1
+    },
+    {
+      "name": "JN_五瓣梅_枝组.005",
+      "mesh": "JN_五瓣梅_枝组.005",
+      "triangles": 765,
+      "faces": 765,
+      "vertices": 1275,
+      "material_slots": 1
+    },
+    {
+      "name": "JN_五瓣梅_枝组.013",
+      "mesh": "JN_五瓣梅_枝组.013",
+      "triangles": 765,
+      "faces": 765,
+      "vertices": 1275,
+      "material_slots": 1
+    }
+  ],
+  "top_name_groups": [
+    {
+      "prefix": "JN_五瓣梅_枝组",
+      "objects": 33,
+      "triangles": 22375
+    },
+    {
+      "prefix": "JN_花尖露珠",
+      "objects": 257,
+      "triangles": 12336
+    },
+    {
+      "prefix": "JN_雪粒",
+      "objects": 480,
+      "triangles": 11520
+    },
+    {
+      "prefix": "JN_太湖石_瘦透漏皱",
+      "objects": 3,
+      "triangles": 8224
+    },
+    {
+      "prefix": "JN_五瓣梅_枝组_花蕊",
+      "objects": 33,
+      "triangles": 6732
+    },
+    {
+      "prefix": "JN_云团",
+      "objects": 21,
+      "triangles": 5376
+    },
+    {
+      "prefix": "JN_瓦上薄雪",
+      "objects": 2,
+      "triangles": 4452
+    },
+    {
+      "prefix": "JN_庭院延展地形",
+      "objects": 1,
+      "triangles": 4428
+    },
+    {
+      "prefix": "JN_明月",
+      "objects": 1,
+      "triangles": 4096
+    },
+    {
+      "prefix": "JN_湖石苔脚",
+      "objects": 36,
+      "triangles": 3600
+    },
+    {
+      "prefix": "JN_树脚苔石",
+      "objects": 24,
+      "triangles": 3456
+    },
+    {
+      "prefix": "JN_石缝湿苔",
+      "objects": 38,
+      "triangles": 2432
+    },
+    {
+      "prefix": "JN_院墙黛瓦_瓦面",
+      "objects": 1,
+      "triangles": 2400
+    },
+    {
+      "prefix": "JN_听雨轩_瓦面",
+      "objects": 1,
+      "triangles": 2052
+    },
+    {
+      "prefix": "JN_横斜梅花",
+      "objects": 1,
+      "triangles": 1755
+    },
+    {
+      "prefix": "JN_北街摊亭_1_陶罐",
+      "objects": 3,
+      "triangles": 1668
+    },
+    {
+      "prefix": "JN_北街摊亭_2_陶罐",
+      "objects": 3,
+      "triangles": 1668
+    },
+    {
+      "prefix": "JN_北街茶亭_瓦面",
+      "objects": 1,
+      "triangles": 1664
+    },
+    {
+      "prefix": "JN_庭院青石_浅批处理",
+      "objects": 1,
+      "triangles": 1524
+    },
+    {
+      "prefix": "JN_水上落梅",
+      "objects": 1,
+      "triangles": 1425
+    },
+    {
+      "prefix": "JN_石灯_宝珠",
+      "objects": 4,
+      "triangles": 1024
+    },
+    {
+      "prefix": "JN_远竹_披叶",
+      "objects": 22,
+      "triangles": 968
+    },
+    {
+      "prefix": "JN_轩内纱灯",
+      "objects": 1,
+      "triangles": 768
+    },
+    {
+      "prefix": "JN_湖石残雪",
+      "objects": 3,
+      "triangles": 768
+    },
+    {
+      "prefix": "JN_前景点梅",
+      "objects": 1,
+      "triangles": 660
+    }
+  ],
+  "images": [
+    {
+      "name": "landscape.png",
+      "size": [
+        2172,
+        724
+      ],
+      "source": "FILE",
+      "packed": true,
+      "estimated_rgba8_bytes": 6290112
+    },
+    {
+      "name": "bark.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "source": "FILE",
+      "packed": true,
+      "estimated_rgba8_bytes": 6290064
+    },
+    {
+      "name": "clay.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "source": "FILE",
+      "packed": true,
+      "estimated_rgba8_bytes": 6290064
+    },
+    {
+      "name": "petal.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "source": "FILE",
+      "packed": true,
+      "estimated_rgba8_bytes": 6290064
+    },
+    {
+      "name": "plaster.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "source": "FILE",
+      "packed": true,
+      "estimated_rgba8_bytes": 6290064
+    },
+    {
+      "name": "stone.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "source": "FILE",
+      "packed": true,
+      "estimated_rgba8_bytes": 6290064
+    },
+    {
+      "name": "wood.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "source": "FILE",
+      "packed": true,
+      "estimated_rgba8_bytes": 6290064
+    }
+  ],
+  "warnings": [],
+  "notes": [
+    "Triangle counts are based on mesh datablocks in the rebuilt scene; modifier-evaluated geometry is not expanded here.",
+    "Texture memory uses a simple RGBA8 estimate (4 bytes/pixel) for trend comparison, not exact Blender/Cycles VRAM residency.",
+    "This report is a performance ledger, not a hard gate yet. Thresholds should become enforceable only after several measured iterations."
+  ]
+}

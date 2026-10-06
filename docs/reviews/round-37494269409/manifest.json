@@ -1,0 +1,461 @@
+{
+  "mode": "low-cost spatial diagnostic",
+  "renderer": "Blender Eevee Next",
+  "resolution": [
+    1024,
+    640
+  ],
+  "frame": 80,
+  "weather": 0,
+  "source_commit": "551aa63066a69316d047151e81ee62de81cac29b",
+  "town_phase": "phase_2_north_tea_market",
+  "views": [
+    {
+      "file": "01_plan.png",
+      "camera": [
+        0,
+        0,
+        32
+      ],
+      "target": [
+        0,
+        0,
+        0
+      ],
+      "lens": 50,
+      "ortho_scale": 28,
+      "question": "总平面：池、轩、月门、院墙与路径是否形成清晰关系",
+      "seconds": 61.4,
+      "diagnostic_exclusions": []
+    },
+    {
+      "file": "02_front_gate.png",
+      "camera": [
+        1.4,
+        -19,
+        4.8
+      ],
+      "target": [
+        1.4,
+        4.5,
+        2.0
+      ],
+      "lens": 42,
+      "ortho_scale": null,
+      "question": "正面轴线：汀步到月门的连续性、门洞尺度、远景借景",
+      "seconds": 20.6,
+      "diagnostic_exclusions": []
+    },
+    {
+      "file": "03_pavilion_entry.png",
+      "camera": [
+        -7,
+        -6.2,
+        1.8
+      ],
+      "target": [
+        -7,
+        -1.55,
+        0.45
+      ],
+      "lens": 42,
+      "ortho_scale": null,
+      "question": "听雨轩入口：三级踏步是否真正接到台基，柱网和入口尺度是否自然",
+      "seconds": 14.33,
+      "diagnostic_exclusions": []
+    },
+    {
+      "file": "04_pond_axis.png",
+      "camera": [
+        0,
+        -12,
+        2.6
+      ],
+      "target": [
+        0,
+        -1.2,
+        1.0
+      ],
+      "lens": 48,
+      "ortho_scale": null,
+      "question": "池面轴线：汀步节奏、池岸硬边与月门方向",
+      "seconds": 16.29,
+      "diagnostic_exclusions": []
+    },
+    {
+      "file": "05_water_to_pavilion.png",
+      "camera": [
+        6.8,
+        -6.5,
+        2.4
+      ],
+      "target": [
+        -5.8,
+        1.2,
+        2.0
+      ],
+      "lens": 48,
+      "ortho_scale": null,
+      "question": "水岸回看：临水踏步、观水区与听雨轩空间层次",
+      "seconds": 14.71,
+      "diagnostic_exclusions": []
+    },
+    {
+      "file": "06_gate_reverse.png",
+      "camera": [
+        1.4,
+        6.55,
+        1.32
+      ],
+      "target": [
+        0.45,
+        -0.35,
+        0.82
+      ],
+      "lens": 46,
+      "ortho_scale": null,
+      "question": "月门背面：降低视线并略向庭院路径偏转，主动避开高位梅枝与花叶，检查门槛、门后石径、门内引路石与回望庭院的真实通行关系",
+      "seconds": 12.24,
+      "diagnostic_exclusions": []
+    },
+    {
+      "file": "07_east_return.png",
+      "camera": [
+        6.0,
+        -5.2,
+        2.2
+      ],
+      "target": [
+        9.8,
+        1.5,
+        1.6
+      ],
+      "lens": 46,
+      "ortho_scale": null,
+      "question": "东墙内侧：转角、漏窗、岸线和临水侧向空间是否拥挤或穿帮",
+      "seconds": 12.26,
+      "diagnostic_exclusions": []
+    },
+    {
+      "file": "08_roofline.png",
+      "camera": [
+        14,
+        -16,
+        13
+      ],
+      "target": [
+        0,
+        2.0,
+        3.0
+      ],
+      "lens": 52,
+      "ortho_scale": null,
+      "question": "高位轮廓：屋顶、墙顶、梅树与远山是否层叠而非齐平",
+      "seconds": 18.0,
+      "diagnostic_exclusions": []
+    },
+    {
+      "file": "09_pavilion_side.png",
+      "camera": [
+        -17.0,
+        -8.5,
+        4.4
+      ],
+      "target": [
+        -7,
+        0.8,
+        2.25
+      ],
+      "lens": 40,
+      "ortho_scale": null,
+      "question": "轩侧：后退并放宽垂直视野，完整收入屋脊、檐口、柱梁、台基和三级踏步，检查出挑、支撑、落地关系与整体比例",
+      "seconds": 16.74,
+      "diagnostic_exclusions": []
+    },
+    {
+      "file": "10_eye_path.png",
+      "camera": [
+        0,
+        -3.2,
+        1.65
+      ],
+      "target": [
+        1.4,
+        5.2,
+        1.0
+      ],
+      "lens": 42,
+      "ortho_scale": null,
+      "question": "人眼高度：保留地面与门洞下缘，检查步向月门时的遮挡、尺度和净宽",
+      "seconds": 14.45,
+      "diagnostic_exclusions": []
+    },
+    {
+      "file": "11_village_plan.png",
+      "camera": [
+        6.0,
+        22.0,
+        48.0
+      ],
+      "target": [
+        6.0,
+        22.0,
+        0
+      ],
+      "lens": 50,
+      "ortho_scale": 50,
+      "question": "小镇总平面：双岸地基、八栋民居、沿河石街、桥头踏步与北街茶集是否连续落地",
+      "seconds": 11.22,
+      "diagnostic_exclusions": [
+        "JN_明月",
+        "JN_云团",
+        "JN_云团.001",
+        "JN_云团.002",
+        "JN_云团.003",
+        "JN_云团.004",
+        "JN_云团.005",
+        "JN_云团.006",
+        "JN_云团.007",
+        "JN_云团.008",
+        "JN_云团.009",
+        "JN_云团.010",
+        "JN_云团.011",
+        "JN_云团.012",
+        "JN_云团.013",
+        "JN_云团.014",
+        "JN_云团.015",
+        "JN_云团.016",
+        "JN_云团.017",
+        "JN_云团.018",
+        "JN_云团.019",
+        "JN_云团.020",
+        "JN_轻岚"
+      ]
+    },
+    {
+      "file": "12_village_lane.png",
+      "camera": [
+        1.4,
+        8.4,
+        1.75
+      ],
+      "target": [
+        1.4,
+        31.5,
+        1.35
+      ],
+      "lens": 42,
+      "ortho_scale": null,
+      "question": "村巷人眼：月门北巷通往茶集的连续地面、民居侧廊、桥前横巷和远端茶亭",
+      "seconds": 11.33,
+      "diagnostic_exclusions": []
+    },
+    {
+      "file": "13_canal_bridge.png",
+      "camera": [
+        13.2,
+        11.2,
+        8.6
+      ],
+      "target": [
+        7.3,
+        15.1,
+        0.9
+      ],
+      "lens": 46,
+      "ortho_scale": null,
+      "question": "水巷木桥：高位斜俯视完整检查桥板、栏柱、双岸驳岸、桥头落地与临水民居尺度",
+      "seconds": 12.35,
+      "diagnostic_exclusions": []
+    },
+    {
+      "file": "14_village_waterfront.png",
+      "camera": [
+        7.3,
+        29.0,
+        2.25
+      ],
+      "target": [
+        7.3,
+        16.0,
+        1.35
+      ],
+      "lens": 40,
+      "ortho_scale": null,
+      "question": "临水回望：检查八栋民居沿水巷的聚落节奏、河埠和木桥是否形成江南村落层次",
+      "seconds": 15.89,
+      "diagnostic_exclusions": []
+    },
+    {
+      "file": "15_north_tea_pavilion.png",
+      "camera": [
+        -13.2,
+        23.6,
+        5.3
+      ],
+      "target": [
+        -4.8,
+        32.0,
+        2.2
+      ],
+      "lens": 35,
+      "ortho_scale": null,
+      "question": "北街茶亭：完整观察屋脊、屋面、承托椽、梁檩、柱础、台基和入亭踏步，检查茶案与长凳的用途和入口净空",
+      "seconds": 10.28,
+      "diagnostic_exclusions": []
+    },
+    {
+      "file": "16_north_market_stalls.png",
+      "camera": [
+        -3.0,
+        28.5,
+        3.5
+      ],
+      "target": [
+        3.25,
+        32.0,
+        1.3
+      ],
+      "lens": 38,
+      "ortho_scale": null,
+      "question": "北街茶集：检查两处摊亭的麻布雨棚、真实承梁、柜台陈设、落地平台与主巷通行关系",
+      "seconds": 11.05,
+      "diagnostic_exclusions": []
+    }
+  ],
+  "spatial_evidence": {
+    "stepping_stones": [
+      [
+        -0.6,
+        -7.3,
+        0.22
+      ],
+      [
+        -0.1299,
+        -6.62,
+        0.22
+      ],
+      [
+        0.2766,
+        -5.94,
+        0.22
+      ],
+      [
+        0.5644,
+        -5.26,
+        0.22
+      ],
+      [
+        0.6946,
+        -4.58,
+        0.22
+      ],
+      [
+        0.6497,
+        -3.9,
+        0.22
+      ],
+      [
+        0.4355,
+        -3.22,
+        0.22
+      ],
+      [
+        0.0813,
+        -2.54,
+        0.22
+      ],
+      [
+        -0.3652,
+        -1.86,
+        0.22
+      ],
+      [
+        -0.8435,
+        -1.18,
+        0.22
+      ],
+      [
+        -1.2888,
+        -0.5,
+        0.22
+      ],
+      [
+        -1.6409,
+        0.18,
+        0.22
+      ]
+    ],
+    "moon_gate_path": [
+      [
+        -1.05,
+        0.62,
+        0.14
+      ],
+      [
+        -0.5947,
+        1.3,
+        0.14
+      ],
+      [
+        -0.1749,
+        1.98,
+        0.14
+      ],
+      [
+        0.2006,
+        2.66,
+        0.14
+      ],
+      [
+        0.5568,
+        3.34,
+        0.14
+      ],
+      [
+        0.933,
+        4.02,
+        0.14
+      ],
+      [
+        1.3536,
+        4.7,
+        0.14
+      ]
+    ],
+    "pavilion_steps": [
+      [
+        -7.0,
+        -2.08,
+        0.09
+      ],
+      [
+        -7.0,
+        -1.82,
+        0.16
+      ],
+      [
+        -7.0,
+        -1.56,
+        0.24
+      ]
+    ],
+    "waterside_steps": [
+      [
+        5.15,
+        -1.18,
+        0.11
+      ],
+      [
+        5.15,
+        -0.82,
+        0.14
+      ],
+      [
+        5.15,
+        -0.45,
+        0.18
+      ]
+    ]
+  }
+}

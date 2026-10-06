@@ -1,0 +1,175 @@
+{
+  "weather_0": {
+    "雨丝": 750,
+    "雨落涟漪": 38,
+    "雪粒": 0,
+    "瓦上薄雪": 0,
+    "汀步薄雪": 0
+  },
+  "weather_1": {
+    "雨丝": 0,
+    "雨落涟漪": 0,
+    "雪粒": 480,
+    "瓦上薄雪": 2,
+    "汀步薄雪": 12
+  },
+  "motion_changed": {
+    "JN_风动枝组": true,
+    "JN_雨丝": true,
+    "JN_雪粒": true,
+    "JN_云团": true
+  },
+  "invalid_object_drivers": [],
+  "isolated_scene_count": 1,
+  "objects": 2833,
+  "rerun_verified": true,
+  "generated_texture_assets": {
+    "plaster": {
+      "found": true,
+      "packed": true,
+      "images": [
+        "plaster.png"
+      ]
+    },
+    "stone": {
+      "found": true,
+      "packed": true,
+      "images": [
+        "stone.png"
+      ]
+    },
+    "bark": {
+      "found": true,
+      "packed": true,
+      "images": [
+        "bark.png"
+      ]
+    },
+    "clay": {
+      "found": true,
+      "packed": true,
+      "images": [
+        "clay.png"
+      ]
+    },
+    "wood": {
+      "found": true,
+      "packed": true,
+      "images": [
+        "wood.png"
+      ]
+    },
+    "petal": {
+      "found": true,
+      "packed": true,
+      "images": [
+        "petal.png"
+      ]
+    },
+    "landscape": {
+      "found": true,
+      "packed": true,
+      "images": [
+        "landscape.png"
+      ]
+    }
+  },
+  "pierced_scholar_stones": 3,
+  "spatial_connectors": {
+    "moon_gate_path": 7,
+    "pavilion_steps": 3,
+    "waterside_steps": 3
+  },
+  "village_phase1": {
+    "counts": {
+      "lane": 24,
+      "banks": 62,
+      "bridge_planks": 11,
+      "bridge_posts": 12,
+      "landing_steps": 6,
+      "houses": 16
+    },
+    "z_ranges": {
+      "lane": [
+        0.1,
+        0.1
+      ],
+      "banks": [
+        0.18,
+        0.18
+      ],
+      "bridge_planks": [
+        0.55,
+        0.55
+      ],
+      "bridge_posts": [
+        1.0,
+        1.0
+      ],
+      "landing_steps": [
+        0.005,
+        0.38
+      ],
+      "houses": [
+        1.72,
+        3.825
+      ]
+    }
+  },
+  "town_phase2": {
+    "phase": "phase_2_north_tea_market",
+    "grounded_houses": 8,
+    "street_segments": 114,
+    "street_batches": 3,
+    "tea_pavilion_columns": 4,
+    "market_stalls": 2,
+    "bridge_risers_per_side": 3,
+    "market_ceramics": 6,
+    "teacups": 2,
+    "canal_preserved": true,
+    "new_image_texture_bytes": 0
+  },
+  "village_wet_revetment": {
+    "present": true,
+    "count": 62,
+    "semantic_count": 62,
+    "batched": false,
+    "shared_mesh": "JN_村落湿润驳岸_原型",
+    "z_range": [
+      0.055,
+      0.055
+    ],
+    "water_z": 0.03,
+    "material_slots": 1
+  },
+  "spatial_semantics": {
+    "moon_gate_path": {
+      "monotonic_to_gate": true,
+      "max_internal_gap": 0.818,
+      "gate_endpoint_distance": 0.502,
+      "approach_gap_from_stepping_stones": 0.741,
+      "gate_clear_width_at_path_top": 1.702
+    },
+    "pavilion_steps": {
+      "rise_toward_platform": true,
+      "platform_edge_overlap": true,
+      "platform_front_y": -1.45
+    },
+    "waterside_steps": {
+      "rise_toward_land": true,
+      "crosses_pond_edge": true,
+      "water_step_inside_pond": true,
+      "pond_near_edge_y": -0.6
+    }
+  },
+  "spatial_warnings": [],
+  "outward_normals": {
+    "JN_云团": true,
+    "JN_明月": true,
+    "JN_花尖露珠_原型": true
+  },
+  "renderer": "Cycles CPU",
+  "renders": [],
+  "render_skipped": true,
+  "render_skip_reason": "formal multi-view rendering paused; use tools/diagnostic_review.py for low-cost spatial review"
+}
