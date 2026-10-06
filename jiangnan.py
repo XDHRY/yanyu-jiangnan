@@ -594,11 +594,13 @@ def village_phase1_skeleton():
     for side in (-1,1):
         for i in range(6):
             o=bpy.data.objects.new(PREFIX+f'村落桥栏柱_{side}_{i+1:02d}',post.data); c.objects.link(o); o.location=(4.7+i*1.2,15.1+side*.82,1)
-    # Continuous linked rails make the crossing read as a bridge instead of a timber platform.
-    rail=box('村落桥扶手_原型',(0,0,0),(6.15,.12,.14),wood,c); rail.hide_render=True; rail.hide_viewport=True
+    # Traditional low-cost railing hierarchy: heavier top handrail + lighter lower rail.
+    # Both remain shared box meshes; proportion, not ornament, carries the silhouette.
+    handrail=box('村落桥扶手_原型',(0,0,0),(6.15,.16,.16),wood,c); handrail.hide_render=True; handrail.hide_viewport=True
+    lower_rail=box('村落桥下横枋_原型',(0,0,0),(6.15,.09,.10),wood,c); lower_rail.hide_render=True; lower_rail.hide_viewport=True
     for side in (-1,1):
-        for z in (1.28,1.72):
-            o=bpy.data.objects.new(PREFIX+f'村落桥扶手_{side}_{z:.2f}',rail.data); c.objects.link(o); o.location=(7.7,15.1+side*.82,z)
+        o=bpy.data.objects.new(PREFIX+f'村落桥扶手_{side}',handrail.data); c.objects.link(o); o.location=(7.7,15.1+side*.82,1.72)
+        o=bpy.data.objects.new(PREFIX+f'村落桥下横枋_{side}',lower_rail.data); c.objects.link(o); o.location=(7.7,15.1+side*.82,1.28)
     step=box('村落河埠踏步_原型',(0,0,0),(1.15,.72,.16),stone,c); step.hide_render=True; step.hide_viewport=True
     for i in range(6):
         o=bpy.data.objects.new(PREFIX+f'村落河埠踏步_{i+1:02d}',step.data); c.objects.link(o); o.location=(4.4,19.72+i*.48,.38-i*.075)
