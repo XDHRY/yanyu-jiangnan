@@ -1,0 +1,187 @@
+name: Jiangnan Verified Review Package
+
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/review-package.yml']
+  workflow_dispatch:
+    inputs:
+      diagnostic_run:
+        type: string
+        required: true
+        default: '37494269409'
+      smoke_run:
+        type: string
+        required: true
+        default: '37494269240'
+      baseline_run:
+        type: string
+        required: true
+        default: '37453306182'
+      source_head:
+        type: string
+        required: true
+        default: '12c7b99fbf961160429b69f27cd203cfef92d752'
+
+permissions:
+  actions: read
+  contents: write
+
+concurrency:
+  group: jiangnan-review-package
+  cancel-in-progress: false
+
+jobs:
+  verified-review-package:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      DIAGNOSTIC_RUN_ID: ${{ inputs.diagnostic_run || '37494269409' }}
+      SMOKE_RUN_ID: ${{ inputs.smoke_run || '37494269240' }}
+      BASELINE_RUN_ID: ${{ inputs.baseline_run || '37453306182' }}
+      SOURCE_HEAD: ${{ inputs.source_head || '12c7b99fbf961160429b69f27cd203cfef92d752' }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install image packaging dependency
+        run: python3 -m pip install Pillow --quiet --disable-pip-version-check
+      - name: Fetch verified native diagnostic artifact
+        uses: actions/download-artifact@v4
+        with:
+          pattern: Jiangnan-Spatial-Diagnostics-*
+          merge-multiple: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ env.DIAGNOSTIC_RUN_ID }}
+          path: _review/current
+      - name: Fetch matching verified scene artifact
+        uses: actions/download-artifact@v4
+        with:
+          pattern: Jiangnan-Blender-4.5-*
+          merge-multiple: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ env.SMOKE_RUN_ID }}
+          path: _review/scene
+      - name: Fetch native comparison baseline
+        uses: actions/download-artifact@v4
+        with:
+          pattern: Jiangnan-Spatial-Diagnostics-*
+          merge-multiple: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ env.BASELINE_RUN_ID }}
+          path: _review/baseline
+      - name: Build and validate review files without rerendering
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          from PIL import Image, ImageDraw, ImageFont
+          import base64, io, json, shutil, zipfile, html, os, re
+          rid=os.environ['DIAGNOSTIC_RUN_ID'];sid=os.environ['SMOKE_RUN_ID'];bid=os.environ['BASELINE_RUN_ID'];head=os.environ['SOURCE_HEAD']
+          assert all(re.fullmatch(r'\d+',x) for x in (rid,sid,bid))
+          assert re.fullmatch(r'[0-9a-f]{40}',head)
+          root=Path.cwd();cur=root/'_review/current';scene=root/'_review/scene';old=root/'_review/baseline'
+          diag=cur/'diagnostics';manifest=json.loads((diag/'manifest.json').read_text())
+          views=manifest['views'];assert 14<=len(views)<=16 and manifest['resolution']==[1024,640]
+          validation=json.loads((cur/'validation/validation.json').read_text())
+          assert validation['town_phase2']['grounded_houses']==8
+          out=root/'docs/reviews'/('round-'+rid);images=out/'images';images.mkdir(parents=True)
+          for v in views:
+              name=v['file'];assert re.fullmatch(r'\d{2}_[a-z_]+\.png',name)
+              with Image.open(diag/name) as im:
+                  assert im.size==(1024,640);im.verify()
+              shutil.copy2(diag/name,images/name)
+          blend=scene/'Jiangnan.blend';assert blend.exists()
+          with blend.open('rb') as f:assert f.read(7)==b'BLENDER'
+          for target,src in [('manifest.json',diag/'manifest.json'),('validation.json',cur/'validation/validation.json'),('asset_budget.json',cur/'validation/asset_budget.json')]:
+              shutil.copy2(src,out/target)
+          budget=json.loads((cur/'validation/asset_budget.json').read_text())
+          before=json.loads((old/'validation/asset_budget.json').read_text())
+          report={'source_head':head,'render_commit':manifest.get('source_commit'),'diagnostic_run':rid,'smoke_run':sid,'baseline_run':bid,'image_count':len(views),'native_resolution':[1024,640],'before':before['totals'],'after':budget['totals'],'town_validation':validation['town_phase2'],'render_seconds':round(sum(v['seconds'] for v in views),2)}
+          (out/'report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2))
+          try:
+              font=ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf',17)
+              title=ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf',26)
+          except OSError:font=title=ImageFont.load_default()
+          sheet=Image.new('RGB',(1260,170+((len(views)+2)//3)*290),(16,24,29));draw=ImageDraw.Draw(sheet)
+          draw.text((18,16),'JIANGNAN TOWN / ROUND 01',font=title,fill=(233,228,214))
+          draw.text((18,64),str(len(views))+' REAL BLENDER 4.5 VIEWS / NATIVE 1024 x 640',font=font,fill=(169,188,187))
+          draw.text((18,104),'Source '+head[:12]+' / Render '+str(manifest.get('source_commit',''))[:12],font=font,fill=(169,188,187))
+          for i,v in enumerate(views):
+              x=(i%3)*420;y=170+(i//3)*290
+              with Image.open(images/v['file']) as im:sheet.paste(im.convert('RGB').resize((412,258),Image.Resampling.LANCZOS),(x+4,y))
+              draw.text((x+10,y+263),v['file'].replace('.png',''),font=font,fill=(220,220,210))
+          sheet.save(out/'contact.jpg',quality=94)
+          compare=Image.new('RGB',(2048,1380),(16,24,29));draw=ImageDraw.Draw(compare)
+          draw.text((18,14),'BEFORE: 640 x 400 / AFTER: NATIVE 1024 x 640',font=font,fill=(230,225,210))
+          for i,name in enumerate(('13_canal_bridge.png','14_village_waterfront.png')):
+              y=52+i*664
+              with Image.open(old/'diagnostics'/name) as im:compare.paste(im.convert('RGB').resize((1024,640),Image.Resampling.LANCZOS),(0,y))
+              with Image.open(images/name) as im:compare.paste(im.convert('RGB'),(1024,y))
+          compare.save(out/'before_after.jpg',quality=94)
+          def data(p):
+              b=io.BytesIO()
+              with Image.open(p) as im:im.convert('RGB').save(b,format='JPEG',quality=95,subsampling=0)
+              return 'data:image/jpeg;base64,'+base64.b64encode(b.getvalue()).decode()
+          titles={'01_plan.png':'庭院总平面','02_front_gate.png':'月门正轴','03_pavilion_entry.png':'听雨轩入口','04_pond_axis.png':'曲水与汀步','05_water_to_pavilion.png':'水岸回看','06_gate_reverse.png':'月门背面','07_east_return.png':'东墙转角','08_roofline.png':'屋顶层次','09_pavilion_side.png':'柱梁与台基','10_eye_path.png':'人眼步行','11_village_plan.png':'总平面（隐去月亮、云与雾）','12_village_lane.png':'北巷通向茶集','13_canal_bridge.png':'木桥与桥头','14_village_waterfront.png':'临水街区回望','15_north_tea_pavilion.png':'北街茶亭','16_north_market_stalls.png':'北街摊亭与陶器'}
+          cards=''.join('<button class="card" onclick="zoom(this)" data-title="'+html.escape(titles.get(v['file'],v['file']))+'"><img src="'+data(images/v['file'])+'" loading="lazy"><strong>'+html.escape(titles.get(v['file'],v['file']))+'</strong><small>'+html.escape(v['question'])+'</small></button>' for v in views)
+          hero=images/('15_north_tea_pavilion.png' if (images/'15_north_tea_pavilion.png').exists() else views[0]['file'])
+          tot=budget['totals'];bt=before['totals']
+          metrics=''.join('<div><small>'+k+'</small><strong>'+str(b)+' → '+str(c)+'</strong></div>' for k,b,c in [('网格三角面',bt['triangles_with_instances'],tot['triangles_with_instances']),('场景对象',bt['objects'],tot['objects']),('材质',bt['materials_used'],tot['materials_used']),('贴图估算MiB',bt['estimated_texture_rgba8_mib'],tot['estimated_texture_rgba8_mib'])])
+          page='''<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>江南小镇 · 首轮真实渲染</title><style>
+          *{box-sizing:border-box}body{margin:0;background:#101a20;color:#eae7dd;font:16px/1.7 system-ui,sans-serif}main{max-width:1320px;margin:auto;padding:28px 18px 60px}h1{font:38px/1.4 "Songti SC",serif;letter-spacing:3px}p{color:#b7c6c5;max-width:980px}img.hero,.compare{width:100%;display:block;border-radius:7px}.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:22px 0}.metrics div{background:#18262d;padding:16px;border:1px solid #294047}small{display:block;color:#a1b5b8;font-size:13px}.metrics strong{font-size:22px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.card{border:1px solid #304449;background:#18252b;color:inherit;padding:0 0 14px;text-align:left;cursor:pointer;border-radius:7px;overflow:hidden}.card img{width:100%;display:block}.card strong,.card small{display:block;padding:8px 13px 0}a{color:#cae1df}details{padding:16px;background:#15242a;margin:25px 0}dialog{background:#0c141a;color:#eee;border:1px solid #405359;max-width:96vw;max-height:96vh}dialog img{max-width:90vw;max-height:80vh;display:block}dialog::backdrop{background:#000d}@media(max-width:800px){.grid{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,1fr)}h1{font-size:30px}}</style><main>
+          <p>烟雨江南 / 持续扩建 · 首轮</p><h1>水岸相连，北街初成</h1>
+          <p>八栋民居补齐双岸地基、三条石街与桥头踏步，向北扩出一座茶亭和两处摊亭。以下全部来自本轮实际模型，属于构造与空间诊断画面。</p>
+          <img class="hero" src="__HERO__" alt="北街茶亭"><section class="metrics">__METRICS__</section>
+          <p>原生1024×640渲染；本页使用等尺寸JPEG编码，images.zip保留PNG原图。网格三角面未展开曲线与修改器，纹理MiB为RGBA8估算。本轮新增程序化麻布与陶釉，没有新增位图贴图。</p>
+          <h2>同机位前后对照</h2><p>左为640×400基线，排版中放大显示；右为本轮原生1024×640。双岸地面、石街与桥头踏步均来自真实几何。</p><img class="compare" src="__COMPARE__" alt="修改前后对照">
+          <h2>全部真实机位</h2><p>点击放大。01—10庭院，11—14村落，15—16本轮茶亭/摊亭聚焦。11号总平面只临时隐去月亮、云和雾以检查地面；排除项记录在manifest，其余机位保留原夜景。</p><section class="grid">__CARDS__</section>
+          <details><summary>验证记录与下一轮</summary><p>代码提交：__HEAD__<br>渲染检出：__RENDER__<br>CI、Blender 4.5 Smoke和16图空间诊断全部通过；8处住宅台基、河道、石街合批、桥头踏步、茶亭柱础和器皿接触均完成实测。</p>
+          <p><a href="__RUN__">本轮构建</a> · <a href="https://github.com/XDHRY/yanyu-jiangnan/pull/5">已合入的变更</a></p><p>小镇仍在持续建设。下一轮先完善真实门窗、室内进深、檐下木作、岸边植物与沿街生活细节；当前画面不是最终美术成片，也不代表Form/Runtime批准。</p></details>
+          </main><dialog id="viewer"><button onclick="document.getElementById('viewer').close()">关闭</button><p id="caption"></p><img id="large"></dialog><script>function zoom(el){document.getElementById('large').src=el.querySelector('img').src;document.getElementById('caption').textContent=el.dataset.title;document.getElementById('viewer').showModal()}</script></html>'''
+          values={'HERO':data(hero),'METRICS':metrics,'COMPARE':data(out/'before_after.jpg'),'CARDS':cards,'HEAD':head,'RENDER':str(manifest.get('source_commit')),'RUN':'https://github.com/'+os.environ['GITHUB_REPOSITORY']+'/actions/runs/'+rid}
+          page=re.sub(r'__(HERO|METRICS|COMPARE|CARDS|HEAD|RENDER|RUN)__',lambda m:values[m.group(1)],page)
+          for encoded in re.findall(r'src="data:image/jpeg;base64,([^"]+)"',page):
+              with Image.open(io.BytesIO(base64.b64decode(encoded,validate=True))) as im:im.verify()
+          (out/'gallery.html').write_text(page,encoding='utf-8')
+          with zipfile.ZipFile(out/'images.zip','w',compression=zipfile.ZIP_DEFLATED,compresslevel=4) as z:
+              for f in sorted(images.glob('*.png')):z.write(f,'images/'+f.name)
+              for name in ('manifest.json','validation.json','asset_budget.json','report.json','contact.jpg','before_after.jpg'):z.write(out/name,name)
+          with zipfile.ZipFile(out/'blender.zip','w',compression=zipfile.ZIP_DEFLATED,compresslevel=4) as z:
+              for f in sorted(scene.rglob('*')):
+                  if f.is_file():z.write(f,f.relative_to(scene))
+          for name in ('images.zip','blender.zip'):
+              with zipfile.ZipFile(out/name) as z:assert z.testzip() is None
+          readme=f"""# 江南小镇 · 首轮审阅包
+          
+          这是源提交 {head} 的真实模型与16张原生1024×640诊断图。代码已合入主线。
+          
+          [完整离线图集](gallery.html) · [16张PNG原图与对照](images.zip) · [可编辑Blender模型](blender.zip)
+          
+          ![北街茶亭](images/15_north_tea_pavilion.png)
+          ![临水街区](images/14_village_waterfront.png)
+          
+          [本轮实图构建](https://github.com/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{rid}) · [模型构建](https://github.com/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{sid})
+          
+          新增连续双岸地基、三条石街、桥头踏步、茶亭和两处摊亭。图集保留庭院核心机位及聚焦近景；11号总平面临时排除月亮、云和雾，建筑保持可见。全部图像来自已验证产物，此次打包未重渲染、未更改模型。
+          
+          小镇持续建设中，贯通门窗与室内、岸边绿化、铺装和檐下细节待下一轮精修。完整Form/Runtime批准尚未完成。
+          """
+          (out/'README.md').write_text(readme,encoding='utf-8')
+          print(json.dumps({'directory':str(out.relative_to(root)),'images':len(views),'files':[{'name':f.name,'bytes':f.stat().st_size} for f in out.iterdir() if f.is_file()],'source':head,'render':manifest.get('source_commit')},ensure_ascii=False))
+          
+          PY
+      - name: Save review files on a separate branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git switch -c "review/round-$DIAGNOSTIC_RUN_ID"
+          git add "docs/reviews/round-$DIAGNOSTIC_RUN_ID"
+          git commit -m "review: preserve verified Jiangnan round $DIAGNOSTIC_RUN_ID"
+          git push origin "HEAD:refs/heads/review/round-$DIAGNOSTIC_RUN_ID"
+      - name: Publish review package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Jiangnan-Review-Package-${{ env.DIAGNOSTIC_RUN_ID }}
+          path: docs/reviews/round-${{ env.DIAGNOSTIC_RUN_ID }}
+          retention-days: 90
