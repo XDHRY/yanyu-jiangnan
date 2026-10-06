@@ -25,7 +25,7 @@
 - [CI](https://github.com/XDHRY/yanyu-jiangnan/actions/runs/37494269231)：通过。
 - [Blender 4.5 Smoke与可编辑模型包](https://github.com/XDHRY/yanyu-jiangnan/actions/runs/37494269240)：通过。
 - [16张原生实图、断言与预算产物](https://github.com/XDHRY/yanyu-jiangnan/actions/runs/37494269409)：通过；16图总渲染273.14秒。
-- 合入main的树与上述验证代码树完全相同（`0a4f91643adf4dde4257f3a884bb186224539c2a`）；本交接后续仅修改文档。
+- 合入main的树与上述验证代码树完全相同（`0a4f91643adf4dde4257f3a884bb186224539c2a`）；后续审阅包工作流与交接修改不改变模型源码。
 
 实测2833对象、1563网格对象、121571网格三角面、25材质、7张贴图，RGBA8估算仍41.99MiB。统计未展开曲线和修改器，不能当作完整运行时面数或显存实测。
 
@@ -40,3 +40,11 @@
 ## 定时推进
 
 本对话任务已启用：每5小时连续推进并展示本轮实图。旧“江南持续推进飞轮”保持停用。保留14核心+最多2聚焦低成本机位，不恢复36机位高成本正式渲染。每轮读最新main/PR、完整父树和本目录交接，检查是否已有同commit的构建以避免重复，验证通过后提交并在已有授权范围内合入。后台模型仅在平台配置或明确证据支持时声称固定。
+
+## 本轮成果交付
+
+完整审阅包已在独立分支 `review/round-37494269409` 保存，commit `3b100a394fd1a0ea953b71cc15fc1fcc84cbaf20`：[查看真实效果与下载模型](https://github.com/XDHRY/yanyu-jiangnan/blob/3b100a394fd1a0ea953b71cc15fc1fcc84cbaf20/docs/reviews/round-37494269409/README.md)。包含16张原生PNG、离线gallery.html、同机位before_after.jpg、contact.jpg、原图与报告images.zip及可编辑blender.zip。审阅包生成工作流 run `37499388633` 与CI均通过，直接使用本轮已验证产物，未重渲染、未更改模型。照片、报告与原构建的源head/render commit一致。
+
+本轮交付时执行工作区断开（environment_offline），原本的文件保存助手无法启动；直接文件保存同样不能读取工作区。源码和Actions产物不受影响，已用GitHub原产物完成上述持久审阅包。不要反复等待相同的离线本地调用或因此停用定时任务。压缩Blender产物应沿用Smoke实际打开验证结果，不能只用未压缩文件的BLENDER头签名误判。
+
+仓库新增 `.github/workflows/review-package.yml`：仅其自身在main的改动或手动触发会打包；基于已验证diagnostic/smoke/baseline run，保留全父树，向新的独立审阅分支保存，不回写模型源码。正常轮次仍优先按可用文件保存机制交付，不需要每次复制整套二进制到Git。
