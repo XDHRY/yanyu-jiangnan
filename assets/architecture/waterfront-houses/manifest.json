@@ -1,0 +1,103 @@
+{
+  "name": "waterfront_house_through_openings_v1",
+  "status": "editable_review_candidate",
+  "source_repository": "XDHRY/yanyu-jiangnan",
+  "source_script": "jiangnan.py:village_phase1_skeleton",
+  "instances_in_scene": 8,
+  "role": "mid",
+  "lod0_tris_actual_with_instances": 6312,
+  "lod0_tris_budget_with_instances": 18000,
+  "lod1_status": "not_generated",
+  "lod2_status": "not_generated",
+  "materials": [
+    "JN_plaster",
+    "JN_tile",
+    "JN_wood",
+    "JN_stone",
+    "JN_darkstone",
+    "JN_bronze",
+    "JN_paper"
+  ],
+  "new_image_texture_bytes": 0,
+  "textures": [
+    {
+      "path": "textures/plaster.png",
+      "source": "textures/generation_prompts.json",
+      "mapping": "existing physical Object box projection",
+      "license_note": "project-generated; no external asset imported"
+    },
+    {
+      "path": "textures/clay.png",
+      "source": "textures/generation_prompts.json",
+      "mapping": "existing physical Object box projection",
+      "license_note": "project-generated; no external asset imported"
+    },
+    {
+      "path": "textures/wood.png",
+      "source": "textures/generation_prompts.json",
+      "mapping": "existing physical Object box projection",
+      "license_note": "project-generated; no external asset imported"
+    },
+    {
+      "path": "textures/stone.png",
+      "source": "textures/generation_prompts.json",
+      "mapping": "existing physical Object box projection",
+      "license_note": "project-generated; no external asset imported"
+    }
+  ],
+  "construction": [
+    "8 true door openings",
+    "16 true window openings",
+    "shared wall shell and gables",
+    "supported roof purlins and 7cm solidify roofs",
+    "floor/plinth/threshold contacts",
+    "8 parked open doors",
+    "8 tables and benches",
+    "2 localized oil lights"
+  ],
+  "validation_views": [
+    "12_village_lane",
+    "14_village_waterfront",
+    "15_house_entry",
+    "16_house_interior"
+  ],
+  "limitations": [
+    "curve/modifier geometry is excluded from reported base-mesh triangles",
+    "runtime collision and LOD not yet approved",
+    "individual approach strips and small stone trims retain editable per-house meshes",
+    "plaster bump and roof tile rhythm need further art refinement"
+  ],
+  "interior": {
+    "mesh_triangles_with_instances": 6312,
+    "triangle_budget": 18000,
+    "shells": 8,
+    "true_door_openings": 8,
+    "true_window_openings": 16,
+    "shared_wall_meshes": 1,
+    "door_clear_width_min": 1.0230000000000001,
+    "interior_depth_min": 4.3896,
+    "ray_tests_passed": 40,
+    "floor_support_passed": 8,
+    "tea_east_risers_m": [
+      0.1,
+      0.1
+    ],
+    "new_image_texture_bytes": 0
+  },
+  "source_head": "19ed9cdd025dcd79616c3521710bfa1a5c314304",
+  "render_checkout": "af2d3a33eca1ea337c772337edf6ac2bf61b99f4",
+  "diagnostic_run": 37528650028,
+  "smoke_run": 37528650031,
+  "triangle_count_method": "base meshes with repeated instances; excludes evaluated modifiers and curves",
+  "shared_components": [
+    "wall shell",
+    "gable ends",
+    "roof",
+    "door/window frames",
+    "parked open door",
+    "floor",
+    "table",
+    "bench",
+    "purlins"
+  ]
+}
