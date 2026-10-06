@@ -253,7 +253,7 @@ def driven(o,path,index,expression,prop='Wind'):
     enum(v,'type','SINGLE_PROP');v.targets[0].id=CTRL;v.targets[0].data_path='["'+prop+'"]';d.expression=expression
 def attach(o,parent):
     bpy.context.view_layer.update();o.parent=parent;o.matrix_parent_inverse=parent.matrix_world.inverted()
-def petals(name,positions,col,parent=None):
+def petals(name,positions,col,parent=None,petal_segments=3):
     vv=[];ff=[];uvs=[];stamenv=[];stamenf=[]
     for pos,size in positions:
         normal=Vector((R.uniform(-.5,.5),R.uniform(-1,-.3),R.uniform(.3,1))).normalized()
@@ -267,7 +267,6 @@ def petals(name,positions,col,parent=None):
             # 5–10 cm flower scale. Keep five distinct petals and the raised pollen
             # center, but avoid spending five fan triangles on every tiny petal.
             # This cuts blossom petal triangles by 40% without reducing bloom count.
-            petal_segments=3
             for j in range(petal_segments+1):
                 t=2*pi*j/petal_segments;p=center+axis*size*(.53+.53*cos(t))+side*size*.43*sin(t)+normal*size*.15*(1+cos(t))
                 vv.append(tuple(p));uvs.append((.5+.33*sin(t),.5+.33*cos(t)))
@@ -289,7 +288,7 @@ def vegetation():
     # Keep the prototype hidden: visible droplet count and silhouette stay unchanged.
     dew_proto=uv('花尖露珠_原型',(0,0,0),(1,1,1),M['dew'],C['dew'],6,4)
     dew_proto.hide_render=True;dew_proto.hide_viewport=True
-    def tree(base,scale,mirror=1):
+    def tree(base,scale,mirror=1,blossom_segments=3):
         bx,by,bz=base
         def pt(x,y,z):return Vector((bx+x*scale*mirror,by+y*scale,bz+z*scale))
         trunk=[pt(0,0,0),pt(-.15,.05,.9),pt(.18,.12,1.8),pt(.35,0,2.6),pt(.1,.12,3.3),pt(.6,.1,4.2)]
@@ -316,12 +315,12 @@ def vegetation():
                     if R.random()<.15:
                         dew=bpy.data.objects.new(PREFIX+'花尖露珠',dew_proto.data);C['dew'].objects.link(dew)
                         dew.location=p+Vector((0,-.02,-.045*scale));dew.scale=(.012*scale,.012*scale,.019*scale);attach(dew,pivot)
-            petals('五瓣梅_枝组',blooms,c,pivot)
+            petals('五瓣梅_枝组',blooms,c,pivot,blossom_segments)
         for j in range(8):
             a=R.random()*6.28;uv('树脚苔石',(bx+cos(a)*.6,by+sin(a)*.5,.15),(.3,.2,.15),M['moss'],C['water'],12,6)
     tree((-3.55,1.65,.18),1.25,1)
     tree((7.4,2.2,.18),1.05,-1)
-    tree((3.9,8.2,.1),.8,-1)
+    # Background plum uses LOD1 two-segment petals: same bloom count, 33% fewer petal triangles.\n    tree((3.9,8.2,.1),.8,-1,2)
     # Bamboo borrowed beyond the wall, arranged as sparse calligraphic strokes.
     for j in range(22):
         x=R.uniform(-8,9);y=R.uniform(7.8,10);h=R.uniform(4.4,7.4)
