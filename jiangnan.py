@@ -607,10 +607,47 @@ def village_phase1_skeleton():
         o=bpy.data.objects.new(PREFIX+f'村落河埠踏步_{i+1:02d}',step.data); c.objects.link(o); o.location=(4.4,19.72+i*.48,.38-i*.075)
 
     # First real waterside settlement: eight linked low-cost Jiangnan houses.
-    body=box('村落民居墙体_原型',(0,0,0),(5.2,4.0,3.2),M['plaster'],c); body.hide_render=True; body.hide_viewport=True
-    base=box('村落民居台基_原型',(0,0,0),(5.6,4.4,.24),stone,c); base.hide_render=True; base.hide_viewport=True
-    door=box('村落民居木门_原型',(0,0,0),(.12,1.08,2.15),wood,c); door.hide_render=True; door.hide_viewport=True
-    window=box('村落民居格窗暗底_原型',(0,0,0),(.10,.92,1.0),wood,c); window.hide_render=True; window.hide_viewport=True
+    # A shared closed wall shell with actual through-openings. No Boolean or
+    # black window backing: door leads to a 4.7 m deep editable interior.
+    def house_parts(name,parts,mat):
+        v=[];f=[]
+        for x,y,z,dx,dy,dz in parts:
+            k=len(v)
+            v.extend([(x+a*dx/2,y+b*dy/2,z+d*dz/2) for a,b,d in
+                      [(-1,-1,-1),(1,-1,-1),(1,1,-1),(-1,1,-1),
+                       (-1,-1,1),(1,-1,1),(1,1,1),(-1,1,1)]])
+            f.extend([tuple(k+j for j in face) for face in
+                      [(0,3,2,1),(4,5,6,7),(0,1,5,4),(1,2,6,5),(2,3,7,6),(3,0,4,7)]])
+        p=mesh(name,v,f,mat,c);p.hide_render=True;p.hide_viewport=True
+        return p
+    parts=[(-2.48,0,1.78,.24,4,3.08),(0,-1.88,1.78,4.72,.24,3.08),(0,1.88,1.78,4.72,.24,3.08)]
+    ys=(-2,-1.65,-.95,-.55,.55,.95,1.65,2)
+    zs=(.24,1.25,2.25,2.50,3.32)
+    for a,b in zip(ys,ys[1:]):
+        for d,e in zip(zs,zs[1:]):
+            ym=(a+b)/2;zm=(d+e)/2
+            if (abs(ym)<.55 and zm<2.50) or (.95<abs(ym)<1.65 and 1.25<zm<2.25):continue
+            parts.append((2.48,ym,zm,.24,b-a,e-d))
+    body=house_parts('村落民居墙体_原型',parts,M['plaster'])
+    # Close both gable ends up to the existing pitched roof; wall panels have
+    # physical thickness, with ridge supported by the gable masonry.
+    gv=[];gf=[]
+    for gx in (-2.48,2.48):
+        k=len(gv)
+        for xx in (gx-.12,gx+.12):
+            gv.extend([(xx,-2,3.32),(xx,2,3.32),(xx,2,3.468),(xx,0,4.35),(xx,-2,3.468)])
+        gf.extend([tuple(k+j for j in (4,3,2,1,0)),tuple(k+j for j in (5,6,7,8,9))])
+        for j in range(5):gf.append((k+j,k+(j+1)%5,k+(j+1)%5+5,k+j+5))
+    gable=mesh('村落民居山墙_原型',gv,gf,M['plaster'],c);gable.hide_render=True;gable.hide_viewport=True
+    base=box('村落民居台基_原型',(0,0,0),(5.6,4.4,.24),stone,c);base.hide_render=True;base.hide_viewport=True
+    frame=house_parts('村落民居门框_原型',[(2.63,-.60,1.39,.16,.10,2.30),(2.63,.60,1.39,.16,.10,2.30),(2.63,0,2.55,.16,1.30,.10)],wood)
+    winframe=house_parts('村落民居窗框_原型',[(2.63,-.39,1.75,.16,.08,1.16),(2.63,.39,1.75,.16,.08,1.16),(2.63,0,1.21,.16,.70,.08),(2.63,0,2.29,.16,.70,.08)],wood)
+    floor=house_parts('村落民居室内地坪_原型',[(0,0,.25,4.72,3.76,.02)],stone)
+    # Door leaf parked at 90 degrees inside, hinged at the jamb. Portal clear.
+    door=house_parts('村落民居开门扇_原型',[(2.16,.50,1.36,.72,.08,2.16)],wood)
+    bearing=house_parts('村落民居承檩_原型',[(0,0,4.20,5.12,.16,.16),(0,-1.88,3.36,5.12,.16,.16),(0,1.88,3.36,5.12,.16,.16)],wood)
+    table=house_parts('村落民居案几_原型',[(-.8,.8,.81,1.4,.65,.06)]+[(-.8+dx,.8+dy,.52,.08,.08,.52) for dx in (-.56,.56) for dy in (-.23,.23)],wood)
+    bench=house_parts('村落民居长凳_原型',[(-.8,-.20,.54,1.30,.32,.08)]+[(-.8+dx,-.20,.38,.09,.26,.24) for dx in (-.50,.50)],wood)
     # Shared timber edging breaks up broad plaster boxes at near-water eye level without new textures.
     corner_post=box('村落民居墙角木柱_原型',(0,0,0),(.14,.14,3.05),wood,c); corner_post.hide_render=True; corner_post.hide_viewport=True
     sill=box('村落民居墙脚木收边_原型',(0,0,0),(.12,3.70,.14),wood,c); sill.hide_render=True; sill.hide_viewport=True
@@ -649,8 +686,11 @@ def village_phase1_skeleton():
                  (15.9,10.1,.96),(16.2,15.0,1.02),(15.8,20.0,.93),(16.1,25.0,1.05)]
     for i,(hx,hy,hs) in enumerate(house_specs,1):
         facing=1 if hx<7.3 else -1
-        for proto,label,z in [(base,'台基',.12),(body,'墙体',1.72),(roof_proto,'屋面',3.30)]:
+        for proto,label,z in [(base,'台基',.12),(body,'墙体',0),(gable,'山墙',0),(floor,'室内地坪',0),(table,'案几',0),(bench,'长凳',0),(bearing,'承檩',0),(roof_proto,'屋面',3.30)]:
             o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_{label}',proto.data); c.objects.link(o); o.location=(hx,hy,z); o.scale=(hs,hs,1)
+            if label=='屋面':
+                thickness=o.modifiers.new('黛瓦屋面厚度','SOLIDIFY');thickness.thickness=.07;thickness.offset=-1
+            if label in ('墙体','山墙','案几','长凳','承檩'):o.rotation_euler.z=0 if facing==1 else pi
         # Two linked eaves create a readable shadow line; one linked ridge strengthens the roof silhouette.
         for side in (-1,1):
             o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_深檐_{side:+d}',eave.data); c.objects.link(o); o.location=(hx,hy+side*2.24*hs,3.34); o.scale=(hs,1,1)
@@ -658,13 +698,31 @@ def village_phase1_skeleton():
         # Two facade corner posts plus a low timber sill give the white wall a readable structural frame.
         for wy in (-1.82,1.82):
             o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_墙角木柱_{wy:+.2f}',corner_post.data); c.objects.link(o); o.location=(hx+facing*2.63*hs,hy+wy*hs,1.64); o.scale=(1,1,1)
-        o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_青石勒脚',plinth.data); c.objects.link(o); o.location=(hx+facing*2.61*hs,hy,.30); o.scale=(1,hs,1)
-        o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_墙脚木收边',sill.data); c.objects.link(o); o.location=(hx+facing*2.64*hs,hy,.50); o.scale=(1,hs,1)
-        o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_檐下额枋',eave_beam.data); c.objects.link(o); o.location=(hx+facing*2.64*hs,hy,3.08); o.scale=(1,hs,1)
-        o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_木门',door.data); c.objects.link(o); o.location=(hx+facing*2.62*hs,hy-.45,1.12)
-        for wy in (-1.15,1.05):
-            o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_格窗暗底',window.data); c.objects.link(o); o.location=(hx+facing*2.63*hs,hy+wy,1.72)
-            g=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_格窗棂',lattice.data); c.objects.link(g); g.location=(hx+facing*2.70*hs,hy+wy,1.72)
+        # Split the stone/timber skirt at the actual doorway instead of sealing it.
+        for wy in (-1.27,1.27):
+            box(f'村落民居_{i:02d}_青石勒脚',(hx+facing*2.61*hs,hy+wy*hs,.30),(.16,1.44*hs,.36),wetstone,c)
+        o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_檐下额枋',eave_beam.data);c.objects.link(o);o.location=(hx+facing*2.64*hs,hy,3.08);o.scale=(1,hs,1)
+        for proto,label,wy in [(frame,'门框',0),(door,'开门扇',0),(winframe,'窗框_南',-1.30),(winframe,'窗框_北',1.30)]:
+            o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_{label}',proto.data);c.objects.link(o)
+            o.location=(hx,hy+facing*wy*hs,0);o.scale=(hs,hs,1);o.rotation_euler.z=0 if facing==1 else pi
+        for wy in (-1.30,1.30):
+            g=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_格窗棂',lattice.data);c.objects.link(g)
+            g.location=(hx+facing*2.70*hs,hy+wy*hs,1.75);g.scale=(1,.72*hs,1)
+        threshold=box(f'村落民居_{i:02d}_门槛',(hx+facing*2.53*hs,hy,.27),(.28*hs,1.10*hs,.02),wood,c)
+        step=box(f'村落民居_{i:02d}_入户踏步',(hx+facing*2.99*hs,hy,.06),(.38*hs,1.30*hs,.12),stone,c)
+        # Per-house approach joins the facade to its existing bank street.
+        edge=hx+facing*3.18*hs;street=2.59 if facing==1 else 13.50
+        if facing==1:
+            box(f'村落民居_{i:02d}_入户石径',((edge+street)/2,hy,.06),(abs(street-edge)+.02,1.30*hs,.12),stone,c)
+        if i in (3,7):
+            lx=hx-facing*.8*hs;ly=hy+facing*.8*hs
+            box(f'村落民居_{i:02d}_油灯盘',(lx,ly,.85),(.16,.13,.02),M['bronze'],c)
+            uv(f'村落民居_{i:02d}_灯芯',(lx,ly,.90),(.014,.014,.040),M['paper'],c,8,4)
+            light(f'村落民居_{i:02d}_室内灯火',(lx,ly,.97),(1,.65,.32),28,.09,kind='POINT')
+        body_instance=bpy.data.objects[PREFIX+f'村落民居_{i:02d}_墙体']
+        body_instance['JN_door_clear_width']=1.10*hs;body_instance['JN_door_clear_height']=2.22
+        body_instance['JN_interior_depth']=4.72*hs
+    S['JN_house_shell_revision']='through_openings_v1'
     S['JN_village_phase']='phase_1_houses'; S['JN_village_phase1_houses']=8
     S['JN_village_phase1_tris_budget']=18000
     S['JN_village_phase1_texture_mib_delta']=0.0
@@ -722,6 +780,8 @@ def town_phase2_market():
     # intentionally open on every side; no flat wall masquerades as a door.
     cx,cy=-4.80,32.0
     box('北街茶亭_台基',(cx,cy,.16),(5.70,4.80,.32),stone,c,.025)
+    # East arrival: 10 cm rise from the connecting street to a 32 cm platform.
+    box('北街茶亭_东入口踏步',(-1.75,31.70,.11),(.44,1.60,.22),stone,c,.012)
     for i,top in enumerate((.107,.213,.320)):
         box(f'北街茶亭_入口踏步_{i+1}',(cx,29.07+i*.24,top/2),(1.84,.36,top),stone,c,.012)
     for dx in (-2.25,2.25):

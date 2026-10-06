@@ -145,10 +145,43 @@ for j in (1,2):
             assert abs(world_bounds(o)[0][2]-top)<.002, 'ceramic must rest on counter: '+o.name
 tray_top=world_bounds(bpy.data.objects['JN_北街茶亭_茶盘'])[1][2]
 assert all(abs(world_bounds(o)[0][2]-tray_top)<.002 for o in teacups), 'tea cups must rest on tray'
-house_windows=[o for o in S.objects if o.name.startswith('JN_村落民居_') and '_格窗暗底' in o.name]
-assert len(house_windows)==16
+# Test geometry, not just declared opening dimensions: rays through door and
+# both windows must travel to the rear wall rather than hit the facade.
+shells=[o for o in S.objects if o.name.startswith('JN_村落民居_') and o.name.endswith('_墙体')]
+assert len(shells)==8 and len({o.data.as_pointer() for o in shells})==1
+for o in shells:
+    assert o['JN_door_clear_width']>=1.0 and o['JN_door_clear_height']>=2.2
+    for y,z in [(0,1.50),(-1.30,1.75),(1.30,1.75)]:
+        hit,loc,normal,idx=o.ray_cast(Vector((3.2,y,z)),Vector((-1,0,0)))
+        assert hit and loc.x<-2.3, (o.name,y,z,tuple(loc))
+    # Jamb and lintel still exist and have real thickness.
+    for y,z in [(.75,1.50),(0,2.70)]:
+        hit,loc,normal,idx=o.ray_cast(Vector((3.2,y,z)),Vector((-1,0,0)))
+        assert hit and loc.x>2.3, (o.name,y,z,tuple(loc))
 for i in range(1,9):
-    assert len([o for o in house_windows if o.name.startswith(f'JN_村落民居_{i:02d}_格窗暗底')])==2
+    tag=f'JN_村落民居_{i:02d}_'
+    floor=world_bounds(bpy.data.objects[tag+'室内地坪'])
+    base=world_bounds(bpy.data.objects[tag+'台基'])
+    step=world_bounds(bpy.data.objects[tag+'入户踏步'])
+    threshold=world_bounds(bpy.data.objects[tag+'门槛'])
+    assert abs(floor[0][2]-base[1][2])<.002
+    assert abs(threshold[0][2]-floor[1][2])<.002
+    assert abs(step[0][2])<.002 and abs(step[1][2]-.12)<.002
+    assert base[1][2]-step[1][2]<=.125
+tea_step=world_bounds(bpy.data.objects['JN_北街茶亭_东入口踏步'])
+tea_approach=world_bounds(bpy.data.objects['JN_小镇茶亭连接石街'])
+assert abs(tea_step[1][2]-tea_approach[1][2]-.10)<.002
+assert abs(tea_base[1][2]-tea_step[1][2]-.10)<.002
+assert tea_step[0][0]<=tea_base[1][0]<=tea_step[1][0]
+assert min(tea_step[1][0],tea_approach[1][0])-max(tea_step[0][0],tea_approach[0][0])>.30
+house_meshes=[o for o in S.objects if o.name.startswith('JN_村落民居_') and not o.hide_render and o.type=='MESH']
+house_tris=0
+for o in house_meshes:
+    o.data.calc_loop_triangles();house_tris+=len(o.data.loop_triangles)
+assert house_tris<=S['JN_village_phase1_tris_budget'], house_tris
+assert all(bpy.data.objects[f'JN_村落民居_{i:02d}_屋面'].modifiers.get('黛瓦屋面厚度') for i in range(1,9))
+report['inhabited_houses']={'mesh_triangles_with_instances':house_tris,'triangle_budget':18000,'shells':8,'true_door_openings':8,'true_window_openings':16,'shared_wall_meshes':1,'door_clear_width_min':min(o['JN_door_clear_width'] for o in shells),'interior_depth_min':min(o['JN_interior_depth'] for o in shells),'ray_tests_passed':40,'floor_support_passed':8,'tea_east_risers_m':[.10,.10],'new_image_texture_bytes':0}
+print('INHABITED_HOUSES',json.dumps(report['inhabited_houses'],ensure_ascii=False))
 report['town_phase2']={'phase':S['JN_town_phase'],'grounded_houses':len(plinths),'street_segments':street_segments,'street_batches':len(streets),'tea_pavilion_columns':4,'market_stalls':2,'bridge_risers_per_side':3,'market_ceramics':len(ceramics),'teacups':len(teacups),'canal_preserved':True,'new_image_texture_bytes':0}
 print('TOWN_PHASE2',json.dumps(report['town_phase2'],ensure_ascii=False))
 
