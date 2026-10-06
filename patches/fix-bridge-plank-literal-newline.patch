@@ -1,0 +1,7 @@
+diff --git a/jiangnan.py b/jiangnan.py
+--- a/jiangnan.py
++++ b/jiangnan.py
+@@
+-    # Keep one shared bridge-plank mesh but expose a real 4 cm shadow gap; the previous 0.62 m board overlapped the 0.60 m pitch.\\n    plank=box('村落桥板_原型',(0,0,0),(.56,1.90,.16),wood,c); plank.hide_render=True; plank.hide_viewport=True
++    # Keep one shared bridge-plank mesh but expose a real 4 cm shadow gap; the previous 0.62 m board overlapped the 0.60 m pitch.
++    plank=box('村落桥板_原型',(0,0,0),(.56,1.90,.16),wood,c); plank.hide_render=True; plank.hide_viewport=True

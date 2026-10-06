@@ -1,0 +1,108 @@
+import bpy, os, json, time
+from mathutils import Vector
+
+OUT=os.environ.get('JN_OUT') or (os.path.dirname(bpy.data.filepath) if bpy.data.filepath else os.getcwd())
+DIAG=os.path.join(OUT,'diagnostics')
+os.makedirs(DIAG,exist_ok=True)
+S=bpy.data.scenes['烟雨江南 · 雪月江南']
+bpy.context.window.scene=S
+CTRL=bpy.data.objects.get('JN_总控_天气0雨1雪_风力')
+if CTRL:
+    CTRL['Weather']=0
+    CTRL.update_tag()
+
+# Diagnostic views deliberately favor spatial truth over beauty.
+VIEWS=[
+    ('01_plan',(0,0,32),(0,0,0),50,28,'总平面：池、轩、月门、院墙与路径是否形成清晰关系'),
+    ('02_front_gate',(1.4,-19,4.8),(1.4,4.5,2.0),42,0,'正面轴线：汀步到月门的连续性、门洞尺度、远景借景'),
+    ('03_pavilion_entry',(-7,-6.2,1.8),(-7,-1.55,.45),42,0,'听雨轩入口：三级踏步是否真正接到台基，柱网和入口尺度是否自然'),
+    ('04_pond_axis',(0,-12,2.6),(0,-1.2,1.0),48,0,'池面轴线：汀步节奏、池岸硬边与月门方向'),
+    ('05_water_to_pavilion',(6.8,-6.5,2.4),(-5.8,1.2,2.0),48,0,'水岸回看：临水踏步、观水区与听雨轩空间层次'),
+    ('06_gate_reverse',(1.4,6.55,1.32),(0.45,-0.35,.82),46,0,'月门背面：降低视线并略向庭院路径偏转，主动避开高位梅枝与花叶，检查门槛、门后石径、门内引路石与回望庭院的真实通行关系'),
+    ('07_east_return',(6.0,-5.2,2.2),(9.8,1.5,1.6),46,0,'东墙内侧：转角、漏窗、岸线和临水侧向空间是否拥挤或穿帮'),
+    ('08_roofline',(14,-16,13),(0,2.0,3.0),52,0,'高位轮廓：屋顶、墙顶、梅树与远山是否层叠而非齐平'),
+    ('09_pavilion_side',(-17.0,-8.5,4.4),(-7,.8,2.25),40,0,'轩侧：后退并放宽垂直视野，完整收入屋脊、檐口、柱梁、台基和三级踏步，检查出挑、支撑、落地关系与整体比例'),
+    ('10_eye_path',(0,-3.2,1.65),(1.4,5.2,1.0),42,0,'人眼高度：保留地面与门洞下缘，检查步向月门时的遮挡、尺度和净宽'),
+    ('11_village_plan',(6.0,22.0,48.0),(6.0,22.0,0),50,50,'小镇总平面：双岸地基、八栋民居、沿河石街、桥头踏步与北街茶集是否连续落地'),
+    ('12_village_lane',(1.4,8.4,1.75),(1.4,31.5,1.35),42,0,'村巷人眼：月门北巷通往茶集的连续地面、民居侧廊、桥前横巷和远端茶亭'),
+    ('13_canal_bridge',(13.2,11.2,8.6),(7.3,15.1,.9),46,0,'水巷木桥：高位斜俯视完整检查桥板、栏柱、双岸驳岸、桥头落地与临水民居尺度'),
+    ('14_village_waterfront',(7.3,29.0,2.25),(7.3,16.0,1.35),40,0,'临水回望：检查八栋民居沿水巷的聚落节奏、河埠和木桥是否形成江南村落层次'),
+    ('15_north_tea_pavilion',(-13.2,23.6,5.3),(-4.8,32.0,2.2),35,0,'北街茶亭：完整观察屋脊、屋面、承托椽、梁檩、柱础、台基和入亭踏步，检查茶案与长凳的用途和入口净空'),
+    ('16_north_market_stalls',(-3.0,28.5,3.5),(3.25,32.0,1.3),38,0,'北街茶集：检查两处摊亭的麻布雨棚、真实承梁、柜台陈设、落地平台与主巷通行关系'),
+]
+
+for o in list(bpy.data.objects):
+    if o.name.startswith('JN_DIAG_'):
+        bpy.data.objects.remove(o,do_unlink=True)
+
+cam_col=bpy.data.collections.get('JN_10_验证相机') or S.collection
+created=[]
+def add_cam(name,loc,target,lens,ortho):
+    data=bpy.data.cameras.new('JN_DIAG_'+name)
+    obj=bpy.data.objects.new('JN_DIAG_'+name,data)
+    cam_col.objects.link(obj)
+    obj.location=loc
+    obj.rotation_euler=(Vector(target)-obj.location).to_track_quat('-Z','Y').to_euler()
+    data.lens=lens
+    if ortho:
+        data.type='ORTHO';data.ortho_scale=ortho
+    created.append(obj)
+    return obj
+
+orig={
+    'engine':S.render.engine,
+    'x':S.render.resolution_x,'y':S.render.resolution_y,'pct':S.render.resolution_percentage,
+    'camera':S.camera.name if S.camera else None,'frame':S.frame_current,
+}
+S.frame_set(80)
+S.render.engine='BLENDER_EEVEE_NEXT'
+S.render.resolution_x=1024
+S.render.resolution_y=640
+S.render.resolution_percentage=100
+if hasattr(S,'eevee') and hasattr(S.eevee,'taa_render_samples'):
+    S.eevee.taa_render_samples=16
+S.render.image_settings.file_format='PNG'
+S.render.film_transparent=False
+
+manifest={'mode':'low-cost spatial diagnostic','renderer':'Blender Eevee Next','resolution':[1024,640],'frame':80,'weather':0,'source_commit':os.environ.get('GITHUB_SHA'),'town_phase':S.get('JN_town_phase'),'views':[]}
+for name,loc,target,lens,ortho,question in VIEWS:
+    cam=add_cam(name,loc,target,lens,ortho)
+    S.camera=cam
+    S.render.filepath=os.path.join(DIAG,name+'.png')
+    excluded=[]
+    if name=='11_village_plan':
+        # Survey view only: remove celestial/fog occlusion, never architecture.
+        excluded=[(o,o.hide_render) for o in S.objects if o.name.startswith(('JN_明月','JN_云团','JN_轻岚'))]
+        for o,_ in excluded:o.hide_render=True
+    start=time.time()
+    try:
+        bpy.ops.render.render(write_still=True)
+    finally:
+        for o,state in excluded:o.hide_render=state
+    manifest['views'].append({
+        'file':name+'.png','camera':list(loc),'target':list(target),'lens':lens,
+        'ortho_scale':ortho or None,'question':question,'seconds':round(time.time()-start,2),
+        'diagnostic_exclusions':[o.name for o,_ in excluded],
+    })
+
+def world_center(o):
+    # Procedural boxes bake world coordinates into mesh vertices, so object origins remain at (0,0,0).
+    # Derive evidence from transformed bounding-box corners rather than matrix_world.translation.
+    corners=[o.matrix_world @ Vector(corner) for corner in o.bound_box]
+    return sum(corners,Vector((0,0,0)))/len(corners)
+def centers(prefix):
+    objects=sorted([o for o in S.objects if o.name.startswith(prefix)],key=lambda o:world_center(o).y)
+    return [[round(v,4) for v in world_center(o)] for o in objects]
+manifest['spatial_evidence']={
+    'stepping_stones':centers('JN_曲水汀步'),
+    'moon_gate_path':centers('JN_月门引路石'),
+    'pavilion_steps':centers('JN_听雨轩入轩踏步'),
+    'waterside_steps':centers('JN_临水踏步'),
+}
+with open(os.path.join(DIAG,'manifest.json'),'w',encoding='utf-8') as f:
+    json.dump(manifest,f,ensure_ascii=False,indent=2)
+
+S.frame_set(orig['frame'])
+S.render.resolution_x=orig['x'];S.render.resolution_y=orig['y'];S.render.resolution_percentage=orig['pct']
+if orig['camera'] and bpy.data.objects.get(orig['camera']):S.camera=bpy.data.objects[orig['camera']]
+print('DIAGNOSTIC_RENDER_COMPLETE',json.dumps({'views':len(VIEWS),'dir':DIAG},ensure_ascii=False))
