@@ -1,0 +1,60 @@
+{
+  "name": "village_roof_hierarchy_v1",
+  "status": "editable_art_review_candidate",
+  "source_repository": "XDHRY/yanyu-jiangnan",
+  "source_script": "jiangnan.py:village_phase1_skeleton",
+  "source_head": "2572a5a0c570dc5dfae26cc57553c405ff0a3ee0",
+  "merge_commit": "033599ec0656edaf6444d1677b134e8f18dcef66",
+  "render_checkout": "d067a65d3ec22c6189abb4d6e8019e40789e7170",
+  "diagnostic_run": 37583062367,
+  "smoke_run": 37583062386,
+  "role": "village_roof_hierarchy",
+  "function": "two-tier inhabited-house roof family with supported eaves and north landmark firewalls",
+  "dimensions_m": {
+    "standard_ridge_z": 4.39,
+    "high_ridge_z": 4.57,
+    "ridge_delta": 0.18,
+    "roof_solidify": 0.07,
+    "firewall_ridge_edge_margin_min": 0.05
+  },
+  "construction": [
+    "4 standard roofs with matching shared gables and purlins",
+    "4 high-ridge roofs with matching shared gables and raised ridge purlins",
+    "8 linked rafter rows with 18 supported tails per house",
+    "8 linked octagonal tile-end rows with 18 tile ends per house",
+    "2 linked stepped firewall bodies and dark tile caps",
+    "2 linked asymmetric ridges terminating inside the street-facing firewall"
+  ],
+  "materials": ["JN_tile", "JN_wood", "JN_plaster", "JN_edge"],
+  "textures": [
+    {"path": "textures/clay.png", "source": "textures/generation_prompts.json", "mapping": "existing physical Object box projection", "license_note": "project-generated; no external asset imported"},
+    {"path": "textures/wood.png", "source": "textures/generation_prompts.json", "mapping": "existing physical Object box projection", "license_note": "project-generated; no external asset imported"},
+    {"path": "textures/plaster.png", "source": "textures/generation_prompts.json", "mapping": "existing physical Object box projection", "license_note": "project-generated; no external asset imported"}
+  ],
+  "new_image_texture_bytes": 0,
+  "new_base_mesh_triangles_delta": 7004,
+  "new_unique_mesh_triangles_delta": 908,
+  "triangle_count_method": "whole-scene base mesh delta against round 03; excludes evaluated curves and Solidify",
+  "house_mesh_triangles_with_instances": 12408,
+  "house_triangle_budget": 18000,
+  "lod0_status": "procedural review source",
+  "lod1_status": "not generated",
+  "lod2_status": "not generated",
+  "validation_views": ["12_village_lane", "14_village_waterfront", "15_roof_hierarchy", "16_firewall_eave_detail"],
+  "validation": {
+    "standard_roofs": 4,
+    "high_ridge_roofs": 4,
+    "shared_rafter_rows": 8,
+    "shared_tile_end_rows": 8,
+    "firewall_houses": 2,
+    "firewall_ridges_terminated": 2,
+    "new_materials": 0,
+    "new_images": 0
+  },
+  "limitations": [
+    "firewall cap corners, drip edges and plaster crest ornaments need final detailing",
+    "main roof surfaces do not yet model complete pantile courses",
+    "curves and modifiers are not included in the base-mesh triangle ledger",
+    "collision, navigation, LOD, UV/export audit and runtime tiers are not approved"
+  ]
+}
