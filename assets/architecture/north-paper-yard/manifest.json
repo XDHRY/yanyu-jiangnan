@@ -1,0 +1,46 @@
+{
+  "schema": "yanyu-jiangnan.asset-manifest.v1",
+  "asset": "north-mulberry-paper-yard-and-bridge",
+  "repository": "XDHRY/yanyu-jiangnan",
+  "source_head": "03cedfc245a4356adbd80b99ef15736653f4ebcf",
+  "merged_main": "f2ed3747772b17fe061c757375eb408dd73a0560",
+  "generator": "jiangnan.py:village_phase1_skeleton+town_phase2_market",
+  "scale": "1 Blender unit = 1 metre",
+  "bounds_m": {"x": [3.39, 19.98], "y": [32.94, 36.86], "z": [0.0, 2.82]},
+  "components": {
+    "paving_and_cross_path": 2,
+    "low_plaster_walls": 2,
+    "tile_wall_caps": 2,
+    "open_pulp_troughs": 1,
+    "paper_presses": 1,
+    "drying_frames": 1,
+    "shared_paper_instances": 4,
+    "post_mounted_work_lanterns": 1,
+    "north_bridge_planks": 11,
+    "north_bridge_posts": 12,
+    "north_bridge_rails": 4,
+    "north_bridge_steps": 6
+  },
+  "materials": [
+    {"name": "纸坊楮皮宣纸", "mapping": "Object", "source": "procedural Noise/Bump", "license": "project-authored", "new_image_bytes": 0}
+  ],
+  "mesh_reuse": {
+    "paper_instances": 4,
+    "paper_mesh_datablocks": 1,
+    "bridge_assets": "linked reuse of existing bridge plank/post/rail meshes"
+  },
+  "uv": "procedural paper material; no new bitmap UV dependency",
+  "normals": "paper sheets retain low-poly bowed silhouette; structural boxes retain hard edges",
+  "lod": "not_generated",
+  "collision": "not_generated; authoring clearance and support assertions only",
+  "navigation": "not_generated",
+  "external_assets": [],
+  "paid_service_budget": 0,
+  "evidence": {
+    "ci_run": 37703784026,
+    "smoke_run": 37703784011,
+    "spatial_run": 37703784036,
+    "artifact_id": 11518474418,
+    "diagnostic_views": ["15_north_paper_bridge.png", "16_paper_yard_detail.png"]
+  }
+}
