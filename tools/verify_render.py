@@ -180,6 +180,26 @@ for o in house_meshes:
     o.data.calc_loop_triangles();house_tris+=len(o.data.loop_triangles)
 assert house_tris<=S['JN_village_phase1_tris_budget'], house_tris
 assert all(bpy.data.objects[f'JN_村落民居_{i:02d}_屋面'].modifiers.get('黛瓦屋面厚度') for i in range(1,9))
+# Roof hierarchy and eave structure: two shared roof meshes, with high roofs
+# supported by their own gables/purlins; all rafter and tile-end rows are linked.
+roofs=[bpy.data.objects[f'JN_村落民居_{i:02d}_屋面'] for i in range(1,9)]
+standard=[roofs[i-1] for i in (1,2,5,6)];high=[roofs[i-1] for i in (3,4,7,8)]
+assert len({o.data.as_pointer() for o in standard})==1 and len({o.data.as_pointer() for o in high})==1
+assert standard[0].data.as_pointer()!=high[0].data.as_pointer()
+assert all(abs(bpy.data.objects[f'JN_村落民居_{i:02d}_正脊'].location.z-(4.57 if i in (3,4,7,8) else 4.39))<.002 for i in range(1,9))
+fire_ridges=[bpy.data.objects[f'JN_村落民居_{i:02d}_正脊'] for i in (4,8)]
+assert len({o.data.as_pointer() for o in fire_ridges})==1
+assert all((world_bounds(o)[1][0] < world_bounds(bpy.data.objects[f'JN_村落民居_{i:02d}_封火山墙压顶'])[1][0]-.05) if i==4 else (world_bounds(o)[0][0] > world_bounds(bpy.data.objects[f'JN_村落民居_{i:02d}_封火山墙压顶'])[0][0]+.05) for i,o in zip((4,8),fire_ridges))
+rafters=[bpy.data.objects[f'JN_村落民居_{i:02d}_檐椽列'] for i in range(1,9)]
+tile_ends=[bpy.data.objects[f'JN_村落民居_{i:02d}_瓦当列'] for i in range(1,9)]
+assert len({o.data.as_pointer() for o in rafters})==1 and len({o.data.as_pointer() for o in tile_ends})==1
+firewalls=[bpy.data.objects[f'JN_村落民居_{i:02d}_封火山墙墙身'] for i in (4,8)]
+firewall_caps=[bpy.data.objects[f'JN_村落民居_{i:02d}_封火山墙压顶'] for i in (4,8)]
+assert len({o.data.as_pointer() for o in firewalls})==1 and len({o.data.as_pointer() for o in firewall_caps})==1
+assert all(world_bounds(o)[0][2]<3.5 and world_bounds(o)[1][2]>4.65 for o in firewalls)
+assert all(world_bounds(o)[0][2]>4.0 and world_bounds(o)[1][2]>4.70 for o in firewall_caps)
+report['roof_hierarchy']={'standard_roofs':4,'high_ridge_roofs':4,'ridge_delta_m':.18,'shared_rafter_rows':8,'shared_tile_end_rows':8,'firewall_houses':2,'firewall_ridges_terminated':2,'roof_mesh_variants':2,'new_image_texture_bytes':0}
+print('ROOF_HIERARCHY',json.dumps(report['roof_hierarchy'],ensure_ascii=False))
 # North-west bamboo workshop: verify supports, attachment, circulation and
 # that its canopy stops before the existing west water street.
 shop_cols=[bpy.data.objects[f'JN_村落竹器作坊_檐柱_{i}'] for i in (1,2)]
