@@ -281,6 +281,7 @@ assert len({o.data.as_pointer() for o in paper_sheets})==1
 press_legs=[o for o in S.objects if o.name.startswith('JN_村落北纸坊_压纸案腿')]
 assert len(press_legs)==4 and all(abs(world_bounds(o)[0][2]-paper_paving[1][2])<.002 for o in press_legs)
 assert bpy.data.objects.get('JN_村落北纸坊_木螺杆') and bpy.data.objects.get('JN_村落北纸坊_压杆横柄')
+assert bpy.data.objects.get('JN_村落北纸坊_工作灯挑杆') and bpy.data.objects.get('JN_村落北纸坊_工作灯火')
 pulp_walls=[o for o in S.objects if o.name.startswith('JN_村落北纸坊_纸浆槽')]
 assert len(pulp_walls)==5
 paper_axis_lo,paper_axis_hi=34.0,35.2
@@ -296,7 +297,7 @@ assert all(abs(world_bounds(o)[0][2])<.002 for o in north_steps)
 for side in ('西','东'):
     tops=[world_bounds(bpy.data.objects[f'JN_小镇北桥踏步_{side}_{i}'])[1][2] for i in range(1,4)]
     assert all(abs(b-a-.18)<.003 for a,b in zip(tops,tops[1:])), tops
-report['north_paper_yard']={'court_supported':True,'clear_axis_m':S['JN_north_paper_yard_clear_axis_m'],'shared_paper_sheets':4,'rack_posts_on_shoes':2,'press_legs_grounded':4,'open_pulp_trough_walls':5,'north_bridge_planks':11,'north_bridge_posts':12,'north_bridge_riser_m':.18,'new_materials':1,'new_image_texture_bytes':0}
+report['north_paper_yard']={'court_supported':True,'clear_axis_m':S['JN_north_paper_yard_clear_axis_m'],'shared_paper_sheets':4,'rack_posts_on_shoes':2,'press_legs_grounded':4,'open_pulp_trough_walls':5,'work_lanterns':S['JN_north_paper_yard_lanterns'],'north_bridge_planks':11,'north_bridge_posts':12,'north_bridge_riser_m':.18,'new_materials':1,'new_image_texture_bytes':0}
 print('NORTH_PAPER_YARD',json.dumps(report['north_paper_yard'],ensure_ascii=False))
 report['inhabited_houses']={'mesh_triangles_with_instances':house_tris,'triangle_budget':18000,'shells':8,'true_door_openings':8,'true_window_openings':16,'shared_wall_meshes':1,'door_clear_width_min':min(o['JN_door_clear_width'] for o in shells),'interior_depth_min':min(o['JN_interior_depth'] for o in shells),'ray_tests_passed':40,'floor_support_passed':8,'tea_east_risers_m':[.10,.10],'new_image_texture_bytes':0}
 print('INHABITED_HOUSES',json.dumps(report['inhabited_houses'],ensure_ascii=False))

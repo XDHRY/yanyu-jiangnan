@@ -963,6 +963,12 @@ def village_phase1_skeleton():
         o=bpy.data.objects.new(PREFIX+f'村落北纸坊_晒纸_{j}',sheet.data);c.objects.link(o);o.location=(xx,36.04,1.16)
         lines(f'村落北纸坊_晒纸绳_{j}',[
             [(xx-.30,36.04,2.36),(xx-.30,36.04,2.54)],[(xx+.30,36.04,2.36),(xx+.30,36.04,2.54)]],.007,wood,c,res=1,bevel_res=0)
+    # A post-mounted work lantern provides a controlled warm pool.  The short
+    # bracket visibly connects to the east rack post instead of floating.
+    line('村落北纸坊_工作灯挑杆',[(19.05,36.04,2.40),(18.78,35.96,2.40),(18.78,35.96,2.24)],.024,wood,c,res=2,bevel_res=1)
+    uv('村落北纸坊_工作纱灯',(18.78,35.96,2.04),(.14,.14,.22),M['paper'],c,14,8)
+    for dz in (-.22,.22):box('村落北纸坊_纱灯铜口',(18.78,35.96,2.04+dz),(.17,.17,.024),M['bronze'],c)
+    light('村落北纸坊_工作灯火',(18.78,35.96,2.02),(1,.46,.20),78,.26,kind='POINT')
     S['JN_craft_shop']='north_west_bamboo_workshop'
     S['JN_craft_shop_clear_entry_m']=1.20
     S['JN_craft_shop_new_image_bytes']=0
@@ -974,6 +980,7 @@ def village_phase1_skeleton():
     S['JN_east_dye_yard_new_image_bytes']=0
     S['JN_north_paper_yard']='north_mulberry_paper_yard_v1'
     S['JN_north_paper_yard_clear_axis_m']=1.20
+    S['JN_north_paper_yard_lanterns']=1
     S['JN_north_paper_yard_new_image_bytes']=0
     S['JN_village_phase']='phase_1_houses'; S['JN_village_phase1_houses']=8
     S['JN_village_phase1_tris_budget']=18000
