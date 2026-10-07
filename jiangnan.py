@@ -637,21 +637,27 @@ def village_phase1_skeleton():
     body=house_parts('村落民居墙体_原型',parts,M['plaster'])
     # Close both gable ends up to the existing pitched roof; wall panels have
     # physical thickness, with ridge supported by the gable masonry.
-    gv=[];gf=[]
-    for gx in (-2.48,2.48):
-        k=len(gv)
-        for xx in (gx-.12,gx+.12):
-            gv.extend([(xx,-2,3.32),(xx,2,3.32),(xx,2,3.468),(xx,0,4.35),(xx,-2,3.468)])
-        gf.extend([tuple(k+j for j in (4,3,2,1,0)),tuple(k+j for j in (5,6,7,8,9))])
-        for j in range(5):gf.append((k+j,k+(j+1)%5,k+(j+1)%5+5,k+j+5))
-    gable=mesh('村落民居山墙_原型',gv,gf,M['plaster'],c);gable.hide_render=True;gable.hide_viewport=True
+    def gable_proto(name,peak):
+        gv=[];gf=[]
+        shoulder=3.468
+        for gx in (-2.48,2.48):
+            k=len(gv)
+            for xx in (gx-.12,gx+.12):
+                gv.extend([(xx,-2,3.32),(xx,2,3.32),(xx,2,shoulder),(xx,0,peak),(xx,-2,shoulder)])
+            gf.extend([tuple(k+j for j in (4,3,2,1,0)),tuple(k+j for j in (5,6,7,8,9))])
+            for j in range(5):gf.append((k+j,k+(j+1)%5,k+(j+1)%5+5,k+j+5))
+        p=mesh(name,gv,gf,M['plaster'],c);p.hide_render=True;p.hide_viewport=True
+        return p
+    gable=gable_proto('村落民居山墙_标准原型',4.35)
+    gable_high=gable_proto('村落民居山墙_高脊原型',4.53)
     base=box('村落民居台基_原型',(0,0,0),(5.6,4.4,.24),stone,c);base.hide_render=True;base.hide_viewport=True
     frame=house_parts('村落民居门框_原型',[(2.63,-.60,1.39,.16,.10,2.30),(2.63,.60,1.39,.16,.10,2.30),(2.63,0,2.55,.16,1.30,.10)],wood)
     winframe=house_parts('村落民居窗框_原型',[(2.63,-.39,1.75,.16,.08,1.16),(2.63,.39,1.75,.16,.08,1.16),(2.63,0,1.21,.16,.70,.08),(2.63,0,2.29,.16,.70,.08)],wood)
     floor=house_parts('村落民居室内地坪_原型',[(0,0,.25,4.72,3.76,.02)],stone)
     # Door leaf parked at 90 degrees inside, hinged at the jamb. Portal clear.
     door=house_parts('村落民居开门扇_原型',[(2.16,.50,1.36,.72,.08,2.16)],wood)
-    bearing=house_parts('村落民居承檩_原型',[(0,0,4.20,5.12,.16,.16),(0,-1.88,3.36,5.12,.16,.16),(0,1.88,3.36,5.12,.16,.16)],wood)
+    bearing=house_parts('村落民居承檩_标准原型',[(0,0,4.20,5.12,.16,.16),(0,-1.88,3.36,5.12,.16,.16),(0,1.88,3.36,5.12,.16,.16)],wood)
+    bearing_high=house_parts('村落民居承檩_高脊原型',[(0,0,4.38,5.12,.16,.16),(0,-1.88,3.36,5.12,.16,.16),(0,1.88,3.36,5.12,.16,.16)],wood)
     table=house_parts('村落民居案几_原型',[(-.8,.8,.81,1.4,.65,.06)]+[(-.8+dx,.8+dy,.52,.08,.08,.52) for dx in (-.56,.56) for dy in (-.23,.23)],wood)
     bench=house_parts('村落民居长凳_原型',[(-.8,-.20,.54,1.30,.32,.08)]+[(-.8+dx,-.20,.38,.09,.26,.24) for dx in (-.50,.50)],wood)
     # Shared timber edging breaks up broad plaster boxes at near-water eye level without new textures.
@@ -671,28 +677,67 @@ def village_phase1_skeleton():
     # Shared low-cost roof with restrained Jiangnan eave lift.  Geometry carries only
     # silhouette/structural turns; tile wear and micro relief stay in the PBR material.
     xs=(-3.15,-2.35,0,2.35,3.15); ys=(-2.38,0,2.38)
-    rv=[]; rf=[]
-    def roof_z(x,y):
+    def roof_proto_for(name,rise):
+        rv=[]; rf=[]
+        def roof_z(x,y):
         # ridge at y=0; a subtle 9 cm corner lift avoids a flat shed-like silhouette
-        slope=1.05*(1-abs(y)/2.38)
-        corner=.09*(abs(x)/3.15)**4*(abs(y)/2.38)**2
-        return max(0,slope)+corner
-    for y in ys:
-        for x in xs: rv.append((x,y,roof_z(x,y)))
-    for j in range(len(ys)-1):
-        for i in range(len(xs)-1):
-            a=j*len(xs)+i; rf.append((a,a+1,a+1+len(xs),a+len(xs)))
-    roof_proto=mesh('村落民居黛瓦屋面_原型',rv,rf,M['tile'],c); roof_proto.hide_render=True; roof_proto.hide_viewport=True
+            slope=rise*(1-abs(y)/2.38)
+            corner=.09*(abs(x)/3.15)**4*(abs(y)/2.38)**2
+            return max(0,slope)+corner
+        for y in ys:
+            for x in xs: rv.append((x,y,roof_z(x,y)))
+        for j in range(len(ys)-1):
+            for i in range(len(xs)-1):
+                a=j*len(xs)+i; rf.append((a,a+1,a+1+len(xs),a+len(xs)))
+        p=mesh(name,rv,rf,M['tile'],c);p.hide_render=True;p.hide_viewport=True
+        return p
+    roof_proto=roof_proto_for('村落民居黛瓦屋面_标准原型',1.05)
+    roof_high=roof_proto_for('村落民居黛瓦屋面_高脊原型',1.23)
     # Three-segment shared eave/ridge strips keep the upturn readable without per-tile geometry.
     ev=[(-3.18,0,.09),(-2.35,0,.025),(0,0,0),(2.35,0,.025),(3.18,0,.09)]
     eave=line('村落民居深檐_原型',ev,.09,M['edge'],c,res=2,bevel_res=1); eave.hide_render=True; eave.hide_viewport=True
     rg=[(-3.18,0,.10),(-2.35,0,.035),(0,0,0),(2.35,0,.035),(3.18,0,.10)]
     ridge=line('村落民居正脊_原型',rg,.095,M['tile'],c,res=2,bevel_res=1); ridge.hide_render=True; ridge.hide_viewport=True
+    # One shared structural eave module is instanced across all houses. The
+    # rafter tails actually meet the solidified roof underside; tile-end discs
+    # carry the visible rhythm without modelling full tile courses.
+    rafter_parts=[]
+    for xx in (-2.72,-2.04,-1.36,-.68,0,.68,1.36,2.04,2.72):
+        lift=.09*(abs(xx)/3.15)**4
+        for yy in (-2.18,2.18):rafter_parts.append((xx,yy,3.17+lift,.08,.50,.12))
+    rafter_row=house_parts('村落民居檐椽列_原型',rafter_parts,wood)
+    tv=[];tf=[]
+    for xx in (-2.72,-2.04,-1.36,-.68,0,.68,1.36,2.04,2.72):
+        lift=.09*(abs(xx)/3.15)**4
+        for side in (-1,1):
+            k=len(tv);yc=side*2.43;zc=3.25+lift
+            for yy in (yc-side*.035,yc+side*.035):
+                for q in range(8):
+                    a=2*pi*q/8;tv.append((xx+.075*cos(a),yy,zc+.075*sin(a)))
+            tf.extend([(k+q,k+(q+1)%8,k+8+(q+1)%8,k+8+q) for q in range(8)])
+            tf.extend([tuple(k+q for q in range(7,-1,-1)),tuple(k+8+q for q in range(8))])
+    tile_ends=mesh('村落民居瓦当列_原型',tv,tf,M['tile'],c);tile_ends.hide_render=True;tile_ends.hide_viewport=True
+    # The north pair receives a shared stepped fire-wall module. Plaster rises
+    # out of the existing gable; dark caps meet each step rather than floating.
+    firewall_body=house_parts('村落民居封火山墙墙身_原型',[
+        (2.62,-1.72,3.76,.28,.34,.72),(2.62,1.72,3.76,.28,.34,.72),
+        (2.62,-1.20,4.00,.28,.72,.46),(2.62,1.20,4.00,.28,.72,.46),
+        (2.62,-.55,4.28,.28,.56,.42),(2.62,.55,4.28,.28,.56,.42),
+        (2.62,0,4.49,.28,.30,.40)],M['plaster'])
+    firewall_caps=house_parts('村落民居封火山墙压顶_原型',[
+        (2.62,-1.72,4.14,.34,.48,.08),(2.62,1.72,4.14,.34,.48,.08),
+        (2.62,-1.20,4.27,.34,.82,.08),(2.62,1.20,4.27,.34,.82,.08),
+        (2.62,-.55,4.51,.34,.66,.08),(2.62,.55,4.51,.34,.66,.08),
+        (2.62,0,4.73,.34,.40,.08)],M['tile'])
     house_specs=[(-2.4,10.2,1.00),(-2.7,15.1,.94),(-2.2,20.1,1.04),(-2.8,25.1,.98),
                  (15.9,10.1,.96),(16.2,15.0,1.02),(15.8,20.0,.93),(16.1,25.0,1.05)]
     for i,(hx,hy,hs) in enumerate(house_specs,1):
         facing=1 if hx<7.3 else -1
-        for proto,label,z in [(base,'台基',.12),(body,'墙体',0),(gable,'山墙',0),(floor,'室内地坪',0),(table,'案几',0),(bench,'长凳',0),(bearing,'承檩',0),(roof_proto,'屋面',3.30)]:
+        hierarchy=i in (3,4,7,8)
+        gable_use=gable_high if hierarchy else gable
+        bearing_use=bearing_high if hierarchy else bearing
+        roof_use=roof_high if hierarchy else roof_proto
+        for proto,label,z in [(base,'台基',.12),(body,'墙体',0),(gable_use,'山墙',0),(floor,'室内地坪',0),(table,'案几',0),(bench,'长凳',0),(bearing_use,'承檩',0),(roof_use,'屋面',3.30)]:
             o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_{label}',proto.data); c.objects.link(o); o.location=(hx,hy,z); o.scale=(hs,hs,1)
             if label=='屋面':
                 thickness=o.modifiers.new('黛瓦屋面厚度','SOLIDIFY');thickness.thickness=.07;thickness.offset=-1
@@ -700,7 +745,14 @@ def village_phase1_skeleton():
         # Two linked eaves create a readable shadow line; one linked ridge strengthens the roof silhouette.
         for side in (-1,1):
             o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_深檐_{side:+d}',eave.data); c.objects.link(o); o.location=(hx,hy+side*2.24*hs,3.34); o.scale=(hs,1,1)
-        o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_正脊',ridge.data); c.objects.link(o); o.location=(hx,hy,4.39); o.scale=(hs,1,1)
+        o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_正脊',ridge.data); c.objects.link(o); o.location=(hx,hy,4.57 if hierarchy else 4.39); o.scale=(hs,1,1)
+        for proto,label in ((rafter_row,'檐椽列'),(tile_ends,'瓦当列')):
+            o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_{label}',proto.data);c.objects.link(o)
+            o.location=(hx,hy,0);o.scale=(hs,hs,1)
+        if i in (4,8):
+            for proto,label in ((firewall_body,'封火山墙墙身'),(firewall_caps,'封火山墙压顶')):
+                o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_{label}',proto.data);c.objects.link(o)
+                o.location=(hx,hy,0);o.scale=(hs,hs,1);o.rotation_euler.z=0 if facing==1 else pi
         # Two facade corner posts plus a low timber sill give the white wall a readable structural frame.
         for wy in (-1.82,1.82):
             o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_墙角木柱_{wy:+.2f}',corner_post.data); c.objects.link(o); o.location=(hx+facing*2.63*hs,hy+wy*hs,1.64); o.scale=(1,1,1)
@@ -775,6 +827,7 @@ def village_phase1_skeleton():
     S['JN_craft_shop_clear_entry_m']=1.20
     S['JN_craft_shop_new_image_bytes']=0
     S['JN_house_shell_revision']='through_openings_v1'
+    S['JN_house_roof_revision']='two_tier_eave_firewall_v1'
     S['JN_village_phase']='phase_1_houses'; S['JN_village_phase1_houses']=8
     S['JN_village_phase1_tris_budget']=18000
     S['JN_village_phase1_texture_mib_delta']=0.0
