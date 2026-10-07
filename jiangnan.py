@@ -486,6 +486,12 @@ def art_upgrade():
         bm=bmesh.new();bm.from_mesh(o.data);bmesh.ops.remove_doubles(bm,verts=list(bm.verts),dist=.00001);bmesh.ops.recalc_face_normals(bm,faces=list(bm.faces));bm.to_mesh(o.data);bm.free()
     for args in [('plaster','plaster',(.32,.32,.32),.035),('stone','stone',(.7,.7,.7),.07),('edge','stone',(1,1,1),.035),('bark','bark',(1.6,1.6,.45),.10),('wood','wood',(1.1,1.1,.30),.035),('tile','clay',(.85,.85,.85),.022)]:image_material(*args)
     image_material('pink','petal',(1,1,1),.007,True,(.94,.55,.65));image_material('ivory','petal',(1,1,1),.006,True)
+    # Native review showed the lime plaster reading as coarse concrete. Keep
+    # its packed albedo, but reduce the grayscale bump to a quiet lime grain.
+    plaster_bump=next(n for n in M['plaster'].node_tree.nodes if n.type=='BUMP' and n.label=='图像灰度近似微凹凸')
+    plaster_bump.inputs['Strength'].default_value=.10
+    plaster_bump.inputs['Distance'].default_value=.012
+    S['JN_plaster_bump_strength']=.10;S['JN_plaster_bump_distance_m']=.012
     # Replace piled spheres by individually sculpted, pierced scholar stones.
     for o in list(C['water'].objects):
         if o.name.startswith(PREFIX+'太湖叠石'):bpy.data.objects.remove(o,do_unlink=True)
@@ -722,6 +728,52 @@ def village_phase1_skeleton():
         body_instance=bpy.data.objects[PREFIX+f'村落民居_{i:02d}_墙体']
         body_instance['JN_door_clear_width']=1.10*hs;body_instance['JN_door_clear_height']=2.22
         body_instance['JN_interior_depth']=4.72*hs
+    # Give the north-west house a distinct public use and silhouette: a
+    # grounded bamboo-craft shop beside the tea market. The lean-to canopy
+    # remains below the main eave and leaves the water street unobstructed.
+    sx,sy=-2.8,25.1
+    for j,yy in enumerate((sy-1.42,sy+1.42),1):
+        box(f'村落竹器作坊_柱础_{j}',(1.30,yy,.11),(.30,.30,.22),stone,c,.015)
+        box(f'村落竹器作坊_檐柱_{j}',(1.30,yy,1.37),(.15,.15,2.30),wood,c,.008)
+    box('村落竹器作坊_前檐枋',(1.30,sy,2.56),(.17,3.02,.16),wood,c,.008)
+    box('村落竹器作坊_墙檩',(-.36,sy,2.77),(.15,3.18,.16),wood,c,.006)
+    av=[(-.42,sy-1.76,2.86),(-.42,sy+1.76,2.86),(1.60,sy-1.76,2.66),(1.60,sy+1.76,2.66)]
+    awning=mesh('村落竹器作坊_披檐屋面',av,[(0,2,3,1)],M['tile'],c)
+    solid=awning.modifiers.new('竹器作坊披檐厚度','SOLIDIFY');solid.thickness=.06;solid.offset=-1
+    rafter_paths=[]
+    for yy in (sy-1.45,sy-.72,sy,sy+.72,sy+1.45):
+        rafter_paths.append([(-.32,yy,2.78),(1.50,yy,2.60)])
+    lines('村落竹器作坊_披檐椽',rafter_paths,.035,wood,c,res=2,bevel_res=1)
+    line('村落竹器作坊_滴水檐口',[(1.61,sy-1.78,2.64),(1.61,sy+1.78,2.64)],.045,M['edge'],c,res=2,bevel_res=1)
+    # Display table sits off the 1.10 m entrance axis; its four legs seat on
+    # stone paving while the central arrival remains more than 1.2 m clear.
+    box('村落竹器作坊_陈列石座',(0.30,sy-1.03,.06),(.94,1.24,.12),stone,c,.010)
+    box('村落竹器作坊_陈列案',(0.30,sy-1.03,.77),(.74,1.05,.08),wood,c,.012)
+    for dx in (-.25,.25):
+        for dy in (-.39,.39):
+            box('村落竹器作坊_陈列案腿',(0.30+dx,sy-1.03+dy,.44),(.08,.08,.64),wood,c)
+    basket_paths=[]
+    for bx,by,scale in ((.30,sy-1.28,.92),(.30,sy-.80,.72)):
+        levels=((.82,.18),(.96,.23),(1.11,.27))
+        for z,rad in levels:
+            basket_paths.append([(bx+rad*sin(2*pi*k/12)*scale,by+rad*cos(2*pi*k/12)*scale,z) for k in range(13)])
+        for k in range(8):
+            a=2*pi*k/8
+            basket_paths.append([(bx+.18*sin(a)*scale,by+.18*cos(a)*scale,.82),(bx+.27*sin(a)*scale,by+.27*cos(a)*scale,1.11)])
+    lines('村落竹器作坊_竹篮篾',basket_paths,.010,wood,c,res=1,bevel_res=0)
+    # A hanging sieve is a readable craft sign without modern lettering.
+    sieve_paths=[[(1.23,sy+.78+.34*cos(2*pi*k/16),2.02+.34*sin(2*pi*k/16)) for k in range(17)]]
+    for k in range(8):
+        a=2*pi*k/8
+        sieve_paths.append([(1.23,sy+.78,2.02),(1.23,sy+.78+.33*cos(a),2.02+.33*sin(a))])
+    lines('村落竹器作坊_挂筛',sieve_paths,.012,wood,c,res=1,bevel_res=0)
+    line('村落竹器作坊_挂筛绳',[(1.23,sy+.78,2.38),(1.23,sy+.78,2.50)],.008,M['edge'],c,res=1,bevel_res=0)
+    box('村落竹器作坊_无字木招牌',(1.22,sy+1.12,2.10),(.08,.62,.38),wood,c,.018)
+    for yy in (sy+.93,sy+1.31):
+        uv('村落竹器作坊_招牌铜钉',(1.17,yy,2.10),(.025,.025,.025),M['bronze'],c,8,4)
+    S['JN_craft_shop']='north_west_bamboo_workshop'
+    S['JN_craft_shop_clear_entry_m']=1.20
+    S['JN_craft_shop_new_image_bytes']=0
     S['JN_house_shell_revision']='through_openings_v1'
     S['JN_village_phase']='phase_1_houses'; S['JN_village_phase1_houses']=8
     S['JN_village_phase1_tris_budget']=18000

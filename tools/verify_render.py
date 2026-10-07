@@ -180,6 +180,29 @@ for o in house_meshes:
     o.data.calc_loop_triangles();house_tris+=len(o.data.loop_triangles)
 assert house_tris<=S['JN_village_phase1_tris_budget'], house_tris
 assert all(bpy.data.objects[f'JN_村落民居_{i:02d}_屋面'].modifiers.get('黛瓦屋面厚度') for i in range(1,9))
+# North-west bamboo workshop: verify supports, attachment, circulation and
+# that its canopy stops before the existing west water street.
+shop_cols=[bpy.data.objects[f'JN_村落竹器作坊_檐柱_{i}'] for i in (1,2)]
+shop_shoes=[bpy.data.objects[f'JN_村落竹器作坊_柱础_{i}'] for i in (1,2)]
+for col,shoe in zip(shop_cols,shop_shoes):
+    cb=world_bounds(col);sb=world_bounds(shoe)
+    assert abs(sb[0][2])<.002 and abs(cb[0][2]-sb[1][2])<.002
+awning=bpy.data.objects['JN_村落竹器作坊_披檐屋面']
+assert awning.modifiers.get('竹器作坊披檐厚度')
+ab=world_bounds(awning)
+west_street=world_bounds(bpy.data.objects['JN_小镇石街_西水街_批处理'])
+assert ab[1][0] < west_street[0][0]-.70, (ab,west_street)
+assert abs(pos(shop_cols[0]).y-pos(shop_cols[1]).y)-max(o.dimensions.y for o in shop_cols)>2.5
+display_pad=world_bounds(bpy.data.objects['JN_村落竹器作坊_陈列石座'])
+display_legs=[o for o in S.objects if o.name.startswith('JN_村落竹器作坊_陈列案腿')]
+assert len(display_legs)==4 and abs(display_pad[0][2])<.002
+assert all(abs(world_bounds(o)[0][2]-display_pad[1][2])<.002 for o in display_legs)
+assert bpy.data.objects.get('JN_村落竹器作坊_竹篮篾') and bpy.data.objects.get('JN_村落竹器作坊_挂筛')
+plaster_bump=next(n for n in bpy.data.materials['JN_plaster'].node_tree.nodes if n.type=='BUMP' and n.label=='图像灰度近似微凹凸')
+assert abs(plaster_bump.inputs['Strength'].default_value-.10)<1e-4
+assert abs(plaster_bump.inputs['Distance'].default_value-.012)<1e-4
+report['bamboo_workshop']={'columns_on_shoes':2,'canopy_solidify_m':.06,'canopy_to_street_clearance_m':round(west_street[0][0]-ab[1][0],3),'clear_entry_m':S['JN_craft_shop_clear_entry_m'],'display_table_legs':4,'baskets':2,'hanging_sieves':1,'new_image_texture_bytes':0,'plaster_bump_strength':.10,'plaster_bump_distance_m':.012}
+print('BAMBOO_WORKSHOP',json.dumps(report['bamboo_workshop'],ensure_ascii=False))
 report['inhabited_houses']={'mesh_triangles_with_instances':house_tris,'triangle_budget':18000,'shells':8,'true_door_openings':8,'true_window_openings':16,'shared_wall_meshes':1,'door_clear_width_min':min(o['JN_door_clear_width'] for o in shells),'interior_depth_min':min(o['JN_interior_depth'] for o in shells),'ray_tests_passed':40,'floor_support_passed':8,'tea_east_risers_m':[.10,.10],'new_image_texture_bytes':0}
 print('INHABITED_HOUSES',json.dumps(report['inhabited_houses'],ensure_ascii=False))
 report['town_phase2']={'phase':S['JN_town_phase'],'grounded_houses':len(plinths),'street_segments':street_segments,'street_batches':len(streets),'tea_pavilion_columns':4,'market_stalls':2,'bridge_risers_per_side':3,'market_ceramics':len(ceramics),'teacups':len(teacups),'canal_preserved':True,'new_image_texture_bytes':0}
