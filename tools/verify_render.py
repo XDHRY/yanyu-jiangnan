@@ -186,7 +186,7 @@ roofs=[bpy.data.objects[f'JN_村落民居_{i:02d}_屋面'] for i in range(1,9)]
 standard=[roofs[i-1] for i in (1,2,5,6)];high=[roofs[i-1] for i in (3,4,7,8)]
 assert len({o.data.as_pointer() for o in standard})==1 and len({o.data.as_pointer() for o in high})==1
 assert standard[0].data.as_pointer()!=high[0].data.as_pointer()
-assert all(abs(pos(bpy.data.objects[f'JN_村落民居_{i:02d}_正脊']).z-(4.57 if i in (3,4,7,8) else 4.39))<.002 for i in range(1,9))
+assert all(abs(bpy.data.objects[f'JN_村落民居_{i:02d}_正脊'].location.z-(4.57 if i in (3,4,7,8) else 4.39))<.002 for i in range(1,9))
 rafters=[bpy.data.objects[f'JN_村落民居_{i:02d}_檐椽列'] for i in range(1,9)]
 tile_ends=[bpy.data.objects[f'JN_村落民居_{i:02d}_瓦当列'] for i in range(1,9)]
 assert len({o.data.as_pointer() for o in rafters})==1 and len({o.data.as_pointer() for o in tile_ends})==1
