@@ -845,12 +845,12 @@ def village_phase1_skeleton():
     for j,xx in enumerate((15.00,17.10,19.20),1):
         box(f'村落东岸染坊_柱础_{j}',(xx,29.15,.23),(.32,.32,.22),stone,c,.015)
         box(f'村落东岸染坊_檐柱_{j}',(xx,29.15,1.44),(.16,.16,2.20),wood,c,.008)
-    box('村落东岸染坊_墙檩',(17.10,27.00,2.78),(4.55,.16,.17),wood,c,.006)
+    box('村落东岸染坊_墙檩',(17.10,27.10,2.78),(4.55,.24,.17),wood,c,.006)
     box('村落东岸染坊_前檐枋',(17.10,29.15,2.53),(4.55,.18,.18),wood,c,.008)
-    cv=[(14.68,26.94,2.86),(19.52,26.94,2.86),(14.68,29.38,2.61),(19.52,29.38,2.61)]
+    cv=[(14.68,27.05,2.86),(19.52,27.05,2.86),(14.68,29.38,2.61),(19.52,29.38,2.61)]
     canopy=mesh('村落东岸染坊_披檐屋面',cv,[(0,2,3,1)],M['tile'],c)
     solid=canopy.modifiers.new('染坊披檐厚度','SOLIDIFY');solid.thickness=.055;solid.offset=-1
-    lines('村落东岸染坊_承托椽',[[ (xx,27.00,2.78),(xx,29.26,2.55) ] for xx in (14.85,15.60,16.35,17.10,17.85,18.60,19.35)],.032,wood,c,res=2,bevel_res=1)
+    lines('村落东岸染坊_承托椽',[[ (xx,27.10,2.78),(xx,29.26,2.55) ] for xx in (14.85,15.60,16.35,17.10,17.85,18.60,19.35)],.032,wood,c,res=2,bevel_res=1)
     line('村落东岸染坊_滴水檐口',[(14.64,29.39,2.58),(19.56,29.39,2.58)],.043,M['edge'],c,res=2,bevel_res=1)
     # Reusable open-mouthed stone vats. The radial profile folds back down the
     # inside wall, so the dark dye surface remains visibly recessed.
