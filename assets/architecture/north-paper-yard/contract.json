@@ -1,0 +1,32 @@
+{
+  "schema": "yanyu-jiangnan.custom-space-contract.v1",
+  "name": "north_mulberry_paper_yard_v1",
+  "status": "form_candidate_not_runtime_approved",
+  "purpose": "east-bank mulberry-paper workyard connected to the north tea market by a second pedestrian bridge",
+  "bounds_m": {"x": [3.39, 19.98], "y": [32.94, 36.86], "z": [0.0, 2.82]},
+  "hero": "one grounded drying rack carrying four shared pale paper sheets against a low white courtyard wall",
+  "circulation": {
+    "route": ["north_tea_market", "north_footbridge", "east_water_street", "paper_yard_cross_path", "paper_yard"],
+    "clear_axis_m": 1.2,
+    "axis_y_m": [34.0, 35.2],
+    "production_props_excluded_from_axis": true
+  },
+  "support_contract": [
+    "yard and cross path rest on continuous east-bank land",
+    "paper rack posts rest on individual stone shoes seated on paving",
+    "press table has four grounded legs and a complete upper frame",
+    "north footbridge reuses linked bridge meshes and meets three supported risers on each bank"
+  ],
+  "collision": {"authoring_clearance_checks": true, "runtime_collision_mesh": "not_generated"},
+  "production_cameras": ["15_north_paper_bridge", "16_paper_yard_detail"],
+  "input_behavior": "none; static editable art-review scene",
+  "runtime_readiness": {
+    "lod": "not_generated",
+    "navigation": "not_generated",
+    "uv_export_audit": "not_run",
+    "form_approval": "not_granted",
+    "runtime_approval": "not_granted"
+  },
+  "paid_service_budget": 0,
+  "new_external_assets": 0
+}

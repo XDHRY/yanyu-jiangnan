@@ -261,9 +261,43 @@ assert world_bounds(landing[0])[1][0]>east_street[0][0] and world_bounds(landing
 axis_lo,axis_hi=29.85,31.05
 production=vats+liquids+dye_cols+dye_shoes+cloths+dry_cols+dry_shoes+[bpy.data.objects['JN_村落东岸染坊_洗布槽底']]
 assert all(world_bounds(o)[1][1]<=axis_lo or world_bounds(o)[0][1]>=axis_hi for o in production)
-assert bpy.data.objects.get('JN_村落东岸染坊_工作纱灯') and bpy.data.objects.get('村落东岸染坊_工作灯火')
+assert bpy.data.objects.get('JN_村落东岸染坊_工作纱灯') and bpy.data.objects.get('JN_村落东岸染坊_工作灯火')
 report['east_dye_yard']={'court_supported':True,'clear_axis_m':S['JN_east_dye_yard_clear_axis_m'],'canopy_columns_on_shoes':3,'canopy_solidify_m':.055,'open_vats':3,'filled_vats':2,'shared_hanging_cloths':3,'drying_posts_on_shoes':2,'work_lanterns':S['JN_east_dye_yard_lanterns'],'landing_risers_m':[round(a-b,3) for a,b in zip(tops,tops[1:])],'new_materials':2,'new_image_texture_bytes':0}
 print('EAST_DYE_YARD',json.dumps(report['east_dye_yard'],ensure_ascii=False))
+# North paper yard and bridge: verify the new economic route is genuinely
+# connected, supported and distinct from the dye-vat asset family.
+paper_paving=world_bounds(bpy.data.objects['JN_村落北纸坊_院坪'])
+paper_path=world_bounds(bpy.data.objects['JN_村落北纸坊_入院横径'])
+assert abs(paper_paving[0][2])<.002 and abs(paper_path[0][2])<.002
+assert min(paper_paving[1][0],paper_path[1][0])-max(paper_paving[0][0],paper_path[0][0])>.02
+assert min(east_street[1][0],paper_path[1][0])-max(east_street[0][0],paper_path[0][0])>.02
+paper_posts=[bpy.data.objects[f'JN_村落北纸坊_晒纸架立柱_{i}'] for i in (1,2)]
+paper_shoes=[bpy.data.objects[f'JN_村落北纸坊_晒纸架柱础_{i}'] for i in (1,2)]
+for col,shoe in zip(paper_posts,paper_shoes):
+    assert abs(world_bounds(shoe)[0][2]-paper_paving[1][2])<.002
+    assert abs(world_bounds(col)[0][2]-world_bounds(shoe)[1][2])<.002
+paper_sheets=[bpy.data.objects[f'JN_村落北纸坊_晒纸_{i}'] for i in range(1,5)]
+assert len({o.data.as_pointer() for o in paper_sheets})==1
+press_legs=[o for o in S.objects if o.name.startswith('JN_村落北纸坊_压纸案腿')]
+assert len(press_legs)==4 and all(abs(world_bounds(o)[0][2]-paper_paving[1][2])<.002 for o in press_legs)
+assert bpy.data.objects.get('JN_村落北纸坊_木螺杆') and bpy.data.objects.get('JN_村落北纸坊_压杆横柄')
+pulp_walls=[o for o in S.objects if o.name.startswith('JN_村落北纸坊_纸浆槽')]
+assert len(pulp_walls)==5
+paper_axis_lo,paper_axis_hi=34.0,35.2
+paper_production=paper_posts+paper_shoes+paper_sheets+press_legs+pulp_walls
+assert all(world_bounds(o)[1][1]<=paper_axis_lo or world_bounds(o)[0][1]>=paper_axis_hi for o in paper_production)
+north_planks=[bpy.data.objects[f'JN_村落北桥板_{i:02d}'] for i in range(1,12)]
+assert len({o.data.as_pointer() for o in north_planks})==1
+assert north_planks[0].data==bpy.data.objects['JN_村落桥板_原型'].data
+north_posts=[o for o in S.objects if o.name.startswith('JN_村落北桥栏柱_')]
+assert len(north_posts)==12 and len({o.data.as_pointer() for o in north_posts})==1
+north_steps=[bpy.data.objects[f'JN_小镇北桥踏步_{side}_{i}'] for side in ('西','东') for i in range(1,4)]
+assert all(abs(world_bounds(o)[0][2])<.002 for o in north_steps)
+for side in ('西','东'):
+    tops=[world_bounds(bpy.data.objects[f'JN_小镇北桥踏步_{side}_{i}'])[1][2] for i in range(1,4)]
+    assert all(abs(b-a-.18)<.003 for a,b in zip(tops,tops[1:])), tops
+report['north_paper_yard']={'court_supported':True,'clear_axis_m':S['JN_north_paper_yard_clear_axis_m'],'shared_paper_sheets':4,'rack_posts_on_shoes':2,'press_legs_grounded':4,'open_pulp_trough_walls':5,'north_bridge_planks':11,'north_bridge_posts':12,'north_bridge_riser_m':.18,'new_materials':1,'new_image_texture_bytes':0}
+print('NORTH_PAPER_YARD',json.dumps(report['north_paper_yard'],ensure_ascii=False))
 report['inhabited_houses']={'mesh_triangles_with_instances':house_tris,'triangle_budget':18000,'shells':8,'true_door_openings':8,'true_window_openings':16,'shared_wall_meshes':1,'door_clear_width_min':min(o['JN_door_clear_width'] for o in shells),'interior_depth_min':min(o['JN_interior_depth'] for o in shells),'ray_tests_passed':40,'floor_support_passed':8,'tea_east_risers_m':[.10,.10],'new_image_texture_bytes':0}
 print('INHABITED_HOUSES',json.dumps(report['inhabited_houses'],ensure_ascii=False))
 report['town_phase2']={'phase':S['JN_town_phase'],'grounded_houses':len(plinths),'street_segments':street_segments,'street_batches':len(streets),'tea_pavilion_columns':4,'market_stalls':2,'bridge_risers_per_side':3,'market_ceramics':len(ceramics),'teacups':len(teacups),'canal_preserved':True,'new_image_texture_bytes':0}
