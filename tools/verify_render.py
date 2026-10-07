@@ -261,7 +261,7 @@ assert world_bounds(landing[0])[1][0]>east_street[0][0] and world_bounds(landing
 axis_lo,axis_hi=29.85,31.05
 production=vats+liquids+dye_cols+dye_shoes+cloths+dry_cols+dry_shoes+[bpy.data.objects['JN_村落东岸染坊_洗布槽底']]
 assert all(world_bounds(o)[1][1]<=axis_lo or world_bounds(o)[0][1]>=axis_hi for o in production)
-assert bpy.data.objects.get('JN_村落东岸染坊_工作纱灯') and bpy.data.objects.get('村落东岸染坊_工作灯火')
+assert bpy.data.objects.get('JN_村落东岸染坊_工作纱灯') and bpy.data.objects.get('JN_村落东岸染坊_工作灯火')
 report['east_dye_yard']={'court_supported':True,'clear_axis_m':S['JN_east_dye_yard_clear_axis_m'],'canopy_columns_on_shoes':3,'canopy_solidify_m':.055,'open_vats':3,'filled_vats':2,'shared_hanging_cloths':3,'drying_posts_on_shoes':2,'work_lanterns':S['JN_east_dye_yard_lanterns'],'landing_risers_m':[round(a-b,3) for a,b in zip(tops,tops[1:])],'new_materials':2,'new_image_texture_bytes':0}
 print('EAST_DYE_YARD',json.dumps(report['east_dye_yard'],ensure_ascii=False))
 report['inhabited_houses']={'mesh_triangles_with_instances':house_tris,'triangle_budget':18000,'shells':8,'true_door_openings':8,'true_window_openings':16,'shared_wall_meshes':1,'door_clear_width_min':min(o['JN_door_clear_width'] for o in shells),'interior_depth_min':min(o['JN_interior_depth'] for o in shells),'ray_tests_passed':40,'floor_support_passed':8,'tea_east_risers_m':[.10,.10],'new_image_texture_bytes':0}
