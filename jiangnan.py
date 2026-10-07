@@ -829,11 +829,84 @@ def village_phase1_skeleton():
     box('村落竹器作坊_无字木招牌',(1.22,sy+1.12,2.10),(.08,.62,.38),wood,c,.018)
     for yy in (sy+.93,sy+1.31):
         uv('村落竹器作坊_招牌铜钉',(1.17,yy,2.10),(.025,.025,.025),M['bronze'],c,8,4)
+    # East-bank indigo yard: a real work court behind house 08, connected on
+    # one clear axis to the east water street and a new stepped river landing.
+    # The production props stay off that 1.20 m circulation band.
+    dx,dy=17.10,30.20
+    box('村落东岸染坊_院坪',(dx,dy,.06),(5.50,5.20,.12),stone,c,.018)
+    box('村落东岸染坊_入院横径',(13.93,30.45,.06),(.90,1.20,.12),stone,c,.014)
+    # Four grounded landing steps descend from the street to the east canal;
+    # the highest overlaps the street edge, the lowest meets the wet revetment.
+    for i,(xx,top) in enumerate(((11.12,.46),(10.82,.34),(10.52,.22),(10.22,.10)),1):
+        o=box(f'村落东岸染坊_河埠踏步_{i}',(xx,30.45,top/2),(.46,1.40,top),stone,c,.012)
+        o['JN_step_top']=top;o['JN_destination']='east_dye_yard'
+    # Lean-to: rear ledger intersects the existing north wall/eave, while the
+    # front beam is carried by three posts seated on individual stone shoes.
+    for j,xx in enumerate((15.00,17.10,19.20),1):
+        box(f'村落东岸染坊_柱础_{j}',(xx,29.15,.23),(.32,.32,.22),stone,c,.015)
+        box(f'村落东岸染坊_檐柱_{j}',(xx,29.15,1.44),(.16,.16,2.20),wood,c,.008)
+    box('村落东岸染坊_墙檩',(17.10,27.00,2.78),(4.55,.16,.17),wood,c,.006)
+    box('村落东岸染坊_前檐枋',(17.10,29.15,2.53),(4.55,.18,.18),wood,c,.008)
+    cv=[(14.68,26.94,2.86),(19.52,26.94,2.86),(14.68,29.38,2.61),(19.52,29.38,2.61)]
+    canopy=mesh('村落东岸染坊_披檐屋面',cv,[(0,2,3,1)],M['tile'],c)
+    solid=canopy.modifiers.new('染坊披檐厚度','SOLIDIFY');solid.thickness=.055;solid.offset=-1
+    lines('村落东岸染坊_承托椽',[[ (xx,27.00,2.78),(xx,29.26,2.55) ] for xx in (14.85,15.60,16.35,17.10,17.85,18.60,19.35)],.032,wood,c,res=2,bevel_res=1)
+    line('村落东岸染坊_滴水檐口',[(14.64,29.39,2.58),(19.56,29.39,2.58)],.043,M['edge'],c,res=2,bevel_res=1)
+    # Reusable open-mouthed stone vats. The radial profile folds back down the
+    # inside wall, so the dark dye surface remains visibly recessed.
+    indigo=material('染坊靛青布',(.025,.095,.145),.76)
+    inn=indigo.node_tree.nodes;ill=indigo.node_tree.links;ibb=next(n for n in inn if n.type=='BSDF_PRINCIPLED')
+    itc=inn.new('ShaderNodeTexCoord');inoise=inn.new('ShaderNodeTexNoise');inoise.inputs['Scale'].default_value=160;inoise.inputs['Detail'].default_value=2
+    ibump=inn.new('ShaderNodeBump');ibump.inputs['Strength'].default_value=.08;ibump.inputs['Distance'].default_value=.002
+    ill.new(itc.outputs['Object'],inoise.inputs['Vector']);ill.new(inoise.outputs['Fac'],ibump.inputs['Height']);ill.new(ibump.outputs['Normal'],ibb.inputs['Normal'])
+    indigo_liquid=material('染坊靛蓝染液',(.012,.045,.070),.10)
+    ib=next(n for n in indigo_liquid.node_tree.nodes if n.type=='BSDF_PRINCIPLED');ib.inputs['Coat Weight'].default_value=.58
+    def dye_vat(name,x,y):
+        seg=20;profile=((.43,0),(.55,.10),(.58,.55),(.52,.66),(.43,.66),(.47,.54),(.46,.13),(.38,.07))
+        vv=[];ff=[]
+        for rad,z in profile:vv.extend((x+rad*cos(2*pi*k/seg),y+rad*sin(2*pi*k/seg),.12+z) for k in range(seg))
+        for row in range(len(profile)-1):
+            for k in range(seg):
+                a=row*seg+k;b=row*seg+(k+1)%seg;ff.append((a,b,b+seg,a+seg))
+        ff.append(tuple(reversed(range(seg))))
+        o=mesh(name,vv,ff,wetstone,c)
+        for p in o.data.polygons:p.use_smooth=len(p.vertices)==4
+        return o
+    for j,xx in enumerate((16.15,17.50,18.85),1):
+        dye_vat(f'村落东岸染坊_染缸_{j}',xx,28.25)
+        if j<3:uv(f'村落东岸染坊_染液_{j}',(xx,28.25,.735),(.425,.425,.018),indigo_liquid,c,20,4)
+    # Open stone rinse trough: four real walls and a supported base, not a
+    # closed decorative box. It stays north of the canopy and off the axis.
+    box('村落东岸染坊_洗布槽底',(14.90,28.25,.20),(1.25,.74,.16),wetstone,c,.012)
+    box('村落东岸染坊_洗布槽壁_西',(14.31,28.25,.43),(.10,.78,.54),wetstone,c,.010)
+    box('村落东岸染坊_洗布槽壁_东',(15.49,28.25,.43),(.10,.78,.54),wetstone,c,.010)
+    for yy in (27.91,28.59):box('村落东岸染坊_洗布槽端壁',(14.90,yy,.43),(1.08,.10,.54),wetstone,c,.010)
+    box('村落东岸染坊_洗布槽水',(14.90,28.25,.43),(1.06,.58,.025),indigo_liquid,c)
+    # Two-post drying frame uses grounded shoes, a continuous top beam and
+    # braces. Three cloths instance one low-poly, slightly rippled mesh.
+    for j,xx in enumerate((15.00,19.20),1):
+        box(f'村落东岸染坊_晾架柱础_{j}',(xx,32.02,.23),(.32,.32,.22),stone,c,.015)
+        box(f'村落东岸染坊_晾架立柱_{j}',(xx,32.02,1.44),(.15,.15,2.20),wood,c,.008)
+    box('村落东岸染坊_晾架横梁',(17.10,32.02,2.52),(4.45,.16,.18),wood,c,.008)
+    lines('村落东岸染坊_晾架斜撑',[
+        [(15.00,32.02,.39),(15.42,32.02,1.18)],[(19.20,32.02,.39),(18.78,32.02,1.18)]],.038,wood,c,res=1,bevel_res=1)
+    pv=[];pf=[]
+    for z in (0,1.32):
+        for xx in (-.46,-.15,.15,.46):pv.append((xx,.025*sin(xx*8),z))
+    for k in range(3):pf.append((k,k+1,k+5,k+4))
+    cloth=mesh('村落东岸染坊_晾晒靛布_原型',pv,pf,indigo,c);cloth.hide_render=True;cloth.hide_viewport=True
+    for j,xx in enumerate((15.72,17.10,18.48),1):
+        o=bpy.data.objects.new(PREFIX+f'村落东岸染坊_晾晒靛布_{j}',cloth.data);c.objects.link(o);o.location=(xx,32.02,1.02)
+        lines(f'村落东岸染坊_布绳_{j}',[
+            [(xx-.34,32.02,2.34),(xx-.34,32.02,2.43)],[(xx+.34,32.02,2.34),(xx+.34,32.02,2.43)]],.008,wood,c,res=1,bevel_res=0)
     S['JN_craft_shop']='north_west_bamboo_workshop'
     S['JN_craft_shop_clear_entry_m']=1.20
     S['JN_craft_shop_new_image_bytes']=0
     S['JN_house_shell_revision']='through_openings_v1'
     S['JN_house_roof_revision']='two_tier_eave_firewall_v1'
+    S['JN_east_dye_yard']='north_east_indigo_workyard_v1'
+    S['JN_east_dye_yard_clear_axis_m']=1.20
+    S['JN_east_dye_yard_new_image_bytes']=0
     S['JN_village_phase']='phase_1_houses'; S['JN_village_phase1_houses']=8
     S['JN_village_phase1_tris_budget']=18000
     S['JN_village_phase1_texture_mib_delta']=0.0
