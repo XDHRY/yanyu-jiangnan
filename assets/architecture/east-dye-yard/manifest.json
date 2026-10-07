@@ -1,0 +1,42 @@
+{
+  "schema": "yanyu-jiangnan.asset-manifest.v1",
+  "asset": "east-indigo-workyard",
+  "repository": "XDHRY/yanyu-jiangnan",
+  "source_head": "164737912dd1eb202e341898e388bd2b5395b96c",
+  "merged_main": "3590a23c7be3767cc6efa96bdf96c235a142d5f0",
+  "generator": "jiangnan.py:village_phase1",
+  "scale": "1 Blender unit = 1 metre",
+  "bounds_m": {"x": [9.99, 19.85], "y": [27.6, 32.8], "z": [0.0, 2.86]},
+  "components": {
+    "paving": 2,
+    "landing_steps": 4,
+    "canopy_columns": 3,
+    "column_shoes": 3,
+    "canopy_rafters": 7,
+    "open_dye_vats": 3,
+    "filled_dye_vats": 2,
+    "open_rinse_troughs": 1,
+    "drying_frames": 1,
+    "shared_cloth_instances": 3,
+    "work_lanterns": 1
+  },
+  "materials": [
+    {"name": "染坊靛青布", "mapping": "Object", "source": "procedural Noise/Bump", "license": "project-authored", "new_image_bytes": 0},
+    {"name": "染坊靛蓝染液", "mapping": "procedural uniform", "source": "Principled BSDF/Coat", "license": "project-authored", "new_image_bytes": 0}
+  ],
+  "mesh_reuse": {"cloth_instances": 3, "shared_mesh_datablocks": 1},
+  "uv": "procedural materials; no new bitmap UV dependency",
+  "normals": "radial vats smooth quad walls; hard/open rims retained by profile",
+  "lod": "not_generated",
+  "collision": "not_generated; authoring clearance and support assertions only",
+  "navigation": "not_generated",
+  "external_assets": [],
+  "paid_service_budget": 0,
+  "evidence": {
+    "ci_run": 37616244713,
+    "smoke_run": 37616244726,
+    "spatial_run": 37616244673,
+    "artifact_id": 11480586059,
+    "diagnostic_views": ["15_east_dye_yard.png", "16_east_dye_detail.png"]
+  }
+}
