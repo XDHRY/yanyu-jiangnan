@@ -698,6 +698,10 @@ def village_phase1_skeleton():
     eave=line('村落民居深檐_原型',ev,.09,M['edge'],c,res=2,bevel_res=1); eave.hide_render=True; eave.hide_viewport=True
     rg=[(-3.18,0,.10),(-2.35,0,.035),(0,0,0),(2.35,0,.035),(3.18,0,.10)]
     ridge=line('村落民居正脊_原型',rg,.095,M['tile'],c,res=2,bevel_res=1); ridge.hide_render=True; ridge.hide_viewport=True
+    # Fire-wall houses keep the rear ridge overhang but terminate the facade
+    # end inside the stepped wall instead of letting the ridge pierce through.
+    rg_fire=[(-3.18,0,.10),(-2.35,0,.035),(0,0,0),(2.35,0,.025),(2.50,0,.035)]
+    ridge_fire=line('村落民居封火山墙收脊_原型',rg_fire,.095,M['tile'],c,res=2,bevel_res=1);ridge_fire.hide_render=True;ridge_fire.hide_viewport=True
     # One shared structural eave module is instanced across all houses. The
     # rafter tails actually meet the solidified roof underside; tile-end discs
     # carry the visible rhythm without modelling full tile courses.
@@ -745,7 +749,9 @@ def village_phase1_skeleton():
         # Two linked eaves create a readable shadow line; one linked ridge strengthens the roof silhouette.
         for side in (-1,1):
             o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_深檐_{side:+d}',eave.data); c.objects.link(o); o.location=(hx,hy+side*2.24*hs,3.34); o.scale=(hs,1,1)
-        o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_正脊',ridge.data); c.objects.link(o); o.location=(hx,hy,4.57 if hierarchy else 4.39); o.scale=(hs,1,1)
+        ridge_use=ridge_fire if i in (4,8) else ridge
+        o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_正脊',ridge_use.data); c.objects.link(o); o.location=(hx,hy,4.57 if hierarchy else 4.39); o.scale=(hs,1,1)
+        if i in (4,8):o.rotation_euler.z=0 if facing==1 else pi
         for proto,label in ((rafter_row,'檐椽列'),(tile_ends,'瓦当列')):
             o=bpy.data.objects.new(PREFIX+f'村落民居_{i:02d}_{label}',proto.data);c.objects.link(o)
             o.location=(hx,hy,0);o.scale=(hs,hs,1)
