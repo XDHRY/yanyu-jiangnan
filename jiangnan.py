@@ -608,6 +608,16 @@ def village_phase1_skeleton():
     for side in (-1,1):
         o=bpy.data.objects.new(PREFIX+f'村落桥扶手_{side}',handrail.data); c.objects.link(o); o.location=(7.7,15.1+side*.82,1.72)
         o=bpy.data.objects.new(PREFIX+f'村落桥下横枋_{side}',lower_rail.data); c.objects.link(o); o.location=(7.7,15.1+side*.82,1.28)
+    # A second footbridge closes the long northern detour between the tea
+    # market and east-bank production yards.  It reuses the proven linked
+    # plank, post and rail meshes instead of adding a duplicate asset family.
+    for i in range(11):
+        o=bpy.data.objects.new(PREFIX+f'村落北桥板_{i+1:02d}',plank.data); c.objects.link(o); o.location=(4.7+i*.60,35.75,.55)
+    for side in (-1,1):
+        for i in range(6):
+            o=bpy.data.objects.new(PREFIX+f'村落北桥栏柱_{side}_{i+1:02d}',post.data); c.objects.link(o); o.location=(4.7+i*1.2,35.75+side*.82,1)
+        o=bpy.data.objects.new(PREFIX+f'村落北桥扶手_{side}',handrail.data); c.objects.link(o); o.location=(7.7,35.75+side*.82,1.72)
+        o=bpy.data.objects.new(PREFIX+f'村落北桥下横枋_{side}',lower_rail.data); c.objects.link(o); o.location=(7.7,35.75+side*.82,1.28)
     step=box('村落河埠踏步_原型',(0,0,0),(1.15,.72,.16),stone,c); step.hide_render=True; step.hide_viewport=True
     for i in range(6):
         o=bpy.data.objects.new(PREFIX+f'村落河埠踏步_{i+1:02d}',step.data); c.objects.link(o); o.location=(4.4,19.72+i*.48,.38-i*.075)
@@ -905,6 +915,60 @@ def village_phase1_skeleton():
     for dz in (-.28,.28):box('村落东岸染坊_纱灯铜口',(17.10,28.76,2.12+dz),(.20,.20,.025),M['bronze'],c)
     line('村落东岸染坊_纱灯悬绳',[(17.10,28.76,2.40),(17.10,28.76,2.58)],.010,wood,c,res=1,bevel_res=0)
     light('村落东岸染坊_工作灯火',(17.10,28.76,2.10),(1,.48,.22),95,.32,kind='POINT')
+    # North mulberry-paper yard: an open work court continues the dye-yard
+    # economy without duplicating its vats.  Wet pulp work stays south of a
+    # clear 1.20 m freight axis; drying stays north against a low white wall.
+    px,py=17.10,34.85
+    box('村落北纸坊_院坪',(px,py,.06),(5.50,3.70,.12),stone,c,.018)
+    box('村落北纸坊_入院横径',(13.93,34.60,.06),(.90,1.20,.12),stone,c,.014)
+    # Low continuous wall defines a courtyard rather than suggesting a false
+    # doorway.  The complete west edge remains open to the real cross path.
+    box('村落北纸坊_北界粉墙',(px,36.78,.57),(5.75,.16,1.02),M['plaster'],c,.018)
+    box('村落北纸坊_北界压顶',(px,36.78,1.11),(5.90,.22,.09),M['tile'],c,.012)
+    box('村落北纸坊_东界粉墙',(19.90,34.91,.57),(.16,3.90,1.02),M['plaster'],c,.018)
+    box('村落北纸坊_东界压顶',(19.90,34.91,1.11),(.22,4.05,.09),M['tile'],c,.012)
+    paper_mat=material('纸坊楮皮宣纸',(.66,.62,.48),.91)
+    pn=paper_mat.node_tree.nodes;pl=paper_mat.node_tree.links;pb=next(n for n in pn if n.type=='BSDF_PRINCIPLED')
+    pc=pn.new('ShaderNodeTexCoord');pnoise=pn.new('ShaderNodeTexNoise');pnoise.inputs['Scale'].default_value=185;pnoise.inputs['Detail'].default_value=2
+    pbum=pn.new('ShaderNodeBump');pbum.inputs['Strength'].default_value=.07;pbum.inputs['Distance'].default_value=.0015
+    pl.new(pc.outputs['Object'],pnoise.inputs['Vector']);pl.new(pnoise.outputs['Fac'],pbum.inputs['Height']);pl.new(pbum.outputs['Normal'],pb.inputs['Normal'])
+    # Open pulp trough made from a supported base and four walls.
+    box('村落北纸坊_纸浆槽底',(15.16,33.58,.20),(1.48,.78,.16),wetstone,c,.012)
+    for xx in (14.47,15.85):box('村落北纸坊_纸浆槽长壁',(xx,33.58,.43),(.10,.82,.54),wetstone,c,.010)
+    for yy in (33.23,33.93):box('村落北纸坊_纸浆槽端壁',(15.16,yy,.43),(1.28,.10,.54),wetstone,c,.010)
+    box('村落北纸坊_纸浆水面',(15.16,33.58,.43),(1.26,.62,.025),M['water'],c)
+    # Four-legged press with a complete upper frame, platen and visible screw.
+    box('村落北纸坊_压纸案面',(18.02,33.58,.84),(1.82,.82,.10),wood,c,.012)
+    for dx in (-.70,.70):
+        for dy in (-.27,.27):box('村落北纸坊_压纸案腿',(18.02+dx,33.58+dy,.455),(.10,.10,.67),wood,c)
+    for dx in (-.70,.70):box('村落北纸坊_压架立柱',(18.02+dx,33.58,1.58),(.12,.12,1.42),wood,c)
+    box('村落北纸坊_压架顶梁',(18.02,33.58,2.30),(1.58,.16,.16),wood,c,.008)
+    box('村落北纸坊_压纸板',(18.02,33.58,1.08),(1.38,.66,.09),wood,c,.008)
+    line('村落北纸坊_木螺杆',[(18.02,33.58,1.12),(18.02,33.58,2.22)],.055,wood,c,res=2,bevel_res=1)
+    line('村落北纸坊_压杆横柄',[(17.64,33.58,1.89),(18.40,33.58,1.89)],.040,wood,c,res=2,bevel_res=1)
+    # One restrained rack is the hero. Four sheets instance one subtly bowed
+    # low-poly mesh; posts and diagonal braces land on individual stone shoes.
+    for j,xx in enumerate((14.95,19.05),1):
+        box(f'村落北纸坊_晒纸架柱础_{j}',(xx,36.04,.23),(.32,.32,.22),stone,c,.015)
+        box(f'村落北纸坊_晒纸架立柱_{j}',(xx,36.04,1.47),(.15,.15,2.26),wood,c,.008)
+    box('村落北纸坊_晒纸架横梁',(17.00,36.04,2.63),(4.35,.17,.18),wood,c,.008)
+    lines('村落北纸坊_晒纸架斜撑',[
+        [(14.95,36.04,.39),(15.40,36.04,1.20)],[(19.05,36.04,.39),(18.60,36.04,1.20)]],.038,wood,c,res=1,bevel_res=1)
+    sv=[];sf=[]
+    for z in (0,1.20):
+        for xx in (-.39,-.13,.13,.39):sv.append((xx,.018*cos(xx*9),z))
+    for k in range(3):sf.append((k,k+1,k+5,k+4))
+    sheet=mesh('村落北纸坊_晒纸原型',sv,sf,paper_mat,c);sheet.hide_render=True;sheet.hide_viewport=True
+    for j,xx in enumerate((15.55,16.52,17.49,18.46),1):
+        o=bpy.data.objects.new(PREFIX+f'村落北纸坊_晒纸_{j}',sheet.data);c.objects.link(o);o.location=(xx,36.04,1.16)
+        lines(f'村落北纸坊_晒纸绳_{j}',[
+            [(xx-.30,36.04,2.36),(xx-.30,36.04,2.54)],[(xx+.30,36.04,2.36),(xx+.30,36.04,2.54)]],.007,wood,c,res=1,bevel_res=0)
+    # A post-mounted work lantern provides a controlled warm pool.  The short
+    # bracket visibly connects to the east rack post instead of floating.
+    line('村落北纸坊_工作灯挑杆',[(19.05,36.04,2.40),(18.78,35.96,2.40),(18.78,35.96,2.24)],.024,wood,c,res=2,bevel_res=1)
+    uv('村落北纸坊_工作纱灯',(18.78,35.96,2.04),(.14,.14,.22),M['paper'],c,14,8)
+    for dz in (-.22,.22):box('村落北纸坊_纱灯铜口',(18.78,35.96,2.04+dz),(.17,.17,.024),M['bronze'],c)
+    light('村落北纸坊_工作灯火',(18.78,35.96,2.02),(1,.46,.20),78,.26,kind='POINT')
     S['JN_craft_shop']='north_west_bamboo_workshop'
     S['JN_craft_shop_clear_entry_m']=1.20
     S['JN_craft_shop_new_image_bytes']=0
@@ -914,6 +978,10 @@ def village_phase1_skeleton():
     S['JN_east_dye_yard_clear_axis_m']=1.20
     S['JN_east_dye_yard_lanterns']=1
     S['JN_east_dye_yard_new_image_bytes']=0
+    S['JN_north_paper_yard']='north_mulberry_paper_yard_v1'
+    S['JN_north_paper_yard_clear_axis_m']=1.20
+    S['JN_north_paper_yard_lanterns']=1
+    S['JN_north_paper_yard_new_image_bytes']=0
     S['JN_village_phase']='phase_1_houses'; S['JN_village_phase1_houses']=8
     S['JN_village_phase1_tris_budget']=18000
     S['JN_village_phase1_texture_mib_delta']=0.0
@@ -966,6 +1034,13 @@ def town_phase2_market():
             top=.29+.17*i
             o=box(f'小镇桥头踏步_{side}_{i+1}',(x,15.10,top/2),(.52,1.90,top),stone,c)
             o['JN_step_top']=top;o['JN_destination']='village_bridge'
+    # The northern footbridge uses a gentler three-rise approach aligned with
+    # both water streets and the paper-yard freight axis.
+    for side,centers in [('西',(3.67,3.99,4.31)),('东',(11.73,11.41,11.09))]:
+        for i,x in enumerate(centers):
+            top=.18+.18*i
+            o=box(f'小镇北桥踏步_{side}_{i+1}',(x,35.75,top/2),(.52,1.72,top),stone,c)
+            o['JN_step_top']=top;o['JN_destination']='north_paper_bridge'
 
     # Open tea pavilion: a complete post/beam/plinth roof hierarchy.  It is
     # intentionally open on every side; no flat wall masquerades as a door.
