@@ -899,6 +899,12 @@ def village_phase1_skeleton():
         o=bpy.data.objects.new(PREFIX+f'村落东岸染坊_晾晒靛布_{j}',cloth.data);c.objects.link(o);o.location=(xx,32.02,1.02)
         lines(f'村落东岸染坊_布绳_{j}',[
             [(xx-.34,32.02,2.34),(xx-.34,32.02,2.43)],[(xx+.34,32.02,2.34),(xx+.34,32.02,2.43)]],.008,wood,c,res=1,bevel_res=0)
+    # One modest work lantern makes the indigo liquid and timber joinery
+    # readable in the rainy night without flattening the cool village palette.
+    uv('村落东岸染坊_工作纱灯',(17.10,28.76,2.12),(.17,.17,.28),M['paper'],c,16,8)
+    for dz in (-.28,.28):box('村落东岸染坊_纱灯铜口',(17.10,28.76,2.12+dz),(.20,.20,.025),M['bronze'],c)
+    line('村落东岸染坊_纱灯悬绳',[(17.10,28.76,2.40),(17.10,28.76,2.58)],.010,wood,c,res=1,bevel_res=0)
+    light('村落东岸染坊_工作灯火',(17.10,28.76,2.10),(1,.48,.22),95,.32,kind='POINT')
     S['JN_craft_shop']='north_west_bamboo_workshop'
     S['JN_craft_shop_clear_entry_m']=1.20
     S['JN_craft_shop_new_image_bytes']=0
@@ -906,6 +912,7 @@ def village_phase1_skeleton():
     S['JN_house_roof_revision']='two_tier_eave_firewall_v1'
     S['JN_east_dye_yard']='north_east_indigo_workyard_v1'
     S['JN_east_dye_yard_clear_axis_m']=1.20
+    S['JN_east_dye_yard_lanterns']=1
     S['JN_east_dye_yard_new_image_bytes']=0
     S['JN_village_phase']='phase_1_houses'; S['JN_village_phase1_houses']=8
     S['JN_village_phase1_tris_budget']=18000
