@@ -1,0 +1,85 @@
+{
+  "name": "north_west_bamboo_workshop_v1",
+  "status": "editable_art_review_candidate",
+  "source_repository": "XDHRY/yanyu-jiangnan",
+  "source_script": "jiangnan.py:village_phase1_skeleton",
+  "source_head": "1788fb050040c8d530d960dc96f2c64200bf00dd",
+  "merge_commit": "205e6e4c361edd3f5d419cae294066eee05840b0",
+  "render_checkout": "94ad3562495236eab92935d5b88726cc7833aeac",
+  "diagnostic_run": 37558782906,
+  "smoke_run": 37558782908,
+  "role": "mid",
+  "function": "north-bank bamboo craft shop and sheltered display frontage",
+  "dimensions_m": {
+    "canopy_depth": 2.02,
+    "canopy_width": 3.52,
+    "clear_entry": 1.2,
+    "canopy_to_street_clearance": 0.99
+  },
+  "construction": [
+    "2 stone shoes and 2 timber eave columns",
+    "wall purlin and front eave beam",
+    "6 cm solidified lean-to roof",
+    "5 supporting rafters and drip edge",
+    "stone display pad, table and 4 grounded legs",
+    "2 open bamboo baskets",
+    "1 hanging bamboo sieve and blank timber sign"
+  ],
+  "materials": [
+    "JN_tile",
+    "JN_wood",
+    "JN_stone",
+    "JN_edge",
+    "JN_bronze"
+  ],
+  "textures": [
+    {
+      "path": "textures/clay.png",
+      "source": "textures/generation_prompts.json",
+      "mapping": "existing physical Object box projection",
+      "license_note": "project-generated; no external asset imported"
+    },
+    {
+      "path": "textures/wood.png",
+      "source": "textures/generation_prompts.json",
+      "mapping": "existing physical Object box projection",
+      "license_note": "project-generated; no external asset imported"
+    },
+    {
+      "path": "textures/stone.png",
+      "source": "textures/generation_prompts.json",
+      "mapping": "existing physical Object box projection",
+      "license_note": "project-generated; no external asset imported"
+    }
+  ],
+  "new_image_texture_bytes": 0,
+  "new_base_mesh_triangles_delta": 314,
+  "curve_objects_delta": 5,
+  "triangle_count_method": "whole-scene base mesh delta against round 02; excludes evaluated curves and Solidify",
+  "lod0_status": "procedural review source",
+  "lod1_status": "not generated",
+  "lod2_status": "not generated",
+  "validation_views": [
+    "12_village_lane",
+    "14_village_waterfront",
+    "15_bamboo_shop",
+    "16_bamboo_shop_detail"
+  ],
+  "validation": {
+    "columns_on_shoes": 2,
+    "canopy_solidify_m": 0.06,
+    "canopy_to_street_clearance_m": 0.99,
+    "clear_entry_m": 1.2,
+    "display_table_legs": 4,
+    "baskets": 2,
+    "hanging_sieves": 1,
+    "plaster_bump_strength": 0.1,
+    "plaster_bump_distance_m": 0.012
+  },
+  "limitations": [
+    "roof tile courses and eave silhouette need further refinement",
+    "curves and modifiers are not included in the base-mesh triangle ledger",
+    "collision, navigation, UV/export audit and runtime tiers are not approved",
+    "bamboo weave is curve geometry and has no evaluated-runtime budget yet"
+  ]
+}
