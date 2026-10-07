@@ -1,0 +1,39 @@
+{
+  "schema": "yanyu-jiangnan.custom-space-contract.v1",
+  "name": "north_east_indigo_workyard_v1",
+  "status": "form_candidate_not_runtime_approved",
+  "purpose": "east-bank indigo dyeing court with sheltered vats, rinse trough, drying frame and direct river landing",
+  "bounds_m": {
+    "x": [9.99, 19.85],
+    "y": [27.6, 32.8],
+    "z": [0.0, 2.86]
+  },
+  "hero": "supported lean-to canopy framing three open dye vats and indigo cloths",
+  "circulation": {
+    "route": ["river_landing", "east_water_street", "cross_path", "workyard"],
+    "clear_axis_m": 1.2,
+    "axis_y_m": [29.85, 31.05],
+    "production_props_excluded_from_axis": true
+  },
+  "support_contract": [
+    "courtyard and cross path rest on continuous east-bank land",
+    "canopy rear ledger intersects house 08 wall and front beam uses three posts on stone shoes",
+    "drying frame uses two posts on stone shoes and a continuous top beam",
+    "all four landing steps are grounded and descend 0.12 m toward the canal"
+  ],
+  "collision": {
+    "authoring_clearance_checks": true,
+    "runtime_collision_mesh": "not_generated"
+  },
+  "production_cameras": ["15_east_dye_yard", "16_east_dye_detail"],
+  "input_behavior": "none; static editable art-review scene",
+  "runtime_readiness": {
+    "lod": "not_generated",
+    "navigation": "not_generated",
+    "uv_export_audit": "not_run",
+    "form_approval": "not_granted",
+    "runtime_approval": "not_granted"
+  },
+  "paid_service_budget": 0,
+  "new_external_assets": 0
+}
