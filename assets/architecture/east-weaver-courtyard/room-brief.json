@@ -8,7 +8,7 @@
   "hero": {"id": "east-weaver-main-hall", "role": "inhabited residential anchor", "reservedBoundsMeters": [5.20, 4.20, 4.65]},
   "symmetry": {"mode": "bilateral", "order": 2, "appliesTo": ["gate-axis", "main-hall-facade"], "exceptions": ["water trough and courtyard lamp move off-axis", "weaving veranda follows north boundary"]},
   "circulation": {"description": "east water street to gate, court, main hall and north weaving veranda", "minimumClearanceMeters": 1.20},
-  "productionCamera": {"viewport": [1024, 640], "location": [14.55, 46.95, 2.15], "target": [18.10, 49.20, 2.05], "verticalFovDegrees": 34},
+  "productionCamera": {"viewport": [1024, 640], "location": [10.20, 49.20, 1.58], "target": [18.10, 49.20, 1.52], "verticalFovDegrees": 32},
   "performanceBudget": {"maxSceneTriangles": 155000, "maxVLowBytes": 0, "maxHighTextureBytes": 50331648},
   "creditBudget": {"maximumCredits": 0, "approvalRequired": true},
   "environment": {"type": "project-night-sky", "identity": "yanyu-jiangnan-night-v1", "source": "repository procedural atmosphere", "assignmentKey": "烟雨江南 · 雪月江南"},
