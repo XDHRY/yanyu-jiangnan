@@ -65,7 +65,14 @@ jobs:
           JN_OUT: ${{ runner.temp }}/jiangnan-web
         run: |
           xvfb-run -a "${RUNNER_TOOL_CACHE}/blender-4.5.14/blender" --background "${JN_OUT}/Jiangnan.blend" --python-exit-code 1 --python tools/diagnostic_review.py
-          test -s "${JN_OUT}/diagnostics/16_paper_yard_detail.png"
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          root=Path(os.environ['JN_OUT'])/'diagnostics'
+          manifest=json.loads((root/'manifest.json').read_text(encoding='utf-8'))
+          assert len(manifest['views'])==16
+          assert all((root/view['file']).stat().st_size>0 for view in manifest['views'])
+          PY
       - name: Export browser GLB
         env:
           JN_OUT: ${{ runner.temp }}/jiangnan-web

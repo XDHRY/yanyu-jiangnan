@@ -299,6 +299,54 @@ for side in ('西','东'):
     assert all(abs(b-a-.18)<.003 for a,b in zip(tops,tops[1:])), tops
 report['north_paper_yard']={'court_supported':True,'clear_axis_m':S['JN_north_paper_yard_clear_axis_m'],'shared_paper_sheets':4,'rack_posts_on_shoes':2,'press_legs_grounded':4,'open_pulp_trough_walls':5,'work_lanterns':S['JN_north_paper_yard_lanterns'],'north_bridge_planks':11,'north_bridge_posts':12,'north_bridge_riser_m':.18,'new_materials':1,'new_image_texture_bytes':0}
 print('NORTH_PAPER_YARD',json.dumps(report['north_paper_yard'],ensure_ascii=False))
+# East wharf storehouse: verify continuous land, real load transfer, an open
+# loading axis, shared cargo meshes and a genuinely open-topped moored boat.
+wharf_land=world_bounds(bpy.data.objects['JN_东岸码头仓屋_北段地基'])
+old_east=world_bounds(bpy.data.objects['JN_小镇地基_东岸'])
+assert abs(wharf_land[1][2])<.002
+assert min(wharf_land[1][1],old_east[1][1])-max(wharf_land[0][1],old_east[0][1])>.10
+wharf_street=world_bounds(bpy.data.objects['JN_东岸码头仓屋_北段石街'])
+wharf_path=world_bounds(bpy.data.objects['JN_东岸码头仓屋_入仓横径'])
+wharf_plinth=world_bounds(bpy.data.objects['JN_东岸码头仓屋_台基'])
+assert abs(wharf_street[0][2])<.002 and abs(wharf_path[0][2])<.002
+assert min(wharf_street[1][0],wharf_path[1][0])-max(wharf_street[0][0],wharf_path[0][0])>.10
+assert min(wharf_plinth[1][0],wharf_path[1][0])-max(wharf_plinth[0][0],wharf_path[0][0])>.10
+assert abs(wharf_plinth[0][2]-wharf_land[1][2])<.002
+wharf_cols=[o for o in S.objects if o.name.startswith('JN_东岸码头仓屋_木柱_')]
+wharf_shoes=[o for o in S.objects if o.name.startswith('JN_东岸码头仓屋_柱础_')]
+assert len(wharf_cols)==len(wharf_shoes)==6
+for col in wharf_cols:
+    cb=world_bounds(col)
+    candidates=[shoe for shoe in wharf_shoes if dist_xy(pos(shoe),pos(col))<.01]
+    assert len(candidates)==1
+    sb=world_bounds(candidates[0])
+    assert abs(sb[0][2]-wharf_plinth[1][2])<.002 and abs(cb[0][2]-sb[1][2])<.002
+wharf_roof=bpy.data.objects['JN_东岸码头仓屋_瓦面']
+assert wharf_roof.modifiers.get('码头仓屋真实屋面厚度')
+crates=[bpy.data.objects[f'JN_东岸码头仓屋_货箱_{i}'] for i in range(1,5)]
+assert len({o.data.as_pointer() for o in crates})==1
+assert all(abs(world_bounds(o)[0][2]-wharf_plinth[1][2])<.003 for o in crates)
+# The central 1.40 m route stays empty from the street through the open west
+# face to x=17.40; storage may begin only deeper against the rear wall.
+axis_y0,axis_y1=40.0,41.4
+axis_blockers=crates+[o for o in S.objects if o.name.startswith(('JN_东岸码头仓屋_货架腿','JN_东岸码头仓屋_货架层板'))]
+for o in axis_blockers:
+    bb=world_bounds(o)
+    if bb[1][1]>axis_y0 and bb[0][1]<axis_y1:
+        assert bb[0][0]>=17.40, 'warehouse loading axis blocked: '+o.name
+deck=world_bounds(bpy.data.objects['JN_东岸码头仓屋_装卸木台'])
+assert deck[0][0]<old_east[0][0] and deck[1][0]>old_east[0][0]
+deck_piles=[o for o in S.objects if o.name.startswith('JN_东岸码头仓屋_木台桩')]
+assert len(deck_piles)==4 and all(world_bounds(o)[0][2]<0 for o in deck_piles)
+boat=bpy.data.objects['JN_东岸码头仓屋_系舟小艇船壳'];boat_bounds=world_bounds(boat)
+assert boat_bounds[0][0]>wb[1][0] and boat_bounds[1][0]<old_east[0][0]
+assert boat_bounds[0][1]>36.9 and len(boat.data.polygons)==20
+seats=[o for o in S.objects if o.name.startswith('JN_东岸码头仓屋_小艇坐板')]
+assert len(seats)==3 and bpy.data.objects.get('JN_东岸码头仓屋_小艇舱底')
+assert bpy.data.objects.get('JN_东岸码头仓屋_系舟缆绳') and len([o for o in S.objects if o.name.startswith('JN_东岸码头仓屋_系舟桩') and '础' not in o.name and '横销' not in o.name])==2
+assert bpy.data.objects.get('JN_东岸码头仓屋_码头灯挑杆') and bpy.data.objects.get('JN_东岸码头仓屋_码头灯火')
+report['town_phase3_east_wharf']={'phase':S['JN_town_phase'],'land_overlap_m':round(min(wharf_land[1][1],old_east[1][1])-max(wharf_land[0][1],old_east[0][1]),3),'clear_loading_axis_m':S['JN_east_wharf_clear_axis_m'],'storehouse_columns_on_shoes':6,'roof_solidify_m':round(wharf_roof.modifiers['码头仓屋真实屋面厚度'].thickness,3),'shared_crates':4,'supported_wharf_piles':4,'open_sampan_shell_faces':len(boat.data.polygons),'boat_seats':3,'mooring_posts':2,'lanterns':S['JN_east_wharf_lanterns'],'reed_stems':21,'new_image_texture_bytes':S['JN_east_wharf_new_image_bytes']}
+print('TOWN_PHASE3_EAST_WHARF',json.dumps(report['town_phase3_east_wharf'],ensure_ascii=False))
 report['inhabited_houses']={'mesh_triangles_with_instances':house_tris,'triangle_budget':18000,'shells':8,'true_door_openings':8,'true_window_openings':16,'shared_wall_meshes':1,'door_clear_width_min':min(o['JN_door_clear_width'] for o in shells),'interior_depth_min':min(o['JN_interior_depth'] for o in shells),'ray_tests_passed':40,'floor_support_passed':8,'tea_east_risers_m':[.10,.10],'new_image_texture_bytes':0}
 print('INHABITED_HOUSES',json.dumps(report['inhabited_houses'],ensure_ascii=False))
 report['town_phase2']={'phase':S['JN_town_phase'],'grounded_houses':len(plinths),'street_segments':street_segments,'street_batches':len(streets),'tea_pavilion_columns':4,'market_stalls':2,'bridge_risers_per_side':3,'market_ceramics':len(ceramics),'teacups':len(teacups),'canal_preserved':True,'new_image_texture_bytes':0}
