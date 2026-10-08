@@ -1,0 +1,108 @@
+name: Jiangnan Web 3D Viewer
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'jiangnan.py'
+      - 'textures/**'
+      - 'tools/export_web.py'
+      - 'tools/build_standalone_viewer.py'
+      - 'tools/diagnostic_review.py'
+      - 'web/viewer/**'
+      - '.github/workflows/web-viewer.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-web-viewer:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install packaging tools
+        run: |
+          python -m pip install Pillow --quiet --disable-pip-version-check
+          npm install --no-save three@0.180.0 esbuild@0.25.9
+      - name: Install headless graphics runtime
+        run: |
+          set -euxo pipefail
+          sudo apt-get update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+            xvfb xauth libegl1 libgl1 libglx-mesa0 libegl-mesa0 mesa-vulkan-drivers
+      - name: Cache Blender
+        id: blender-cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.tool_cache }}/blender-4.5.14
+          key: blender-linux-x64-4.5.14
+      - name: Install Blender 4.5.14 LTS
+        if: steps.blender-cache.outputs.cache-hit != 'true'
+        run: |
+          set -euxo pipefail
+          mkdir -p "${RUNNER_TOOL_CACHE}/blender-4.5.14"
+          curl --fail --location --retry 3 "https://download.blender.org/release/Blender4.5/blender-4.5.14-linux-x64.tar.xz" -o "${RUNNER_TEMP}/blender.tar.xz"
+          tar -xJf "${RUNNER_TEMP}/blender.tar.xz" --strip-components=1 -C "${RUNNER_TOOL_CACHE}/blender-4.5.14"
+      - name: Rebuild verified scene
+        env:
+          JN_OUT: ${{ runner.temp }}/jiangnan-web
+        run: |
+          mkdir -p "${JN_OUT}/textures"
+          cp jiangnan.py "${JN_OUT}/jiangnan.py"
+          cp textures/*.png "${JN_OUT}/textures/"
+          "${RUNNER_TOOL_CACHE}/blender-4.5.14/blender" --background --python-exit-code 1 --python jiangnan.py
+          JN_FORMAL_RENDER=0 "${RUNNER_TOOL_CACHE}/blender-4.5.14/blender" --background "${JN_OUT}/Jiangnan.blend" --python-exit-code 1 --python tools/verify_render.py
+      - name: Render sixteen diagnostic views
+        env:
+          JN_OUT: ${{ runner.temp }}/jiangnan-web
+        run: |
+          xvfb-run -a "${RUNNER_TOOL_CACHE}/blender-4.5.14/blender" --background "${JN_OUT}/Jiangnan.blend" --python-exit-code 1 --python tools/diagnostic_review.py
+          test -s "${JN_OUT}/diagnostics/16_paper_yard_detail.png"
+      - name: Export browser GLB
+        env:
+          JN_OUT: ${{ runner.temp }}/jiangnan-web
+          JN_WEB_OUT: ${{ runner.temp }}/jiangnan-web-export
+        run: |
+          "${RUNNER_TOOL_CACHE}/blender-4.5.14/blender" --background "${JN_OUT}/Jiangnan.blend" --python-exit-code 1 --python tools/export_web.py
+          test -s "${JN_WEB_OUT}/jiangnan-town.glb"
+      - name: Bundle viewer
+        env:
+          JN_OUT: ${{ runner.temp }}/jiangnan-web
+          JN_WEB_OUT: ${{ runner.temp }}/jiangnan-web-export
+        run: |
+          mkdir -p "${RUNNER_TEMP}/package/diagnostics"
+          cp web/viewer/index.html "${RUNNER_TEMP}/package/index.html"
+          cp "${JN_WEB_OUT}/jiangnan-town.glb" "${RUNNER_TEMP}/package/"
+          cp "${JN_WEB_OUT}/viewer_manifest.json" "${RUNNER_TEMP}/package/"
+          cp "${JN_OUT}/diagnostics/"*.png "${RUNNER_TEMP}/package/diagnostics/"
+          cp "${JN_OUT}/diagnostics/manifest.json" "${RUNNER_TEMP}/package/diagnostics/"
+          ./node_modules/.bin/esbuild web/viewer/app.js --bundle --format=iife --platform=browser --minify --outfile="${RUNNER_TEMP}/package/app.bundle.js"
+          python tools/build_standalone_viewer.py "${RUNNER_TEMP}/package"
+          python - <<'PY'
+          from pathlib import Path
+          import json, os, zipfile
+          root=Path(os.environ['RUNNER_TEMP'])/'package'
+          with zipfile.ZipFile(Path(os.environ['RUNNER_TEMP'])/'jiangnan-town-web-viewer.zip','w',zipfile.ZIP_DEFLATED,compresslevel=4) as z:
+              for p in root.rglob('*'):
+                  if p.is_file() and p.name!='jiangnan-town-standalone.html': z.write(p,p.relative_to(root))
+          print(json.dumps({p.name:p.stat().st_size for p in root.iterdir() if p.is_file()},indent=2))
+          PY
+      - name: Publish viewer artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Jiangnan-Web-Viewer-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/package/jiangnan-town-standalone.html
+            ${{ runner.temp }}/jiangnan-town-web-viewer.zip
+            ${{ runner.temp }}/package/viewer_manifest.json
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
