@@ -1201,6 +1201,14 @@ def town_phase3_east_wharf():
         box('东岸码头仓屋_系舟桩础',(10.36,y,.20),(.34,.34,.18),stone,c,.012)
         box('东岸码头仓屋_系舟桩',(10.36,y,.72),(.15,.15,.86),wood,c,.008)
         line('东岸码头仓屋_系舟桩横销',[(10.15,y,.93),(10.57,y,.93)],.032,wood,c,res=1,bevel_res=1)
+    # One low dock lantern is physically hooked to the southern mooring post.
+    # Its pool separates the dark boat from the canal without flattening the
+    # night hierarchy or competing with the storehouse work light.
+    line('东岸码头仓屋_码头灯挑杆',[(10.36,39.96,1.05),(10.36,39.96,1.48),(10.72,39.96,1.48)],.024,wood,c,res=2,bevel_res=1)
+    uv('东岸码头仓屋_码头纱灯',(10.72,39.96,1.25),(.12,.12,.19),M['paper'],c,12,8)
+    for dz in (-.19,.19):box('东岸码头仓屋_码头纱灯铜口',(10.72,39.96,1.25+dz),(.15,.15,.022),M['bronze'],c)
+    line('东岸码头仓屋_码头灯悬绳',[(10.72,39.96,1.44),(10.72,39.96,1.49)],.008,wood,c,res=1,bevel_res=0)
+    light('东岸码头仓屋_码头灯火',(10.72,39.96,1.24),(1,.43,.18),62,.24,kind='POINT')
 
     # Open-topped sampan shell: tapered sides, visible bottom boards and three
     # real transverse seats. It remains north of the bridge approach.
@@ -1231,6 +1239,7 @@ def town_phase3_east_wharf():
     S['JN_town_phase']='phase_3_east_wharf_storehouse'
     S['JN_east_wharf_clear_axis_m']=1.40
     S['JN_east_wharf_crate_instances']=4
+    S['JN_east_wharf_lanterns']=2
     S['JN_east_wharf_new_image_bytes']=0
 
 def batch_static_objects(name,objects,mat,col,bev=0):
