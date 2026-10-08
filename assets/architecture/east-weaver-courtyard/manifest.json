@@ -1,0 +1,41 @@
+{
+  "schema": "yanyu-jiangnan.asset-manifest.v1",
+  "asset": "east-weaver-residential-courtyard",
+  "status": "merged_project_gates_passed",
+  "source": {
+    "repository": "XDHRY/yanyu-jiangnan",
+    "generator": "jiangnan.py:town_phase4_east_residence",
+    "baseline_commit": "04e9295ce93bb8fd1dc39ac47b78e9fa7c0d4606",
+    "pr": 14,
+    "pr_head": "d0ebf93f6ebe1cef00a3500a8e5b4093dbe725ba",
+    "merge_commit": "903f032ce9dd279fde6fd1617b2863d70d4a10d0"
+  },
+  "implemented": [
+    "11.98 m by 8.95 m connected east-bank land parcel and continuous stone street",
+    "1.44 m clear split-wall gate with open leaf, threshold, jambs, lintel and solid roof",
+    "west-facing shared-mesh main hall with 1.012 m through door, two true windows, interior floor and furniture",
+    "north weaving veranda with four columns on four shoes, two beams, solid roof and four loom threads",
+    "domestic stone water trough, courtyard lamp and gate-to-hall circulation",
+    "three linked baskets, two hanging tools, boat gunwales, ribs, stern board and drainage battens"
+  ],
+  "materials": {"used": 28, "new_bitmap_textures": 0, "estimated_texture_rgba8_mib": 41.99},
+  "geometry": {"objects": 3272, "mesh_objects": 1938, "curve_objects": 1267, "triangles_with_instances": 143641, "unique_mesh_datablocks": 805, "instance_reuse_ratio": 0.6027},
+  "evidence": {
+    "render_source_commit": "7ba8e37eee235943725a3016418f87afbae6908a",
+    "diagnostic_run": 37754478347,
+    "diagnostic_artifact": 11539189010,
+    "smoke_run": 37754478405,
+    "editable_model_artifact": 11539841304,
+    "web_viewer_run": 37754478385,
+    "web_viewer_artifact": 11539318936,
+    "ci_run": 37754478510,
+    "views": ["15_east_residential_overview.png", "16_weaver_courtyard_axis.png"],
+    "render_count": 16,
+    "resolution": [1024, 640],
+    "render_seconds": 281.92
+  },
+  "project_gates": {"ci": "passed", "blender_smoke": "passed", "spatial_diagnostic": "passed", "web_viewer": "passed"},
+  "human_approval": {"function": "pending", "form": "pending", "runtime": "pending"},
+  "runtime_debt": {"collision": "not_generated", "navigation": "not_generated", "lod": "not_generated", "uv_export_audit": "pending"},
+  "license": {"procedural_source": "repository-owned", "paid_service_credits": 0}
+}
