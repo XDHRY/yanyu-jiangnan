@@ -1,0 +1,7 @@
+{
+  "schema": "game-room.milestone-reviews.v1",
+  "roomId": "yanyu-east-weaver-courtyard-round08",
+  "function": {"status": "pending", "approvedBy": "", "approvedAt": "", "evidence": ["contract.json", "room-brief.json", "openings.json"], "strangestElement": "A weaving veranda beyond a courtyard wall must have a real connecting opening.", "notes": "The north boundary is split around a 1.40 m passage; no decorative false opening is used."},
+  "form": {"status": "pending", "approvedBy": "", "approvedAt": "", "evidence": [], "strangestElement": "", "notes": "Project CI and diagnostic renders are evidence candidates, not human Form approval."},
+  "runtime": {"status": "pending", "approvedBy": "", "approvedAt": "", "evidence": [], "strangestElement": "", "notes": "Collision, navigation and LOD remain outside this round."}
+}

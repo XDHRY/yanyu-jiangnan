@@ -326,6 +326,9 @@ assert wharf_roof.modifiers.get('码头仓屋真实屋面厚度')
 crates=[bpy.data.objects[f'JN_东岸码头仓屋_货箱_{i}'] for i in range(1,5)]
 assert len({o.data.as_pointer() for o in crates})==1
 assert all(abs(world_bounds(o)[0][2]-wharf_plinth[1][2])<.003 for o in crates)
+baskets=[bpy.data.objects[f'JN_东岸码头仓屋_竹筐_{i}'] for i in range(1,4)]
+assert len({o.data.as_pointer() for o in baskets})==1
+assert all(abs(world_bounds(o)[0][2]-wharf_plinth[1][2])<.003 for o in baskets)
 # The central 1.40 m route stays empty from the street through the open west
 # face to x=17.40; storage may begin only deeper against the rear wall.
 axis_y0,axis_y1=40.0,41.4
@@ -343,10 +346,58 @@ assert boat_bounds[0][0]>wb[1][0] and boat_bounds[1][0]<old_east[0][0]
 assert boat_bounds[0][1]>36.9 and len(boat.data.polygons)==20
 seats=[o for o in S.objects if o.name.startswith('JN_东岸码头仓屋_小艇坐板')]
 assert len(seats)==3 and bpy.data.objects.get('JN_东岸码头仓屋_小艇舱底')
+gunwales=[o for o in S.objects if o.name.startswith('JN_东岸码头仓屋_小艇舷侧压条')]
+ribs=[o for o in S.objects if o.name.startswith('JN_东岸码头仓屋_小艇横肋')]
+battens=[o for o in S.objects if o.name.startswith('JN_东岸码头仓屋_小艇排水栅条')]
+assert len(gunwales)==2 and len(ribs)==2 and len(battens)==3
+assert bpy.data.objects.get('JN_东岸码头仓屋_小艇艄板')
 assert bpy.data.objects.get('JN_东岸码头仓屋_系舟缆绳') and len([o for o in S.objects if o.name.startswith('JN_东岸码头仓屋_系舟桩') and '础' not in o.name and '横销' not in o.name])==2
 assert bpy.data.objects.get('JN_东岸码头仓屋_码头灯挑杆') and bpy.data.objects.get('JN_东岸码头仓屋_码头灯火')
-report['town_phase3_east_wharf']={'phase':S['JN_town_phase'],'land_overlap_m':round(min(wharf_land[1][1],old_east[1][1])-max(wharf_land[0][1],old_east[0][1]),3),'clear_loading_axis_m':S['JN_east_wharf_clear_axis_m'],'storehouse_columns_on_shoes':6,'roof_solidify_m':round(wharf_roof.modifiers['码头仓屋真实屋面厚度'].thickness,3),'shared_crates':4,'supported_wharf_piles':4,'open_sampan_shell_faces':len(boat.data.polygons),'boat_seats':3,'mooring_posts':2,'lanterns':S['JN_east_wharf_lanterns'],'reed_stems':21,'new_image_texture_bytes':S['JN_east_wharf_new_image_bytes']}
+report['town_phase3_east_wharf']={'asset_phase':'phase_3_east_wharf_storehouse','town_phase':S['JN_town_phase'],'land_overlap_m':round(min(wharf_land[1][1],old_east[1][1])-max(wharf_land[0][1],old_east[0][1]),3),'clear_loading_axis_m':S['JN_east_wharf_clear_axis_m'],'storehouse_columns_on_shoes':6,'roof_solidify_m':round(wharf_roof.modifiers['码头仓屋真实屋面厚度'].thickness,3),'shared_crates':4,'shared_baskets':3,'supported_wharf_piles':4,'open_sampan_shell_faces':len(boat.data.polygons),'boat_seats':3,'boat_gunwales':2,'boat_ribs':2,'boat_floor_battens':3,'mooring_posts':2,'lanterns':S['JN_east_wharf_lanterns'],'reed_stems':21,'new_image_texture_bytes':S['JN_east_wharf_new_image_bytes']}
 print('TOWN_PHASE3_EAST_WHARF',json.dumps(report['town_phase3_east_wharf'],ensure_ascii=False))
+# East residential courtyard: verify continuous land and street, a real gate
+# destination, through-open main hall, grounded weaving veranda and clear axis.
+res_land=world_bounds(bpy.data.objects['JN_东岸织户宅院_北段地基'])
+res_street=world_bounds(bpy.data.objects['JN_东岸织户宅院_北延石街'])
+res_path=world_bounds(bpy.data.objects['JN_东岸织户宅院_入院横径'])
+assert abs(res_land[1][2])<.002
+assert min(res_land[1][1],wharf_land[1][1])-max(res_land[0][1],wharf_land[0][1])>.20
+assert min(res_street[1][1],wharf_street[1][1])-max(res_street[0][1],wharf_street[0][1])>.10
+assert min(res_street[1][0],res_path[1][0])-max(res_street[0][0],res_path[0][0])>.10
+gate_segments=[bpy.data.objects['JN_东岸织户宅院_西院墙_南段'],bpy.data.objects['JN_东岸织户宅院_西院墙_北段']]
+gate_clear=world_bounds(gate_segments[1])[0][1]-world_bounds(gate_segments[0])[1][1]
+# Bevels intentionally soften both plaster edges by a few millimetres; audit
+# the evaluated opening rather than comparing against the un-bevelled design coordinates.
+assert gate_clear>=1.36,gate_clear
+assert bpy.data.objects.get('JN_东岸织户宅院_开门扇') and bpy.data.objects.get('JN_东岸织户宅院_门楼瓦面')
+gate_roof=bpy.data.objects['JN_东岸织户宅院_门楼瓦面']
+assert gate_roof.modifiers.get('宅院门楼真实屋面厚度')
+hall=bpy.data.objects['JN_东岸织户宅院_正房_墙体']
+assert hall['JN_door_clear_width']>=1.0 and hall['JN_door_clear_height']>=2.2
+for y,z in ((0,1.50),(-1.30,1.75),(1.30,1.75)):
+    hit,loc,normal,idx=hall.ray_cast(Vector((3.2,y,z)),Vector((-1,0,0)))
+    assert hit and loc.x<-2.3,(y,z,tuple(loc))
+hall_floor=world_bounds(bpy.data.objects['JN_东岸织户宅院_正房_室内地坪'])
+hall_base=world_bounds(bpy.data.objects['JN_东岸织户宅院_正房_台基'])
+hall_step=world_bounds(bpy.data.objects['JN_东岸织户宅院_正房入户踏步'])
+assert abs(hall_floor[0][2]-hall_base[1][2])<.002 and abs(hall_step[0][2])<.002
+hall_roof=bpy.data.objects['JN_东岸织户宅院_正房_屋面']
+assert hall_roof.modifiers.get('织户正房黛瓦屋面厚度')
+loom_cols=[o for o in S.objects if o.name.startswith('JN_东岸织户宅院_织廊木柱')]
+loom_shoes=[o for o in S.objects if o.name.startswith('JN_东岸织户宅院_织廊柱础')]
+assert len(loom_cols)==len(loom_shoes)==4
+for col in loom_cols:
+    candidates=[s for s in loom_shoes if dist_xy(pos(s),pos(col))<.01]
+    assert len(candidates)==1
+    cb=world_bounds(col);sb=world_bounds(candidates[0])
+    assert abs(sb[0][2]-.20)<.002 and abs(cb[0][2]-sb[1][2])<.002
+loom_roof=bpy.data.objects['JN_东岸织户宅院_织廊瓦面']
+assert loom_roof.modifiers.get('织廊真实屋面厚度')
+assert len([o for o in S.objects if o.name.startswith('JN_东岸织户宅院_织机经线')])==4
+north_opening=[bpy.data.objects['JN_东岸织户宅院_北界粉墙_西段'],bpy.data.objects['JN_东岸织户宅院_北界粉墙_东段']]
+assert all(world_bounds(o)[1][0]<=16.86 or world_bounds(o)[0][0]>=18.24 for o in north_opening)
+report['town_phase4_east_residence']={'phase':S['JN_town_phase'],'land_overlap_m':round(min(res_land[1][1],wharf_land[1][1])-max(res_land[0][1],wharf_land[0][1]),3),'gate_design_width_m':S['JN_east_residence_gate_clear_width_m'],'gate_evaluated_clear_width_m':round(gate_clear,3),'hall_door_clear_width_m':S['JN_east_residence_hall_door_clear_width_m'],'through_openings':3,'solidified_roofs':3,'weaving_veranda_posts_on_shoes':4,'loom_threads':4,'domestic_water_trough_walls':5,'new_image_texture_bytes':S['JN_east_residence_new_image_bytes']}
+print('TOWN_PHASE4_EAST_RESIDENCE',json.dumps(report['town_phase4_east_residence'],ensure_ascii=False))
 report['inhabited_houses']={'mesh_triangles_with_instances':house_tris,'triangle_budget':18000,'shells':8,'true_door_openings':8,'true_window_openings':16,'shared_wall_meshes':1,'door_clear_width_min':min(o['JN_door_clear_width'] for o in shells),'interior_depth_min':min(o['JN_interior_depth'] for o in shells),'ray_tests_passed':40,'floor_support_passed':8,'tea_east_risers_m':[.10,.10],'new_image_texture_bytes':0}
 print('INHABITED_HOUSES',json.dumps(report['inhabited_houses'],ensure_ascii=False))
 report['town_phase2']={'phase':S['JN_town_phase'],'grounded_houses':len(plinths),'street_segments':street_segments,'street_batches':len(streets),'tea_pavilion_columns':4,'market_stalls':2,'bridge_risers_per_side':3,'market_ceramics':len(ceramics),'teacups':len(teacups),'canal_preserved':True,'new_image_texture_bytes':0}
