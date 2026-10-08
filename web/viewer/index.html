@@ -1,3 +1,85 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>烟雨江南 · 全景巡游</title><style>
-*{box-sizing:border-box}html,body,#viewport{margin:0;width:100%;height:100%;overflow:hidden;background:#0f1717;color:#eee;font-family:system-ui,-apple-system,"PingFang SC",sans-serif}button,input{font:inherit}#viewport canvas{display:block;touch-action:none}.panel{position:fixed;z-index:5;background:rgba(15,25,25,.82);backdrop-filter:blur(14px);border:1px solid rgba(226,216,190,.2);box-shadow:0 12px 40px #0005}.top{left:12px;right:12px;top:max(12px,env(safe-area-inset-top));padding:10px 12px;border-radius:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}.brand{font-family:"Songti SC",serif;font-size:18px;letter-spacing:2px;margin-right:8px}.status{color:#b9cbc5;font-size:12px;margin-left:auto}.toolbar button{border:1px solid #56645d;background:#24322f;color:#e8e2d3;border-radius:8px;padding:7px 10px}.toolbar button.active{background:#876b43;border-color:#c4a46d}.side{right:12px;top:78px;bottom:70px;width:min(300px,42vw);padding:12px;border-radius:12px;overflow:auto}.side h3{margin:4px 0 8px;font:18px "Songti SC",serif}.side p{font-size:12px;color:#aec0ba}.presets{display:grid;gap:6px}.presets button{background:#172421;color:#ddd;border:1px solid #34443f;border-radius:7px;padding:8px;text-align:left}.presets button:hover{background:#263732}.bottom{left:12px;bottom:max(12px,env(safe-area-inset-bottom));padding:8px 10px;border-radius:10px;font-size:12px;color:#c8d5d0;max-width:min(660px,calc(100vw - 24px))}.loading{position:fixed;inset:0;z-index:20;display:grid;place-items:center;background:#0f1717;transition:.5s}.loading.done{opacity:0;pointer-events:none}.loading.error{background:#2b1515}.loading>div{text-align:center}.seal{width:62px;height:62px;margin:auto;border:2px solid #9e3d32;color:#d8b6a7;display:grid;place-items:center;font:26px "Songti SC",serif;transform:rotate(-2deg)}#flypad{display:none;position:fixed;left:14px;bottom:90px;z-index:7;grid-template-columns:repeat(3,48px);gap:5px}#flypad.show{display:grid}#flypad button{height:48px;border-radius:12px;border:1px solid #738078;background:#1b2927cc;color:#eee;font-size:20px;touch-action:none}#flypad .blank{visibility:hidden}.speed{display:flex;align-items:center;gap:6px;margin-top:10px}.speed input{width:120px}dialog{border:1px solid #4d5d56;background:#111b1a;color:#eee;width:min(1000px,96vw);height:min(82vh,800px);padding:12px;border-radius:12px}dialog::backdrop{background:#000b}.diagGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.diagGrid button{background:#1c2926;border:0;color:#ddd;padding:0}.diagGrid img{width:100%;display:block}.diagGrid span{display:block;padding:6px;font-size:11px}#diagLarge{max-width:100%;max-height:48vh;display:block;margin:8px auto}#diagBtn[hidden]{display:none}@media(max-width:760px){.side{top:auto;left:12px;right:12px;bottom:70px;width:auto;max-height:34vh}.top .status{width:100%;margin-left:0}.brand{width:100%}.diagGrid{grid-template-columns:repeat(2,1fr)}.bottom{display:none}}
-</style></head><body><div id="viewport"></div><div id="loading" class="loading"><div><div class="seal">江南</div><p id="loadingStatus">准备载入模型…</p></div></div><div class="panel top toolbar"><div class="brand">烟雨江南 · 全景巡游</div><button id="orbit" class="active">轨道观察</button><button id="fly">自由巡游</button><button id="tour">自动巡游</button><button id="fit">总览</button><button id="gridBtn">网格</button><button id="wireBtn">线框</button><button id="fogBtn" class="active">雾感</button><button id="diagBtn" hidden>诊断图</button><span id="status" class="status"></span></div><aside class="panel side"><h3>十六机位</h3><p id="metric">等待模型…</p><div id="presets" class="presets"></div><div class="speed"><span>巡游速度</span><input id="speed" type="range" min="1" max="18" step=".5" value="5"><span id="speedVal">5.0 m/s</span></div><p>双击模型可查看构件名称与坐标。</p><p id="inspect">尚未选择构件</p></aside><div id="flypad"><button class="blank"></button><button data-move="fwd">▲</button><button data-move="up">升</button><button data-move="left">◀</button><button data-move="back">▼</button><button data-move="right">▶</button><button class="blank"></button><button data-move="down">降</button><button class="blank"></button></div><div class="panel bottom">桌面：轨道模式左键旋转 / 右键平移 / 滚轮缩放；自由巡游使用 WASD、Q/E 升降、Shift 加速并拖动画面转向。手机：单指/双指轨道观察，或切换“自由巡游”后使用方向键并拖动画面。</div><dialog id="diag"><button onclick="this.closest('dialog').close()">关闭诊断图</button><h3 id="diagCaption">16 张 Blender 实图</h3><img id="diagLarge"><div id="diagGrid" class="diagGrid"></div></dialog><script src="./app.bundle.js"></script></body></html>
+*{box-sizing:border-box}html,body,#viewport{margin:0;width:100%;height:100%;overflow:hidden;background:#0f1717;color:#eee;font-family:system-ui,-apple-system,"PingFang SC",sans-serif}button,input{font:inherit}button{cursor:pointer}#viewport canvas{display:block;touch-action:none}
+.panel{position:fixed;z-index:5;background:rgba(15,25,25,.84);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(226,216,190,.2);box-shadow:0 12px 40px #0006;border-radius:14px}
+.panelHead{display:flex;align-items:center;gap:8px;min-height:36px}.panelBody{margin-top:8px}.collapsed .panelBody{display:none}.panelToggle{margin-left:auto;border:1px solid #53615b;background:#22302d;color:#e8e2d3;border-radius:999px;padding:5px 9px;font-size:12px;white-space:nowrap}
+.top{left:12px;right:12px;top:max(12px,env(safe-area-inset-top));padding:9px 11px}.brand{font-family:"Songti SC",serif;font-size:18px;letter-spacing:2px;white-space:nowrap}.status{color:#b9cbc5;font-size:12px;margin-left:auto;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:42vw}
+.toolGrid{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:7px}.toolGrid button{border:1px solid #56645d;background:#24322f;color:#e8e2d3;border-radius:9px;padding:8px 8px;white-space:nowrap}.toolGrid button.active{background:#876b43;border-color:#c4a46d}
+.side{right:12px;top:96px;bottom:72px;width:min(310px,42vw);padding:10px}.side h3{margin:0;font:18px "Songti SC",serif}.side .panelBody{max-height:calc(100vh - 190px);overflow:auto;overscroll-behavior:contain;padding-right:2px}.side p{font-size:12px;color:#aec0ba}.presets{display:grid;gap:6px}.presets button{background:#172421;color:#ddd;border:1px solid #34443f;border-radius:8px;padding:8px;text-align:left}.presets button:hover{background:#263732}.subgroup{border:1px solid #2d3d38;border-radius:10px;padding:7px 8px;margin:8px 0;background:#13201e99}.subgroup summary{cursor:pointer;color:#d9d3c4;font-size:13px;user-select:none}.subgroup[open] summary{margin-bottom:8px}
+.speed{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.speed input{width:min(150px,46vw)}
+.help{left:12px;bottom:max(12px,env(safe-area-inset-bottom));padding:7px 9px;max-width:min(720px,calc(100vw - 24px));font-size:12px;color:#c8d5d0}.help .panelBody{line-height:1.65}
+.loading{position:fixed;inset:0;z-index:20;display:grid;place-items:center;background:#0f1717;transition:.5s}.loading.done{opacity:0;pointer-events:none}.loading.error{background:#2b1515}.loading>div{text-align:center}.seal{width:62px;height:62px;margin:auto;border:2px solid #9e3d32;color:#d8b6a7;display:grid;place-items:center;font:26px "Songti SC",serif;transform:rotate(-2deg)}
+#flypad{display:none;position:fixed;left:14px;bottom:92px;z-index:7;grid-template-columns:repeat(3,48px);gap:5px}#flypad.show{display:grid}#flypad button{height:48px;border-radius:12px;border:1px solid #738078;background:#1b2927dd;color:#eee;font-size:20px;touch-action:none}#flypad .blank{visibility:hidden}
+#restoreUI{display:none;position:fixed;z-index:30;right:12px;top:max(12px,env(safe-area-inset-top));width:46px;height:46px;border-radius:50%;border:1px solid #8d9b91;background:#172522dc;color:#f2ead9;font-size:20px;box-shadow:0 8px 24px #0007}.ui-hidden .chrome{display:none!important}.ui-hidden #restoreUI{display:block}
+dialog{border:1px solid #4d5d56;background:#111b1a;color:#eee;width:min(1000px,96vw);height:min(86vh,820px);padding:12px;border-radius:14px}dialog::backdrop{background:#000c}.diagTop{position:sticky;top:0;z-index:3;display:flex;align-items:center;gap:8px;background:#111b1af2;padding-bottom:8px}.diagTop button{margin-left:auto;border:1px solid #64736c;background:#26332f;color:#eee;border-radius:8px;padding:7px 11px}.diagGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.diagGrid button{background:#1c2926;border:0;color:#ddd;padding:0;border-radius:8px;overflow:hidden}.diagGrid img{width:100%;display:block}.diagGrid span{display:block;padding:6px;font-size:11px}#diagLarge{max-width:100%;max-height:46vh;display:block;margin:8px auto;border-radius:8px}#diagBtn[hidden]{display:none}
+@media(max-width:900px){.toolGrid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:760px){
+  .panel{border-radius:12px}
+  .top{left:10px;right:auto;top:max(10px,env(safe-area-inset-top));width:auto;max-width:calc(100vw - 20px);padding:6px 8px}
+  .top:not(.collapsed){left:10px;right:10px;width:auto;padding:9px}
+  .top.collapsed .brand{font-size:15px;letter-spacing:1px}.top.collapsed .status{display:none}.top:not(.collapsed) .status{width:100%;max-width:none;margin-left:0}
+  .toolGrid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.toolGrid button{min-height:40px;padding:7px 5px;font-size:13px}
+  .side{top:auto;left:auto;right:10px;bottom:max(10px,env(safe-area-inset-bottom));width:auto;padding:6px 8px}
+  .side.collapsed h3{font-size:14px}.side.collapsed .panelHead{min-height:30px}
+  .side:not(.collapsed){left:10px;right:10px;width:auto;bottom:max(10px,env(safe-area-inset-bottom));max-height:58vh;padding:10px}
+  .side:not(.collapsed) .panelBody{max-height:49vh;overflow:auto}.presets{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.presets button{font-size:12px;padding:8px 7px}
+  .help{left:10px;right:auto;bottom:max(10px,env(safe-area-inset-bottom));width:auto;max-width:calc(100vw - 120px);padding:6px 8px}.help.collapsed .panelHead{min-height:30px}.help:not(.collapsed){right:10px;max-width:none;bottom:max(10px,env(safe-area-inset-bottom))}
+  #flypad{left:10px;bottom:78px;grid-template-columns:repeat(3,44px);gap:4px}#flypad button{height:44px;font-size:17px}#flypad.show~.help{bottom:236px}
+  dialog{width:calc(100vw - 12px);height:calc(100dvh - 18px);max-height:none;padding:9px}.diagGrid{grid-template-columns:repeat(2,1fr);gap:6px}#diagLarge{max-height:40vh}
+}
+@media(max-width:420px){.toolGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.brand{max-width:58vw;overflow:hidden;text-overflow:ellipsis}.presets{grid-template-columns:1fr}}
+@media(orientation:landscape) and (max-height:520px){.side:not(.collapsed){max-height:78vh;width:min(390px,46vw);left:auto}.side:not(.collapsed) .panelBody{max-height:64vh}.top:not(.collapsed){right:auto;width:min(650px,65vw)}}
+</style></head><body><div id="viewport"></div>
+<div id="loading" class="loading"><div><div class="seal">江南</div><p id="loadingStatus">准备载入模型…</p></div></div>
+<button id="restoreUI" aria-label="恢复界面">☰</button>
+
+<div id="topPanel" class="panel top chrome collapsed">
+  <div class="panelHead"><div class="brand">烟雨江南 · 全景巡游</div><span id="status" class="status"></span><button id="topToggle" class="panelToggle" aria-expanded="false">工具</button></div>
+  <div class="panelBody"><div class="toolGrid">
+    <button id="orbit" class="active">轨道观察</button><button id="fly">自由巡游</button><button id="tour">自动巡游</button><button id="fit">总览</button>
+    <button id="gridBtn">网格</button><button id="wireBtn">线框</button><button id="fogBtn" class="active">雾感</button><button id="diagBtn" hidden>诊断图</button>
+    <button id="immersive">沉浸模式</button>
+  </div></div>
+</div>
+
+<aside id="scenePanel" class="panel side chrome collapsed">
+  <div class="panelHead"><h3>机位 · 16</h3><button id="sceneToggle" class="panelToggle" aria-expanded="false">展开</button></div>
+  <div class="panelBody">
+    <p id="metric">等待模型…</p>
+    <details class="subgroup" open><summary>十六个真实机位</summary><div id="presets" class="presets"></div></details>
+    <details class="subgroup"><summary>巡游参数与构件检查</summary>
+      <div class="speed"><span>速度</span><input id="speed" type="range" min="1" max="18" step=".5" value="5"><span id="speedVal">5.0 m/s</span></div>
+      <p>双击模型可查看构件名称与坐标。</p><p id="inspect">尚未选择构件</p>
+    </details>
+  </div>
+</aside>
+
+<div id="flypad" class="chrome"><button class="blank"></button><button data-move="fwd">▲</button><button data-move="up">升</button><button data-move="left">◀</button><button data-move="back">▼</button><button data-move="right">▶</button><button class="blank"></button><button data-move="down">降</button><button class="blank"></button></div>
+
+<div id="helpPanel" class="panel help chrome collapsed">
+  <div class="panelHead"><span>操作提示</span><button id="helpToggle" class="panelToggle" aria-expanded="false">展开</button></div>
+  <div class="panelBody">桌面：轨道模式左键旋转 / 右键平移 / 滚轮缩放；自由巡游使用 WASD、Q/E 升降、Shift 加速并拖动画面转向。手机：单指/双指轨道观察；自由巡游时使用方向键并拖动画面。需要无遮挡时使用“沉浸模式”。</div>
+</div>
+
+<dialog id="diag"><div class="diagTop"><h3 id="diagCaption">16 张 Blender 实图</h3><button onclick="this.closest('dialog').close()">关闭</button></div><img id="diagLarge"><details class="subgroup" open><summary>展开 / 折叠 16 张诊断缩略图</summary><div id="diagGrid" class="diagGrid"></div></details></dialog>
+
+<script>
+(function(){
+  function q(id){return document.getElementById(id)}
+  function wire(panelId,buttonId,labelOpen,labelClosed){
+    var panel=q(panelId),button=q(buttonId);
+    function sync(){var c=panel.classList.contains('collapsed');button.textContent=c?labelClosed:labelOpen;button.setAttribute('aria-expanded',String(!c))}
+    button.addEventListener('click',function(){panel.classList.toggle('collapsed');sync()});sync();
+  }
+  wire('topPanel','topToggle','收起','工具');
+  wire('scenePanel','sceneToggle','收起','展开');
+  wire('helpPanel','helpToggle','收起','展开');
+  if(window.matchMedia('(min-width:761px)').matches){
+    q('topPanel').classList.remove('collapsed');q('scenePanel').classList.remove('collapsed');
+    q('topToggle').textContent='收起';q('topToggle').setAttribute('aria-expanded','true');
+    q('sceneToggle').textContent='收起';q('sceneToggle').setAttribute('aria-expanded','true');
+  }
+  q('immersive').addEventListener('click',function(){document.body.classList.add('ui-hidden')});
+  q('restoreUI').addEventListener('click',function(){document.body.classList.remove('ui-hidden')});
+})();
+</script>
+<script src="./app.bundle.js"></script></body></html>
