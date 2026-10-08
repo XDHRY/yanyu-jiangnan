@@ -1186,6 +1186,18 @@ def town_phase3_east_wharf():
     box('东岸码头仓屋_货架层板',(18.55,cy,1.06),(1.34,2.12,.10),wood,c,.010)
     for y in (39.82,41.58):
         for x in (18.05,19.05):box('东岸码头仓屋_货架腿',(x,y,.62),(.09,.09,.84),wood,c)
+    # Three linked open baskets and two hanging tools add lived-in storage
+    # detail without blocking the 1.40 m freight axis or adding a texture.
+    bv=[];bf=[];seg=12
+    for z,rad in ((0,.24),(.48,.34)):
+        bv.extend((rad*cos(2*pi*i/seg),rad*sin(2*pi*i/seg),z) for i in range(seg))
+    for i in range(seg):bf.append((i,(i+1)%seg,seg+(i+1)%seg,seg+i))
+    basket=mesh('东岸码头仓屋_竹筐原型',bv,bf,wood,c);basket.hide_render=True;basket.hide_viewport=True
+    for j,(x,y) in enumerate(((18.55,39.78),(18.48,41.56),(17.72,42.18)),1):
+        o=bpy.data.objects.new(PREFIX+f'东岸码头仓屋_竹筐_{j}',basket.data);c.objects.link(o);o.location=(x,y,.32)
+    lines('东岸码头仓屋_梁下挂具',[
+        [(18.15,39.15,2.96),(18.15,39.15,2.18),(17.98,39.15,1.92)],
+        [(18.50,39.15,2.96),(18.50,39.15,2.28),(18.68,39.15,2.02)]],.014,M['edge'],c,res=2,bevel_res=1)
     box('东岸码头仓屋_壁灯挑杆',(18.74,cy,2.64),(1.10,.08,.08),wood,c,.006)
     uv('东岸码头仓屋_工作纱灯',(18.22,cy,2.30),(.15,.15,.24),M['paper'],c,14,8)
     line('东岸码头仓屋_纱灯悬绳',[(18.22,cy,2.54),(18.22,cy,2.66)],.009,wood,c,res=1,bevel_res=0)
@@ -1225,6 +1237,14 @@ def town_phase3_east_wharf():
     for p in boat.data.polygons:p.use_smooth=len(p.vertices)==4
     box('东岸码头仓屋_小艇舱底',(bx,by,.34),(.54,3.10,.08),wood,c,.010)
     for yy in (-.92,0,.92):box('东岸码头仓屋_小艇坐板',(bx,by+yy,.61),(1.03,.22,.08),wood,c,.008)
+    # P1 boat refinement: continuous gunwales, two transverse ribs, a real
+    # stern board and three raised floor battens clarify the shell at close range.
+    for side in (-1,1):
+        line('东岸码头仓屋_小艇舷侧压条',[(bx+side*half,by+yy,.60) for yy,half,_ in sections],.027,M['edge'],c,res=2,bevel_res=1)
+    for yy,half in ((-.80,.62),(.80,.62)):
+        line('东岸码头仓屋_小艇横肋',[(bx-half*.88,by+yy,.53),(bx,by+yy,.39),(bx+half*.88,by+yy,.53)],.024,M['edge'],c,res=2,bevel_res=1)
+    box('东岸码头仓屋_小艇艄板',(bx,by+1.70,.48),(.82,.075,.34),wood,c,.008)
+    for xx in (-.18,0,.18):box('东岸码头仓屋_小艇排水栅条',(bx+xx,by,.405),(.075,2.72,.055),M['edge'],c,.005)
     line('东岸码头仓屋_系舟缆绳',[(9.10,41.24,.56),(9.65,41.40,.80),(10.36,41.44,.93)],.018,M['edge'],c,res=3,bevel_res=1)
     line('东岸码头仓屋_竹篙',[(8.14,38.85,.57),(9.26,42.56,.64)],.025,wood,c,res=2,bevel_res=1)
 
@@ -1239,8 +1259,112 @@ def town_phase3_east_wharf():
     S['JN_town_phase']='phase_3_east_wharf_storehouse'
     S['JN_east_wharf_clear_axis_m']=1.40
     S['JN_east_wharf_crate_instances']=4
+    S['JN_east_wharf_basket_instances']=3
+    S['JN_east_wharf_boat_detail_revision']='gunwale_ribs_stern_floor_battens_v1'
     S['JN_east_wharf_lanterns']=2
     S['JN_east_wharf_new_image_bytes']=0
+
+def town_phase4_east_residence():
+    """Create a connected east-bank weaving household courtyard north of the wharf."""
+    c=C['water'];stone=M['stone'];wood=M['wood'];wetstone=M['darkstone']
+    # Extend the wharf parcel with deliberate overlap and continue the same
+    # water street north. The cross path aligns gate, court and main-hall door.
+    land=box('东岸织户宅院_北段地基',(16.15,49.20,-.30),(11.98,8.95,.60),wetstone,c)
+    land['JN_function']='continuous_land_support';land['JN_ground_top']=0.0
+    box('东岸织户宅院_北延石街',(12.40,49.20,.06),(2.20,8.95,.12),stone,c,.012)
+    box('东岸织户宅院_入院横径',(14.70,49.20,.06),(2.70,1.32,.12),stone,c,.012)
+    box('东岸织户宅院_院坪',(14.96,49.20,.06),(1.72,5.18,.12),stone,c,.012)
+
+    # A thick west wall is split around a real 1.44 m gate. Timber jambs,
+    # parked-open leaf, threshold and a solidified roof make the destination
+    # legible from the street instead of presenting a decorative false door.
+    wall_x=14.05;gate_y=49.20
+    for tag,y,length in (('南段',47.415,2.13),('北段',50.99,2.14)):
+        box('东岸织户宅院_西院墙_'+tag,(wall_x,y,1.05),(.24,length,2.10),M['plaster'],c,.018)
+        box('东岸织户宅院_西院墙压顶_'+tag,(wall_x,y,2.14),(.34,length+.08,.09),M['tile'],c,.010)
+    for y in (48.45,49.95):box('东岸织户宅院_门楼木柱',(wall_x,y,1.32),(.20,.20,2.48),wood,c,.008)
+    box('东岸织户宅院_门楼额枋',(wall_x,gate_y,2.50),(.22,1.72,.20),wood,c,.008)
+    box('东岸织户宅院_门槛',(13.99,gate_y,.13),(.34,1.34,.08),wood,c,.006)
+    box('东岸织户宅院_开门扇',(14.58,48.49,1.21),(1.08,.075,2.08),wood,c,.010)
+    gv=[(13.42,48.16,2.55),(14.68,48.16,2.55),(13.42,50.24,2.55),(14.68,50.24,2.55),
+        (14.05,48.16,2.91),(14.05,50.24,2.91)]
+    gate_roof=mesh('东岸织户宅院_门楼瓦面',gv,[(0,2,5,4),(4,5,3,1)],M['tile'],c)
+    solid=gate_roof.modifiers.new('宅院门楼真实屋面厚度','SOLIDIFY');solid.thickness=.065;solid.offset=-1
+    box('东岸织户宅院_南界粉墙',(17.60,46.24,.88),(7.34,.20,1.76),M['plaster'],c,.018)
+    box('东岸织户宅院_南界压顶',(17.60,46.24,1.80),(7.46,.28,.09),M['tile'],c,.010)
+    # The north boundary is also split: its opening leads directly into the
+    # working veranda rather than trapping it beyond a decorative wall.
+    for tag,x,length in (('西段',15.39,2.92),('东段',19.76,3.02)):
+        box('东岸织户宅院_北界粉墙_'+tag,(x,52.16,.88),(length,.20,1.76),M['plaster'],c,.018)
+        box('东岸织户宅院_北界压顶_'+tag,(x,52.16,1.80),(length+.08,.28,.09),M['tile'],c,.010)
+    for x in (16.85,18.25):box('东岸织户宅院_织廊入口柱',(x,52.16,1.18),(.16,.16,2.20),wood,c,.006)
+    box('东岸织户宅院_织廊入口额枋',(17.55,52.16,2.26),(1.56,.18,.16),wood,c,.006)
+
+    # Reuse the proven village-house structural family at a slightly reduced
+    # scale. The west-facing main hall retains a 1.01 m through-door, two true
+    # windows, interior floor, furniture and an open leaf.
+    hx,hy,hs=18.25,49.20,.92
+    def source(name):return bpy.data.objects[PREFIX+name]
+    for proto_name,label,z in [
+        ('村落民居台基_原型','台基',.12),('村落民居墙体_原型','墙体',0),
+        ('村落民居山墙_高脊原型','山墙',0),('村落民居室内地坪_原型','室内地坪',0),
+        ('村落民居案几_原型','案几',0),('村落民居长凳_原型','长凳',0),
+        ('村落民居承檩_高脊原型','承檩',0),('村落民居黛瓦屋面_高脊原型','屋面',3.30)]:
+        proto=source(proto_name);o=bpy.data.objects.new(PREFIX+'东岸织户宅院_正房_'+label,proto.data);c.objects.link(o)
+        o.location=(hx,hy,z);o.scale=(hs,hs,1)
+        if label in ('墙体','山墙','案几','长凳','承檩'):o.rotation_euler.z=pi
+        if label=='屋面':
+            mod=o.modifiers.new('织户正房黛瓦屋面厚度','SOLIDIFY');mod.thickness=.07;mod.offset=-1
+    for side in (-1,1):
+        proto=source('村落民居深檐_原型');o=bpy.data.objects.new(PREFIX+f'东岸织户宅院_正房深檐_{side:+d}',proto.data);c.objects.link(o)
+        o.location=(hx,hy+side*2.24*hs,3.34);o.scale=(hs,1,1)
+    proto=source('村落民居正脊_原型');o=bpy.data.objects.new(PREFIX+'东岸织户宅院_正房正脊',proto.data);c.objects.link(o);o.location=(hx,hy,4.57);o.scale=(hs,1,1)
+    for proto_name,label in (('村落民居檐椽列_原型','檐椽列'),('村落民居瓦当列_原型','瓦当列')):
+        proto=source(proto_name);o=bpy.data.objects.new(PREFIX+'东岸织户宅院_正房'+label,proto.data);c.objects.link(o);o.location=(hx,hy,0);o.scale=(hs,hs,1)
+    for wy in (-1.82,1.82):
+        proto=source('村落民居墙角木柱_原型');o=bpy.data.objects.new(PREFIX+f'东岸织户宅院_正房墙角柱_{wy:+.2f}',proto.data);c.objects.link(o);o.location=(hx-2.63*hs,hy+wy*hs,1.64)
+    for wy in (-1.27,1.27):box('东岸织户宅院_正房青石勒脚',(hx-2.61*hs,hy+wy*hs,.30),(.16,1.44*hs,.36),wetstone,c)
+    proto=source('村落民居檐下额枋_原型');o=bpy.data.objects.new(PREFIX+'东岸织户宅院_正房檐下额枋',proto.data);c.objects.link(o);o.location=(hx-2.64*hs,hy,3.08);o.scale=(1,hs,1)
+    for proto_name,label,wy in [('村落民居门框_原型','门框',0),('村落民居开门扇_原型','开门扇',0),('村落民居窗框_原型','窗框_南',-1.30),('村落民居窗框_原型','窗框_北',1.30)]:
+        proto=source(proto_name);o=bpy.data.objects.new(PREFIX+'东岸织户宅院_正房_'+label,proto.data);c.objects.link(o)
+        o.location=(hx,hy-wy*hs,0);o.scale=(hs,hs,1);o.rotation_euler.z=pi
+    for wy in (-1.30,1.30):
+        proto=source('村落民居格窗棂_原型');o=bpy.data.objects.new(PREFIX+f'东岸织户宅院_正房格窗棂_{wy:+.2f}',proto.data);c.objects.link(o)
+        o.location=(hx-2.70*hs,hy+wy*hs,1.75);o.scale=(1,.72*hs,1)
+    box('东岸织户宅院_正房门槛',(hx-2.53*hs,hy,.27),(.28*hs,1.10*hs,.02),wood,c)
+    box('东岸织户宅院_正房入户踏步',(hx-2.99*hs,hy,.06),(.38*hs,1.30*hs,.12),stone,c)
+    hall=bpy.data.objects[PREFIX+'东岸织户宅院_正房_墙体'];hall['JN_door_clear_width']=1.10*hs;hall['JN_door_clear_height']=2.22;hall['JN_interior_depth']=4.72*hs
+
+    # A compact weaving veranda replaces an ornamental side wing: four posts
+    # on shoes, two beams and a solid sloped roof shelter a linked loom frame.
+    vx,vy=17.55,53.00
+    box('东岸织户宅院_织廊台基',(vx,vy,.10),(4.45,1.34,.20),stone,c,.014)
+    for j,x in enumerate((15.82,19.28),1):
+        for side,y in enumerate((52.57,53.43),1):
+            box(f'东岸织户宅院_织廊柱础_{j}_{side}',(x,y,.27),(.28,.28,.14),stone,c,.012)
+            box(f'东岸织户宅院_织廊木柱_{j}_{side}',(x,y,1.43),(.15,.15,2.18),wood,c,.006)
+    for y in (52.57,53.43):box('东岸织户宅院_织廊檐枋',(vx,y,2.55),(3.72,.17,.17),wood,c,.006)
+    rv=[(15.55,52.38,2.62),(19.55,52.38,2.62),(15.55,53.62,2.92),(19.55,53.62,2.92)]
+    roof_obj=mesh('东岸织户宅院_织廊瓦面',rv,[(0,1,3,2)],M['tile'],c);mod=roof_obj.modifiers.new('织廊真实屋面厚度','SOLIDIFY');mod.thickness=.06;mod.offset=-1
+    for x in (16.48,18.62):
+        box('东岸织户宅院_织机立柱',(x,vy,.78),(.10,.10,1.18),wood,c)
+    box('东岸织户宅院_织机上梁',(17.55,vy,1.39),(2.30,.12,.12),wood,c)
+    box('东岸织户宅院_织机坐梁',(17.55,52.86,.58),(2.16,.10,.10),wood,c)
+    for yy in (52.80,52.92,53.04,53.16):line('东岸织户宅院_织机经线',[(16.56,yy,.72),(18.54,yy,1.30)],.007,M['paper'],c,res=1,bevel_res=0)
+
+    # Domestic water and warm light stay off the gate-to-hall axis.
+    box('东岸织户宅院_石水槽底',(15.15,50.70,.18),(1.18,.62,.14),wetstone,c,.010)
+    for x in (14.61,15.69):box('东岸织户宅院_石水槽长壁',(x,50.70,.37),(.10,.66,.45),wetstone,c,.008)
+    for y in (50.44,50.96):box('东岸织户宅院_石水槽端壁',(15.15,y,.37),(.98,.10,.45),wetstone,c,.008)
+    box('东岸织户宅院_石水槽水面',(15.15,50.70,.42),(.96,.46,.02),M['water'],c)
+    line('东岸织户宅院_院灯挑杆',[(14.05,50.00,1.82),(14.62,50.00,1.82),(14.62,50.00,1.55)],.022,wood,c,res=2,bevel_res=1)
+    uv('东岸织户宅院_院灯纱罩',(14.62,50.00,1.36),(.12,.12,.19),M['paper'],c,12,8)
+    light('东岸织户宅院_院灯火',(14.62,50.00,1.35),(1,.47,.21),58,.22,kind='POINT')
+    S['JN_town_phase']='phase_4_east_residential_courtyard'
+    S['JN_east_residence_gate_clear_width_m']=1.44
+    S['JN_east_residence_hall_door_clear_width_m']=round(1.10*hs,3)
+    S['JN_east_residence_loom_posts']=4
+    S['JN_east_residence_new_image_bytes']=0
 
 def batch_static_objects(name,objects,mat,col,bev=0):
     """Combine already-built static meshes after art generation so optimization cannot perturb procedural build order."""
@@ -1317,7 +1441,7 @@ def viewport():
                 a.spaces.active.region_3d.view_camera_zoom=0
     bpy.context.view_layer.update()
 def build(stage=None):
-    start();courtyard();village_phase1_skeleton();town_phase2_market();town_phase3_east_wharf()
+    start();courtyard();village_phase1_skeleton();town_phase2_market();town_phase3_east_wharf();town_phase4_east_residence()
     level=P['stage'] if stage is None else stage
     if level>=2:vegetation()
     if level>=3:weather()

@@ -1,0 +1,16 @@
+{
+  "schema": "game-room.room-brief.v1",
+  "roomId": "yanyu-east-weaver-courtyard-round08",
+  "family": "custom",
+  "purpose": "Private weaving household courtyard connected to the east water street and wharf.",
+  "runtimeSurface": "Blender 4.5 editable scene and browser GLB review",
+  "boundsMeters": [11.98, 8.95, 5.25],
+  "hero": {"id": "east-weaver-main-hall", "role": "inhabited residential anchor", "reservedBoundsMeters": [5.20, 4.20, 4.65]},
+  "symmetry": {"mode": "bilateral", "order": 2, "appliesTo": ["gate-axis", "main-hall-facade"], "exceptions": ["water trough and courtyard lamp move off-axis", "weaving veranda follows north boundary"]},
+  "circulation": {"description": "east water street to gate, court, main hall and north weaving veranda", "minimumClearanceMeters": 1.20},
+  "productionCamera": {"viewport": [1024, 640], "location": [10.55, 49.20, 3.35], "target": [18.05, 49.20, 1.65], "verticalFovDegrees": 40},
+  "performanceBudget": {"maxSceneTriangles": 155000, "maxVLowBytes": 0, "maxHighTextureBytes": 50331648},
+  "creditBudget": {"maximumCredits": 0, "approvalRequired": true},
+  "environment": {"type": "project-night-sky", "identity": "yanyu-jiangnan-night-v1", "source": "repository procedural atmosphere", "assignmentKey": "烟雨江南 · 雪月江南"},
+  "artifacts": {"floorPlan": "diagnostic view 11", "reflectedCeilingPlan": "not_applicable_outdoor", "planMetadata": "diagnostic manifest", "wallElevations": ["diagnostic view 16"], "visualTarget": "docs/town-art-contract.md", "openingContactSheet": "diagnostic views 15-16"}
+}

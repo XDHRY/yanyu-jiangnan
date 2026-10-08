@@ -1,0 +1,24 @@
+{
+  "schema": "yanyu-jiangnan.asset-contract.v1",
+  "asset": "east-weaver-residential-courtyard",
+  "purpose": "A private weaving household that transitions the east-bank production waterfront into an inhabited residential quarter.",
+  "source": "jiangnan.py:town_phase4_east_residence",
+  "units": "metres",
+  "bounds_m": {"x": [10.16, 22.14], "y": [44.725, 53.675], "z": [-0.60, 4.65]},
+  "hero": "west-facing high-ridge main hall seen through the courtyard gate",
+  "circulation": {
+    "route": "east water street -> 1.44 m gate -> stone court -> 1.012 m main-hall door",
+    "secondary_route": "court -> 1.40 m north opening -> working weaving veranda",
+    "primary_arrival_exception": "The 1.44 m gate is intentionally domestic rather than a public 2.40 m hall; it remains above the 1.20 m project circulation minimum and has visible depth and a real destination."
+  },
+  "structure": [
+    "continuous overlapped land support and street",
+    "thick split courtyard walls with two real openings",
+    "main hall with through door, two through windows, interior floor and furniture",
+    "solidified main-hall, gatehouse and veranda roofs",
+    "four veranda columns transferring load through four stone shoes"
+  ],
+  "production_cameras": ["15_east_residential_overview", "16_weaver_courtyard_axis"],
+  "performance": {"new_image_bytes": 0, "paid_service_credits": 0},
+  "runtime": {"collision": "not_generated", "navigation": "not_generated", "lod": "not_generated"}
+}

@@ -1,0 +1,13 @@
+{
+  "schema": "game-room.opening-schedule.v1",
+  "roomId": "yanyu-east-weaver-courtyard-round08",
+  "primaryArrival": {
+    "openingId": "EW-GATE-01",
+    "exception": "Domestic courtyard gate is 1.44 m wide, deliberately below the public-hall 2.40 m default but above the project 1.20 m walking minimum; the main hall is visible beyond it."
+  },
+  "openings": [
+    {"id": "EW-GATE-01", "type": "door", "wall": "west courtyard wall", "width_m": 1.44, "height_m": 2.35, "threshold_m": 0.08, "depth_m": 0.24, "destination": "stone court and main hall", "leaf": "parked open"},
+    {"id": "EW-HALL-01", "type": "door", "wall": "main hall west facade", "width_m": 1.012, "height_m": 2.22, "threshold_m": 0.02, "depth_m": 0.24, "destination": "4.34 m deep furnished hall", "leaf": "parked open"},
+    {"id": "EW-LOOM-01", "type": "door", "wall": "north courtyard wall", "width_m": 1.40, "height_m": 2.18, "threshold_m": 0.0, "depth_m": 0.20, "destination": "supported weaving veranda", "leaf": "open passage"}
+  ]
+}
