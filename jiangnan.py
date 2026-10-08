@@ -1352,6 +1352,16 @@ def town_phase4_east_residence():
     box('东岸织户宅院_织机坐梁',(17.55,52.86,.58),(2.16,.10,.10),wood,c)
     for yy in (52.80,52.92,53.04,53.16):line('东岸织户宅院_织机经线',[(16.56,yy,.72),(18.54,yy,1.30)],.007,M['paper'],c,res=1,bevel_res=0)
 
+    # P1 domestic weaving detail: linked cloth rolls, a low shuttle and two
+    # bobbins make the loom read as an active household tool rather than an
+    # empty frame.  All repeats share mesh data and add no bitmap textures.
+    roll_proto=uv('东岸织户宅院_织布卷原型',(0,0,0),(.16,.16,.46),M['ivory'],c,12,6)
+    roll_proto.hide_render=True;roll_proto.hide_viewport=True
+    for j,(x,y,z,ang) in enumerate(((16.05,52.73,.52,pi/2),(19.02,53.22,.52,pi/2)),1):
+        o=bpy.data.objects.new(PREFIX+f'东岸织户宅院_织布卷_{j}',roll_proto.data);c.objects.link(o);o.location=(x,y,z);o.rotation_euler.y=ang
+    shuttle=mesh('东岸织户宅院_织梭',[(17.25,52.68,.69),(17.85,52.68,.69),(17.68,52.84,.76),(17.25,52.84,.76)],[(0,1,2,3)],wood,c)
+    for x in (16.30,18.80):uv('东岸织户宅院_线轴',(x,53.26,.54),(.08,.08,.16),M['wood'],c,10,5)
+
     # Domestic water and warm light stay off the gate-to-hall axis.
     box('东岸织户宅院_石水槽底',(15.15,50.70,.18),(1.18,.62,.14),wetstone,c,.010)
     for x in (14.61,15.69):box('东岸织户宅院_石水槽长壁',(x,50.70,.37),(.10,.66,.45),wetstone,c,.008)
@@ -1364,7 +1374,88 @@ def town_phase4_east_residence():
     S['JN_east_residence_gate_clear_width_m']=1.44
     S['JN_east_residence_hall_door_clear_width_m']=round(1.10*hs,3)
     S['JN_east_residence_loom_posts']=4
+    S['JN_east_residence_cloth_rolls']=2
     S['JN_east_residence_new_image_bytes']=0
+
+def town_phase5_cloth_finish_yard():
+    """Extend the east-bank household into a connected rinsing and cloth-finishing yard."""
+    c=C['water'];stone=M['stone'];wood=M['wood'];wetstone=M['darkstone']
+    # The parcel deliberately overlaps the weaving veranda and continues the
+    # water street.  This is one navigable production sequence, not a detached set.
+    land=box('东岸晒布后园_北段地基',(16.15,58.10,-.30),(11.98,9.25,.60),wetstone,c)
+    land['JN_function']='connected_cloth_finish_land';land['JN_ground_top']=0.0
+    box('东岸晒布后园_北延石街',(12.40,58.10,.06),(2.20,9.25,.12),stone,c,.012)
+    box('东岸晒布后园_门内横径',(14.88,57.40,.06),(3.18,1.28,.12),stone,c,.012)
+    box('东岸晒布后园_织廊接径',(17.55,54.05,.06),(1.28,1.40,.12),stone,c,.012)
+    box('东岸晒布后园_院坪',(17.50,57.35,.06),(6.10,5.20,.12),stone,c,.012)
+
+    # Thick west wall split around a 1.64 m real gate.  The gate axis terminates
+    # at an open three-bay finishing hall, so the aperture has a visible purpose.
+    wall_x=14.05;gate_y=57.40
+    for tag,y,length in (('南段',55.00,3.00),('北段',60.06,3.82)):
+        box('东岸晒布后园_西院墙_'+tag,(wall_x,y,1.02),(.24,length,2.04),M['plaster'],c,.018)
+        box('东岸晒布后园_西院墙压顶_'+tag,(wall_x,y,2.10),(.34,length+.08,.09),M['tile'],c,.010)
+    for y in (56.50,58.30):box('东岸晒布后园_门楼木柱',(wall_x,y,1.30),(.20,.20,2.44),wood,c,.008)
+    box('东岸晒布后园_门楼额枋',(wall_x,gate_y,2.48),(.22,2.02,.20),wood,c,.008)
+    box('东岸晒布后园_门槛',(13.99,gate_y,.13),(.34,1.54,.08),wood,c,.006)
+    box('东岸晒布后园_开门扇',(14.60,56.56,1.20),(1.18,.075,2.06),wood,c,.010)
+    gv=[(13.38,56.20,2.53),(14.72,56.20,2.53),(13.38,58.60,2.53),(14.72,58.60,2.53),
+        (14.05,56.20,2.92),(14.05,58.60,2.92)]
+    gate_roof=mesh('东岸晒布后园_门楼瓦面',gv,[(0,2,5,4),(4,5,3,1)],M['tile'],c)
+    mod=gate_roof.modifiers.new('晒布后园门楼真实屋面厚度','SOLIDIFY');mod.thickness=.065;mod.offset=-1
+    box('东岸晒布后园_北界粉墙',(18.05,62.62,.90),(7.76,.20,1.80),M['plaster'],c,.018)
+    box('东岸晒布后园_北界压顶',(18.05,62.62,1.84),(7.86,.28,.09),M['tile'],c,.010)
+    box('东岸晒布后园_东界粉墙',(21.94,58.10,.90),(.20,9.04,1.80),M['plaster'],c,.018)
+    box('东岸晒布后园_东界压顶',(21.94,58.10,1.84),(.28,9.12,.09),M['tile'],c,.010)
+
+    # Open three-bay finishing hall: six posts transfer through six shoes to a
+    # stone platform.  The solid gabled roof and ring beams carry a clear load path.
+    hx,hy=18.25,57.40
+    box('东岸晒布后园_整布厅台基',(hx,hy,.14),(5.70,3.72,.28),stone,c,.018)
+    for j,x in enumerate((15.92,18.25,20.58),1):
+        for side,y in enumerate((55.95,58.85),1):
+            box(f'东岸晒布后园_整布厅柱础_{j}_{side}',(x,y,.38),(.38,.38,.20),wetstone,c,.015)
+            box(f'东岸晒布后园_整布厅木柱_{j}_{side}',(x,y,1.72),(.18,.18,2.48),wood,c,.008)
+    for y in (55.95,58.85):box('东岸晒布后园_整布厅檐枋',(hx,y,2.94),(5.18,.20,.20),wood,c,.008)
+    for x in (15.92,18.25,20.58):box('东岸晒布后园_整布厅穿枋',(x,hy,2.84),(.18,3.12,.18),wood,c,.008)
+    rv=[(15.45,55.55,3.02),(21.05,55.55,3.02),(15.45,59.25,3.02),(21.05,59.25,3.02),
+        (18.25,55.55,4.08),(18.25,59.25,4.08)]
+    hall_roof=mesh('东岸晒布后园_整布厅黛瓦屋面',rv,[(0,2,5,4),(4,5,3,1)],M['tile'],c)
+    mod=hall_roof.modifiers.new('整布厅真实屋面厚度','SOLIDIFY');mod.thickness=.075;mod.offset=-1
+    line('东岸晒布后园_整布厅正脊',[(18.25,55.38,4.10),(18.25,59.42,4.10)],.085,M['edge'],c,res=1,bevel_res=1)
+    box('东岸晒布后园_整布长案',(18.25,57.40,1.02),(2.80,.82,.15),wood,c,.025)
+    for x in (17.12,19.38):box('东岸晒布后园_整布案腿',(x,57.40,.58),(.16,.66,.82),wood,c,.012)
+
+    # Six linked cloth sheets hang from three supported drying frames.  The
+    # shallow center fold gives readable depth while keeping topology tiny.
+    cv=[(-.46,0,0),(.46,0,0),(-.46,0,-1.36),(0,.055,-1.42),(.46,0,-1.36)]
+    cloth=mesh('东岸晒布后园_晾布原型',cv,[(0,1,4,3,2)],M['ivory'],c);cloth.hide_render=True;cloth.hide_viewport=True
+    for row,y in enumerate((60.05,61.18),1):
+        for x in (15.72,18.25,20.78):
+            box(f'东岸晒布后园_晾架柱_{row}',(x,y,1.56),(.13,.13,2.56),wood,c,.006)
+            box(f'东岸晒布后园_晾架柱础_{row}',(x,y,.20),(.28,.28,.16),stone,c,.010)
+        box(f'东岸晒布后园_晾架横杆_{row}',(18.25,y,2.50),(5.25,.13,.13),wood,c,.006)
+        for col,x in enumerate((16.55,17.70,18.85,20.00),1):
+            o=bpy.data.objects.new(PREFIX+f'东岸晒布后园_晾布_{row}_{col}',cloth.data);c.objects.link(o);o.location=(x,y,2.43)
+
+    # Rinsing trough, narrow stone drain and a pair of cloth baskets occupy the
+    # south work edge, leaving the gate-to-hall axis clear.
+    tx,ty=19.90,54.45
+    box('东岸晒布后园_漂洗槽底',(tx,ty,.18),(2.25,.92,.14),wetstone,c,.010)
+    for x in (18.82,20.98):box('东岸晒布后园_漂洗槽长壁',(x,ty,.42),(.12,.98,.55),wetstone,c,.008)
+    for y in (54.02,54.88):box('东岸晒布后园_漂洗槽端壁',(tx,y,.42),(2.04,.12,.55),wetstone,c,.008)
+    box('东岸晒布后园_漂洗槽水面',(tx,ty,.47),(1.98,.74,.02),M['water'],c)
+    box('东岸晒布后园_排水石槽',(16.70,54.45,.10),(4.10,.34,.18),wetstone,c,.008)
+    box('东岸晒布后园_排水水线',(16.70,54.45,.20),(3.88,.16,.015),M['water'],c)
+    line('东岸晒布后园_工作灯挑杆',[(14.05,58.38,1.82),(14.64,58.38,1.82),(14.64,58.38,1.54)],.022,wood,c,res=2,bevel_res=1)
+    uv('东岸晒布后园_工作灯纱罩',(14.64,58.38,1.34),(.12,.12,.19),M['paper'],c,12,8)
+    light('东岸晒布后园_工作灯火',(14.64,58.38,1.33),(1,.47,.21),56,.22,kind='POINT')
+
+    S['JN_town_phase']='phase_5_east_cloth_finish_yard'
+    S['JN_east_cloth_gate_clear_width_m']=1.64
+    S['JN_east_cloth_hall_posts']=6
+    S['JN_east_cloth_linked_sheets']=8
+    S['JN_east_cloth_new_image_bytes']=0
 
 def batch_static_objects(name,objects,mat,col,bev=0):
     """Combine already-built static meshes after art generation so optimization cannot perturb procedural build order."""
@@ -1441,7 +1532,7 @@ def viewport():
                 a.spaces.active.region_3d.view_camera_zoom=0
     bpy.context.view_layer.update()
 def build(stage=None):
-    start();courtyard();village_phase1_skeleton();town_phase2_market();town_phase3_east_wharf();town_phase4_east_residence()
+    start();courtyard();village_phase1_skeleton();town_phase2_market();town_phase3_east_wharf();town_phase4_east_residence();town_phase5_cloth_finish_yard()
     level=P['stage'] if stage is None else stage
     if level>=2:vegetation()
     if level>=3:weather()

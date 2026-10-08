@@ -1,0 +1,24 @@
+{
+  "schema": "yanyu-jiangnan.asset-contract.v1",
+  "asset": "east-cloth-finish-yard",
+  "purpose": "A connected rinsing, drying and cloth-finishing yard that extends the east-bank weaving household into a legible production sequence.",
+  "source": "jiangnan.py:town_phase5_cloth_finish_yard",
+  "units": "metres",
+  "bounds_m": {"x": [10.16, 22.14], "y": [53.475, 62.725], "z": [-0.60, 4.20]},
+  "hero": "open three-bay finishing hall seen through the west gate",
+  "circulation": {
+    "primary": "east water street -> 1.64 m gate -> stone court -> open finishing hall",
+    "production": "weaving veranda -> rinsing trough -> drain -> drying frames -> finishing table",
+    "primary_arrival_exception": "The 1.64 m gate is a domestic work-yard entrance rather than a public hall. It exceeds the project 1.20 m minimum and terminates at a visible open hall."
+  },
+  "structure": [
+    "overlapped land support and continuous stone water street",
+    "thick split west wall with a real gate and solid roof",
+    "six hall columns on six stone shoes with longitudinal and transverse beams",
+    "solidified gabled hall roof with continuous ridge",
+    "six drying-frame columns on six shoes and two cross rails"
+  ],
+  "production_cameras": ["15_east_cloth_yard_overview", "16_cloth_finish_gate_axis"],
+  "performance": {"new_image_bytes": 0, "paid_service_credits": 0, "linked_cloth_sheets": 8},
+  "runtime": {"collision": "not_generated", "navigation": "not_generated", "lod": "not_generated", "uv_export_audit": "pending"}
+}

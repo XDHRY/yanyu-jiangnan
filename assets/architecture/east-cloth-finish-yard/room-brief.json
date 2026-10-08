@@ -1,0 +1,16 @@
+{
+  "schema": "game-room.room-brief.v1",
+  "roomId": "yanyu-east-cloth-finish-yard-round09",
+  "family": "custom",
+  "purpose": "Outdoor cloth-rinsing, drying and finishing yard connected to the weaving household and east water street.",
+  "runtimeSurface": "Blender 4.5 editable scene and browser GLB review",
+  "boundsMeters": [11.98, 9.25, 4.20],
+  "hero": {"id": "east-cloth-finishing-hall", "role": "open supported production anchor", "reservedBoundsMeters": [5.70, 3.72, 4.20]},
+  "symmetry": {"mode": "bilateral", "order": 2, "appliesTo": ["gate-axis", "finishing-hall-bays", "drying-frame-posts"], "exceptions": ["rinsing trough and drain occupy the south production edge", "cloth sheets vary by row spacing"]},
+  "circulation": {"description": "water street to gate and hall; weaving veranda to rinse, dry and finish sequence", "minimumClearanceMeters": 1.20},
+  "productionCamera": {"viewport": [1024, 640], "location": [9.55, 57.40, 1.62], "target": [18.25, 57.40, 1.52], "verticalFovDegrees": 30},
+  "performanceBudget": {"maxSceneTriangles": 160000, "maxNewImageBytes": 0, "maxTextureBytes": 50331648},
+  "creditBudget": {"maximumCredits": 0, "approvalRequired": true},
+  "environment": {"type": "project-night-sky", "identity": "yanyu-jiangnan-night-v1", "source": "repository procedural atmosphere", "assignmentKey": "烟雨江南 · 雪月江南"},
+  "artifacts": {"floorPlan": "diagnostic view 11", "reflectedCeilingPlan": "not_applicable_outdoor", "planMetadata": "diagnostic manifest", "wallElevations": ["diagnostic view 16"], "visualTarget": "docs/town-art-contract.md", "openingContactSheet": "diagnostic views 15-16"}
+}

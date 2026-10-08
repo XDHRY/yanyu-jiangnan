@@ -1,0 +1,8 @@
+{
+  "schema": "game-room.openings.v1",
+  "roomId": "yanyu-east-cloth-finish-yard-round09",
+  "openings": [
+    {"id": "cloth-yard-west-gate", "type": "door", "wall": "west split courtyard wall", "widthMeters": 1.64, "heightMeters": 2.35, "thresholdMeters": 0.08, "depthMeters": 0.34, "destination": "stone court and open finishing hall", "state": "parked-open leaf"},
+    {"id": "cloth-yard-south-production-link", "type": "door", "wall": "open shared production boundary", "widthMeters": 1.28, "heightMeters": 2.20, "thresholdMeters": 0.0, "depthMeters": 1.40, "destination": "weaving veranda and rinsing edge", "state": "open passage"}
+  ]
+}
