@@ -1136,6 +1136,103 @@ def town_phase2_market():
     S['JN_town_ground_bounds']='west -8.4..4.44; east 10.16..20.4; y 7..37'
     S['JN_town_new_texture_mib']=0.0
 
+def town_phase3_east_wharf():
+    """Extend the east bank with a grounded storehouse, working wharf and moored sampan."""
+    c=C['water'];stone=M['stone'];wood=M['wood'];wetstone=M['darkstone']
+    # The northern parcel overlaps the existing bank by 20 cm so the support
+    # reads as one continuous piece of land rather than a floating addition.
+    land=box('东岸码头仓屋_北段地基',(15.28,40.90,-.30),(10.24,8.20,.60),wetstone,c)
+    land['JN_function']='continuous_land_support';land['JN_ground_top']=0.0
+    box('东岸码头仓屋_北段石街',(12.40,40.85,.06),(2.20,8.10,.12),stone,c,.012)
+    box('东岸码头仓屋_入仓横径',(13.64,40.70,.06),(1.52,1.40,.12),stone,c,.012)
+
+    # A six-post open-front storehouse adds a stronger roof silhouette while
+    # retaining a real 1.40 m loading axis from street to interior.
+    cx,cy=16.65,40.70
+    box('东岸码头仓屋_台基',(cx,cy,.16),(6.20,5.30,.32),stone,c,.025)
+    box('东岸码头仓屋_西入口踏步',(13.38,cy,.09),(.44,1.54,.18),stone,c,.012)
+    for j,x in enumerate((14.02,16.65,19.28),1):
+        for side,y in enumerate((38.42,42.98),1):
+            box(f'东岸码头仓屋_柱础_{j}_{side}',(x,y,.42),(.34,.34,.20),stone,c,.016)
+            box(f'东岸码头仓屋_木柱_{j}_{side}',(x,y,1.77),(.19,.19,2.50),wood,c,.008)
+    for y in (38.42,42.98):box('东岸码头仓屋_长檩',(cx,y,3.08),(5.48,.19,.20),wood,c,.008)
+    for x in (14.02,16.65,19.28):
+        box('东岸码头仓屋_穿梁',(x,cy,3.07),(.19,4.72,.20),wood,c,.008)
+        box('东岸码头仓屋_脊下短柱',(x,cy,3.56),(.15,.15,.80),wood,c,.006)
+    box('东岸码头仓屋_脊檩',(cx,cy,4.00),(5.52,.19,.22),wood,c,.008)
+    # Low white walls protect stored goods on the east and close only the
+    # rear halves of the side bays. The west loading face stays genuinely open.
+    box('东岸码头仓屋_东后墙',(19.43,cy,1.48),(.20,4.72,2.60),M['plaster'],c,.018)
+    for y in (38.38,43.02):
+        box('东岸码头仓屋_侧粉墙',(18.35,y,1.35),(2.36,.18,2.34),M['plaster'],c,.018)
+        box('东岸码头仓屋_侧墙压顶',(18.35,y,2.56),(2.46,.24,.09),M['tile'],c,.010)
+    wharf_roof=roof('东岸码头仓屋',cx,cy,3.16,6.70,5.70,c)
+    roof_solid=wharf_roof.modifiers.new('码头仓屋真实屋面厚度','SOLIDIFY');roof_solid.thickness=.080;roof_solid.offset=-1
+    for x in (14.02,15.34,16.65,17.96,19.28):
+        for side in (-1,1):
+            pts=[]
+            for t in (0,.2,.4,.6,.8,1):
+                z=3.16+1.15*(1-t)**1.8+.24*(abs(x-cx)/3.35)**8*t**3-.11
+                pts.append((x,cy+side*2.85*t,z))
+            line('东岸码头仓屋_承托椽',pts,.038,wood,c,res=2,bevel_res=1)
+
+    # Shared crates sit against the side walls, clear of the central loading
+    # axis. Timber bands and a wall shelf make the storage use legible.
+    crate=box('东岸码头仓屋_货箱原型',(0,0,.42),(.86,.72,.64),wood,c,.018)
+    crate.hide_render=True;crate.hide_viewport=True
+    for j,(x,y,z,scale) in enumerate(((17.85,39.05,.220,1),(18.72,39.05,.238,.82),(17.95,42.34,.230,.90),(18.78,42.32,.248,.72)),1):
+        o=bpy.data.objects.new(PREFIX+f'东岸码头仓屋_货箱_{j}',crate.data);c.objects.link(o);o.location=(x,y,z);o.scale=(scale,scale,scale)
+        for dy in (-.23,.23):box(f'东岸码头仓屋_货箱箍_{j}',(x,y+dy*scale,z+.42*scale),(.90*scale,.045,.68*scale),M['edge'],c,.006)
+    box('东岸码头仓屋_货架层板',(18.55,cy,1.06),(1.34,2.12,.10),wood,c,.010)
+    for y in (39.82,41.58):
+        for x in (18.05,19.05):box('东岸码头仓屋_货架腿',(x,y,.62),(.09,.09,.84),wood,c)
+    box('东岸码头仓屋_壁灯挑杆',(18.74,cy,2.64),(1.10,.08,.08),wood,c,.006)
+    uv('东岸码头仓屋_工作纱灯',(18.22,cy,2.30),(.15,.15,.24),M['paper'],c,14,8)
+    line('东岸码头仓屋_纱灯悬绳',[(18.22,cy,2.54),(18.22,cy,2.66)],.009,wood,c,res=1,bevel_res=0)
+    light('东岸码头仓屋_工作灯火',(18.22,cy,2.28),(1,.48,.22),82,.28,kind='POINT')
+
+    # A supported working wharf reaches the canal without masking the bridge.
+    box('东岸码头仓屋_装卸木台',(11.16,40.70,.24),(2.18,2.44,.22),wood,c,.010)
+    for x in (10.28,12.04):
+        for y in (39.78,41.62):box('东岸码头仓屋_木台桩',(x,y,-.12),(.20,.20,.94),wood,c,.008)
+    for i,(x,top) in enumerate(((12.34,.18),(12.14,.24)),1):
+        box(f'东岸码头仓屋_装卸踏步_{i}',(x,cy,top/2),(.46,1.48,top),stone,c,.010)
+    for y in (39.96,41.44):
+        box('东岸码头仓屋_系舟桩础',(10.36,y,.20),(.34,.34,.18),stone,c,.012)
+        box('东岸码头仓屋_系舟桩',(10.36,y,.72),(.15,.15,.86),wood,c,.008)
+        line('东岸码头仓屋_系舟桩横销',[(10.15,y,.93),(10.57,y,.93)],.032,wood,c,res=1,bevel_res=1)
+
+    # Open-topped sampan shell: tapered sides, visible bottom boards and three
+    # real transverse seats. It remains north of the bridge approach.
+    bx,by=8.72,40.72
+    sections=[(-2.15,.06,.39),(-1.70,.46,.27),(-.80,.62,.20),(0,.67,.18),(.80,.62,.20),(1.70,.46,.27),(2.15,.06,.39)]
+    vv=[];ff=[]
+    for yy,half,bottom in sections:
+        vv.extend(((bx-half,by+yy,.58),(bx+half,by+yy,.58),(bx-half*.52,by+yy,bottom),(bx+half*.52,by+yy,bottom)))
+    for i in range(len(sections)-1):
+        a=4*i;b=a+4
+        ff.extend(((a,b,b+2,a+2),(a+1,a+3,b+3,b+1),(a+2,b+2,b+3,a+3)))
+    ff.extend(((0,1,3,2),(24,26,27,25)))
+    boat=mesh('东岸码头仓屋_系舟小艇船壳',vv,ff,wood,c)
+    for p in boat.data.polygons:p.use_smooth=len(p.vertices)==4
+    box('东岸码头仓屋_小艇舱底',(bx,by,.34),(.54,3.10,.08),wood,c,.010)
+    for yy in (-.92,0,.92):box('东岸码头仓屋_小艇坐板',(bx,by+yy,.61),(1.03,.22,.08),wood,c,.008)
+    line('东岸码头仓屋_系舟缆绳',[(9.10,41.24,.56),(9.65,41.40,.80),(10.36,41.44,.93)],.018,M['edge'],c,res=3,bevel_res=1)
+    line('东岸码头仓屋_竹篙',[(8.14,38.85,.57),(9.26,42.56,.64)],.025,wood,c,res=2,bevel_res=1)
+
+    # Three restrained reed clumps soften the bank while preserving steps,
+    # loading deck and bridge sight lines.
+    reed_paths=[]
+    for x,y in ((10.12,38.35),(10.06,43.12),(9.98,44.12)):
+        for j in range(7):
+            dx=(j-3)*.035;h=.62+.07*(j%3)
+            reed_paths.append([(x+dx,y+.025*(j%2),.02),(x+dx*.7,y,h)])
+    lines('东岸码头仓屋_岸边芦苇',reed_paths,.010,M['moss'],c,res=1,bevel_res=0)
+    S['JN_town_phase']='phase_3_east_wharf_storehouse'
+    S['JN_east_wharf_clear_axis_m']=1.40
+    S['JN_east_wharf_crate_instances']=4
+    S['JN_east_wharf_new_image_bytes']=0
+
 def batch_static_objects(name,objects,mat,col,bev=0):
     """Combine already-built static meshes after art generation so optimization cannot perturb procedural build order."""
     objects=[o for o in objects if o and o.type=='MESH']
@@ -1211,7 +1308,7 @@ def viewport():
                 a.spaces.active.region_3d.view_camera_zoom=0
     bpy.context.view_layer.update()
 def build(stage=None):
-    start();courtyard();village_phase1_skeleton();town_phase2_market()
+    start();courtyard();village_phase1_skeleton();town_phase2_market();town_phase3_east_wharf()
     level=P['stage'] if stage is None else stage
     if level>=2:vegetation()
     if level>=3:weather()

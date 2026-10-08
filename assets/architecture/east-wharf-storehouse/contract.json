@@ -1,0 +1,36 @@
+{
+  "schema": "yanyu-jiangnan.asset-contract.v1",
+  "asset": "east-wharf-storehouse-and-moored-sampan",
+  "scale": "1 Blender unit = 1 metre",
+  "function": {
+    "status": "candidate",
+    "requirements": [
+      "east-bank land overlaps the existing support and preserves the canal gap",
+      "a 1.40 m loading axis connects the extended water street to the open storehouse",
+      "the wharf is pile-supported and the sampan is tied to a physical mooring post",
+      "cargo remains outside the primary loading route"
+    ]
+  },
+  "form": {
+    "status": "candidate",
+    "requirements": [
+      "six grounded posts carry complete beams, ridge support and a solidified curved tile roof",
+      "the open west loading face remains visually distinct from the rear plaster walls",
+      "storehouse, boat and restrained reeds establish a new northern silhouette without masking the bridge"
+    ]
+  },
+  "runtime": {
+    "status": "not_approved",
+    "known_debt": [
+      "collision not generated",
+      "navigation not generated",
+      "LOD not generated",
+      "UV export audit not generated"
+    ]
+  },
+  "budget": {
+    "new_bitmap_bytes": 0,
+    "paid_service_cost": 0,
+    "reuse": "four cargo crates share one mesh; existing stone, wood, plaster, tile and water materials are reused"
+  }
+}
