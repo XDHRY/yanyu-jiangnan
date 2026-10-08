@@ -73,7 +73,7 @@ function buildPresetMenu(){
     const b=document.createElement('button');
     const title=c.userData?.jn_title || c.name.replace('JN_WEB_CAM_','');
     b.textContent=`${String(i+1).padStart(2,'0')} ${title}`;
-    b.onclick=()=>goPreset(i,true,true); box.appendChild(b);
+    b.onclick=()=>{goPreset(i,true,true);if(window.matchMedia('(max-width:760px)').matches){const p=document.getElementById('scenePanel'),t=document.getElementById('sceneToggle');if(p){p.classList.add('collapsed')}if(t){t.textContent='展开';t.setAttribute('aria-expanded','false')}}}; box.appendChild(b);
   });
 }
 function goPreset(i,animate=true,interruptTour=true){
