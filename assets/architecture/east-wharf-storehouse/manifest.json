@@ -1,0 +1,51 @@
+{
+  "schema": "yanyu-jiangnan.asset-manifest.v1",
+  "asset": "east-wharf-storehouse-and-moored-sampan",
+  "repository": "XDHRY/yanyu-jiangnan",
+  "source_head": "339b83e0db71295c6311a0097ab5185be2ee0841",
+  "merged_main": "e191aeaf273640dba947516f50aa96e7e2ea52ca",
+  "generator": "jiangnan.py:town_phase3_east_wharf",
+  "scale": "1 Blender unit = 1 metre",
+  "bounds_m": {"x": [8.05, 20.4], "y": [36.8, 45.0], "z": [-0.59, 4.55]},
+  "components": {
+    "continuous_land_extensions": 1,
+    "street_and_loading_paths": 2,
+    "storehouse_plinths": 1,
+    "columns_on_shoes": 6,
+    "solidified_curved_roofs": 1,
+    "shared_cargo_crates": 4,
+    "supported_wharf_piles": 4,
+    "mooring_posts": 2,
+    "open_sampans": 1,
+    "boat_seats": 3,
+    "supported_lanterns": 2,
+    "reed_stems": 21
+  },
+  "materials": {
+    "reused": ["stone", "darkstone", "wood", "plaster", "tile", "paper", "bronze", "moss", "water"],
+    "new": [],
+    "new_image_bytes": 0
+  },
+  "mesh_reuse": {
+    "cargo_instances": 4,
+    "cargo_mesh_datablocks": 1,
+    "boat": "single low-poly open shell plus separate floor and seats"
+  },
+  "uv": "no new bitmap UV dependency",
+  "normals": "boat quads smooth; structural boxes keep readable edges; roof uses existing curved tile system",
+  "lod": "not_generated",
+  "collision": "not_generated; authoring support and clearance assertions only",
+  "navigation": "not_generated",
+  "external_assets": [],
+  "paid_service_budget": 0,
+  "evidence": {
+    "ci_run": 37723581799,
+    "smoke_run": 37723581778,
+    "spatial_run": 37723581849,
+    "web_viewer_run": 37723581777,
+    "diagnostic_artifact_id": 11527151928,
+    "editable_model_artifact_id": 11527250282,
+    "web_viewer_artifact_id": 11526937191,
+    "diagnostic_views": ["15_east_wharf_overview.png", "16_wharf_storehouse_detail.png"]
+  }
+}
