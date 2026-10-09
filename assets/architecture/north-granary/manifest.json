@@ -1,0 +1,34 @@
+{
+  "schema": "yanyu-jiangnan.asset-manifest.v1",
+  "asset": "north-granary",
+  "source_commit": "4b9a883d655dbf9e6a930ec5285c2acbc23bdb25",
+  "source": "jiangnan.py:town_phase7_north_granary",
+  "units": "metres",
+  "dimensions": {"parcel": [12.84, 13.00], "granary_platform": [5.55, 6.10], "gate_design_width": 1.90, "gate_evaluated_width": 1.90, "store_door_evaluated_width": 1.54, "raised_floor_bottom": 0.58},
+  "implemented": {
+    "granary_posts_on_shoes": 6,
+    "store_steps": 3,
+    "vent_windows": 4,
+    "linked_grain_sacks": 6,
+    "linked_grain_bins": 3,
+    "scale_support_feet": 2,
+    "solidified_roofs": 2
+  },
+  "materials": ["JN_plaster", "JN_tile", "JN_wood", "JN_stone", "JN_darkstone", "JN_bronze", "JN_paper", "JN_米行旧木板", "JN_米行麻布"],
+  "textures": {"new_bitmap_bytes": 0, "packed_existing_images": 7, "estimated_scene_rgba8_mib": 41.99},
+  "reuse": {"grain_sacks": "shared mesh", "grain_bins": "shared mesh", "paid_assets": 0, "instance_reuse_ratio": 0.5534},
+  "performance": {"objects": 3530, "triangles_with_instances": 149846, "materials_used": 31, "diagnostic_render_seconds": 282.86},
+  "evidence": {
+    "pull_request": 17,
+    "ci_run": 37989050153,
+    "smoke_run": 37989050119,
+    "spatial_run": 37989050129,
+    "web_run": 37989050101,
+    "editable_artifact": 11643968516,
+    "diagnostic_artifact": 11644566901,
+    "web_artifact": 11644851106,
+    "review_views": ["15_north_granary_overview", "16_granary_gate_hall_axis"]
+  },
+  "runtime": {"collision": "pending", "navigation": "pending", "lod": "pending", "uv_normal_export_audit": "pending"},
+  "human_approvals": {"function": "pending", "form": "pending", "runtime": "pending"}
+}
