@@ -473,6 +473,45 @@ assert len([o for o in S.objects if o.name.startswith('JN_西岸酒坊院_北桥
 assert len([o for o in S.objects if o.name.startswith('JN_西岸酒坊院_北桥东阶_')])==3
 report['town_phase6_west_wine_court']={'phase':S['JN_town_phase'],'land_overlap_m':round(min(wine_land[1][1],old_west[1][1])-max(wine_land[0][1],old_west[0][1]),3),'gate_design_width_m':S['JN_west_wine_gate_clear_width_m'],'gate_evaluated_clear_width_m':round(wine_clear,3),'hall_posts_on_shoes':6,'linked_fermentation_vats':4,'liquid_surfaces':4,'bridge_planks':11,'bridge_rail_posts':12,'bridge_risers_per_side':3,'new_image_texture_bytes':S['JN_west_wine_new_image_bytes']}
 print('TOWN_PHASE6_WEST_WINE_COURT',json.dumps(report['town_phase6_west_wine_court'],ensure_ascii=False))
+# North granary: prove that the new parcel extends—not replaces—the wine-yard
+# baseline, and that raised storage, openings, repeated goods and working props
+# obey the same structural and performance contracts as earlier phases.
+granary_land=world_bounds(bpy.data.objects['JN_北端米行粮栈_北段地基'])
+granary_street=world_bounds(bpy.data.objects['JN_北端米行粮栈_北延石街'])
+assert abs(granary_land[1][2])<.002
+land_overlap=min(granary_land[1][1],wine_land[1][1])-max(granary_land[0][1],wine_land[0][1])
+street_overlap=min(granary_street[1][1],wine_street[1][1])-max(granary_street[0][1],wine_street[0][1])
+assert land_overlap>.20,land_overlap
+assert street_overlap>.20,street_overlap
+granary_gate=[bpy.data.objects['JN_北端米行粮栈_东院墙_南段'],bpy.data.objects['JN_北端米行粮栈_东院墙_北段']]
+granary_clear=world_bounds(granary_gate[1])[0][1]-world_bounds(granary_gate[0])[1][1]
+assert granary_clear>=1.85,granary_clear
+assert bpy.data.objects['JN_北端米行粮栈_门楼瓦面'].modifiers.get('米行门楼真实屋面厚度')
+granary_cols=[o for o in S.objects if o.name.startswith('JN_北端米行粮栈_粮仓木柱')]
+granary_shoes=[o for o in S.objects if o.name.startswith('JN_北端米行粮栈_粮仓柱础')]
+assert len(granary_cols)==len(granary_shoes)==6
+for col in granary_cols:
+    candidates=[shoe for shoe in granary_shoes if dist_xy(pos(shoe),pos(col))<.01]
+    assert len(candidates)==1 and abs(world_bounds(col)[0][2]-world_bounds(candidates[0])[1][2])<.002
+assert bpy.data.objects['JN_北端米行粮栈_粮仓黛瓦屋面'].modifiers.get('粮仓真实屋面厚度')
+granary_floor=world_bounds(bpy.data.objects['JN_北端米行粮栈_架空木地坪'])
+assert granary_floor[0][2]>.50 and granary_floor[1][2]<.85
+store_door=[bpy.data.objects['JN_北端米行粮栈_粮仓东板墙_南段'],bpy.data.objects['JN_北端米行粮栈_粮仓东板墙_北段']]
+store_clear=world_bounds(store_door[1])[0][1]-world_bounds(store_door[0])[1][1]
+assert store_clear>=1.40,store_clear
+assert len([o for o in S.objects if o.name.startswith('JN_北端米行粮栈_粮仓上仓踏步_')])==3
+sacks=[o for o in S.objects if o.name.startswith('JN_北端米行粮栈_粮袋_') and not o.name.endswith('原型')]
+bins=[o for o in S.objects if o.name.startswith('JN_北端米行粮栈_粮斗_') and not o.name.endswith('原型')]
+assert len(sacks)==6 and len({o.data.as_pointer() for o in sacks})==1
+assert len(bins)==3 and len({o.data.as_pointer() for o in bins})==1
+assert len([o for o in S.objects if o.name.startswith('JN_北端米行粮栈_粮仓通风窗框_')])==4
+assert len([o for o in S.objects if o.name.startswith('JN_北端米行粮栈_粮仓通风窗内衬_')])==4
+assert len([o for o in S.objects if o.name.startswith('JN_北端米行粮栈_磅秤支脚')])==2
+assert bpy.data.objects.get('JN_北端米行粮栈_磅秤立柱') and bpy.data.objects.get('JN_北端米行粮栈_磅秤横梁')
+assert bpy.data.objects.get('JN_北端米行粮栈_秤盘吊索') and bpy.data.objects.get('JN_北端米行粮栈_铜秤盘')
+assert bpy.data.objects.get('JN_北端米行粮栈_工作灯挑杆') and bpy.data.objects.get('JN_北端米行粮栈_工作纱灯')
+report['town_phase7_north_granary']={'phase':S['JN_town_phase'],'land_overlap_m':round(land_overlap,3),'street_overlap_m':round(street_overlap,3),'gate_design_width_m':S['JN_north_granary_gate_clear_width_m'],'gate_evaluated_clear_width_m':round(granary_clear,3),'store_door_clear_width_m':round(store_clear,3),'raised_floor_bottom_m':round(granary_floor[0][2],3),'hall_posts_on_shoes':6,'linked_grain_sacks':len(sacks),'linked_grain_bins':len(bins),'vent_windows':4,'scale_support_feet':2,'new_image_texture_bytes':S['JN_north_granary_new_image_bytes']}
+print('TOWN_PHASE7_NORTH_GRANARY',json.dumps(report['town_phase7_north_granary'],ensure_ascii=False))
 report['inhabited_houses']={'mesh_triangles_with_instances':house_tris,'triangle_budget':18000,'shells':8,'true_door_openings':8,'true_window_openings':16,'shared_wall_meshes':1,'door_clear_width_min':min(o['JN_door_clear_width'] for o in shells),'interior_depth_min':min(o['JN_interior_depth'] for o in shells),'ray_tests_passed':40,'floor_support_passed':8,'tea_east_risers_m':[.10,.10],'new_image_texture_bytes':0}
 print('INHABITED_HOUSES',json.dumps(report['inhabited_houses'],ensure_ascii=False))
 report['town_phase2']={'phase':S['JN_town_phase'],'grounded_houses':len(plinths),'street_segments':street_segments,'street_batches':len(streets),'tea_pavilion_columns':4,'market_stalls':2,'bridge_risers_per_side':3,'market_ceramics':len(ceramics),'teacups':len(teacups),'canal_preserved':True,'new_image_texture_bytes':0}

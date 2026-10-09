@@ -1,0 +1,9 @@
+{
+  "schema": "game-room.openings.v1",
+  "roomId": "yanyu-north-granary-round11",
+  "openings": [
+    {"id": "granary-yard-east-gate", "type": "door", "wall": "east split courtyard wall", "widthMeters": 1.90, "heightMeters": 2.35, "thresholdMeters": 0.08, "depthMeters": 0.34, "destination": "unloading court and raised granary", "state": "parked-open leaf"},
+    {"id": "granary-store-east-door", "type": "door", "wall": "east split plank wall", "widthMeters": 1.54, "heightMeters": 1.95, "thresholdMeters": 0.10, "depthMeters": 0.30, "destination": "raised dry-grain store", "state": "parked-open leaf"},
+    {"id": "wine-back-lane-link", "type": "passage", "wall": "open south work boundary", "widthMeters": 1.25, "heightMeters": 2.20, "thresholdMeters": 0.0, "depthMeters": 7.40, "destination": "west wine courtyard", "state": "open passage"}
+  ]
+}

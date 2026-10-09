@@ -1556,6 +1556,119 @@ def town_phase6_west_wine_court():
     S['JN_west_wine_bridge_planks']=11
     S['JN_west_wine_new_image_bytes']=0
 
+def town_phase7_north_granary():
+    """Extend the west-bank supply chain with a raised rice granary and unloading court."""
+    c=C['water'];stone=M['stone'];wood=M['wood'];wetstone=M['darkstone']
+    # A deliberate 0.25 m overlap with Phase 6 keeps both the land and water-street
+    # walking surfaces continuous.  The short cross-lane links the wine back yard,
+    # public street and granary gate as one supply route.
+    land=box('北端米行粮栈_北段地基',(-1.98,57.95,-.30),(12.84,13.00,.60),wetstone,c)
+    land['JN_function']='connected_north_granary_land';land['JN_ground_top']=0.0
+    box('北端米行粮栈_北延石街',(3.50,57.95,.06),(1.82,13.00,.12),stone,c,.012)
+    box('北端米行粮栈_酒坊后巷',(-1.10,52.30,.06),(7.40,1.25,.12),stone,c,.012)
+    box('北端米行粮栈_卸货院坪',(-1.95,57.90,.06),(6.00,6.90,.12),stone,c,.012)
+
+    # Street gate: two independent wall runs leave a measured 1.90 m passage.
+    wall_x=1.15;gate_y=57.90
+    for tag,y,length in (('南段',54.30,5.30),('北段',61.55,5.40)):
+        box('北端米行粮栈_东院墙_'+tag,(wall_x,y,1.02),(.24,length,2.04),M['plaster'],c,.018)
+        box('北端米行粮栈_东院墙压顶_'+tag,(wall_x,y,2.10),(.34,length+.08,.09),M['tile'],c,.010)
+    for y in (56.90,58.90):box('北端米行粮栈_门楼木柱',(wall_x,y,1.30),(.20,.20,2.44),wood,c,.008)
+    box('北端米行粮栈_门楼额枋',(wall_x,gate_y,2.48),(.22,2.24,.20),wood,c,.008)
+    box('北端米行粮栈_门槛',(1.21,gate_y,.13),(.34,1.78,.08),wood,c,.006)
+    box('北端米行粮栈_开门扇',(.57,56.97,1.20),(1.20,.075,2.06),wood,c,.010)
+    gv=[(.48,56.53,2.53),(1.82,56.53,2.53),(.48,59.27,2.53),(1.82,59.27,2.53),
+        (1.15,56.53,2.96),(1.15,59.27,2.96)]
+    gate_roof=mesh('北端米行粮栈_门楼瓦面',gv,[(0,2,5,4),(4,5,3,1)],M['tile'],c)
+    mod=gate_roof.modifiers.new('米行门楼真实屋面厚度','SOLIDIFY');mod.thickness=.065;mod.offset=-1
+    box('北端米行粮栈_西界粉墙',(-8.30,58.00,.90),(.20,12.60,1.80),M['plaster'],c,.018)
+    box('北端米行粮栈_西界压顶',(-8.30,58.00,1.84),(.28,12.68,.09),M['tile'],c,.010)
+    box('北端米行粮栈_北界粉墙',(-3.55,64.35,.90),(9.70,.20,1.80),M['plaster'],c,.018)
+    box('北端米行粮栈_北界压顶',(-3.55,64.35,1.84),(9.80,.28,.09),M['tile'],c,.010)
+
+    # Raised damp-proof granary. Six timber posts land exactly on stone shoes;
+    # the floor sits above splash level and the enclosed plank shell has a true
+    # east-facing doorway instead of a decorative door pasted onto a wall.
+    hx,hy=-4.70,58.60
+    box('北端米行粮栈_粮仓台基',(hx,hy,.20),(5.55,6.10,.40),stone,c,.018)
+    box('北端米行粮栈_架空木地坪',(hx,hy,.69),(5.05,5.55,.22),wood,c,.012)
+    for j,x in enumerate((-6.65,-4.70,-2.75),1):
+        for side,y in enumerate((56.25,60.95),1):
+            box(f'北端米行粮栈_粮仓柱础_{j}_{side}',(x,y,.38),(.40,.40,.36),wetstone,c,.015)
+            box(f'北端米行粮栈_粮仓木柱_{j}_{side}',(x,y,1.76),(.20,.20,2.40),wood,c,.008)
+    for y in (56.25,60.95):box('北端米行粮栈_粮仓檐枋',(hx,y,2.96),(4.30,.22,.22),wood,c,.008)
+    for x in (-6.65,-4.70,-2.75):box('北端米行粮栈_粮仓穿枋',(x,hy,2.86),(.20,4.92,.20),wood,c,.008)
+    # Rear and flank plank walls stop above the ventilated floor. East wall is
+    # split around a 1.42 m door opening centered on the court axis.
+    plankmat=material('米行旧木板',(.105,.061,.032),.68,9)
+    box('北端米行粮栈_粮仓西板墙',(-6.91,hy,1.80),(.16,4.66,2.05),plankmat,c,.008)
+    box('北端米行粮栈_粮仓南板墙',(hx,56.18,1.80),(4.38,.16,2.05),plankmat,c,.008)
+    box('北端米行粮栈_粮仓北板墙',(hx,61.02,1.80),(4.38,.16,2.05),plankmat,c,.008)
+    for tag,y,length in (('南段',57.14,1.38),('北段',60.06,1.38)):
+        box('北端米行粮栈_粮仓东板墙_'+tag,(-2.49,y,1.80),(.16,length,2.05),plankmat,c,.008)
+    box('北端米行粮栈_粮仓门楣',(-2.49,hy,2.80),(.18,1.70,.20),wood,c,.008)
+    box('北端米行粮栈_粮仓开门扇',(-2.58,57.82,1.75),(.08,1.34,1.86),wood,c,.010)
+    box('北端米行粮栈_粮仓门槛',(-2.39,hy,.84),(.30,1.32,.10),wood,c,.006)
+    for i,(x,z) in enumerate(((-1.82,.16),(-2.04,.35),(-2.25,.55)),1):
+        box(f'北端米行粮栈_粮仓上仓踏步_{i}',(x,hy,z),(.44,1.62,.20),stone,c,.012)
+    rv=[(-7.18,55.78,3.04),(-2.22,55.78,3.04),(-7.18,61.42,3.04),(-2.22,61.42,3.04),
+        (-4.70,55.78,4.12),(-4.70,61.42,4.12)]
+    hall_roof=mesh('北端米行粮栈_粮仓黛瓦屋面',rv,[(0,2,5,4),(4,5,3,1)],M['tile'],c)
+    mod=hall_roof.modifiers.new('粮仓真实屋面厚度','SOLIDIFY');mod.thickness=.075;mod.offset=-1
+    line('北端米行粮栈_粮仓正脊',[(-4.70,55.64,4.15),(-4.70,61.56,4.15)],.085,M['edge'],c,res=1,bevel_res=1)
+    # Four narrow screened vents keep the raised store believable without large
+    # dark holes. Each has a sill, reveal and recessed backing plane.
+    for i,y in enumerate((56.92,57.72,59.48,60.28),1):
+        box(f'北端米行粮栈_粮仓通风窗框_{i}',(-6.99,y,2.12),(.10,.52,.48),wood,c,.006)
+        box(f'北端米行粮栈_粮仓通风窗内衬_{i}',(-6.94,y,2.12),(.04,.36,.32),wetstone,c)
+
+    # Shared grain sacks and lidded bins establish scale and inventory while
+    # retaining one mesh datablock per repeated asset family.
+    sackmat=material('米行麻布',(.30,.235,.13),.88,14)
+    seg=12;sv=[];sf=[]
+    # Flat base, broad shoulder and pinched tied mouth read as a filled sack
+    # from the gate camera while all six copies still share one mesh datablock.
+    for z,rx,ry in ((0,.28,.22),(.12,.37,.27),(.64,.39,.28),(.84,.29,.22),(.93,.13,.12),(1.05,.20,.08)):
+        sv.extend((rx*cos(2*pi*i/seg),ry*sin(2*pi*i/seg),z) for i in range(seg))
+    sf.append(tuple(range(seg-1,-1,-1)))
+    for row in range(5):
+        for i in range(seg):
+            a=row*seg+i;b=row*seg+(i+1)%seg;sf.append((a,b,b+seg,a+seg))
+    sf.append(tuple(range(5*seg,6*seg)))
+    sack=mesh('北端米行粮栈_粮袋原型',sv,sf,sackmat,c);sack.hide_render=True;sack.hide_viewport=True
+    for i,(x,y,z,rz) in enumerate(((-1.10,56.90,.12,.12),(-.35,57.28,.12,-.18),(-1.05,58.45,.12,.05),(-3.58,57.35,.80,.18),(-4.35,57.30,.80,-.12),(-5.12,57.36,.80,.08)),1):
+        o=bpy.data.objects.new(PREFIX+f'北端米行粮栈_粮袋_{i}',sack.data);c.objects.link(o);o.location=(x,y,z);o.rotation_euler[2]=rz
+    seg=16;bv=[];bf=[]
+    for z,r in ((0,.43),(.74,.46),(.86,.40)):
+        bv.extend((r*cos(2*pi*i/seg),r*sin(2*pi*i/seg),z) for i in range(seg))
+    for row in range(2):
+        for i in range(seg):
+            a=row*seg+i;b=row*seg+(i+1)%seg;bf.append((a,b,b+seg,a+seg))
+    bf.extend((tuple(range(seg-1,-1,-1)),tuple(range(2*seg,3*seg))))
+    grainbin=mesh('北端米行粮栈_粮斗原型',bv,bf,wood,c);grainbin.hide_render=True;grainbin.hide_viewport=True
+    for i,(x,y) in enumerate(((-5.85,59.55),(-4.68,59.55),(-3.51,59.55)),1):
+        o=bpy.data.objects.new(PREFIX+f'北端米行粮栈_粮斗_{i}',grainbin.data);c.objects.link(o);o.location=(x,y,.80)
+
+    # Grounded beam scale: two feet, upright, brace and cross-beam carry a
+    # suspended bronze pan. The rope endpoints visibly meet beam and pan.
+    box('北端米行粮栈_磅秤底座',(-.35,60.45,.20),(1.55,.85,.28),wetstone,c,.018)
+    for y in (60.18,60.72):box('北端米行粮栈_磅秤支脚',(-.78,y,.52),(.18,.18,.78),wood,c,.008)
+    box('北端米行粮栈_磅秤立柱',(-.78,60.45,1.42),(.20,.20,2.25),wood,c,.008)
+    box('北端米行粮栈_磅秤斜撑',(-.52,60.45,.92),(.62,.16,.14),wood,c,.006)
+    box('北端米行粮栈_磅秤横梁',(-.02,60.45,2.47),(1.78,.16,.16),wood,c,.006)
+    line('北端米行粮栈_秤盘吊索',[((.58),60.45,2.39),(.58,60.22,1.72),(.58,60.45,1.42),(.58,60.68,1.72),(.58,60.45,2.39)],.016,M['bronze'],c,res=1,bevel_res=1)
+    uv('北端米行粮栈_铜秤盘',(.58,60.45,1.40),(.46,.46,.08),M['bronze'],c,16,4)
+    line('北端米行粮栈_工作灯挑杆',[(-2.75,58.60,2.76),(-1.95,58.60,2.76),(-1.95,58.60,2.28)],.024,wood,c,res=2,bevel_res=1)
+    uv('北端米行粮栈_工作纱灯',(-1.95,58.60,2.08),(.15,.15,.22),M['paper'],c,12,8)
+    light('北端米行粮栈_工作灯火',(-1.95,58.60,2.05),(1,.48,.20),92,.28,kind='POINT')
+
+    S['JN_town_phase']='phase_7_north_granary'
+    S['JN_north_granary_gate_clear_width_m']=1.90
+    S['JN_north_granary_hall_posts']=6
+    S['JN_north_granary_linked_sacks']=6
+    S['JN_north_granary_linked_bins']=3
+    S['JN_north_granary_new_image_bytes']=0
+
 def batch_static_objects(name,objects,mat,col,bev=0):
     """Combine already-built static meshes after art generation so optimization cannot perturb procedural build order."""
     objects=[o for o in objects if o and o.type=='MESH']
@@ -1631,7 +1744,7 @@ def viewport():
                 a.spaces.active.region_3d.view_camera_zoom=0
     bpy.context.view_layer.update()
 def build(stage=None):
-    start();courtyard();village_phase1_skeleton();town_phase2_market();town_phase3_east_wharf();town_phase4_east_residence();town_phase5_cloth_finish_yard();town_phase6_west_wine_court()
+    start();courtyard();village_phase1_skeleton();town_phase2_market();town_phase3_east_wharf();town_phase4_east_residence();town_phase5_cloth_finish_yard();town_phase6_west_wine_court();town_phase7_north_granary()
     level=P['stage'] if stage is None else stage
     if level>=2:vegetation()
     if level>=3:weather()

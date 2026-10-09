@@ -1,0 +1,10 @@
+{
+  "schema": "game-room.props.v1",
+  "roomId": "yanyu-north-granary-round11",
+  "assets": [
+    {"id": "linked-grain-sack", "function": "grain unloading and storage", "dimensionsMeters": [0.72, 0.50, 1.10], "attachmentFace": "bottom", "semanticFront": "east", "reuseClass": "linked-repeat", "polygonTarget": 168, "source": "procedural mesh", "rejectionCriteria": ["floating above court or floor", "blocks primary gate axis", "all copies share identical rotation"]},
+    {"id": "linked-grain-bin", "function": "lidded dry grain storage", "dimensionsMeters": [0.92, 0.92, 0.86], "attachmentFace": "bottom", "semanticFront": "east", "reuseClass": "linked-repeat", "polygonTarget": 112, "source": "procedural timber geometry", "rejectionCriteria": ["open top without lid", "blocks store doorway", "intersects plank wall"]},
+    {"id": "beam-scale", "function": "weigh incoming grain", "dimensionsMeters": [2.10, 1.00, 2.55], "attachmentFace": "base and feet", "semanticFront": "east", "reuseClass": "unique-functional", "polygonTarget": 260, "source": "procedural timber, rope and bronze geometry", "rejectionCriteria": ["unsupported beam", "floating feet", "rope misses beam or pan", "blocks primary arrival"]}
+  ],
+  "paidGeneration": {"provider": null, "creditsAuthorized": 0, "creditsConsumed": 0}
+}
