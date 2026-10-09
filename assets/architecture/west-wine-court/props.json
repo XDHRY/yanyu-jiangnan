@@ -1,0 +1,10 @@
+{
+  "schema": "game-room.props.v1",
+  "roomId": "yanyu-west-wine-court-round10",
+  "assets": [
+    {"id": "linked-fermentation-vat", "function": "grain fermentation", "dimensionsMeters": [1.16, 1.16, 0.86], "attachmentFace": "bottom", "semanticFront": "east", "reuseClass": "linked-repeat", "polygonTarget": 160, "source": "procedural mesh", "rejectionCriteria": ["sealed top", "missing liquid surface", "blocks gate axis"]},
+    {"id": "steaming-stove", "function": "wine steaming", "dimensionsMeters": [1.55, 1.35, 1.80], "attachmentFace": "bottom", "semanticFront": "south", "reuseClass": "unique-functional", "polygonTarget": 320, "source": "procedural stone and copper geometry", "rejectionCriteria": ["floating pot", "missing stove mouth", "missing condenser pipe"]},
+    {"id": "mixing-table", "function": "starter culture mixing", "dimensionsMeters": [2.65, 0.88, 1.03], "attachmentFace": "feet", "semanticFront": "east", "reuseClass": "unique-functional", "polygonTarget": 96, "source": "procedural timber geometry", "rejectionCriteria": ["unsupported top", "blocks bridge approach"]}
+  ],
+  "paidGeneration": {"provider": null, "creditsAuthorized": 0, "creditsConsumed": 0}
+}

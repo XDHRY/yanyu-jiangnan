@@ -1,0 +1,8 @@
+{
+  "schema": "game-room.openings.v1",
+  "roomId": "yanyu-west-wine-court-round10",
+  "openings": [
+    {"id": "wine-yard-east-gate", "type": "door", "wall": "east split courtyard wall", "widthMeters": 1.70, "heightMeters": 2.35, "thresholdMeters": 0.08, "depthMeters": 0.34, "destination": "stone court and open wine hall", "state": "parked-open leaf"},
+    {"id": "wine-yard-north-loop", "type": "passage", "wall": "open northeast court edge", "widthMeters": 1.82, "heightMeters": 2.20, "thresholdMeters": 0.0, "depthMeters": 3.30, "destination": "north bridge and east weaving district", "state": "open passage"}
+  ]
+}

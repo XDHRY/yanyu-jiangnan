@@ -1,0 +1,16 @@
+{
+  "schema": "game-room.room-layout.v1",
+  "roomId": "yanyu-west-wine-court-round10",
+  "units": "metres",
+  "shell": {"bounds": [19.24, 15.00, 4.20], "groundTop": 0.0, "wallThickness": 0.20},
+  "circulation": [
+    {"id": "primary-gate-axis", "from": [4.41, 44.20, 0.06], "to": [-1.88, 44.20, 0.14], "minimumWidth": 1.20},
+    {"id": "north-bridge-loop", "from": [1.15, 49.20, 0.06], "to": [10.84, 49.20, 0.10], "minimumWidth": 1.48}
+  ],
+  "placements": [
+    {"id": "wine-hall", "location": [-4.55, 44.20, 0.0], "role": "hero"},
+    {"id": "fermentation-cluster", "location": [-5.14, 44.16, 0.28], "role": "fermentation"},
+    {"id": "steaming-stove", "location": [-2.75, 47.95, 0.0], "role": "hot-work"},
+    {"id": "north-bridge", "location": [7.20, 49.20, 0.0], "role": "cross-canal-loop"}
+  ]
+}

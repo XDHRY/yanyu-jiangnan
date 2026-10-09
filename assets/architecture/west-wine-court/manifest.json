@@ -1,0 +1,37 @@
+{
+  "schema": "yanyu-jiangnan.asset-manifest.v1",
+  "asset": "west-wine-court",
+  "source_commit": "be32f59a6df3251966d63dd8e3fa1ff3ef7bc1e4",
+  "source": "jiangnan.py:town_phase6_west_wine_court",
+  "units": "metres",
+  "dimensions": {"parcel": [12.84, 15.00], "hall_platform": [5.35, 5.10], "gate_design_width": 1.70, "gate_evaluated_width": 1.80, "bridge_deck": [5.70, 1.48]},
+  "implemented": {
+    "hall_posts_on_shoes": 6,
+    "linked_fermentation_vats": 4,
+    "liquid_surfaces": 4,
+    "steaming_stove": 1,
+    "copper_pot_and_pipe": 1,
+    "supported_mixing_table": 1,
+    "bridge_planks": 11,
+    "bridge_rail_posts": 12,
+    "bridge_risers_per_side": 3,
+    "solidified_roofs": 2
+  },
+  "materials": ["JN_plaster", "JN_tile", "JN_wood", "JN_stone", "JN_darkstone", "JN_water", "JN_bronze", "JN_paper", "JN_酒坊粗陶"],
+  "textures": {"new_bitmap_bytes": 0, "packed_existing_images": 7, "estimated_scene_rgba8_mib": 41.99},
+  "reuse": {"fermentation_vats": "shared mesh", "bridge_planks": "shared mesh", "paid_assets": 0, "instance_reuse_ratio": 0.5681},
+  "performance": {"objects": 3450, "triangles_with_instances": 147520, "materials_used": 29, "diagnostic_render_seconds": 285.43},
+  "evidence": {
+    "pull_request": 16,
+    "ci_run": 37946569263,
+    "smoke_run": 37946569261,
+    "spatial_run": 37946569262,
+    "web_run": 37946569296,
+    "editable_artifact": 11623747203,
+    "diagnostic_artifact": 11624666966,
+    "web_artifact": 11623573147,
+    "review_views": ["15_west_wine_court_overview", "16_wine_gate_hall_axis"]
+  },
+  "runtime": {"collision": "pending", "navigation": "pending", "lod": "pending", "uv_normal_export_audit": "pending"},
+  "human_approvals": {"function": "pending", "form": "pending", "runtime": "pending"}
+}
