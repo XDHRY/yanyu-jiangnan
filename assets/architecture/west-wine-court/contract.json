@@ -1,0 +1,24 @@
+{
+  "schema": "yanyu-jiangnan.asset-contract.v1",
+  "asset": "west-wine-court",
+  "purpose": "A connected west-bank wine workshop courtyard and third bridge that rebalance the northern settlement and close a cross-canal production loop.",
+  "source": "jiangnan.py:town_phase6_west_wine_court",
+  "units": "metres",
+  "bounds_m": {"x": [-8.40, 10.84], "y": [36.70, 51.70], "z": [-0.60, 4.20]},
+  "hero": "six-column open wine hall seen through the east gate",
+  "circulation": {
+    "primary": "west water street -> 1.70 m east gate -> stone court -> open wine hall",
+    "loop": "tea market -> wine yard -> north bridge -> east weaving district",
+    "minimum_clearance_m": 1.20
+  },
+  "structure": [
+    "overlapped land support and continuous west water street",
+    "thick split east wall with real gate and solid roof",
+    "six hall columns on stone shoes with complete beam ring",
+    "solidified gabled hall roof with continuous ridge",
+    "eleven-plank bridge with twelve rail posts and three risers per bank"
+  ],
+  "production_cameras": ["15_west_wine_court_overview", "16_wine_gate_hall_axis"],
+  "performance": {"new_image_bytes": 0, "paid_service_credits": 0, "linked_fermentation_vats": 4},
+  "runtime": {"collision": "not_generated", "navigation": "not_generated", "lod": "not_generated", "uv_export_audit": "pending"}
+}

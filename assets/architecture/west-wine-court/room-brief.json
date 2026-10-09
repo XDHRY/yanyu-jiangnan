@@ -1,0 +1,16 @@
+{
+  "schema": "game-room.room-brief.v1",
+  "roomId": "yanyu-west-wine-court-round10",
+  "family": "custom",
+  "purpose": "Outdoor fermentation and steaming courtyard connected to the west water street and north cross-canal loop.",
+  "runtimeSurface": "Blender 4.5 editable scene and browser GLB review",
+  "boundsMeters": [19.24, 15.00, 4.20],
+  "hero": {"id": "west-wine-hall", "role": "open supported production anchor", "reservedBoundsMeters": [5.35, 5.10, 4.20]},
+  "symmetry": {"mode": "bilateral", "order": 2, "appliesTo": ["gate-axis", "wine-hall-bays", "bridge-rails"], "exceptions": ["stove occupies the north hot-work edge", "mixing table offsets the fermentation cluster"]},
+  "circulation": {"description": "water street to gate and hall; courtyard to north bridge and east weaving district", "minimumClearanceMeters": 1.20},
+  "productionCamera": {"viewport": [1024, 640], "location": [4.5, 43.35, 2.15], "target": [-4.35, 44.35, 1.48], "lensMillimeters": 38},
+  "performanceBudget": {"maxSceneTriangles": 175000, "maxNewImageBytes": 0, "maxTextureBytes": 50331648},
+  "creditBudget": {"maximumCredits": 0, "approvalRequired": true},
+  "environment": {"type": "project-night-sky", "identity": "yanyu-jiangnan-night-v1", "source": "repository procedural atmosphere", "assignmentKey": "烟雨江南 · 雪月江南"},
+  "artifacts": {"floorPlan": "diagnostic view 11", "reflectedCeilingPlan": "not_applicable_outdoor", "planMetadata": "diagnostic manifest", "wallElevations": ["diagnostic view 16"], "visualTarget": "docs/town-art-contract.md", "openingContactSheet": "diagnostic views 15-16"}
+}

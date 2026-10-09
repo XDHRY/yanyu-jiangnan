@@ -1463,6 +1463,99 @@ def town_phase5_cloth_finish_yard():
     S['JN_east_cloth_work_lanterns']=2
     S['JN_east_cloth_new_image_bytes']=0
 
+def town_phase6_west_wine_court():
+    """Rebalance the town with a connected west-bank wine yard and a third bridge."""
+    c=C['water'];stone=M['stone'];wood=M['wood'];wetstone=M['darkstone']
+    # Overlap the north tea-market land and continue the west water street so
+    # the new parcel is physically part of the settlement rather than a set.
+    land=box('西岸酒坊院_北段地基',(-1.98,44.20,-.30),(12.84,15.00,.60),wetstone,c)
+    land['JN_function']='connected_west_wine_court_land';land['JN_ground_top']=0.0
+    box('西岸酒坊院_北延石街',(3.50,44.20,.06),(1.82,15.00,.12),stone,c,.012)
+    box('西岸酒坊院_门前横径',(2.10,44.20,.06),(3.30,1.34,.12),stone,c,.012)
+    box('西岸酒坊院_院坪',(-2.75,44.20,.06),(7.30,8.70,.12),stone,c,.012)
+
+    # East-facing split wall and a real 1.70 m opening. A parked leaf and
+    # threshold make the doorway legible without obstructing the arrival axis.
+    wall_x=1.15;gate_y=44.20
+    for tag,y,length in (('南段',39.90,6.80),('北段',48.50,6.80)):
+        box('西岸酒坊院_东院墙_'+tag,(wall_x,y,1.02),(.24,length,2.04),M['plaster'],c,.018)
+        box('西岸酒坊院_东院墙压顶_'+tag,(wall_x,y,2.10),(.34,length+.08,.09),M['tile'],c,.010)
+    for y in (43.25,45.15):box('西岸酒坊院_门楼木柱',(wall_x,y,1.30),(.20,.20,2.44),wood,c,.008)
+    box('西岸酒坊院_门楼额枋',(wall_x,gate_y,2.48),(.22,2.14,.20),wood,c,.008)
+    box('西岸酒坊院_门槛',(1.21,gate_y,.13),(.34,1.60,.08),wood,c,.006)
+    box('西岸酒坊院_开门扇',(.57,43.31,1.20),(1.20,.075,2.06),wood,c,.010)
+    gv=[(.48,42.92,2.53),(1.82,42.92,2.53),(.48,45.48,2.53),(1.82,45.48,2.53),
+        (1.15,42.92,2.94),(1.15,45.48,2.94)]
+    gate_roof=mesh('西岸酒坊院_门楼瓦面',gv,[(0,2,5,4),(4,5,3,1)],M['tile'],c)
+    mod=gate_roof.modifiers.new('酒坊院门楼真实屋面厚度','SOLIDIFY');mod.thickness=.065;mod.offset=-1
+    box('西岸酒坊院_西界粉墙',(-8.30,44.20,.90),(.20,14.70,1.80),M['plaster'],c,.018)
+    box('西岸酒坊院_西界压顶',(-8.30,44.20,1.84),(.28,14.78,.09),M['tile'],c,.010)
+    box('西岸酒坊院_北界粉墙',(-3.55,51.55,.90),(9.70,.20,1.80),M['plaster'],c,.018)
+    box('西岸酒坊院_北界压顶',(-3.55,51.55,1.84),(9.80,.28,.09),M['tile'],c,.010)
+
+    # Six-column open fermentation hall. Every timber column lands on a stone
+    # shoe and the complete beam ring supports a solidified gabled roof.
+    hx,hy=-4.55,44.20
+    box('西岸酒坊院_酿酒厅台基',(hx,hy,.14),(5.35,5.10,.28),stone,c,.018)
+    for j,x in enumerate((-6.45,-4.55,-2.65),1):
+        for side,y in enumerate((42.25,46.15),1):
+            box(f'西岸酒坊院_酿酒厅柱础_{j}_{side}',(x,y,.38),(.38,.38,.20),wetstone,c,.015)
+            box(f'西岸酒坊院_酿酒厅木柱_{j}_{side}',(x,y,1.72),(.18,.18,2.48),wood,c,.008)
+    for y in (42.25,46.15):box('西岸酒坊院_酿酒厅檐枋',(hx,y,2.94),(4.36,.20,.20),wood,c,.008)
+    for x in (-6.45,-4.55,-2.65):box('西岸酒坊院_酿酒厅穿枋',(x,hy,2.84),(.18,4.12,.18),wood,c,.008)
+    rv=[(-6.95,41.82,3.02),(-2.15,41.82,3.02),(-6.95,46.58,3.02),(-2.15,46.58,3.02),
+        (-4.55,41.82,4.02),(-4.55,46.58,4.02)]
+    hall_roof=mesh('西岸酒坊院_酿酒厅黛瓦屋面',rv,[(0,2,5,4),(4,5,3,1)],M['tile'],c)
+    mod=hall_roof.modifiers.new('酿酒厅真实屋面厚度','SOLIDIFY');mod.thickness=.075;mod.offset=-1
+    line('西岸酒坊院_酿酒厅正脊',[(-4.55,41.68,4.05),(-4.55,46.72,4.05)],.085,M['edge'],c,res=1,bevel_res=1)
+
+    # Four linked open fermentation vats carry real liquid surfaces. Their
+    # low-poly walls are shared, keeping the production cluster inexpensive.
+    vatmat=material('酒坊粗陶',(.18,.105,.055),.64,12)
+    seg=16;vv=[];vf=[]
+    for r,z in ((.48,0),(.54,.12),(.58,.76),(.54,.86),(.46,.86)):
+        vv.extend((r*cos(2*pi*i/seg),r*sin(2*pi*i/seg),z) for i in range(seg))
+    for row in range(4):
+        for i in range(seg):
+            a=row*seg+i;b=row*seg+(i+1)%seg;vf.append((a,b,b+seg,a+seg))
+    vat=mesh('西岸酒坊院_发酵酒缸原型',vv,vf,vatmat,c);vat.hide_render=True;vat.hide_viewport=True
+    for j,(x,y) in enumerate(((-5.82,43.20),(-4.45,43.20),(-5.82,45.12),(-4.45,45.12)),1):
+        o=bpy.data.objects.new(PREFIX+f'西岸酒坊院_发酵酒缸_{j}',vat.data);c.objects.link(o);o.location=(x,y,.28)
+        uv(f'西岸酒坊院_酒醅液面_{j}',(x,y,1.115),(.43,.43,.025),M['water'],c,16,3)
+
+    # A masonry stove and copper steaming pot form the hot-work corner. The
+    # supported mixing table and hanging lantern complete the readable craft.
+    box('西岸酒坊院_蒸酒灶台',(-2.75,47.95,.48),(1.55,1.35,.96),wetstone,c,.035)
+    box('西岸酒坊院_蒸酒灶口',(-2.75,47.24,.47),(.62,.08,.56),M['darkstone'],c,.010)
+    uv('西岸酒坊院_蒸酒铜锅',(-2.75,47.95,1.08),(.64,.64,.38),M['bronze'],c,18,8)
+    line('西岸酒坊院_蒸酒弯管',[(-2.75,47.95,1.42),(-2.75,48.48,1.72),(-1.90,48.48,1.42)],.045,M['bronze'],c,res=3,bevel_res=2)
+    box('西岸酒坊院_拌曲案面',(-5.65,48.55,.96),(2.65,.88,.14),wood,c,.018)
+    for x in (-6.62,-4.68):
+        for y in (48.27,48.83):box('西岸酒坊院_拌曲案腿',(x,y,.52),(.14,.14,.82),wood,c,.008)
+    line('西岸酒坊院_工作灯挑杆',[(-2.65,46.15,2.72),(-2.05,46.15,2.72),(-2.05,46.15,2.33)],.022,wood,c,res=2,bevel_res=1)
+    uv('西岸酒坊院_工作纱灯',(-2.05,46.15,2.13),(.14,.14,.21),M['paper'],c,12,8)
+    light('西岸酒坊院_工作灯火',(-2.05,46.15,2.10),(1,.48,.20),72,.24,kind='POINT')
+
+    # Third bridge closes the north production loop. Eleven shared deck planks,
+    # rails and three risers per side land on the continuous bank parcels.
+    plank=box('西岸酒坊院_北桥板原型',(0,0,0),(1,1,.14),wood,c,.014);plank.hide_render=True;plank.hide_viewport=True
+    for i in range(11):
+        x=4.60+i*.52
+        o=bpy.data.objects.new(PREFIX+f'西岸酒坊院_北桥板_{i+1:02d}',plank.data);c.objects.link(o);o.location=(x,49.20,.70);o.scale=(.50,1.48,1)
+    for side,y in enumerate((48.43,49.97),1):
+        for i,x in enumerate((4.68,5.72,6.76,7.80,8.84,9.78),1):
+            box(f'西岸酒坊院_北桥栏柱_{side}_{i}',(x,y,1.29),(.12,.12,1.04),wood,c,.006)
+        for z in (1.18,1.65):box('西岸酒坊院_北桥栏杆',(7.23,y,z),(5.22,.10,.10),wood,c,.005)
+    for side,centers in (('西',(3.70,4.02,4.34)),('东',(10.68,10.36,10.04))):
+        for i,x in enumerate(centers,1):box(f'西岸酒坊院_北桥{side}阶_{i}',(x,49.20,.10+.20*(i-1 if side=='西' else 3-i)),(.32,1.62,.20),stone,c,.012)
+
+    S['JN_town_phase']='phase_6_west_wine_court'
+    S['JN_west_wine_gate_clear_width_m']=1.70
+    S['JN_west_wine_hall_posts']=6
+    S['JN_west_wine_linked_vats']=4
+    S['JN_west_wine_bridge_planks']=11
+    S['JN_west_wine_new_image_bytes']=0
+
 def batch_static_objects(name,objects,mat,col,bev=0):
     """Combine already-built static meshes after art generation so optimization cannot perturb procedural build order."""
     objects=[o for o in objects if o and o.type=='MESH']
@@ -1538,7 +1631,7 @@ def viewport():
                 a.spaces.active.region_3d.view_camera_zoom=0
     bpy.context.view_layer.update()
 def build(stage=None):
-    start();courtyard();village_phase1_skeleton();town_phase2_market();town_phase3_east_wharf();town_phase4_east_residence();town_phase5_cloth_finish_yard()
+    start();courtyard();village_phase1_skeleton();town_phase2_market();town_phase3_east_wharf();town_phase4_east_residence();town_phase5_cloth_finish_yard();town_phase6_west_wine_court()
     level=P['stage'] if stage is None else stage
     if level>=2:vegetation()
     if level>=3:weather()

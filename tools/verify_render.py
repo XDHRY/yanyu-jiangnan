@@ -439,6 +439,40 @@ assert bpy.data.objects.get('JN_东岸晒布后园_整布厅工作纱灯')
 assert bpy.data.objects.get('JN_东岸晒布后园_整布厅工作灯火')
 report['town_phase5_east_cloth_finish']={'phase':S['JN_town_phase'],'land_overlap_m':round(min(finish_land[1][1],res_land[1][1])-max(finish_land[0][1],res_land[0][1]),3),'street_overlap_m':round(min(finish_street[1][1],res_street[1][1])-max(finish_street[0][1],res_street[0][1]),3),'gate_design_width_m':S['JN_east_cloth_gate_clear_width_m'],'gate_evaluated_clear_width_m':round(finish_clear,3),'finishing_hall_posts_on_shoes':6,'drying_frame_posts_on_shoes':6,'linked_cloth_sheets':len(sheets),'rinsing_trough_stone_parts':5,'rinsing_water_surfaces':1,'drain_channels':2,'work_lanterns':S['JN_east_cloth_work_lanterns'],'solidified_roofs':2,'new_image_texture_bytes':S['JN_east_cloth_new_image_bytes']}
 print('TOWN_PHASE5_EAST_CLOTH_FINISH',json.dumps(report['town_phase5_east_cloth_finish'],ensure_ascii=False))
+# West wine courtyard and third bridge: verify connected support, real gate,
+# grounded timber structure, shared vats, hot-work equipment and bridge landing.
+wine_land=world_bounds(bpy.data.objects['JN_西岸酒坊院_北段地基'])
+old_west=world_bounds(bpy.data.objects['JN_小镇地基_西岸'])
+wine_street=world_bounds(bpy.data.objects['JN_西岸酒坊院_北延石街'])
+old_west_street=[world_bounds(o) for o in S.objects if o.name.startswith('JN_小镇石街_西水街')]
+assert abs(wine_land[1][2])<.002
+assert min(wine_land[1][1],old_west[1][1])-max(wine_land[0][1],old_west[0][1])>.15
+assert max(min(wine_street[1][1],b[1][1])-max(wine_street[0][1],b[0][1]) for b in old_west_street)>.10
+wine_gate=[bpy.data.objects['JN_西岸酒坊院_东院墙_南段'],bpy.data.objects['JN_西岸酒坊院_东院墙_北段']]
+wine_clear=world_bounds(wine_gate[1])[0][1]-world_bounds(wine_gate[0])[1][1]
+assert wine_clear>=1.65,wine_clear
+assert bpy.data.objects['JN_西岸酒坊院_门楼瓦面'].modifiers.get('酒坊院门楼真实屋面厚度')
+wine_cols=[o for o in S.objects if o.name.startswith('JN_西岸酒坊院_酿酒厅木柱')]
+wine_shoes=[o for o in S.objects if o.name.startswith('JN_西岸酒坊院_酿酒厅柱础')]
+assert len(wine_cols)==len(wine_shoes)==6
+for col in wine_cols:
+    candidates=[shoe for shoe in wine_shoes if dist_xy(pos(shoe),pos(col))<.01]
+    assert len(candidates)==1 and abs(world_bounds(col)[0][2]-world_bounds(candidates[0])[1][2])<.002
+assert bpy.data.objects['JN_西岸酒坊院_酿酒厅黛瓦屋面'].modifiers.get('酿酒厅真实屋面厚度')
+vats=[o for o in S.objects if o.name.startswith('JN_西岸酒坊院_发酵酒缸_') and not o.name.endswith('原型')]
+liquids=[o for o in S.objects if o.name.startswith('JN_西岸酒坊院_酒醅液面_')]
+assert len(vats)==len(liquids)==4 and len({o.data.as_pointer() for o in vats})==1
+assert bpy.data.objects.get('JN_西岸酒坊院_蒸酒灶台') and bpy.data.objects.get('JN_西岸酒坊院_蒸酒铜锅')
+assert len([o for o in S.objects if o.name.startswith('JN_西岸酒坊院_拌曲案腿')])==4
+assert bpy.data.objects.get('JN_西岸酒坊院_工作灯挑杆') and bpy.data.objects.get('JN_西岸酒坊院_工作纱灯')
+bridge_planks=[o for o in S.objects if o.name.startswith('JN_西岸酒坊院_北桥板_') and not o.name.endswith('原型')]
+bridge_posts=[o for o in S.objects if o.name.startswith('JN_西岸酒坊院_北桥栏柱_')]
+assert len(bridge_planks)==11 and len({o.data.as_pointer() for o in bridge_planks})==1
+assert len(bridge_posts)==12 and len([o for o in S.objects if o.name.startswith('JN_西岸酒坊院_北桥栏杆')])==4
+assert len([o for o in S.objects if o.name.startswith('JN_西岸酒坊院_北桥西阶_')])==3
+assert len([o for o in S.objects if o.name.startswith('JN_西岸酒坊院_北桥东阶_')])==3
+report['town_phase6_west_wine_court']={'phase':S['JN_town_phase'],'land_overlap_m':round(min(wine_land[1][1],old_west[1][1])-max(wine_land[0][1],old_west[0][1]),3),'gate_design_width_m':S['JN_west_wine_gate_clear_width_m'],'gate_evaluated_clear_width_m':round(wine_clear,3),'hall_posts_on_shoes':6,'linked_fermentation_vats':4,'liquid_surfaces':4,'bridge_planks':11,'bridge_rail_posts':12,'bridge_risers_per_side':3,'new_image_texture_bytes':S['JN_west_wine_new_image_bytes']}
+print('TOWN_PHASE6_WEST_WINE_COURT',json.dumps(report['town_phase6_west_wine_court'],ensure_ascii=False))
 report['inhabited_houses']={'mesh_triangles_with_instances':house_tris,'triangle_budget':18000,'shells':8,'true_door_openings':8,'true_window_openings':16,'shared_wall_meshes':1,'door_clear_width_min':min(o['JN_door_clear_width'] for o in shells),'interior_depth_min':min(o['JN_interior_depth'] for o in shells),'ray_tests_passed':40,'floor_support_passed':8,'tea_east_risers_m':[.10,.10],'new_image_texture_bytes':0}
 print('INHABITED_HOUSES',json.dumps(report['inhabited_houses'],ensure_ascii=False))
 report['town_phase2']={'phase':S['JN_town_phase'],'grounded_houses':len(plinths),'street_segments':street_segments,'street_batches':len(streets),'tea_pavilion_columns':4,'market_stalls':2,'bridge_risers_per_side':3,'market_ceramics':len(ceramics),'teacups':len(teacups),'canal_preserved':True,'new_image_texture_bytes':0}
