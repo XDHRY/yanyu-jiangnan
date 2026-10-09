@@ -1425,6 +1425,11 @@ def town_phase5_cloth_finish_yard():
     line('东岸晒布后园_整布厅正脊',[(18.25,55.38,4.10),(18.25,59.42,4.10)],.085,M['edge'],c,res=1,bevel_res=1)
     box('东岸晒布后园_整布长案',(18.25,57.40,1.02),(2.80,.82,.15),wood,c,.025)
     for x in (17.12,19.38):box('东岸晒布后园_整布案腿',(x,57.40,.58),(.16,.66,.82),wood,c,.012)
+    # A physically hung work lantern lifts the central bay without flattening
+    # the surrounding moonlit walls and makes the pale cloth read as cloth.
+    line('东岸晒布后园_整布厅吊灯杆',[(18.25,56.55,2.82),(18.25,56.55,2.38)],.018,wood,c,res=2,bevel_res=1)
+    uv('东岸晒布后园_整布厅工作纱灯',(18.25,56.55,2.19),(.15,.15,.21),M['paper'],c,12,8)
+    light('东岸晒布后园_整布厅工作灯火',(18.25,56.55,2.16),(1,.50,.24),92,.28,kind='POINT')
 
     # Six linked cloth sheets hang from three supported drying frames.  The
     # shallow center fold gives readable depth while keeping topology tiny.
@@ -1455,6 +1460,7 @@ def town_phase5_cloth_finish_yard():
     S['JN_east_cloth_gate_clear_width_m']=1.64
     S['JN_east_cloth_hall_posts']=6
     S['JN_east_cloth_linked_sheets']=8
+    S['JN_east_cloth_work_lanterns']=2
     S['JN_east_cloth_new_image_bytes']=0
 
 def batch_static_objects(name,objects,mat,col,bev=0):
