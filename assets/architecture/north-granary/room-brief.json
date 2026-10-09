@@ -1,0 +1,16 @@
+{
+  "schema": "game-room.room-brief.v1",
+  "roomId": "yanyu-north-granary-round11",
+  "family": "custom",
+  "purpose": "Raised dry grain storage and unloading court connected to the west water street and wine-yard back lane.",
+  "runtimeSurface": "Blender 4.5 editable scene and browser GLB review",
+  "boundsMeters": [12.81, 13.00, 4.30],
+  "hero": {"id": "north-raised-granary", "role": "enclosed supported production anchor", "reservedBoundsMeters": [5.55, 6.10, 4.30]},
+  "symmetry": {"mode": "bilateral", "order": 2, "appliesTo": ["gate-axis", "granary-bays", "roof"], "exceptions": ["unloading scale occupies the north court edge", "grain sacks show asymmetric work-in-progress"]},
+  "circulation": {"description": "water street to gate and unloading court; wine back lane to scale and raised dry store", "minimumClearanceMeters": 1.20},
+  "productionCamera": {"viewport": [1024, 640], "location": [4.45, 57.05, 2.12], "target": [-4.35, 58.55, 1.55], "lensMillimeters": 38},
+  "performanceBudget": {"maxSceneTriangles": 190000, "maxNewImageBytes": 0, "maxTextureBytes": 50331648},
+  "creditBudget": {"maximumCredits": 0, "approvalRequired": true},
+  "environment": {"type": "project-night-sky", "identity": "yanyu-jiangnan-night-v1", "source": "repository procedural atmosphere", "assignmentKey": "烟雨江南 · 雪月江南"},
+  "artifacts": {"floorPlan": "diagnostic view 11", "reflectedCeilingPlan": "not_applicable_outdoor", "planMetadata": "diagnostic manifest", "wallElevations": ["diagnostic view 16"], "visualTarget": "docs/town-art-contract.md", "openingContactSheet": "diagnostic views 15-16"}
+}

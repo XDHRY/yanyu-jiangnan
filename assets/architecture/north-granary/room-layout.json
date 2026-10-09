@@ -1,0 +1,17 @@
+{
+  "schema": "game-room.room-layout.v1",
+  "roomId": "yanyu-north-granary-round11",
+  "units": "metres",
+  "shell": {"bounds": [12.81, 13.00, 4.30], "groundTop": 0.0, "wallThickness": 0.20},
+  "circulation": [
+    {"id": "primary-gate-axis", "from": [4.41, 57.90, 0.06], "to": [-1.38, 57.90, 0.06], "minimumWidth": 1.20},
+    {"id": "raised-store-axis", "from": [-1.38, 58.60, 0.06], "to": [-4.70, 58.60, 0.80], "minimumWidth": 1.20},
+    {"id": "wine-back-lane", "from": [-4.80, 52.30, 0.06], "to": [2.60, 52.30, 0.06], "minimumWidth": 1.20}
+  ],
+  "placements": [
+    {"id": "raised-granary", "location": [-4.70, 58.60, 0.0], "role": "hero"},
+    {"id": "unloading-sacks", "location": [-0.83, 57.54, 0.0], "role": "unloading"},
+    {"id": "beam-scale", "location": [-0.35, 60.45, 0.0], "role": "weighing"},
+    {"id": "wine-back-lane", "location": [-1.10, 52.30, 0.0], "role": "production-link"}
+  ]
+}

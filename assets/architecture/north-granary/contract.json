@@ -1,0 +1,25 @@
+{
+  "schema": "yanyu-jiangnan.asset-contract.v1",
+  "asset": "north-granary",
+  "purpose": "A connected raised rice granary and unloading court that extends the west-bank wine supply chain northward.",
+  "source": "jiangnan.py:town_phase7_north_granary",
+  "units": "metres",
+  "bounds_m": {"x": [-8.40, 4.41], "y": [51.45, 64.45], "z": [-0.60, 4.30]},
+  "hero": "raised six-column granary seen through the east gate",
+  "circulation": {
+    "primary": "west water street -> 1.90 m east gate -> unloading court -> 1.54 m store door",
+    "production": "wine back lane -> unloading sacks and scale -> raised dry store",
+    "minimum_clearance_m": 1.20
+  },
+  "structure": [
+    "overlapped land support and continuous west water street",
+    "thick split east wall with real gate and solidified roof",
+    "six granary posts on six stone shoes with complete beam ring",
+    "raised timber floor above splash level and three-step store access",
+    "split plank facade with real east-facing door",
+    "solidified gabled roof, continuous ridge and screened ventilation openings"
+  ],
+  "production_cameras": ["15_north_granary_overview", "16_granary_gate_hall_axis"],
+  "performance": {"new_image_bytes": 0, "paid_service_credits": 0, "linked_grain_sacks": 6, "linked_grain_bins": 3},
+  "runtime": {"collision": "not_generated", "navigation": "not_generated", "lod": "not_generated", "uv_export_audit": "pending"}
+}
