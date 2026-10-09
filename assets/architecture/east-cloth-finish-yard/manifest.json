@@ -1,0 +1,35 @@
+{
+  "schema": "yanyu-jiangnan.asset-manifest.v1",
+  "asset": "east-cloth-finish-yard",
+  "source_commit": "a8e450cfd0aee170835c911f3b3516e195b7ef07",
+  "merge_commit": "bbb1189575e419fb7ce252f085225cfbe25677fd",
+  "source": "jiangnan.py:town_phase5_cloth_finish_yard",
+  "units": "metres",
+  "dimensions": {"parcel": [11.98, 9.25], "hall_platform": [5.70, 3.72], "gate_design_width": 1.64, "gate_evaluated_width": 1.65},
+  "implemented": {
+    "hall_posts_on_shoes": 6,
+    "drying_posts_on_shoes": 6,
+    "linked_cloth_sheets": 8,
+    "rinsing_trough_stone_parts": 5,
+    "rinsing_water_surfaces": 1,
+    "drain_channels": 2,
+    "work_lanterns": 2,
+    "solidified_roofs": 2
+  },
+  "materials": ["JN_plaster", "JN_tile", "JN_wood", "JN_stone", "JN_darkstone", "JN_water", "JN_ivory", "JN_paper"],
+  "textures": {"new_bitmap_bytes": 0, "packed_existing_images": 7, "estimated_scene_rgba8_mib": 41.99},
+  "reuse": {"cloth_sheets": "shared mesh", "weaving_cloth_rolls": "shared mesh", "paid_assets": 0},
+  "evidence": {
+    "pull_request": 15,
+    "ci_run": 37900952836,
+    "smoke_run": 37900952718,
+    "spatial_run": 37900952608,
+    "web_run": 37900952594,
+    "editable_artifact": 11602107060,
+    "diagnostic_artifact": 11601979632,
+    "web_artifact": 11602413880,
+    "review_views": ["15_east_cloth_yard_overview", "16_cloth_finish_gate_axis"]
+  },
+  "runtime": {"collision": "pending", "navigation": "pending", "lod": "pending", "uv_normal_export_audit": "pending"},
+  "human_approvals": {"function": "pending", "form": "pending", "runtime": "pending"}
+}
