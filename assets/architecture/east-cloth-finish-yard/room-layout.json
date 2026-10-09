@@ -1,0 +1,15 @@
+{
+  "schema": "game-room.room-layout.v1",
+  "roomId": "yanyu-east-cloth-finish-yard-round09",
+  "units": "metres",
+  "shell": {"bounds": [11.98, 9.25, 4.20], "groundTop": 0.0, "wallThickness": 0.20},
+  "circulation": [
+    {"id": "primary-gate-axis", "from": [10.16, 57.40, 0.06], "to": [15.40, 57.40, 0.14], "minimumWidth": 1.20},
+    {"id": "production-sequence", "from": [17.55, 53.35, 0.06], "to": [18.25, 61.18, 0.06], "minimumWidth": 1.20}
+  ],
+  "placements": [
+    {"id": "finishing-hall", "location": [18.25, 57.40, 0.0], "role": "hero"},
+    {"id": "rinsing-trough", "location": [19.90, 54.45, 0.0], "role": "wet-work"},
+    {"id": "drying-frames", "location": [18.25, 60.615, 0.0], "role": "drying"}
+  ]
+}

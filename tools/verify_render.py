@@ -394,10 +394,51 @@ for col in loom_cols:
 loom_roof=bpy.data.objects['JN_东岸织户宅院_织廊瓦面']
 assert loom_roof.modifiers.get('织廊真实屋面厚度')
 assert len([o for o in S.objects if o.name.startswith('JN_东岸织户宅院_织机经线')])==4
+cloth_rolls=[bpy.data.objects[f'JN_东岸织户宅院_织布卷_{i}'] for i in range(1,3)]
+assert len({o.data.as_pointer() for o in cloth_rolls})==1
+assert bpy.data.objects.get('JN_东岸织户宅院_织梭') and len([o for o in S.objects if o.name.startswith('JN_东岸织户宅院_线轴')])==2
 north_opening=[bpy.data.objects['JN_东岸织户宅院_北界粉墙_西段'],bpy.data.objects['JN_东岸织户宅院_北界粉墙_东段']]
 assert all(world_bounds(o)[1][0]<=16.86 or world_bounds(o)[0][0]>=18.24 for o in north_opening)
-report['town_phase4_east_residence']={'phase':S['JN_town_phase'],'land_overlap_m':round(min(res_land[1][1],wharf_land[1][1])-max(res_land[0][1],wharf_land[0][1]),3),'gate_design_width_m':S['JN_east_residence_gate_clear_width_m'],'gate_evaluated_clear_width_m':round(gate_clear,3),'hall_door_clear_width_m':S['JN_east_residence_hall_door_clear_width_m'],'through_openings':3,'solidified_roofs':3,'weaving_veranda_posts_on_shoes':4,'loom_threads':4,'domestic_water_trough_walls':5,'new_image_texture_bytes':S['JN_east_residence_new_image_bytes']}
+report['town_phase4_east_residence']={'asset_phase':'phase_4_east_residential_courtyard','town_phase':S['JN_town_phase'],'land_overlap_m':round(min(res_land[1][1],wharf_land[1][1])-max(res_land[0][1],wharf_land[0][1]),3),'gate_design_width_m':S['JN_east_residence_gate_clear_width_m'],'gate_evaluated_clear_width_m':round(gate_clear,3),'hall_door_clear_width_m':S['JN_east_residence_hall_door_clear_width_m'],'through_openings':3,'solidified_roofs':3,'weaving_veranda_posts_on_shoes':4,'loom_threads':4,'linked_cloth_rolls':2,'loom_shuttle':1,'bobbins':2,'domestic_water_trough_walls':5,'new_image_texture_bytes':S['JN_east_residence_new_image_bytes']}
 print('TOWN_PHASE4_EAST_RESIDENCE',json.dumps(report['town_phase4_east_residence'],ensure_ascii=False))
+# North cloth-finishing yard: verify physical parcel/street continuity, real
+# gate clearance, supported open hall, linked cloth sheets and rinsing drainage.
+finish_land=world_bounds(bpy.data.objects['JN_东岸晒布后园_北段地基'])
+finish_street=world_bounds(bpy.data.objects['JN_东岸晒布后园_北延石街'])
+assert abs(finish_land[1][2])<.002
+assert min(finish_land[1][1],res_land[1][1])-max(finish_land[0][1],res_land[0][1])>.15
+assert min(finish_street[1][1],res_street[1][1])-max(finish_street[0][1],res_street[0][1])>.10
+finish_gate=[bpy.data.objects['JN_东岸晒布后园_西院墙_南段'],bpy.data.objects['JN_东岸晒布后园_西院墙_北段']]
+finish_clear=world_bounds(finish_gate[1])[0][1]-world_bounds(finish_gate[0])[1][1]
+assert finish_clear>=1.55,finish_clear
+assert bpy.data.objects.get('JN_东岸晒布后园_开门扇')
+finish_gate_roof=bpy.data.objects['JN_东岸晒布后园_门楼瓦面']
+assert finish_gate_roof.modifiers.get('晒布后园门楼真实屋面厚度')
+finish_cols=[o for o in S.objects if o.name.startswith('JN_东岸晒布后园_整布厅木柱')]
+finish_shoes=[o for o in S.objects if o.name.startswith('JN_东岸晒布后园_整布厅柱础')]
+assert len(finish_cols)==len(finish_shoes)==6
+for col in finish_cols:
+    candidates=[shoe for shoe in finish_shoes if dist_xy(pos(shoe),pos(col))<.01]
+    assert len(candidates)==1
+    cb=world_bounds(col);sb=world_bounds(candidates[0])
+    assert abs(sb[0][2]-.28)<.002 and abs(cb[0][2]-sb[1][2])<.002
+finish_roof=bpy.data.objects['JN_东岸晒布后园_整布厅黛瓦屋面']
+assert finish_roof.modifiers.get('整布厅真实屋面厚度')
+dry_cols=[o for o in S.objects if o.name.startswith('JN_东岸晒布后园_晾架柱_') and '柱础' not in o.name]
+dry_shoes=[o for o in S.objects if o.name.startswith('JN_东岸晒布后园_晾架柱础_')]
+assert len(dry_cols)==len(dry_shoes)==6
+for col in dry_cols:
+    candidates=[shoe for shoe in dry_shoes if dist_xy(pos(shoe),pos(col))<.01]
+    assert len(candidates)==1 and abs(world_bounds(col)[0][2]-world_bounds(candidates[0])[1][2])<.002
+sheets=[o for o in S.objects if o.name.startswith('JN_东岸晒布后园_晾布_') and not o.name.endswith('原型')]
+assert len(sheets)==8 and len({o.data.as_pointer() for o in sheets})==1
+assert len([o for o in S.objects if o.name.startswith('JN_东岸晒布后园_漂洗槽')])==6
+assert bpy.data.objects.get('JN_东岸晒布后园_排水石槽') and bpy.data.objects.get('JN_东岸晒布后园_排水水线')
+assert bpy.data.objects.get('JN_东岸晒布后园_整布厅吊灯杆')
+assert bpy.data.objects.get('JN_东岸晒布后园_整布厅工作纱灯')
+assert bpy.data.objects.get('JN_东岸晒布后园_整布厅工作灯火')
+report['town_phase5_east_cloth_finish']={'phase':S['JN_town_phase'],'land_overlap_m':round(min(finish_land[1][1],res_land[1][1])-max(finish_land[0][1],res_land[0][1]),3),'street_overlap_m':round(min(finish_street[1][1],res_street[1][1])-max(finish_street[0][1],res_street[0][1]),3),'gate_design_width_m':S['JN_east_cloth_gate_clear_width_m'],'gate_evaluated_clear_width_m':round(finish_clear,3),'finishing_hall_posts_on_shoes':6,'drying_frame_posts_on_shoes':6,'linked_cloth_sheets':len(sheets),'rinsing_trough_stone_parts':5,'rinsing_water_surfaces':1,'drain_channels':2,'work_lanterns':S['JN_east_cloth_work_lanterns'],'solidified_roofs':2,'new_image_texture_bytes':S['JN_east_cloth_new_image_bytes']}
+print('TOWN_PHASE5_EAST_CLOTH_FINISH',json.dumps(report['town_phase5_east_cloth_finish'],ensure_ascii=False))
 report['inhabited_houses']={'mesh_triangles_with_instances':house_tris,'triangle_budget':18000,'shells':8,'true_door_openings':8,'true_window_openings':16,'shared_wall_meshes':1,'door_clear_width_min':min(o['JN_door_clear_width'] for o in shells),'interior_depth_min':min(o['JN_interior_depth'] for o in shells),'ray_tests_passed':40,'floor_support_passed':8,'tea_east_risers_m':[.10,.10],'new_image_texture_bytes':0}
 print('INHABITED_HOUSES',json.dumps(report['inhabited_houses'],ensure_ascii=False))
 report['town_phase2']={'phase':S['JN_town_phase'],'grounded_houses':len(plinths),'street_segments':street_segments,'street_batches':len(streets),'tea_pavilion_columns':4,'market_stalls':2,'bridge_risers_per_side':3,'market_ceramics':len(ceramics),'teacups':len(teacups),'canal_preserved':True,'new_image_texture_bytes':0}

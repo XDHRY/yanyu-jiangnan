@@ -1,0 +1,10 @@
+{
+  "schema": "game-room.props.v1",
+  "roomId": "yanyu-east-cloth-finish-yard-round09",
+  "assets": [
+    {"id": "linked-cloth-sheet", "function": "drying textile", "dimensionsMeters": [0.92, 0.055, 1.42], "attachmentFace": "top edge", "semanticFront": "west", "reuseClass": "linked-repeat", "polygonTarget": 8, "source": "procedural mesh", "rejectionCriteria": ["floating from rail", "blocks gate axis", "coplanar flat silhouette"]},
+    {"id": "rinsing-trough", "function": "wet cloth rinsing", "dimensionsMeters": [2.25, 0.92, 0.70], "attachmentFace": "bottom", "semanticFront": "west", "reuseClass": "unique-functional", "polygonTarget": 120, "source": "procedural stone geometry", "rejectionCriteria": ["missing water containment", "missing drain connection", "floating walls"]},
+    {"id": "finishing-table", "function": "cloth inspection and folding", "dimensionsMeters": [2.80, 0.82, 1.10], "attachmentFace": "feet", "semanticFront": "west", "reuseClass": "unique-functional", "polygonTarget": 96, "source": "procedural timber geometry", "rejectionCriteria": ["unsupported top", "blocks primary arrival before hall platform"]}
+  ],
+  "paidGeneration": {"provider": null, "creditsAuthorized": 0, "creditsConsumed": 0}
+}
