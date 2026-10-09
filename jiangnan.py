@@ -1625,8 +1625,18 @@ def town_phase7_north_granary():
     # Shared grain sacks and lidded bins establish scale and inventory while
     # retaining one mesh datablock per repeated asset family.
     sackmat=material('米行麻布',(.30,.235,.13),.88,14)
-    sack=uv('北端米行粮栈_粮袋原型',(0,0,0),(.36,.25,.55),sackmat,c,12,7);sack.hide_render=True;sack.hide_viewport=True
-    for i,(x,y,z,rz) in enumerate(((-1.10,56.90,.62,.12),(-.35,57.28,.62,-.18),(-1.05,58.45,.62,.05),(-3.58,57.35,1.32,.18),(-4.35,57.30,1.32,-.12),(-5.12,57.36,1.32,.08)),1):
+    seg=12;sv=[];sf=[]
+    # Flat base, broad shoulder and pinched tied mouth read as a filled sack
+    # from the gate camera while all six copies still share one mesh datablock.
+    for z,rx,ry in ((0,.28,.22),(.12,.37,.27),(.64,.39,.28),(.84,.29,.22),(.93,.13,.12),(1.05,.20,.08)):
+        sv.extend((rx*cos(2*pi*i/seg),ry*sin(2*pi*i/seg),z) for i in range(seg))
+    sf.append(tuple(range(seg-1,-1,-1)))
+    for row in range(5):
+        for i in range(seg):
+            a=row*seg+i;b=row*seg+(i+1)%seg;sf.append((a,b,b+seg,a+seg))
+    sf.append(tuple(range(5*seg,6*seg)))
+    sack=mesh('北端米行粮栈_粮袋原型',sv,sf,sackmat,c);sack.hide_render=True;sack.hide_viewport=True
+    for i,(x,y,z,rz) in enumerate(((-1.10,56.90,.12,.12),(-.35,57.28,.12,-.18),(-1.05,58.45,.12,.05),(-3.58,57.35,.80,.18),(-4.35,57.30,.80,-.12),(-5.12,57.36,.80,.08)),1):
         o=bpy.data.objects.new(PREFIX+f'北端米行粮栈_粮袋_{i}',sack.data);c.objects.link(o);o.location=(x,y,z);o.rotation_euler[2]=rz
     seg=16;bv=[];bf=[]
     for z,r in ((0,.43),(.74,.46),(.86,.40)):
@@ -1648,9 +1658,9 @@ def town_phase7_north_granary():
     box('北端米行粮栈_磅秤横梁',(-.02,60.45,2.47),(1.78,.16,.16),wood,c,.006)
     line('北端米行粮栈_秤盘吊索',[((.58),60.45,2.39),(.58,60.22,1.72),(.58,60.45,1.42),(.58,60.68,1.72),(.58,60.45,2.39)],.016,M['bronze'],c,res=1,bevel_res=1)
     uv('北端米行粮栈_铜秤盘',(.58,60.45,1.40),(.46,.46,.08),M['bronze'],c,16,4)
-    line('北端米行粮栈_工作灯挑杆',[(-2.75,56.25,2.76),(-1.95,56.25,2.76),(-1.95,56.25,2.28)],.024,wood,c,res=2,bevel_res=1)
-    uv('北端米行粮栈_工作纱灯',(-1.95,56.25,2.08),(.15,.15,.22),M['paper'],c,12,8)
-    light('北端米行粮栈_工作灯火',(-1.95,56.25,2.05),(1,.48,.20),72,.24,kind='POINT')
+    line('北端米行粮栈_工作灯挑杆',[(-2.75,58.60,2.76),(-1.95,58.60,2.76),(-1.95,58.60,2.28)],.024,wood,c,res=2,bevel_res=1)
+    uv('北端米行粮栈_工作纱灯',(-1.95,58.60,2.08),(.15,.15,.22),M['paper'],c,12,8)
+    light('北端米行粮栈_工作灯火',(-1.95,58.60,2.05),(1,.48,.20),92,.28,kind='POINT')
 
     S['JN_town_phase']='phase_7_north_granary'
     S['JN_north_granary_gate_clear_width_m']=1.90
