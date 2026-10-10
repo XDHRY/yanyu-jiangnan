@@ -27,8 +27,8 @@ VIEWS=[
     ('12_village_lane',(1.4,8.4,1.75),(1.4,31.5,1.35),42,0,'村巷人眼：月门北巷通往茶集的连续地面、民居侧廊、桥前横巷和远端茶亭'),
     ('13_canal_bridge',(13.2,11.2,8.6),(7.3,15.1,.9),46,0,'水巷木桥：高位斜俯视完整检查桥板、栏柱、双岸驳岸、桥头落地与临水民居尺度'),
     ('14_village_waterfront',(7.3,29.0,2.25),(7.3,16.0,1.35),40,0,'临水回望：检查八栋民居沿水巷的聚落节奏、河埠和木桥是否形成江南村落层次'),
-    ('15_silk_basin_trade_overview',(5.70,59.30,7.10),(12.70,68.45,.98),45,0,'丝行交易节点总览：降低并后撤，从西南侧检查主航道、河湾内运丝舟、木台、门楼、候船亭、原料仓及北开间铺面的水陆关系'),
-    ('16_silk_shop_account_focus',(14.30,69.82,1.72),(19.20,69.82,1.18),35,0,'丝行铺面近景：相机进入两根铺面柱之间，沿柜台上方直看中央绢样、后部账房门洞与案桌，检查街面—交易—记账的真实纵深'),
+    ('15_oar_workshop_node',(-10.30,66.25,5.10),(-4.55,72.85,1.45),44,0,'修桨公共节点总览：从西南侧检查候船亭、横巷、实体台基、开敞修桨棚与北河轮廓是否连续且互不遮挡'),
+    ('16_oar_workshop_craft',(-4.60,68.05,1.72),(-4.70,73.30,1.18),38,0,'修桨作坊人眼近景：穿过四米开口查看马凳桨坯、工作长案、共享桨架、船板与真实支撑，检查动线和工艺可读性'),
 ]
 
 for o in list(bpy.data.objects):
@@ -106,4 +106,5 @@ S.frame_set(orig['frame'])
 S.render.resolution_x=orig['x'];S.render.resolution_y=orig['y'];S.render.resolution_percentage=orig['pct']
 if orig['camera'] and bpy.data.objects.get(orig['camera']):S.camera=bpy.data.objects[orig['camera']]
 print('DIAGNOSTIC_RENDER_COMPLETE',json.dumps({'views':len(VIEWS),'dir':DIAG},ensure_ascii=False))
+
 

@@ -1,0 +1,10 @@
+{
+  "schema": "game-room.milestone-reviews.v1",
+  "roomId": "yanyu-west-oar-workshop-round15",
+  "reviews": [
+    {"gate": "Function", "status": "pending", "criteria": ["cross-lane overlaps the west water street", "south bay exceeds 2.4 m", "craft destination is visible from arrival", "canal and bridge approaches remain clear"]},
+    {"gate": "Form", "status": "pending", "criteria": ["four posts land on four shoes", "solid roof is visibly supported", "oars share one mesh", "tools and stock remain restrained"]},
+    {"gate": "Runtime", "status": "pending", "criteria": ["scene triangle budget passes", "16-camera diagnostic passes", "collision and navigation remain explicitly ungenerated", "GLB viewer smoke passes"]}
+  ],
+  "automationPolicy": "CI records evidence only and never upgrades a pending human review to approved."
+}

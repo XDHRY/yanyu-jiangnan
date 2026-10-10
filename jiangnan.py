@@ -1982,6 +1982,96 @@ def town_phase10_silk_trade_finish():
     S['JN_silk_boat_navigation_clearance_m']=.09
     S['JN_silk_shop_new_image_bytes']=0
 
+def town_phase11_west_oar_workshop():
+    """Add a grounded west-bank oar workshop and refine the silk-shop threshold."""
+    c=C['water'];stone=M['stone'];wood=M['wood'];wetstone=M['darkstone']
+    ropemat=bpy.data.materials.get(PREFIX+'米行麻绳') or M['edge']
+
+    # A public cross-lane overlaps the proven west water street and opens into
+    # the waiting pavilion.  The repair shed sits wholly on the Round 13 west
+    # parcel, leaving the five-metre canal and bridge approaches untouched.
+    lane=box('北河修桨作坊_候船横巷',(-.60,71.35,.06),(8.20,1.30,.12),stone,c,.012)
+    lane['JN_function']='waiting_pavilion_to_oar_workshop_route'
+    lane['JN_overlap_west_water_street_m']=.91
+    wx,wy=-4.60,73.20
+    box('北河修桨作坊_实体台基',(wx,wy,.15),(5.60,3.55,.30),stone,c,.022)
+    for y,z,w in ((71.55,.12,3.90),(71.28,.06,4.35)):
+        box('北河修桨作坊_入坊踏步',(wx,y,z),(w,.38,.12),stone,c,.012)
+
+    # Four corner posts create one generous 4.22 m south-facing arrival.  The
+    # open bay has a visible workbench destination rather than a false facade.
+    for x in (-6.80,-2.40):
+        for y in (71.80,74.60):
+            box('北河修桨作坊_柱础',(x,y,.39),(.46,.46,.18),wetstone,c,.014)
+            box('北河修桨作坊_木柱',(x,y,1.78),(.18,.18,2.60),wood,c,.008)
+    for y in (71.80,74.60):box('北河修桨作坊_檐枋',(wx,y,3.10),(4.60,.20,.22),wood,c,.008)
+    for x in (-6.80,-2.40):box('北河修桨作坊_穿梁',(x,wy,3.04),(.20,3.04,.20),wood,c,.008)
+    shed_roof=roof('北河修桨作坊_屋面',wx,wy,3.13,6.15,4.25,c)
+    mod=shed_roof.modifiers.new('修桨作坊真实屋面厚度','SOLIDIFY');mod.thickness=.072;mod.offset=-1
+
+    # Workbench, trestles and timber stock make the craft legible while keeping
+    # the centre arrival clear.  Every floor object physically lands on either
+    # the platform or a visible support.
+    box('北河修桨作坊_工作长案',(-5.55,73.52,.91),(2.28,.62,.14),wood,c,.014)
+    for x in (-6.40,-4.70):
+        for y in (73.30,73.74):box('北河修桨作坊_长案腿',(x,y,.53),(.13,.13,.70),wood,c,.005)
+    for x in (-5.82,-3.88):
+        box('北河修桨作坊_修桨马凳横木',(x,72.36,.72),(.94,.16,.14),wood,c,.008)
+        for dx in (-.31,.31):box('北河修桨作坊_修桨马凳腿',(x+dx,72.36,.38),(.12,.12,.60),wood,c,.005)
+    box('北河修桨作坊_待刨桨坯',(-4.85,72.36,.83),(3.20,.16,.11),wood,c,.012)
+    box('北河修桨作坊_备用船板一',(-3.45,73.63,.41),(1.95,.34,.12),wood,c,.010)
+    box('北河修桨作坊_备用船板二',(-3.50,73.58,.55),(1.72,.30,.11),wood,c,.010)
+
+    # One compact shared oar mesh provides four rack instances.  The blade and
+    # shaft remain real silhouette geometry rather than painted detail.
+    ov=[];of=[]
+    def prism(x0,x1,y0,y1,z0,z1):
+        k=len(ov);ov.extend(((x0,y0,z0),(x0,y0,z1),(x0,y1,z0),(x0,y1,z1),(x1,y0,z0),(x1,y0,z1),(x1,y1,z0),(x1,y1,z1)))
+        of.extend(tuple(k+i for i in f) for f in ((0,4,6,2),(1,3,7,5),(0,1,5,4),(2,6,7,3),(0,2,3,1),(4,5,7,6)))
+    prism(-.034,.034,-.034,.034,0,2.02)
+    k=len(ov);ov.extend(((-.24,-.030,-.50),(-.24,-.030,-.12),(-.07,-.030,.10),(.07,-.030,.10),(.24,-.030,-.12),(.24,-.030,-.50),(-.24,.030,-.50),(-.24,.030,-.12),(-.07,.030,.10),(.07,.030,.10),(.24,.030,-.12),(.24,.030,-.50)))
+    of.extend(tuple(k+i for i in f) for f in ((0,1,2,3,4,5),(11,10,9,8,7,6),(0,6,7,1),(1,7,8,2),(2,8,9,3),(3,9,10,4),(4,10,11,5),(5,11,6,0)))
+    oar=mesh('北河修桨作坊_桨橹原型',ov,of,wood,c);oar.hide_render=True;oar.hide_viewport=True
+    box('北河修桨作坊_桨架下枋',(wx,74.34,.88),(4.05,.14,.14),wood,c,.006)
+    box('北河修桨作坊_桨架上枋',(wx,74.34,2.34),(4.05,.14,.14),wood,c,.006)
+    for i,x in enumerate((-6.18,-5.15,-4.10,-3.08),1):
+        o=bpy.data.objects.new(PREFIX+f'北河修桨作坊_共享桨橹_{i}',oar.data);c.objects.link(o)
+        o.location=(x,74.24,.68);o.rotation_euler[1]=(-.045 if i%2 else .055)
+
+    # Restrained tools and rope explain active maintenance without visual clutter.
+    box('北河修桨作坊_木刨',(-5.80,73.47,1.06),(.42,.18,.13),wetstone,c,.006)
+    box('北河修桨作坊_木槌柄',(-5.30,73.45,1.08),(.52,.07,.07),wood,c,.004)
+    box('北河修桨作坊_木槌头',(-5.53,73.45,1.08),(.18,.16,.15),wood,c,.005)
+    uv('北河修桨作坊_桐油罐',(-6.34,73.45,1.12),(.17,.17,.22),wetstone,c,12,6)
+    for j,r in enumerate((.34,.25),1):
+        pts=[(-3.20+r*cos(2*pi*i/20),72.76+r*sin(2*pi*i/20),.34+.025*j) for i in range(21)]
+        line(f'北河修桨作坊_盘绳_{j}',pts,.018,ropemat,c,res=1,bevel_res=1)
+
+    # A single task lantern and a low guide lamp preserve the moonlit hierarchy.
+    line('北河修桨作坊_工作灯挑杆',[(-2.40,72.05,2.60),(-3.02,72.05,2.60),(-3.02,72.05,2.19)],.020,wood,c,res=2,bevel_res=1)
+    uv('北河修桨作坊_工作纱灯',(-3.02,72.05,1.98),(.12,.12,.18),M['paper'],c,12,8)
+    light('北河修桨作坊_工作灯火',(-3.02,72.05,1.96),(1,.45,.20),70,.24,kind='POINT')
+    line('北河修桨作坊_引路灯柱',[(1.95,71.45,.12),(1.95,71.45,.86)],.035,wood,c,res=1,bevel_res=1)
+    uv('北河修桨作坊_引路纱灯',(1.95,71.45,1.00),(.10,.10,.14),M['paper'],c,10,6)
+    light('北河修桨作坊_引路灯火',(1.95,71.45,.98),(1,.40,.17),36,.18,kind='POINT')
+
+    # Silk-shop refinements: physical cloth edging, a supported hanging sign,
+    # and one account-room lamp.  None blocks the open shop/account sightline.
+    for i,(y,mat) in enumerate(((69.34,bpy.data.materials[PREFIX+'丝行月白绢']),(70.30,bpy.data.materials[PREFIX+'丝行黛青绢'])),1):
+        line(f'北河丝行_悬绢包边_{i}',[(16.32,y-.15,1.08),(16.32,y-.15,2.08),(16.32,y+.15,2.08),(16.32,y+.15,1.08)],.009,mat,c,res=1,bevel_res=1)
+        box(f'北河丝行_悬绢坠边_{i}',(16.32,y,1.08),(.025,.32,.035),mat,c,.002)
+    line('北河丝行_招幌挑杆',[(13.55,70.88,2.45),(12.72,70.88,2.45),(12.72,70.88,2.28)],.022,wood,c,res=2,bevel_res=1)
+    box('北河丝行_木质招幌牌',(12.72,70.88,1.88),(.09,.58,.70),wood,c,.012)
+    for y in (70.66,71.10):line('北河丝行_招幌流苏',[(12.72,y,1.53),(12.72,y,1.28)],.012,bpy.data.materials[PREFIX+'丝行绛红绢'],c,res=1,bevel_res=1)
+    line('北河丝行_账房灯悬绳',[(19.45,70.40,2.62),(19.45,70.40,2.30)],.010,wood,c,res=1,bevel_res=1)
+    uv('北河丝行_账房纱灯',(19.45,70.40,2.12),(.11,.11,.17),M['paper'],c,12,8)
+    light('北河丝行_账房灯火',(19.45,70.40,2.10),(1,.43,.18),44,.18,kind='POINT')
+
+    S['JN_town_phase']='phase_11_west_oar_workshop'
+    S['JN_oar_workshop_opening_width_m']=4.22
+    S['JN_oar_workshop_shared_oars']=4
+    S['JN_oar_workshop_new_image_bytes']=0
+
 def batch_static_objects(name,objects,mat,col,bev=0):
     """Combine already-built static meshes after art generation so optimization cannot perturb procedural build order."""
     objects=[o for o in objects if o and o.type=='MESH']
@@ -2057,7 +2147,7 @@ def viewport():
                 a.spaces.active.region_3d.view_camera_zoom=0
     bpy.context.view_layer.update()
 def build(stage=None):
-    start();courtyard();village_phase1_skeleton();town_phase2_market();town_phase3_east_wharf();town_phase4_east_residence();town_phase5_cloth_finish_yard();town_phase6_west_wine_court();town_phase7_north_granary();town_phase8_north_grain_wharf();town_phase9_north_silk_bend();town_phase10_silk_trade_finish()
+    start();courtyard();village_phase1_skeleton();town_phase2_market();town_phase3_east_wharf();town_phase4_east_residence();town_phase5_cloth_finish_yard();town_phase6_west_wine_court();town_phase7_north_granary();town_phase8_north_grain_wharf();town_phase9_north_silk_bend();town_phase10_silk_trade_finish();town_phase11_west_oar_workshop()
     level=P['stage'] if stage is None else stage
     if level>=2:vegetation()
     if level>=3:weather()
@@ -2074,4 +2164,5 @@ if __name__=='__main__':
         rdir=os.path.join(P['output_dir'],'renders');os.makedirs(rdir,exist_ok=True)
         for name in ['正面','顶视','三分之四']:
             S.camera=bpy.data.objects[PREFIX+name];S.render.filepath=os.path.join(rdir,name+'.png');bpy.ops.render.render(write_still=True)
+
 

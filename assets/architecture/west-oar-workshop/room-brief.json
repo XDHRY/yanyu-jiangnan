@@ -1,0 +1,9 @@
+{
+  "schema": "game-room.room-brief.v1",
+  "roomId": "yanyu-west-oar-workshop-round15",
+  "intent": "Balance the east-bank production mass with a small public craft node beside the north waiting pavilion.",
+  "mustReadAs": ["grounded Ming timber shed", "open public arrival", "working oar repair", "continuous waiting-pavilion route"],
+  "functionBeforeOrnament": ["overlap the proven west water street", "keep the canal and fourth-bridge approaches clear", "give the open bay a visible work destination", "mount every tool and timber stock on a real support"],
+  "artDirection": ["dark tile and warm timber over bluestone", "sparse craft tools", "one task lantern and one low guide light", "no new bitmap texture"],
+  "outOfScope": ["new canal extension", "paid generated assets", "runtime collision generation", "navigation mesh", "36-camera render"]
+}
