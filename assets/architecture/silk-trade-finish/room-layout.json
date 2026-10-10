@@ -1,0 +1,18 @@
+{
+  "schema": "game-room.room-layout.v1",
+  "roomId": "yanyu-silk-trade-finish-round14",
+  "units": "metres",
+  "shell": {"bounds": [11.20, 4.05, 3.17], "groundTop": 0.0, "existingStructure": "Round 13 six-column raw-silk warehouse and loading basin"},
+  "circulation": [
+    {"id": "gate-axis", "from": [13.55, 68.30, 0.13], "to": [18.15, 68.30, 0.16], "minimumWidth": 1.90},
+    {"id": "shop-opening", "from": [15.44, 69.32, 0.30], "to": [15.44, 70.32, 0.30], "minimumWidth": 1.00},
+    {"id": "account-door", "from": [18.66, 69.37, 0.30], "to": [18.66, 70.17, 0.30], "minimumWidth": 0.80},
+    {"id": "main-water-navigation", "from": [4.80, 68.28, 0.03], "to": [9.80, 68.28, 0.03], "minimumWidth": 5.00}
+  ],
+  "placements": [
+    {"id": "trade-counter", "location": [15.52, 69.82, 0.84], "role": "street transaction"},
+    {"id": "silk-display", "location": [16.38, 69.82, 1.58], "role": "merchandise identity"},
+    {"id": "account-desk", "location": [19.68, 69.86, 0.82], "role": "account-room destination"},
+    {"id": "silk-boat", "location": [10.38, 68.28, 0.39], "role": "basin transport"}
+  ]
+}
