@@ -1,0 +1,25 @@
+{
+  "schema": "yanyu-jiangnan.asset-contract.v1",
+  "asset": "north-grain-wharf",
+  "purpose": "A public bridge-north grain landing that joins the west granary, the third bridge and east-bank cloth production through a continuous working canal.",
+  "source": "jiangnan.py:town_phase8_north_grain_wharf",
+  "units": "metres",
+  "bounds_m": {"x": [3.24, 10.16], "y": [32.85, 64.55], "z": [-0.64, 1.91]},
+  "hero": "pile-supported loading deck and open rice barge seen between the third bridge and north granary",
+  "circulation": {
+    "primary": "third bridge -> west water street -> bridge-north turning pocket -> descending landing steps -> loading deck",
+    "production": "granary gate -> public landing -> rice barge -> east-bank cloth district",
+    "minimum_clearance_m": 1.20
+  },
+  "structure": [
+    "continuous northern canal surface overlapping the original water strip",
+    "three descending stone landing steps",
+    "timber loading deck carried by four piles",
+    "two grounded mooring posts with visible cross-pins",
+    "open boat hull with bottom, ribs, seats, gunwales and stern board",
+    "mooring rope with visible boat and post endpoints"
+  ],
+  "production_cameras": ["15_bridge_granary_water_chain", "16_grain_wharf_human_scale"],
+  "performance": {"new_image_bytes": 0, "paid_service_credits": 0, "linked_round11_sacks": 2, "support_piles": 4},
+  "runtime": {"collision": "not_generated", "navigation": "not_generated", "lod": "not_generated", "uv_export_audit": "pending"}
+}

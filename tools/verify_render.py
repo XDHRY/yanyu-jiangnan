@@ -512,6 +512,38 @@ assert bpy.data.objects.get('JN_北端米行粮栈_秤盘吊索') and bpy.data.o
 assert bpy.data.objects.get('JN_北端米行粮栈_工作灯挑杆') and bpy.data.objects.get('JN_北端米行粮栈_工作纱灯')
 report['town_phase7_north_granary']={'phase':S['JN_town_phase'],'land_overlap_m':round(land_overlap,3),'street_overlap_m':round(street_overlap,3),'gate_design_width_m':S['JN_north_granary_gate_clear_width_m'],'gate_evaluated_clear_width_m':round(granary_clear,3),'store_door_clear_width_m':round(store_clear,3),'raised_floor_bottom_m':round(granary_floor[0][2],3),'hall_posts_on_shoes':6,'linked_grain_sacks':len(sacks),'linked_grain_bins':len(bins),'vent_windows':4,'scale_support_feet':2,'new_image_texture_bytes':S['JN_north_granary_new_image_bytes']}
 print('TOWN_PHASE7_NORTH_GRANARY',json.dumps(report['town_phase7_north_granary'],ensure_ascii=False))
+# North grain wharf: require continuous water, a descending stone approach,
+# pile-supported loading deck, open working boat and explicit mesh reuse.
+old_canal=world_bounds(bpy.data.objects['JN_村落水巷'])
+north_canal=world_bounds(bpy.data.objects['JN_北段连续水巷'])
+canal_overlap=min(old_canal[1][1],north_canal[1][1])-max(old_canal[0][1],north_canal[0][1])
+assert canal_overlap>=.145,canal_overlap
+assert abs(old_canal[0][0]-north_canal[0][0])<.002 and abs(old_canal[1][0]-north_canal[1][0])<.002
+wharf_steps=sorted([o for o in S.objects if o.name.startswith('JN_北粮水埠_下水踏步_')],key=lambda o:pos(o).x)
+assert len(wharf_steps)==3
+step_tops=[world_bounds(o)[1][2] for o in wharf_steps]
+assert all(step_tops[i]>step_tops[i+1] for i in range(len(step_tops)-1)),step_tops
+deck=bpy.data.objects['JN_北粮水埠_装卸木台'];deck_bounds=world_bounds(deck)
+wharf_piles=[o for o in S.objects if o.name.startswith('JN_北粮水埠_木台桩')]
+assert len(wharf_piles)==4
+for pile in wharf_piles:
+    pb=world_bounds(pile)
+    assert pb[1][2]>=deck_bounds[0][2] and pb[0][2]<-.60
+boat=bpy.data.objects['JN_北粮水埠_米船船壳']
+assert len(boat.data.polygons)==20
+assert len([o for o in S.objects if o.name.startswith('JN_北粮水埠_米船坐板')])==3
+assert len([o for o in S.objects if o.name.startswith('JN_北粮水埠_米船横肋')])==2
+assert len([o for o in S.objects if o.name.startswith('JN_北粮水埠_米船舷侧压条')])==2
+assert bpy.data.objects.get('JN_北粮水埠_系舟缆绳') and bpy.data.objects.get('JN_北粮水埠_竹篙')
+shared_wharf_sacks=[o for o in S.objects if o.name.startswith('JN_北粮水埠_共享粮袋_')]
+assert len(shared_wharf_sacks)==2 and all(o.data.as_pointer()==sacks[0].data.as_pointer() for o in shared_wharf_sacks)
+assert len([o for o in S.objects if o.name.startswith('JN_北端米行粮栈_粮袋扎口绳_')])==6
+assert len([o for o in S.objects if o.name.startswith('JN_北粮水埠_粮袋扎口绳_')])==2
+bridge_y=max(world_bounds(o)[1][1] for o in bridge_planks)
+boat_y=world_bounds(boat)[0][1]
+assert boat_y-bridge_y>2.0,(boat_y,bridge_y)
+report['town_phase8_north_grain_wharf']={'phase':S['JN_town_phase'],'canal_overlap_m':round(canal_overlap,3),'canal_north_end_m':round(north_canal[1][1],3),'descending_step_tops_m':[round(z,3) for z in step_tops],'support_piles':len(wharf_piles),'open_boat_hull_faces':len(boat.data.polygons),'boat_bridge_clearance_m':round(boat_y-bridge_y,3),'shared_round11_sacks':len(shared_wharf_sacks),'new_image_texture_bytes':S['JN_north_grain_wharf_new_image_bytes']}
+print('TOWN_PHASE8_NORTH_GRAIN_WHARF',json.dumps(report['town_phase8_north_grain_wharf'],ensure_ascii=False))
 report['inhabited_houses']={'mesh_triangles_with_instances':house_tris,'triangle_budget':18000,'shells':8,'true_door_openings':8,'true_window_openings':16,'shared_wall_meshes':1,'door_clear_width_min':min(o['JN_door_clear_width'] for o in shells),'interior_depth_min':min(o['JN_interior_depth'] for o in shells),'ray_tests_passed':40,'floor_support_passed':8,'tea_east_risers_m':[.10,.10],'new_image_texture_bytes':0}
 print('INHABITED_HOUSES',json.dumps(report['inhabited_houses'],ensure_ascii=False))
 report['town_phase2']={'phase':S['JN_town_phase'],'grounded_houses':len(plinths),'street_segments':street_segments,'street_batches':len(streets),'tea_pavilion_columns':4,'market_stalls':2,'bridge_risers_per_side':3,'market_ceramics':len(ceramics),'teacups':len(teacups),'canal_preserved':True,'new_image_texture_bytes':0}
@@ -645,3 +677,4 @@ else:
 with open(os.path.join(VALIDATION,'validation.json'),'w',encoding='utf-8') as f:json.dump(report,f,ensure_ascii=False,indent=2)
 weather(0);S.camera=bpy.data.objects['JN_三分之四'];S.frame_set(80)
 print('ALL_RENDER_JOBS_COMPLETED' if formal_render else 'ALL_ASSERTIONS_COMPLETED',json.dumps(report,ensure_ascii=False))
+

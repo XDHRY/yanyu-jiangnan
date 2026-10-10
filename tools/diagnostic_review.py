@@ -27,8 +27,8 @@ VIEWS=[
     ('12_village_lane',(1.4,8.4,1.75),(1.4,31.5,1.35),42,0,'村巷人眼：月门北巷通往茶集的连续地面、民居侧廊、桥前横巷和远端茶亭'),
     ('13_canal_bridge',(13.2,11.2,8.6),(7.3,15.1,.9),46,0,'水巷木桥：高位斜俯视完整检查桥板、栏柱、双岸驳岸、桥头落地与临水民居尺度'),
     ('14_village_waterfront',(7.3,29.0,2.25),(7.3,16.0,1.35),40,0,'临水回望：检查八栋民居沿水巷的聚落节奏、河埠和木桥是否形成江南村落层次'),
-    ('15_north_granary_overview',(15.5,58.5,12.5),(-1.5,57.5,1.42),43,0,'西岸北端总览：从已验证的东岸高位安全区横看粮栈地基、北延水街、架空粮仓与卸货院，并检查南侧酒坊后巷的连续供应链'),
-    ('16_granary_gate_hall_axis',(4.45,57.05,2.12),(-4.35,58.55,1.55),38,0,'米行粮栈近景：穿过东门看真实粮仓门洞、架空地坪、六柱支撑、共享粮袋粮斗与落地磅秤，检查门楼—柱梁—台基和卸货动线'),
+    ('15_bridge_granary_water_chain',(17.0,45.5,13.0),(3.5,55.4,1.08),39,0,'跨河连续性：更高、更宽地同框检查完整第三桥、北段连续河面、桥北转折石坪、粮运埠头、米船和北粮栈之间的公共供应链'),
+    ('16_grain_wharf_human_scale',(10.20,51.80,3.00),(5.45,54.90,.68),38,0,'粮运埠头人眼近景：从东南斜看三级下水踏步、四桩木台、共享粮袋、开口米船、系舟端点和码头灯，减少船体与墙面的遮挡'),
 ]
 
 for o in list(bpy.data.objects):
@@ -106,3 +106,4 @@ S.frame_set(orig['frame'])
 S.render.resolution_x=orig['x'];S.render.resolution_y=orig['y'];S.render.resolution_percentage=orig['pct']
 if orig['camera'] and bpy.data.objects.get(orig['camera']):S.camera=bpy.data.objects[orig['camera']]
 print('DIAGNOSTIC_RENDER_COMPLETE',json.dumps({'views':len(VIEWS),'dir':DIAG},ensure_ascii=False))
+

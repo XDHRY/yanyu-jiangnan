@@ -1,0 +1,8 @@
+{
+  "schema": "game-room.openings.v1",
+  "roomId": "yanyu-north-grain-wharf-round12",
+  "openings": [
+    {"id": "west-street-to-landing", "type": "passage", "wall": "open canal edge", "widthMeters": 1.72, "heightMeters": 2.20, "thresholdMeters": 0.0, "depthMeters": 1.44, "destination": "grain loading deck and rice barge", "state": "open descending passage"},
+    {"id": "north-canal-navigation", "type": "waterway", "wall": "west and east revetment gap", "widthMeters": 5.00, "heightMeters": 0.06, "thresholdMeters": 0.0, "depthMeters": 31.70, "destination": "third bridge, grain landing and northern terminus", "state": "continuous water surface"}
+  ]
+}
