@@ -1866,12 +1866,12 @@ def town_phase9_north_silk_bend():
             a=row*seg+i;b=row*seg+(i+1)%seg;bf.append((a,b,b+seg,a+seg))
     bf.append(tuple(range(4*seg,5*seg)))
     bale=mesh('北河丝行_绢包原型',bv,bf,balemat,c);bale.hide_render=True;bale.hide_viewport=True
-    for i,(x,y,rz) in enumerate(((17.25,66.78,.10),(18.25,66.78,-.08),(19.25,66.78,.04),(17.35,69.90,-.10),(18.35,69.90,.08),(19.35,69.90,-.03)),1):
-        o=bpy.data.objects.new(PREFIX+f'北河丝行_绢包_{i}',bale.data);c.objects.link(o);o.location=(x,y,.16);o.rotation_euler[2]=rz
+    for i,(x,y,z,rz) in enumerate(((17.25,66.78,.16,.10),(18.25,66.78,.16,-.08),(19.25,66.78,.16,.04),(17.45,66.80,.88,-.10),(18.45,66.80,.88,.08),(19.45,66.80,.88,-.03)),1):
+        o=bpy.data.objects.new(PREFIX+f'北河丝行_绢包_{i}',bale.data);c.objects.link(o);o.location=(x,y,z);o.rotation_euler[2]=rz
         for j,dy in enumerate((-.18,.18),1):
-            loop=[(x-.36,y+dy,.30),(x-.41,y+dy,.54),(x-.28,y+dy,.84),(x+.28,y+dy,.84),(x+.41,y+dy,.54),(x+.36,y+dy,.30),(x-.36,y+dy,.30)]
+            loop=[(x-.36,y+dy,z+.14),(x-.41,y+dy,z+.38),(x-.28,y+dy,z+.68),(x+.28,y+dy,z+.68),(x+.41,y+dy,z+.38),(x+.36,y+dy,z+.14),(x-.36,y+dy,z+.14)]
             line(f'北河丝行_绢包束绳_{i}_{j}',loop,.013,ropemat,c,res=1,bevel_res=1)
-        uv(f'北河丝行_绢包绳结_{i}',(x,y-.19,.86),(.035,.035,.035),ropemat,c,8,4)
+        uv(f'北河丝行_绢包绳结_{i}',(x,y-.19,z+.70),(.035,.035,.035),ropemat,c,8,4)
     box('北河丝行_络丝架顶梁',(20.15,68.30,2.18),(.18,2.72,.18),wood,c,.008)
     for y in (67.05,69.55):box('北河丝行_络丝架立柱',(20.15,y,1.28),(.18,.18,1.72),wood,c,.008)
     for z in (1.12,1.62):box('北河丝行_络丝架横轴',(20.15,68.30,z),(.16,2.36,.16),wood,c,.006)
