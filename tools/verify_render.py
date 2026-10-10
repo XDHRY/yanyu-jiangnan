@@ -544,6 +544,53 @@ boat_y=world_bounds(boat)[0][1]
 assert boat_y-bridge_y>2.0,(boat_y,bridge_y)
 report['town_phase8_north_grain_wharf']={'phase':S['JN_town_phase'],'canal_overlap_m':round(canal_overlap,3),'canal_north_end_m':round(north_canal[1][1],3),'descending_step_tops_m':[round(z,3) for z in step_tops],'support_piles':len(wharf_piles),'open_boat_hull_faces':len(boat.data.polygons),'boat_bridge_clearance_m':round(boat_y-bridge_y,3),'shared_round11_sacks':len(shared_wharf_sacks),'new_image_texture_bytes':S['JN_north_grain_wharf_new_image_bytes']}
 print('TOWN_PHASE8_NORTH_GRAIN_WHARF',json.dumps(report['town_phase8_north_grain_wharf'],ensure_ascii=False))
+# North silk bend: prove continuous land and water, a traversable public bridge,
+# grounded warehouse framing, a pile-supported bay deck and linked cargo meshes.
+silk_west=world_bounds(bpy.data.objects['JN_北河丝行_西岸延伸地基'])
+silk_east=world_bounds(bpy.data.objects['JN_北河丝行_东岸原料区地基'])
+silk_water=world_bounds(bpy.data.objects['JN_北河丝行_北延水巷'])
+silk_basin=world_bounds(bpy.data.objects['JN_北河丝行_东向卸货河湾'])
+west_overlap=min(silk_west[1][1],granary_land[1][1])-max(silk_west[0][1],granary_land[0][1])
+east_cloth=world_bounds(bpy.data.objects['JN_东岸晒布后园_北段地基'])
+east_overlap=min(silk_east[1][1],east_cloth[1][1])-max(silk_east[0][1],east_cloth[0][1])
+water_overlap=min(silk_water[1][1],north_canal[1][1])-max(silk_water[0][1],north_canal[0][1])
+assert west_overlap>=.20,west_overlap
+assert east_overlap>=.20,east_overlap
+assert water_overlap>=.145,water_overlap
+assert abs(silk_water[1][0]-silk_basin[0][0])<.002
+assert abs(silk_water[0][2]-silk_basin[0][2])<.002
+silk_gate=[bpy.data.objects['JN_北河丝行_西院墙_南段'],bpy.data.objects['JN_北河丝行_西院墙_北段']]
+silk_clear=world_bounds(silk_gate[1])[0][1]-world_bounds(silk_gate[0])[1][1]
+assert silk_clear>=1.85,silk_clear
+assert bpy.data.objects['JN_北河丝行_门楼瓦面'].modifiers.get('丝行门楼真实屋面厚度')
+silk_cols=[o for o in S.objects if o.name.startswith('JN_北河丝行_原料仓木柱')]
+silk_shoes=[o for o in S.objects if o.name.startswith('JN_北河丝行_原料仓柱础')]
+assert len(silk_cols)==len(silk_shoes)==6
+for col in silk_cols:
+    candidates=[shoe for shoe in silk_shoes if dist_xy(pos(shoe),pos(col))<.01]
+    assert len(candidates)==1 and abs(world_bounds(col)[0][2]-world_bounds(candidates[0])[1][2])<.002
+assert bpy.data.objects['JN_北河丝行_原料仓_瓦面'].modifiers.get('丝行原料仓真实屋面厚度')
+silk_deck=world_bounds(bpy.data.objects['JN_北河丝行_河湾装卸木台'])
+silk_piles=[o for o in S.objects if o.name.startswith('JN_北河丝行_河湾木台桩')]
+assert len(silk_piles)==4
+for pile in silk_piles:
+    pb=world_bounds(pile)
+    assert pb[1][2]>=silk_deck[0][2] and pb[0][2]<-.60
+silk_bales=[o for o in S.objects if o.name.startswith('JN_北河丝行_绢包_') and not o.name.endswith('原型')]
+assert len(silk_bales)==6 and len({o.data.as_pointer() for o in silk_bales})==1
+silk_planks=[o for o in S.objects if o.name.startswith('JN_北河丝行_第四桥板_') and not o.name.endswith('原型')]
+silk_bridge_posts=[o for o in S.objects if o.name.startswith('JN_北河丝行_第四桥栏柱_')]
+assert len(silk_planks)==11 and len({o.data.as_pointer() for o in silk_planks})==1
+assert len(silk_bridge_posts)==12 and len([o for o in S.objects if o.name.startswith('JN_北河丝行_第四桥栏杆')])==4
+assert len([o for o in S.objects if o.name.startswith('JN_北河丝行_第四桥西阶_')])==3
+assert len([o for o in S.objects if o.name.startswith('JN_北河丝行_第四桥东阶_')])==3
+pavilion_cols=[o for o in S.objects if o.name.startswith('JN_北河丝行_候船亭木柱')]
+pavilion_shoes=[o for o in S.objects if o.name.startswith('JN_北河丝行_候船亭柱础')]
+assert len(pavilion_cols)==len(pavilion_shoes)==4
+assert bpy.data.objects['JN_北河丝行_候船亭_瓦面'].modifiers.get('候船亭真实屋面厚度')
+assert not [o for o in S.objects if o.name.startswith('JN_北河丝行_候船亭') and '墙' in o.name]
+report['town_phase9_north_silk_bend']={'phase':S['JN_town_phase'],'west_land_overlap_m':round(west_overlap,3),'east_land_overlap_m':round(east_overlap,3),'canal_overlap_m':round(water_overlap,3),'basin_water_join_gap_m':round(abs(silk_water[1][0]-silk_basin[0][0]),3),'gate_design_width_m':S['JN_north_silk_gate_clear_width_m'],'gate_evaluated_clear_width_m':round(silk_clear,3),'warehouse_posts_on_shoes':6,'loading_deck_support_piles':4,'linked_silk_bales':6,'bridge_planks':11,'bridge_rail_posts':12,'bridge_risers_per_side':3,'waiting_pavilion_posts':4,'new_image_texture_bytes':S['JN_north_silk_new_image_bytes']}
+print('TOWN_PHASE9_NORTH_SILK_BEND',json.dumps(report['town_phase9_north_silk_bend'],ensure_ascii=False))
 report['inhabited_houses']={'mesh_triangles_with_instances':house_tris,'triangle_budget':18000,'shells':8,'true_door_openings':8,'true_window_openings':16,'shared_wall_meshes':1,'door_clear_width_min':min(o['JN_door_clear_width'] for o in shells),'interior_depth_min':min(o['JN_interior_depth'] for o in shells),'ray_tests_passed':40,'floor_support_passed':8,'tea_east_risers_m':[.10,.10],'new_image_texture_bytes':0}
 print('INHABITED_HOUSES',json.dumps(report['inhabited_houses'],ensure_ascii=False))
 report['town_phase2']={'phase':S['JN_town_phase'],'grounded_houses':len(plinths),'street_segments':street_segments,'street_batches':len(streets),'tea_pavilion_columns':4,'market_stalls':2,'bridge_risers_per_side':3,'market_ceramics':len(ceramics),'teacups':len(teacups),'canal_preserved':True,'new_image_texture_bytes':0}

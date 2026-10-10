@@ -1,0 +1,20 @@
+{
+  "schema": "game-room.room-layout.v1",
+  "roomId": "yanyu-north-silk-bend-round13",
+  "units": "metres",
+  "shell": {"bounds": [30.54, 13.15, 4.64], "groundTop": 0.0, "wallThickness": 0.24},
+  "circulation": [
+    {"id": "west-north-street", "from": [3.50, 64.20, 0.06], "to": [3.50, 75.60, 0.06], "minimumWidth": 1.82},
+    {"id": "fourth-bridge-crossing", "from": [4.62, 74.20, 0.20], "to": [10.16, 74.20, 0.20], "minimumWidth": 1.62},
+    {"id": "east-silk-street", "from": [14.45, 62.60, 0.06], "to": [14.45, 74.00, 0.06], "minimumWidth": 1.82},
+    {"id": "gate-to-warehouse", "from": [13.55, 68.30, 0.13], "to": [18.15, 68.30, 0.16], "minimumWidth": 1.20},
+    {"id": "north-water-navigation", "from": [7.30, 64.40, 0.03], "to": [7.30, 75.60, 0.03], "minimumWidth": 5.00}
+  ],
+  "placements": [
+    {"id": "waiting-pavilion", "location": [0.10, 68.70, 0.16], "role": "public-shelter"},
+    {"id": "fourth-bridge", "location": [7.23, 74.20, 0.70], "role": "cross-bank-link"},
+    {"id": "silk-gate", "location": [13.55, 68.30, 1.30], "role": "compound-threshold"},
+    {"id": "loading-deck", "location": [12.20, 68.30, 0.30], "role": "water-transfer"},
+    {"id": "raw-material-warehouse", "location": [18.15, 68.30, 0.16], "role": "hero"}
+  ]
+}

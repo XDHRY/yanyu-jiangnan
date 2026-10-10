@@ -1,0 +1,10 @@
+{
+  "schema": "game-room.openings.v1",
+  "roomId": "yanyu-north-silk-bend-round13",
+  "openings": [
+    {"id": "silk-yard-gate", "type": "gate", "wall": "west courtyard wall", "widthMeters": 1.90, "heightMeters": 2.38, "thresholdMeters": 0.09, "depthMeters": 0.24, "destination": "bale yard and raw-material warehouse", "state": "one leaf open"},
+    {"id": "north-canal", "type": "waterway", "wall": "west and east revetment gap", "widthMeters": 5.00, "heightMeters": 0.06, "thresholdMeters": 0.0, "depthMeters": 11.20, "destination": "fourth bridge and future northern district", "state": "continuous water surface"},
+    {"id": "east-unloading-basin", "type": "waterway", "wall": "east bank recess", "widthMeters": 3.60, "heightMeters": 0.06, "thresholdMeters": 0.0, "depthMeters": 6.80, "destination": "silk loading deck", "state": "flush joined to canal"},
+    {"id": "fourth-bridge", "type": "passage", "wall": "cross-canal public route", "widthMeters": 2.96, "heightMeters": 2.20, "thresholdMeters": 0.20, "depthMeters": 5.50, "destination": "west waiting pavilion and east silk street", "state": "open with railings"}
+  ]
+}

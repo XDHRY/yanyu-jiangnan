@@ -1,0 +1,37 @@
+{
+  "schema": "yanyu-jiangnan.asset-manifest.v1",
+  "asset": "north-silk-bend",
+  "source_commit": "b8b46232045f216620311b268208e0494f777139",
+  "diagnostic_source_commit": "83b4d6340b7aa6e2cb6a611dbde0669c1f926ae3",
+  "source": "jiangnan.py:town_phase9_north_silk_bend",
+  "units": "metres",
+  "dimensions": {"north_canal": [5.00, 11.20], "canal_overlap": 0.15, "east_basin": [3.60, 6.80], "gate_clear_evaluated": 1.96, "loading_deck": [2.40, 2.62, 0.18]},
+  "implemented": {
+    "fourth_bridge_planks": 11,
+    "fourth_bridge_rail_posts": 12,
+    "bridge_risers_per_bank": 3,
+    "waiting_pavilion_posts_on_shoes": 4,
+    "warehouse_posts_on_shoes": 6,
+    "loading_deck_support_piles": 4,
+    "mooring_posts": 2,
+    "linked_silk_bales": 6,
+    "reel_skeins": 3
+  },
+  "materials": ["JN_water", "JN_wood", "JN_stone", "JN_湿润青石", "JN_plaster", "JN_tile", "JN_丝行原麻绢包"],
+  "textures": {"new_bitmap_bytes": 0, "packed_existing_images": 7, "estimated_scene_rgba8_mib": 41.99},
+  "reuse": {"silk_bales": "six objects share one Round 13 mesh", "paid_assets": 0, "instance_reuse_ratio": 0.523},
+  "performance": {"objects": 3741, "mesh_objects": 2350, "curve_objects": 1317, "triangles_with_instances": 156792, "materials_used": 33, "diagnostic_render_seconds": 193.80},
+  "evidence": {
+    "pull_request": 19,
+    "ci_run": 38039763232,
+    "smoke_run": 38039763264,
+    "spatial_run": 38039763201,
+    "web_run": 38039763215,
+    "editable_artifact": 11665128406,
+    "diagnostic_artifact": 11665278825,
+    "web_artifact": 11664769486,
+    "review_views": ["15_north_silk_bend_overview", "16_silk_gate_warehouse_axis"]
+  },
+  "runtime": {"collision": "pending", "navigation": "pending", "lod": "pending", "uv_normal_export_audit": "pending"},
+  "human_approvals": {"function": "pending", "form": "pending", "runtime": "pending"}
+}

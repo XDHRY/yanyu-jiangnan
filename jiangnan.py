@@ -563,7 +563,9 @@ def art_upgrade():
         v=[];f=[];uvs=[]
         for j in range(2):
             for i in range(65):
-                a=-1.05+2.1*i/64;v.append((65*sin(a),65*cos(a),-10+j*43));uvs.append((i/64,j))
+                # Keep the image-backed horizon outside the expanding settlement.
+                # The former 65 m radius crossed the Round 13 north district at y=75 m.
+                a=-1.05+2.1*i/64;v.append((120*sin(a),120*cos(a),-10+j*43));uvs.append((i/64,j))
                 if j and i:a0=i-1;f.append((a0,a0+1,a0+66,a0+65))
         o=mesh('远山环幕_生成贴图',v,f,m,C['sky']);uv_layer=o.data.uv_layers.new(name='远山全景UV')
         for loop in o.data.loops:uv_layer.data[loop.index].uv=uvs[loop.vertex_index]
@@ -1751,6 +1753,127 @@ def town_phase8_north_grain_wharf():
     S['JN_north_grain_wharf_shared_sacks']=2
     S['JN_north_grain_wharf_new_image_bytes']=0
 
+def town_phase9_north_silk_bend():
+    """Extend the north canal into a working bend with a raw-silk warehouse and fourth bridge."""
+    c=C['water'];stone=M['stone'];wood=M['wood'];wetstone=M['darkstone']
+    # Both banks overlap the Round 12 terminus. The east parcel deliberately
+    # retreats to x=13.40 around the basin, then returns to the normal bank at
+    # the fourth bridge so the bend reads as water rather than a painted inset.
+    west_land=box('北河丝行_西岸延伸地基',(-1.98,69.90,-.30),(12.84,11.40,.60),wetstone,c)
+    west_land['JN_function']='north_bend_west_support';west_land['JN_ground_top']=0.0
+    east_land=box('北河丝行_东岸原料区地基',(17.77,68.30,-.30),(8.74,11.70,.60),wetstone,c)
+    east_land['JN_function']='recessed_east_silk_parcel';east_land['JN_ground_top']=0.0
+    east_cap=box('北河丝行_第四桥东岸接地',(16.15,74.80,-.30),(11.98,1.50,.60),wetstone,c)
+    east_cap['JN_function']='returned_standard_east_bank';east_cap['JN_ground_top']=0.0
+    water=box('北河丝行_北延水巷',(7.30,70.00,.03),(5.00,11.20,.06),M['water'],c)
+    water['JN_function']='continuous_north_canal_water';water['JN_overlap_with_round12_m']=.15
+    basin=box('北河丝行_东向卸货河湾',(11.60,68.30,.03),(3.60,6.80,.06),M['water'],c)
+    basin['JN_function']='east_loading_basin';basin['JN_width_m']=8.60
+
+    # Continuous public routes: west water street, recessed east silk street and
+    # a north cross-lane returning to the normal east bridge landing.
+    box('北河丝行_西岸北延石街',(3.50,70.00,.06),(1.82,11.20,.12),stone,c,.012)
+    box('北河丝行_东岸丝行石街',(14.45,68.30,.06),(1.82,11.40,.12),stone,c,.012)
+    box('北河丝行_第四桥东接横巷',(13.38,73.82,.06),(3.96,1.36,.12),stone,c,.012)
+
+    # Fourth bridge closes a new pedestrian loop north of the widened basin.
+    plank=box('北河丝行_第四桥板原型',(0,0,0),(1,1,.14),wood,c,.014);plank.hide_render=True;plank.hide_viewport=True
+    for i in range(11):
+        x=4.60+i*.52
+        o=bpy.data.objects.new(PREFIX+f'北河丝行_第四桥板_{i+1:02d}',plank.data);c.objects.link(o);o.location=(x,74.20,.70);o.scale=(.50,1.48,1)
+    for side,y in enumerate((73.43,74.97),1):
+        for i,x in enumerate((4.68,5.72,6.76,7.80,8.84,9.78),1):
+            box(f'北河丝行_第四桥栏柱_{side}_{i}',(x,y,1.29),(.12,.12,1.04),wood,c,.006)
+        for z in (1.18,1.65):box('北河丝行_第四桥栏杆',(7.23,y,z),(5.22,.10,.10),wood,c,.005)
+    for side,centers in (('西',(3.70,4.02,4.34)),('东',(10.68,10.36,10.04))):
+        for i,x in enumerate(centers,1):
+            top=.20+.20*(i-1 if side=='西' else 3-i)
+            box(f'北河丝行_第四桥{side}阶_{i}',(x,74.20,top/2),(.32,1.62,top),stone,c,.012)
+
+    # A small open waiting pavilion supports the public node without competing
+    # with the silk warehouse. Four posts land on four shoes; no wall infill is
+    # placed between them, preserving the river outlook promised by the columns.
+    px,py=.10,68.70
+    box('北河丝行_候船亭台基',(px,py,.16),(4.00,4.50,.32),stone,c,.025)
+    for x in (-1.40,1.60):
+        for y in (67.05,70.35):
+            box('北河丝行_候船亭柱础',(x,y,.41),(.42,.42,.18),wetstone,c,.014)
+            box('北河丝行_候船亭木柱',(x,y,1.78),(.19,.19,2.58),wood,c,.008)
+    for y in (67.05,70.35):box('北河丝行_候船亭檐枋',(px,y,3.08),(3.20,.20,.22),wood,c,.008)
+    for x in (-1.40,1.60):box('北河丝行_候船亭穿枋',(x,py,3.02),(.20,3.50,.20),wood,c,.008)
+    pavilion_roof=roof('北河丝行_候船亭',px,py,3.12,4.70,5.00,c)
+    mod=pavilion_roof.modifiers.new('候船亭真实屋面厚度','SOLIDIFY');mod.thickness=.070;mod.offset=-1
+    box('北河丝行_候船亭长凳',(px,69.55,.66),(2.30,.46,.16),wood,c,.018)
+    for x in (-.78,.98):box('北河丝行_候船亭凳腿',(x,69.55,.37),(.15,.34,.52),wood,c,.008)
+
+    # Thick split west wall creates a measured 1.90 m silk-yard arrival. The
+    # gate looks directly through to an open-front, six-column raw-silk hall.
+    wall_x=13.55;gate_y=68.30
+    for tag,y,length in (('南段',65.32,4.00),('北段',71.28,4.00)):
+        box('北河丝行_西院墙_'+tag,(wall_x,y,1.02),(.24,length,2.04),M['plaster'],c,.018)
+        box('北河丝行_西院墙压顶_'+tag,(wall_x,y,2.10),(.34,length+.08,.09),M['tile'],c,.010)
+    for y in (67.30,69.30):box('北河丝行_门楼木柱',(wall_x,y,1.30),(.20,.20,2.44),wood,c,.008)
+    box('北河丝行_门楼额枋',(wall_x,gate_y,2.48),(.22,2.24,.20),wood,c,.008)
+    box('北河丝行_门槛',(13.49,gate_y,.13),(.34,1.78,.08),wood,c,.006)
+    box('北河丝行_开门扇',(14.18,67.37,1.20),(1.20,.075,2.06),wood,c,.010)
+    gv=[(12.88,66.93,2.53),(14.22,66.93,2.53),(12.88,69.67,2.53),(14.22,69.67,2.53),(13.55,66.93,2.96),(13.55,69.67,2.96)]
+    gate_roof=mesh('北河丝行_门楼瓦面',gv,[(0,2,5,4),(4,5,3,1)],M['tile'],c)
+    mod=gate_roof.modifiers.new('丝行门楼真实屋面厚度','SOLIDIFY');mod.thickness=.065;mod.offset=-1
+    box('北河丝行_东界粉墙',(22.04,68.30,.90),(.20,11.20,1.80),M['plaster'],c,.018)
+    box('北河丝行_东界压顶',(22.04,68.30,1.84),(.28,11.28,.09),M['tile'],c,.010)
+    box('北河丝行_南界粉墙',(18.12,62.55,.90),(7.66,.20,1.80),M['plaster'],c,.018)
+    box('北河丝行_南界压顶',(18.12,62.55,1.84),(7.76,.28,.09),M['tile'],c,.010)
+
+    hx,hy=18.15,68.30
+    box('北河丝行_原料仓台基',(hx,hy,.16),(6.30,5.40,.32),stone,c,.025)
+    box('北河丝行_西入口踏步',(14.82,hy,.09),(.42,1.58,.18),stone,c,.012)
+    for x in (15.52,18.15,20.78):
+        for y in (66.04,70.56):
+            box('北河丝行_原料仓柱础',(x,y,.42),(.38,.38,.20),wetstone,c,.015)
+            box('北河丝行_原料仓木柱',(x,y,1.80),(.20,.20,2.56),wood,c,.008)
+    for y in (66.04,70.56):box('北河丝行_原料仓长檩',(hx,y,3.12),(5.50,.21,.22),wood,c,.008)
+    for x in (15.52,18.15,20.78):box('北河丝行_原料仓穿梁',(x,hy,3.06),(.20,4.72,.20),wood,c,.008)
+    box('北河丝行_原料仓东后墙',(21.00,hy,1.52),(.20,4.62,2.66),M['plaster'],c,.018)
+    for y in (66.00,70.60):box('北河丝行_原料仓侧粉墙',(19.92,y,1.40),(2.30,.18,2.38),M['plaster'],c,.018)
+    warehouse_roof=roof('北河丝行_原料仓',hx,hy,3.20,6.85,5.85,c)
+    mod=warehouse_roof.modifiers.new('丝行原料仓真实屋面厚度','SOLIDIFY');mod.thickness=.080;mod.offset=-1
+
+    # A four-pile east loading deck reaches the basin. Two shallow risers land
+    # back on the recessed east parcel; mooring points retain visible contact.
+    box('北河丝行_河湾装卸木台',(12.20,68.30,.30),(2.40,2.62,.18),wood,c,.010)
+    for x in (11.22,13.18):
+        for y in (67.23,69.37):box('北河丝行_河湾木台桩',(x,y,-.13),(.20,.20,1.02),wood,c,.008)
+    for i,(x,top) in enumerate(((13.42,.18),(13.20,.28)),1):box(f'北河丝行_河湾装卸踏步_{i}',(x,hy,top/2),(.44,1.56,top),stone,c,.010)
+    for y in (67.36,69.24):
+        box('北河丝行_河湾系舟桩础',(11.20,y,.18),(.34,.34,.18),stone,c,.010)
+        box('北河丝行_河湾系舟桩',(11.20,y,.76),(.16,.16,.98),wood,c,.008)
+
+    # Linked raw-silk bales and a real timber reel rack explain the warehouse
+    # function while leaving the 1.40 m gate-to-hall axis unobstructed.
+    balemat=material('丝行原麻绢包',(.49,.38,.20),.86,12)
+    bale=box('北河丝行_绢包原型',(0,0,.44),(.82,.58,.72),balemat,c,.060);bale.hide_render=True;bale.hide_viewport=True
+    for i,(x,y,rz) in enumerate(((17.25,66.78,.10),(18.25,66.78,-.08),(19.25,66.78,.04),(17.35,69.90,-.10),(18.35,69.90,.08),(19.35,69.90,-.03)),1):
+        o=bpy.data.objects.new(PREFIX+f'北河丝行_绢包_{i}',bale.data);c.objects.link(o);o.location=(x,y,.16);o.rotation_euler[2]=rz
+        for dy in (-.18,.18):box(f'北河丝行_绢包束带_{i}',(x,y+dy,.60),(.86,.045,.76),M['edge'],c,.004)
+    box('北河丝行_络丝架顶梁',(20.15,68.30,2.18),(.18,2.72,.18),wood,c,.008)
+    for y in (67.05,69.55):box('北河丝行_络丝架立柱',(20.15,y,1.28),(.18,.18,1.72),wood,c,.008)
+    for z in (1.12,1.62):box('北河丝行_络丝架横轴',(20.15,68.30,z),(.16,2.36,.16),wood,c,.006)
+    for j,y in enumerate((67.55,68.30,69.05),1):
+        line(f'北河丝行_络丝绞_{j}',[(20.05,y-.18,1.62),(19.92,y,1.44),(20.05,y+.18,1.62),(20.18,y,1.80),(20.05,y-.18,1.62)],.028,balemat,c,res=2,bevel_res=1)
+
+    line('北河丝行_门侧工作灯挑杆',[(13.55,69.30,2.28),(12.92,69.30,2.28),(12.92,69.30,1.82)],.022,wood,c,res=2,bevel_res=1)
+    uv('北河丝行_门侧工作纱灯',(12.92,69.30,1.60),(.13,.13,.20),M['paper'],c,12,8)
+    light('北河丝行_门侧工作灯火',(12.92,69.30,1.58),(1,.46,.20),62,.24,kind='POINT')
+    line('北河丝行_仓内吊灯杆',[(18.15,67.30,3.04),(18.15,67.30,2.52)],.018,wood,c,res=1,bevel_res=1)
+    uv('北河丝行_仓内工作纱灯',(18.15,67.30,2.30),(.15,.15,.22),M['paper'],c,12,8)
+    light('北河丝行_仓内工作灯火',(18.15,67.30,2.28),(1,.50,.24),92,.28,kind='POINT')
+
+    S['JN_town_phase']='phase_9_north_silk_bend'
+    S['JN_north_silk_gate_clear_width_m']=1.90
+    S['JN_north_silk_bridge_planks']=11
+    S['JN_north_silk_linked_bales']=6
+    S['JN_north_silk_new_image_bytes']=0
+
 def batch_static_objects(name,objects,mat,col,bev=0):
     """Combine already-built static meshes after art generation so optimization cannot perturb procedural build order."""
     objects=[o for o in objects if o and o.type=='MESH']
@@ -1826,7 +1949,7 @@ def viewport():
                 a.spaces.active.region_3d.view_camera_zoom=0
     bpy.context.view_layer.update()
 def build(stage=None):
-    start();courtyard();village_phase1_skeleton();town_phase2_market();town_phase3_east_wharf();town_phase4_east_residence();town_phase5_cloth_finish_yard();town_phase6_west_wine_court();town_phase7_north_granary();town_phase8_north_grain_wharf()
+    start();courtyard();village_phase1_skeleton();town_phase2_market();town_phase3_east_wharf();town_phase4_east_residence();town_phase5_cloth_finish_yard();town_phase6_west_wine_court();town_phase7_north_granary();town_phase8_north_grain_wharf();town_phase9_north_silk_bend()
     level=P['stage'] if stage is None else stage
     if level>=2:vegetation()
     if level>=3:weather()
