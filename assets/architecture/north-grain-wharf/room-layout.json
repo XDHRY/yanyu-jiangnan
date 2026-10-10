@@ -1,0 +1,17 @@
+{
+  "schema": "game-room.room-layout.v1",
+  "roomId": "yanyu-north-grain-wharf-round12",
+  "units": "metres",
+  "shell": {"bounds": [6.92, 31.70, 2.55], "groundTop": 0.0, "wallThickness": 0.0},
+  "circulation": [
+    {"id": "bridge-to-granary-street", "from": [3.50, 49.20, 0.06], "to": [3.48, 54.90, 0.06], "minimumWidth": 1.72},
+    {"id": "street-to-loading-deck", "from": [4.14, 54.90, 0.21], "to": [6.84, 54.90, 0.40], "minimumWidth": 1.72},
+    {"id": "north-water-navigation", "from": [7.30, 32.85, 0.03], "to": [7.30, 64.55, 0.03], "minimumWidth": 3.30}
+  ],
+  "placements": [
+    {"id": "turning-pocket", "location": [3.48, 54.90, 0.06], "role": "public-transition"},
+    {"id": "loading-deck", "location": [5.78, 54.90, 0.31], "role": "hero"},
+    {"id": "open-rice-barge", "location": [8.02, 55.00, 0.17], "role": "water-transport"},
+    {"id": "dock-lantern", "location": [7.02, 55.82, 1.48], "role": "functional-night-light"}
+  ]
+}
