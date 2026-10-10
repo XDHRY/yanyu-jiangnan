@@ -1624,7 +1624,7 @@ def town_phase7_north_granary():
 
     # Shared grain sacks and lidded bins establish scale and inventory while
     # retaining one mesh datablock per repeated asset family.
-    sackmat=material('米行麻布',(.30,.235,.13),.88,14)
+    sackmat=material('米行麻布',(.42,.32,.17),.84,14)
     seg=12;sv=[];sf=[]
     # Flat base, broad shoulder and pinched tied mouth read as a filled sack
     # from the gate camera while all six copies still share one mesh datablock.
@@ -1638,6 +1638,11 @@ def town_phase7_north_granary():
     sack=mesh('北端米行粮栈_粮袋原型',sv,sf,sackmat,c);sack.hide_render=True;sack.hide_viewport=True
     for i,(x,y,z,rz) in enumerate(((-1.10,56.90,.12,.12),(-.35,57.28,.12,-.18),(-1.05,58.45,.12,.05),(-3.58,57.35,.80,.18),(-4.35,57.30,.80,-.12),(-5.12,57.36,.80,.08)),1):
         o=bpy.data.objects.new(PREFIX+f'北端米行粮栈_粮袋_{i}',sack.data);c.objects.link(o);o.location=(x,y,z);o.rotation_euler[2]=rz
+        # A real tied neck keeps the brighter sack silhouette from reading as a
+        # sealed clay jar. The closed loop and short free end visibly meet the bag.
+        ring=[(x+.145*cos(2*pi*j/8),y+.145*sin(2*pi*j/8),z+.99) for j in range(9)]
+        line(f'北端米行粮栈_粮袋扎口绳_{i}',ring,.012,M['edge'],c,res=1,bevel_res=1)
+        line(f'北端米行粮栈_粮袋绳尾_{i}',[(x+.11,y,z+.99),(x+.20,y+.05,z+.88)],.010,M['edge'],c,res=1,bevel_res=1)
     seg=16;bv=[];bf=[]
     for z,r in ((0,.43),(.74,.46),(.86,.40)):
         bv.extend((r*cos(2*pi*i/seg),r*sin(2*pi*i/seg),z) for i in range(seg))
@@ -1651,13 +1656,15 @@ def town_phase7_north_granary():
 
     # Grounded beam scale: two feet, upright, brace and cross-beam carry a
     # suspended bronze pan. The rope endpoints visibly meet beam and pan.
-    box('北端米行粮栈_磅秤底座',(-.35,60.45,.20),(1.55,.85,.28),wetstone,c,.018)
-    for y in (60.18,60.72):box('北端米行粮栈_磅秤支脚',(-.78,y,.52),(.18,.18,.78),wood,c,.008)
-    box('北端米行粮栈_磅秤立柱',(-.78,60.45,1.42),(.20,.20,2.25),wood,c,.008)
-    box('北端米行粮栈_磅秤斜撑',(-.52,60.45,.92),(.62,.16,.14),wood,c,.006)
-    box('北端米行粮栈_磅秤横梁',(-.02,60.45,2.47),(1.78,.16,.16),wood,c,.006)
-    line('北端米行粮栈_秤盘吊索',[((.58),60.45,2.39),(.58,60.22,1.72),(.58,60.45,1.42),(.58,60.68,1.72),(.58,60.45,2.39)],.016,M['bronze'],c,res=1,bevel_res=1)
-    uv('北端米行粮栈_铜秤盘',(.58,60.45,1.40),(.46,.46,.08),M['bronze'],c,16,4)
+    # Rotate the scale ninety degrees relative to Round 11 so the long beam and
+    # hanging pan present a readable side profile from the east gate camera.
+    box('北端米行粮栈_磅秤底座',(-.35,60.10,.20),(.85,1.55,.28),wetstone,c,.018)
+    for y in (59.82,60.38):box('北端米行粮栈_磅秤支脚',(-.62,y,.52),(.18,.18,.78),wood,c,.008)
+    box('北端米行粮栈_磅秤立柱',(-.62,60.10,1.42),(.20,.20,2.25),wood,c,.008)
+    box('北端米行粮栈_磅秤斜撑',(-.62,60.35,.92),(.16,.62,.14),wood,c,.006)
+    box('北端米行粮栈_磅秤横梁',(-.62,60.78,2.47),(.16,1.78,.16),wood,c,.006)
+    line('北端米行粮栈_秤盘吊索',[(-.62,61.38,2.39),(-.85,61.38,1.72),(-.62,61.38,1.42),(-.39,61.38,1.72),(-.62,61.38,2.39)],.016,M['bronze'],c,res=1,bevel_res=1)
+    uv('北端米行粮栈_铜秤盘',(-.62,61.38,1.40),(.46,.46,.08),M['bronze'],c,16,4)
     line('北端米行粮栈_工作灯挑杆',[(-2.75,58.60,2.76),(-1.95,58.60,2.76),(-1.95,58.60,2.28)],.024,wood,c,res=2,bevel_res=1)
     uv('北端米行粮栈_工作纱灯',(-1.95,58.60,2.08),(.15,.15,.22),M['paper'],c,12,8)
     light('北端米行粮栈_工作灯火',(-1.95,58.60,2.05),(1,.48,.20),92,.28,kind='POINT')
@@ -1668,6 +1675,77 @@ def town_phase7_north_granary():
     S['JN_north_granary_linked_sacks']=6
     S['JN_north_granary_linked_bins']=3
     S['JN_north_granary_new_image_bytes']=0
+
+def town_phase8_north_grain_wharf():
+    """Repair the northern canal water and add a supported public grain landing."""
+    c=C['water'];stone=M['stone'];wood=M['wood'];wetstone=M['darkstone']
+    # Earlier expansion continued buildings and bridges beyond the first water
+    # strip. Restore the actual river surface from the paper-yard overlap to the
+    # granary terminus, while retaining a 0.15 m overlap with the original canal.
+    water=box('北段连续水巷',(7.30,48.70,.03),(5.00,31.70,.06),M['water'],c)
+    water['JN_function']='continuous_north_canal_water';water['JN_overlap_with_original_m']=.15
+
+    # The paved turning pocket links the granary street to a three-rise landing.
+    # Each tread descends toward the water; the timber apron then reaches the boat.
+    box('北粮水埠_桥北转折石坪',(3.48,54.90,.06),(1.86,2.70,.12),stone,c,.012)
+    for i,(x,top) in enumerate(((4.38,.42),(4.72,.28),(5.06,.14)),1):
+        step=box(f'北粮水埠_下水踏步_{i}',(x,54.90,top/2),(.48,1.72,top),stone,c,.012)
+        step['JN_step_top']=top;step['JN_destination']='north_grain_wharf'
+    deck=box('北粮水埠_装卸木台',(5.78,54.90,.31),(2.55,2.46,.18),wood,c,.010)
+    deck['JN_function']='supported_grain_loading_deck'
+    for x in (4.72,6.84):
+        for y in (53.92,55.88):
+            pile=box('北粮水埠_木台桩',(x,y,-.13),(.20,.20,1.02),wood,c,.008)
+            pile['JN_supports']='north_grain_loading_deck'
+    for y in (53.98,55.82):
+        box('北粮水埠_系舟桩础',(6.66,y,.18),(.34,.34,.18),stone,c,.010)
+        box('北粮水埠_系舟桩',(6.66,y,.82),(.16,.16,1.10),wood,c,.008)
+        line('北粮水埠_系舟桩横销',[(6.42,y,1.08),(6.90,y,1.08)],.030,wood,c,res=1,bevel_res=1)
+
+    # A narrow open rice barge leaves the navigation lane clear and remains well
+    # north of the third bridge. The hull, bottom, ribs and seats are all geometry.
+    bx,by=8.02,55.00
+    sections=[(-2.12,.08,.38),(-1.68,.50,.25),(-.82,.67,.19),(0,.72,.17),(.82,.67,.19),(1.68,.50,.25),(2.12,.08,.38)]
+    vv=[];ff=[]
+    for yy,half,bottom in sections:
+        vv.extend(((bx-half,by+yy,.59),(bx+half,by+yy,.59),(bx-half*.52,by+yy,bottom),(bx+half*.52,by+yy,bottom)))
+    for i in range(len(sections)-1):
+        a=4*i;b=a+4
+        ff.extend(((a,b,b+2,a+2),(a+1,a+3,b+3,b+1),(a+2,b+2,b+3,a+3)))
+    ff.extend(((0,1,3,2),(24,26,27,25)))
+    boat=mesh('北粮水埠_米船船壳',vv,ff,wood,c)
+    for p in boat.data.polygons:p.use_smooth=len(p.vertices)==4
+    box('北粮水埠_米船舱底',(bx,by,.35),(.62,3.22,.08),wood,c,.008)
+    for yy in (-.92,0,.92):box('北粮水埠_米船坐板',(bx,by+yy,.62),(1.16,.22,.08),wood,c,.006)
+    for side in (-1,1):
+        line('北粮水埠_米船舷侧压条',[(bx+side*half,by+yy,.61) for yy,half,_ in sections],.027,wetstone,c,res=2,bevel_res=1)
+    for yy,half in ((-.82,.67),(.82,.67)):
+        line('北粮水埠_米船横肋',[(bx-half*.88,by+yy,.54),(bx,by+yy,.40),(bx+half*.88,by+yy,.54)],.024,wetstone,c,res=2,bevel_res=1)
+    for xx in (-.20,0,.20):box('北粮水埠_米船排水栅条',(bx+xx,by,.415),(.075,2.82,.055),wetstone,c,.004)
+    box('北粮水埠_米船艄板',(bx,by+1.68,.49),(.92,.075,.34),wood,c,.006)
+    line('北粮水埠_竹篙',[(7.38,52.88,.58),(8.66,57.20,.66)],.026,wood,c,res=2,bevel_res=1)
+
+    # Mooring endpoints visibly meet the boat and north post. Two wharf sacks
+    # reuse the exact Round 11 grain-sack mesh instead of duplicating geometry.
+    line('北粮水埠_系舟缆绳',[(7.45,54.10,.58),(7.00,53.98,.82),(6.66,53.98,1.08)],.018,wetstone,c,res=3,bevel_res=1)
+    sack_mesh=bpy.data.objects[PREFIX+'北端米行粮栈_粮袋原型'].data
+    for i,(x,y,rz) in enumerate(((5.35,54.20,.12),(5.82,55.35,-.18)),1):
+        o=bpy.data.objects.new(PREFIX+f'北粮水埠_共享粮袋_{i}',sack_mesh);c.objects.link(o);o.location=(x,y,.40);o.rotation_euler[2]=rz
+        ring=[(x+.145*cos(2*pi*j/8),y+.145*sin(2*pi*j/8),1.39) for j in range(9)]
+        line(f'北粮水埠_粮袋扎口绳_{i}',ring,.012,wetstone,c,res=1,bevel_res=1)
+
+    # One restrained dock lamp provides a functional pool without flattening
+    # the moonlit hierarchy or adding bitmap textures.
+    line('北粮水埠_码头灯挑杆',[(6.66,55.82,1.18),(6.66,55.82,1.72),(7.02,55.82,1.72)],.024,wood,c,res=2,bevel_res=1)
+    uv('北粮水埠_码头纱灯',(7.02,55.82,1.48),(.12,.12,.19),M['paper'],c,12,8)
+    line('北粮水埠_码头灯悬绳',[(7.02,55.82,1.67),(7.02,55.82,1.73)],.008,wood,c,res=1,bevel_res=0)
+    light('北粮水埠_码头灯火',(7.02,55.82,1.46),(1,.43,.18),62,.24,kind='POINT')
+
+    S['JN_town_phase']='phase_8_north_grain_wharf'
+    S['JN_north_canal_overlap_m']=.15
+    S['JN_north_grain_wharf_piles']=4
+    S['JN_north_grain_wharf_shared_sacks']=2
+    S['JN_north_grain_wharf_new_image_bytes']=0
 
 def batch_static_objects(name,objects,mat,col,bev=0):
     """Combine already-built static meshes after art generation so optimization cannot perturb procedural build order."""
@@ -1744,7 +1822,7 @@ def viewport():
                 a.spaces.active.region_3d.view_camera_zoom=0
     bpy.context.view_layer.update()
 def build(stage=None):
-    start();courtyard();village_phase1_skeleton();town_phase2_market();town_phase3_east_wharf();town_phase4_east_residence();town_phase5_cloth_finish_yard();town_phase6_west_wine_court();town_phase7_north_granary()
+    start();courtyard();village_phase1_skeleton();town_phase2_market();town_phase3_east_wharf();town_phase4_east_residence();town_phase5_cloth_finish_yard();town_phase6_west_wine_court();town_phase7_north_granary();town_phase8_north_grain_wharf()
     level=P['stage'] if stage is None else stage
     if level>=2:vegetation()
     if level>=3:weather()
@@ -1761,3 +1839,4 @@ if __name__=='__main__':
         rdir=os.path.join(P['output_dir'],'renders');os.makedirs(rdir,exist_ok=True)
         for name in ['正面','顶视','三分之四']:
             S.camera=bpy.data.objects[PREFIX+name];S.render.filepath=os.path.join(rdir,name+'.png');bpy.ops.render.render(write_still=True)
+
