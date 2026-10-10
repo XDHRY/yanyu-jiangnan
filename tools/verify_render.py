@@ -569,7 +569,7 @@ assert len(silk_cols)==len(silk_shoes)==6
 for col in silk_cols:
     candidates=[shoe for shoe in silk_shoes if dist_xy(pos(shoe),pos(col))<.01]
     assert len(candidates)==1 and abs(world_bounds(col)[0][2]-world_bounds(candidates[0])[1][2])<.002
-assert bpy.data.objects['JN_北河丝行_原料仓黛瓦屋面'].modifiers.get('丝行原料仓真实屋面厚度')
+assert bpy.data.objects['JN_北河丝行_原料仓_瓦面'].modifiers.get('丝行原料仓真实屋面厚度')
 silk_deck=world_bounds(bpy.data.objects['JN_北河丝行_河湾装卸木台'])
 silk_piles=[o for o in S.objects if o.name.startswith('JN_北河丝行_河湾木台桩')]
 assert len(silk_piles)==4
@@ -587,7 +587,7 @@ assert len([o for o in S.objects if o.name.startswith('JN_北河丝行_第四桥
 pavilion_cols=[o for o in S.objects if o.name.startswith('JN_北河丝行_候船亭木柱')]
 pavilion_shoes=[o for o in S.objects if o.name.startswith('JN_北河丝行_候船亭柱础')]
 assert len(pavilion_cols)==len(pavilion_shoes)==4
-assert bpy.data.objects['JN_北河丝行_候船亭黛瓦屋面'].modifiers.get('候船亭真实屋面厚度')
+assert bpy.data.objects['JN_北河丝行_候船亭_瓦面'].modifiers.get('候船亭真实屋面厚度')
 assert not [o for o in S.objects if o.name.startswith('JN_北河丝行_候船亭') and '墙' in o.name]
 report['town_phase9_north_silk_bend']={'phase':S['JN_town_phase'],'west_land_overlap_m':round(west_overlap,3),'east_land_overlap_m':round(east_overlap,3),'canal_overlap_m':round(water_overlap,3),'basin_water_join_gap_m':round(abs(silk_water[1][0]-silk_basin[0][0]),3),'gate_design_width_m':S['JN_north_silk_gate_clear_width_m'],'gate_evaluated_clear_width_m':round(silk_clear,3),'warehouse_posts_on_shoes':6,'loading_deck_support_piles':4,'linked_silk_bales':6,'bridge_planks':11,'bridge_rail_posts':12,'bridge_risers_per_side':3,'waiting_pavilion_posts':4,'new_image_texture_bytes':S['JN_north_silk_new_image_bytes']}
 print('TOWN_PHASE9_NORTH_SILK_BEND',json.dumps(report['town_phase9_north_silk_bend'],ensure_ascii=False))
