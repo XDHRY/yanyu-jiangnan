@@ -1,0 +1,9 @@
+{
+  "schema": "game-room.openings.v1",
+  "roomId": "yanyu-silk-trade-finish-round14",
+  "openings": [
+    {"id": "street-shop-opening", "type": "shopfront", "wall": "existing warehouse west bay", "widthMeters": 1.00, "heightMeters": 2.24, "thresholdMeters": 0.30, "depthMeters": 3.22, "destination": "trade counter and three silk bolts", "state": "two solid shutters folded open"},
+    {"id": "account-room-door", "type": "door", "wall": "timber screen behind shop", "widthMeters": 0.80, "heightMeters": 2.14, "thresholdMeters": 0.08, "depthMeters": 2.34, "destination": "desk, ledgers, abacus and stool", "state": "open"},
+    {"id": "loading-basin-berth", "type": "water berth", "wall": "recessed east-bank basin", "widthMeters": 0.98, "heightMeters": 0.60, "thresholdMeters": 0.0, "depthMeters": 3.40, "destination": "moored open silk boat and loading deck", "state": "open water"}
+  ]
+}
