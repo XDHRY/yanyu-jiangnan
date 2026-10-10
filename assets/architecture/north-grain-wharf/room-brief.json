@@ -8,7 +8,7 @@
   "hero": {"id": "north-grain-loading-deck", "role": "supported waterside transfer anchor", "reservedBoundsMeters": [4.88, 5.20, 2.00]},
   "symmetry": {"mode": "asymmetric-working-waterfront", "order": 1, "appliesTo": ["four-pile deck", "barge hull"], "exceptions": ["cargo and lantern show active unloading", "mooring uses the southern post"]},
   "circulation": {"description": "third bridge to west street, turning pocket, descending steps, deck and moored barge", "minimumClearanceMeters": 1.20},
-  "productionCamera": {"viewport": [1024, 640], "location": [10.75, 57.35, 2.45], "target": [5.55, 54.90, 0.78], "lensMillimeters": 39, "overviewLocation": [15.0, 47.2, 10.8], "overviewTarget": [4.2, 54.3, 1.10]},
+  "productionCamera": {"viewport": [1024, 640], "location": [10.20, 51.80, 3.00], "target": [5.45, 54.90, 0.68], "lensMillimeters": 38, "overviewLocation": [17.0, 45.5, 13.0], "overviewTarget": [3.5, 55.4, 1.08]},
   "performanceBudget": {"maxSceneTriangles": 195000, "maxNewImageBytes": 0, "maxTextureBytes": 50331648},
   "creditBudget": {"maximumCredits": 0, "approvalRequired": true},
   "environment": {"type": "project-night-sky", "identity": "yanyu-jiangnan-night-v1", "source": "repository procedural atmosphere", "assignmentKey": "烟雨江南 · 雪月江南"},
