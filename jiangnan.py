@@ -1625,10 +1625,11 @@ def town_phase7_north_granary():
     # Shared grain sacks and lidded bins establish scale and inventory while
     # retaining one mesh datablock per repeated asset family.
     sackmat=material('米行麻布',(.42,.32,.17),.84,14)
+    ropemat=material('米行麻绳',(.38,.23,.09),.90,8)
     seg=12;sv=[];sf=[]
     # Flat base, broad shoulder and pinched tied mouth read as a filled sack
     # from the gate camera while all six copies still share one mesh datablock.
-    for z,rx,ry in ((0,.28,.22),(.12,.37,.27),(.64,.39,.28),(.84,.29,.22),(.93,.13,.12),(1.05,.20,.08)):
+    for z,rx,ry in ((0,.28,.22),(.12,.37,.27),(.64,.39,.28),(.84,.29,.22),(.93,.13,.12),(1.05,.06,.05)):
         sv.extend((rx*cos(2*pi*i/seg),ry*sin(2*pi*i/seg),z) for i in range(seg))
     sf.append(tuple(range(seg-1,-1,-1)))
     for row in range(5):
@@ -1641,8 +1642,9 @@ def town_phase7_north_granary():
         # A real tied neck keeps the brighter sack silhouette from reading as a
         # sealed clay jar. The closed loop and short free end visibly meet the bag.
         ring=[(x+.145*cos(2*pi*j/8),y+.145*sin(2*pi*j/8),z+.99) for j in range(9)]
-        line(f'北端米行粮栈_粮袋扎口绳_{i}',ring,.012,M['edge'],c,res=1,bevel_res=1)
-        line(f'北端米行粮栈_粮袋绳尾_{i}',[(x+.11,y,z+.99),(x+.20,y+.05,z+.88)],.010,M['edge'],c,res=1,bevel_res=1)
+        line(f'北端米行粮栈_粮袋扎口绳_{i}',ring,.014,ropemat,c,res=1,bevel_res=1)
+        uv(f'北端米行粮栈_粮袋绳结_{i}',(x+.14,y,z+1.00),(.040,.040,.040),ropemat,c,8,4)
+        line(f'北端米行粮栈_粮袋绳尾_{i}',[(x+.14,y,z+1.00),(x+.23,y+.06,z+.87)],.011,ropemat,c,res=1,bevel_res=1)
     seg=16;bv=[];bf=[]
     for z,r in ((0,.43),(.74,.46),(.86,.40)):
         bv.extend((r*cos(2*pi*i/seg),r*sin(2*pi*i/seg),z) for i in range(seg))
@@ -1678,7 +1680,7 @@ def town_phase7_north_granary():
 
 def town_phase8_north_grain_wharf():
     """Repair the northern canal water and add a supported public grain landing."""
-    c=C['water'];stone=M['stone'];wood=M['wood'];wetstone=M['darkstone']
+    c=C['water'];stone=M['stone'];wood=M['wood'];wetstone=M['darkstone'];ropemat=bpy.data.materials[PREFIX+'米行麻绳']
     # Earlier expansion continued buildings and bridges beyond the first water
     # strip. Restore the actual river surface from the paper-yard overlap to the
     # granary terminus, while retaining a 0.15 m overlap with the original canal.
@@ -1732,7 +1734,9 @@ def town_phase8_north_grain_wharf():
     for i,(x,y,rz) in enumerate(((5.35,54.20,.12),(5.82,55.35,-.18)),1):
         o=bpy.data.objects.new(PREFIX+f'北粮水埠_共享粮袋_{i}',sack_mesh);c.objects.link(o);o.location=(x,y,.40);o.rotation_euler[2]=rz
         ring=[(x+.145*cos(2*pi*j/8),y+.145*sin(2*pi*j/8),1.39) for j in range(9)]
-        line(f'北粮水埠_粮袋扎口绳_{i}',ring,.012,wetstone,c,res=1,bevel_res=1)
+        line(f'北粮水埠_粮袋扎口绳_{i}',ring,.014,ropemat,c,res=1,bevel_res=1)
+        uv(f'北粮水埠_粮袋绳结_{i}',(x+.14,y,1.40),(.040,.040,.040),ropemat,c,8,4)
+        line(f'北粮水埠_粮袋绳尾_{i}',[(x+.14,y,1.40),(x+.23,y+.06,1.27)],.011,ropemat,c,res=1,bevel_res=1)
 
     # One restrained dock lamp provides a functional pool without flattening
     # the moonlit hierarchy or adding bitmap textures.
