@@ -563,7 +563,9 @@ def art_upgrade():
         v=[];f=[];uvs=[]
         for j in range(2):
             for i in range(65):
-                a=-1.05+2.1*i/64;v.append((65*sin(a),65*cos(a),-10+j*43));uvs.append((i/64,j))
+                # Keep the image-backed horizon outside the expanding settlement.
+                # The former 65 m radius crossed the Round 13 north district at y=75 m.
+                a=-1.05+2.1*i/64;v.append((120*sin(a),120*cos(a),-10+j*43));uvs.append((i/64,j))
                 if j and i:a0=i-1;f.append((a0,a0+1,a0+66,a0+65))
         o=mesh('远山环幕_生成贴图',v,f,m,C['sky']);uv_layer=o.data.uv_layers.new(name='远山全景UV')
         for loop in o.data.loops:uv_layer.data[loop.index].uv=uvs[loop.vertex_index]
