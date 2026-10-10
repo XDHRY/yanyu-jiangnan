@@ -1,0 +1,25 @@
+{
+  "schema": "yanyu-jiangnan.asset-contract.v1",
+  "asset": "north-silk-bend",
+  "purpose": "A fourth-bridge public bend that extends both banks and the canal into an east-bank raw-silk receiving yard.",
+  "source": "jiangnan.py:town_phase9_north_silk_bend",
+  "units": "metres",
+  "bounds_m": {"x": [-8.40, 22.14], "y": [62.45, 75.60], "z": [-0.64, 4.00]},
+  "hero": "east-bank silk gate, pile-supported unloading bay and six-column raw-material warehouse",
+  "circulation": {
+    "primary": "north grain wharf -> west stone street -> waiting pavilion -> fourth bridge -> silk gate",
+    "production": "unloading bay -> silk gate -> bale yard -> raw-material warehouse",
+    "minimum_clearance_m": 1.20
+  },
+  "structure": [
+    "north canal overlapping the Round 12 water surface",
+    "east unloading basin joined flush to the canal",
+    "eleven-plank bridge with twelve rail posts and three risers per bank",
+    "open four-column waiting pavilion grounded on stone shoes",
+    "six-column raw-material warehouse grounded on stone shoes",
+    "pile-supported timber loading deck and grounded mooring posts"
+  ],
+  "production_cameras": ["15_north_silk_bend_overview", "16_silk_gate_warehouse_axis"],
+  "performance": {"max_scene_triangles": 170000, "new_image_bytes": 0, "paid_service_credits": 0, "linked_silk_bales": 6},
+  "runtime": {"collision": "not_generated", "navigation": "not_generated", "lod": "not_generated", "uv_export_audit": "pending"}
+}
