@@ -1,0 +1,11 @@
+{
+  "schema": "game-room.props.v1",
+  "roomId": "yanyu-north-silk-bend-round13",
+  "assets": [
+    {"id": "linked-silk-bale", "function": "raw silk cargo", "dimensionsMeters": [0.82, 0.58, 0.72], "attachmentFace": "bottom", "semanticFront": "west", "reuseClass": "linked-round13", "polygonTarget": 24, "source": "procedural shared mesh", "rejectionCriteria": ["duplicate mesh datablock", "missing binding straps", "floating cargo"]},
+    {"id": "loading-deck", "function": "transfer bales from boat to yard", "dimensionsMeters": [2.40, 2.62, 0.18], "attachmentFace": "four piles", "semanticFront": "west", "reuseClass": "unique-structural", "polygonTarget": 160, "source": "procedural timber geometry", "rejectionCriteria": ["floating deck", "fewer than four piles", "blocks canal"]},
+    {"id": "waiting-pavilion", "function": "public shelter at the bridge turn", "dimensionsMeters": [4.70, 5.00, 3.60], "attachmentFace": "four stone shoes", "semanticFront": "east", "reuseClass": "unique-architectural", "polygonTarget": 1200, "source": "procedural Ming timber frame", "rejectionCriteria": ["wall infill closes pavilion", "columns miss shoes", "roof lacks thickness"]},
+    {"id": "reel-rack", "function": "identify silk trade and hold skeins", "dimensionsMeters": [0.30, 2.72, 2.18], "attachmentFace": "warehouse floor", "semanticFront": "west", "reuseClass": "unique-functional", "polygonTarget": 220, "source": "procedural timber and curves", "rejectionCriteria": ["no visible skeins", "blocks warehouse circulation"]}
+  ],
+  "paidGeneration": {"provider": null, "creditsAuthorized": 0, "creditsConsumed": 0}
+}
