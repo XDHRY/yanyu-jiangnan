@@ -621,7 +621,12 @@ boat_bales=[o for o in S.objects if o.name.startswith('JN_北河丝行_运丝舟
 assert len(boat_bales)==2 and all(o.data.as_pointer()==silk_bales[0].data.as_pointer() for o in boat_bales)
 assert len(bpy.data.objects['JN_北河丝行_绢包原型'].data.polygons)==50
 assert len([o for o in S.objects if o.name.startswith('JN_北河丝行_绢包束绳_')])==12
-report['town_phase10_silk_trade_finish']={'phase':S['JN_town_phase'],'shop_opening_evaluated_m':round(shop_open,3),'gate_axis_to_counter_clearance_m':round(counter_clear,3),'account_room_door_clearance_m':round(account_clear,3),'displayed_silk_bolts':3,'account_room_destination':'desk-ledgers-abacus-stool','boat_hull_faces':len(silk_boat.data.polygons),'boat_navigation_lane_clearance_m':round(nav_clear,3),'boat_linked_soft_bales':len(boat_bales),'soft_bale_polygons':len(bpy.data.objects['JN_北河丝行_绢包原型'].data.polygons),'soft_bale_shared_instances':len(silk_bales)+len(boat_bales),'new_image_texture_bytes':S['JN_silk_shop_new_image_bytes']}
+ground_bales=[o for o in silk_bales if world_bounds(o)[0][2]<.20]
+stacked_bales=[o for o in silk_bales if world_bounds(o)[0][2]>.80]
+assert len(ground_bales)==3 and len(stacked_bales)==3
+assert all(world_bounds(o)[1][1]<67.20 for o in silk_bales)
+assert min(world_bounds(o)[0][2] for o in stacked_bales)-max(world_bounds(o)[1][2] for o in ground_bales)<.03
+report['town_phase10_silk_trade_finish']={'phase':S['JN_town_phase'],'shop_opening_evaluated_m':round(shop_open,3),'gate_axis_to_counter_clearance_m':round(counter_clear,3),'account_room_door_clearance_m':round(account_clear,3),'displayed_silk_bolts':3,'account_room_destination':'desk-ledgers-abacus-stool','boat_hull_faces':len(silk_boat.data.polygons),'boat_navigation_lane_clearance_m':round(nav_clear,3),'boat_linked_soft_bales':len(boat_bales),'soft_bale_polygons':len(bpy.data.objects['JN_北河丝行_绢包原型'].data.polygons),'soft_bale_shared_instances':len(silk_bales)+len(boat_bales),'warehouse_bale_stack':[len(ground_bales),len(stacked_bales)],'new_image_texture_bytes':S['JN_silk_shop_new_image_bytes']}
 print('TOWN_PHASE10_SILK_TRADE_FINISH',json.dumps(report['town_phase10_silk_trade_finish'],ensure_ascii=False))
 report['inhabited_houses']={'mesh_triangles_with_instances':house_tris,'triangle_budget':18000,'shells':8,'true_door_openings':8,'true_window_openings':16,'shared_wall_meshes':1,'door_clear_width_min':min(o['JN_door_clear_width'] for o in shells),'interior_depth_min':min(o['JN_interior_depth'] for o in shells),'ray_tests_passed':40,'floor_support_passed':8,'tea_east_risers_m':[.10,.10],'new_image_texture_bytes':0}
 print('INHABITED_HOUSES',json.dumps(report['inhabited_houses'],ensure_ascii=False))
