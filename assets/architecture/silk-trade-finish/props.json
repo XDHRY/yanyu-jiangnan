@@ -1,0 +1,11 @@
+{
+  "schema": "game-room.props.v1",
+  "roomId": "yanyu-silk-trade-finish-round14",
+  "assets": [
+    {"id": "soft-linked-silk-bale", "function": "bound silk cargo", "dimensionsMeters": [0.88, 0.62, 0.74], "attachmentFace": "bottom", "semanticFront": "west", "reuseClass": "linked-round14", "polygonTarget": 50, "source": "procedural shared super-ellipse mesh", "rejectionCriteria": ["box silhouette", "duplicate mesh datablock", "missing rope loops", "floating cargo"]},
+    {"id": "silk-trade-counter", "function": "street transaction", "dimensionsMeters": [0.48, 1.06, 0.76], "attachmentFace": "stone foot and warehouse plinth", "semanticFront": "west", "reuseClass": "unique-functional", "polygonTarget": 200, "source": "procedural timber geometry", "rejectionCriteria": ["blocks gate axis", "no visible merchandise destination", "floating counter"]},
+    {"id": "account-desk-set", "function": "record transactions", "dimensionsMeters": [1.22, 0.62, 0.76], "attachmentFace": "warehouse plinth", "semanticFront": "west", "reuseClass": "unique-functional", "polygonTarget": 800, "source": "procedural timber, paper and bronze geometry", "rejectionCriteria": ["missing door destination", "missing ledger", "missing abacus", "blocks doorway"]},
+    {"id": "silk-basin-boat", "function": "move silk cargo from canal to unloading deck", "dimensionsMeters": [0.98, 3.40, 0.40], "attachmentFace": "water surface and mooring rope", "semanticFront": "north", "reuseClass": "unique-structural", "polygonTarget": 500, "source": "procedural open timber hull", "rejectionCriteria": ["enters main navigation lane", "closed solid hull", "missing ribs or seats", "unmoored"]}
+  ],
+  "paidGeneration": {"provider": null, "creditsAuthorized": 0, "creditsConsumed": 0}
+}
