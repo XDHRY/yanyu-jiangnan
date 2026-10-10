@@ -1,0 +1,11 @@
+{
+  "schema": "game-room.props.v1",
+  "roomId": "yanyu-west-oar-workshop-round15",
+  "assets": [
+    {"id": "shared-oar", "function": "finished boat propulsion and craft identity", "dimensionsMeters": [0.48, 0.06, 2.52], "attachmentFace": "blade foot in rack", "semanticFront": "south", "reuseClass": "linked-round15", "polygonTarget": 14, "source": "procedural shared shaft-and-blade mesh", "rejectionCriteria": ["duplicate mesh datablock", "painted blade silhouette", "floating rack placement", "roof intersection"]},
+    {"id": "repair-trestle-pair", "function": "support an unfinished oar blank", "dimensionsMeters": [2.88, 0.16, 0.72], "attachmentFace": "four legs on workshop platform", "semanticFront": "south", "reuseClass": "procedural repeated support", "polygonTarget": 120, "source": "procedural timber geometry", "rejectionCriteria": ["floating legs", "unsupported blank", "blocks primary arrival"]},
+    {"id": "craft-workbench", "function": "visible repair destination", "dimensionsMeters": [2.28, 0.62, 0.98], "attachmentFace": "four legs on workshop platform", "semanticFront": "south", "reuseClass": "unique-functional", "polygonTarget": 180, "source": "procedural timber geometry", "rejectionCriteria": ["missing tools", "floating legs", "blocks shared-oar rack"]},
+    {"id": "rope-and-timber-stock", "function": "explain boat maintenance supplies", "dimensionsMeters": [2.00, 1.30, 0.60], "attachmentFace": "platform", "semanticFront": "south", "reuseClass": "procedural dressing", "polygonTarget": 300, "source": "procedural curves and timber boxes", "rejectionCriteria": ["visual clutter", "unsupported boards", "intersects circulation"]}
+  ],
+  "paidGeneration": {"provider": null, "creditsAuthorized": 0, "creditsConsumed": 0}
+}
