@@ -1,0 +1,37 @@
+{
+  "schema": "yanyu-jiangnan.asset-manifest.v1",
+  "asset": "north-grain-wharf",
+  "source_commit": "40cfb5e8e7c44f827f511a818ebf0ddcfaaae632",
+  "diagnostic_source_commit": "a5fad520bf59cc153b40fcb963035ed44661147c",
+  "source": "jiangnan.py:town_phase8_north_grain_wharf",
+  "units": "metres",
+  "dimensions": {"canal_extension": [5.00, 31.70], "canal_overlap": 0.15, "loading_deck": [2.55, 2.46, 0.18], "rice_barge": [1.44, 4.24, 0.44], "bridge_clearance": 2.94},
+  "implemented": {
+    "descending_landing_steps": 3,
+    "loading_deck_support_piles": 4,
+    "mooring_posts": 2,
+    "open_boat_hull_faces": 20,
+    "boat_seats": 3,
+    "boat_ribs": 2,
+    "linked_round11_sacks": 2,
+    "round11_sack_tie_ropes": 6,
+    "wharf_sack_tie_ropes": 2
+  },
+  "materials": ["JN_water", "JN_wood", "JN_stone", "JN_darkstone", "JN_paper", "JN_米行麻布", "JN_米行麻绳"],
+  "textures": {"new_bitmap_bytes": 0, "packed_existing_images": 7, "estimated_scene_rgba8_mib": 41.99},
+  "reuse": {"wharf_grain_sacks": "shared Round 11 north-granary mesh", "paid_assets": 0, "instance_reuse_ratio": 0.5458},
+  "performance": {"objects": 3591, "mesh_objects": 2217, "curve_objects": 1302, "triangles_with_instances": 151164, "materials_used": 32, "diagnostic_render_seconds": 282.99},
+  "evidence": {
+    "pull_request": 18,
+    "ci_run": 38018084200,
+    "smoke_run": 38018084231,
+    "spatial_run": 38018084257,
+    "web_run": 38018084240,
+    "editable_artifact": 11657490702,
+    "diagnostic_artifact": 11657081562,
+    "web_artifact": 11656788953,
+    "review_views": ["15_bridge_granary_water_chain", "16_grain_wharf_human_scale"]
+  },
+  "runtime": {"collision": "pending", "navigation": "pending", "lod": "pending", "uv_normal_export_audit": "pending"},
+  "human_approvals": {"function": "pending", "form": "pending", "runtime": "pending"}
+}
