@@ -1,0 +1,25 @@
+{
+  "schema": "yanyu-jiangnan.asset-contract.v1",
+  "asset": "silk-trade-finish",
+  "purpose": "Close the east-bank silk workflow with a street-facing trade bay, a real account-room destination, softened linked bales and a navigation-safe basin boat.",
+  "source": "jiangnan.py:town_phase10_silk_trade_finish",
+  "units": "metres",
+  "bounds_m": {"x": [9.80, 21.00], "y": [66.55, 70.60], "z": [0.03, 3.20]},
+  "hero": "open silk shop bay with visible account room behind it",
+  "circulation": {
+    "primary": "silk gate -> clear warehouse axis -> trade counter",
+    "commerce": "street-facing opening -> silk display -> account-room doorway -> desk",
+    "water": "east loading basin -> moored silk boat -> pile-supported loading deck",
+    "minimum_clearance_m": 0.75
+  },
+  "structure": [
+    "shop bay retained inside the six-column warehouse frame and solid roof",
+    "folded-open timber shutters with physical posts, lintel, counter and stone foot",
+    "account-room screen with measured doorway and visible furnished destination",
+    "open timber boat hull wholly inside the recessed loading basin",
+    "softened shared bale mesh with geometry rope bindings"
+  ],
+  "production_cameras": ["15_silk_basin_trade_overview", "16_silk_shop_account_focus"],
+  "performance": {"max_scene_triangles": 170000, "new_image_bytes": 0, "paid_service_credits": 0, "linked_soft_bales": 8},
+  "runtime": {"collision": "not_generated", "navigation": "not_generated", "lod": "not_generated", "uv_export_audit": "pending"}
+}

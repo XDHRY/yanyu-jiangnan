@@ -591,6 +591,43 @@ assert bpy.data.objects['JN_北河丝行_候船亭_瓦面'].modifiers.get('候�
 assert not [o for o in S.objects if o.name.startswith('JN_北河丝行_候船亭') and '墙' in o.name]
 report['town_phase9_north_silk_bend']={'phase':S['JN_town_phase'],'west_land_overlap_m':round(west_overlap,3),'east_land_overlap_m':round(east_overlap,3),'canal_overlap_m':round(water_overlap,3),'basin_water_join_gap_m':round(abs(silk_water[1][0]-silk_basin[0][0]),3),'gate_design_width_m':S['JN_north_silk_gate_clear_width_m'],'gate_evaluated_clear_width_m':round(silk_clear,3),'warehouse_posts_on_shoes':6,'loading_deck_support_piles':4,'linked_silk_bales':6,'bridge_planks':11,'bridge_rail_posts':12,'bridge_risers_per_side':3,'waiting_pavilion_posts':4,'new_image_texture_bytes':S['JN_north_silk_new_image_bytes']}
 print('TOWN_PHASE9_NORTH_SILK_BEND',json.dumps(report['town_phase9_north_silk_bend'],ensure_ascii=False))
+# Silk trade finish: verify that commerce is a real bay inside the supported
+# warehouse, the account room has a destination, and the boat stays outside
+# the 5 m navigation lane while reusing the softened bale mesh.
+shop_posts=sorted([o for o in S.objects if o.name.startswith('JN_北河丝行_铺面前柱')],key=lambda o:pos(o).y)
+assert len(shop_posts)==2
+shop_open=world_bounds(shop_posts[1])[0][1]-world_bounds(shop_posts[0])[1][1]
+assert shop_open>=.98,shop_open
+counter=bpy.data.objects['JN_北河丝行_临街交易柜台']
+counter_clear=world_bounds(counter)[0][1]-68.30
+assert counter_clear>=.95,counter_clear
+assert len([o for o in S.objects if o.name.startswith('JN_北河丝行_铺面开启排门_')])==2
+assert len([o for o in S.objects if o.name.startswith('JN_北河丝行_铺面绢匹_') and '轴' not in o.name])==3
+account_parts=[bpy.data.objects['JN_北河丝行_账房隔扇_南段'],bpy.data.objects['JN_北河丝行_账房隔扇_北段']]
+account_clear=world_bounds(account_parts[1])[0][1]-world_bounds(account_parts[0])[1][1]
+assert account_clear>=.75,account_clear
+for required in ('JN_北河丝行_账房案桌','JN_北河丝行_账册一','JN_北河丝行_算盘框','JN_北河丝行_账房方凳'):
+    assert bpy.data.objects.get(required),required
+silk_boat=bpy.data.objects['JN_北河丝行_运丝小舟船壳']
+boat_bounds=world_bounds(silk_boat)
+nav_clear=boat_bounds[0][0]-silk_water[1][0]
+assert nav_clear>=.085,nav_clear
+assert boat_bounds[0][0]>=silk_basin[0][0] and boat_bounds[1][0]<=silk_basin[1][0]
+assert boat_bounds[0][1]>=silk_basin[0][1] and boat_bounds[1][1]<=silk_basin[1][1]
+assert len(silk_boat.data.polygons)==20
+assert len([o for o in S.objects if o.name.startswith('JN_北河丝行_运丝小舟坐板')])==2
+assert len([o for o in S.objects if o.name.startswith('JN_北河丝行_运丝小舟舷压条')])==2
+boat_bales=[o for o in S.objects if o.name.startswith('JN_北河丝行_运丝舟共享绢包_')]
+assert len(boat_bales)==2 and all(o.data.as_pointer()==silk_bales[0].data.as_pointer() for o in boat_bales)
+assert len(bpy.data.objects['JN_北河丝行_绢包原型'].data.polygons)==50
+assert len([o for o in S.objects if o.name.startswith('JN_北河丝行_绢包束绳_')])==12
+ground_bales=[o for o in silk_bales if world_bounds(o)[0][2]<.20]
+stacked_bales=[o for o in silk_bales if world_bounds(o)[0][2]>.80]
+assert len(ground_bales)==3 and len(stacked_bales)==3
+assert all(world_bounds(o)[1][1]<67.20 for o in silk_bales)
+assert min(world_bounds(o)[0][2] for o in stacked_bales)-max(world_bounds(o)[1][2] for o in ground_bales)<.03
+report['town_phase10_silk_trade_finish']={'phase':S['JN_town_phase'],'shop_opening_evaluated_m':round(shop_open,3),'gate_axis_to_counter_clearance_m':round(counter_clear,3),'account_room_door_clearance_m':round(account_clear,3),'displayed_silk_bolts':3,'account_room_destination':'desk-ledgers-abacus-stool','boat_hull_faces':len(silk_boat.data.polygons),'boat_navigation_lane_clearance_m':round(nav_clear,3),'boat_linked_soft_bales':len(boat_bales),'soft_bale_polygons':len(bpy.data.objects['JN_北河丝行_绢包原型'].data.polygons),'soft_bale_shared_instances':len(silk_bales)+len(boat_bales),'warehouse_bale_stack':[len(ground_bales),len(stacked_bales)],'new_image_texture_bytes':S['JN_silk_shop_new_image_bytes']}
+print('TOWN_PHASE10_SILK_TRADE_FINISH',json.dumps(report['town_phase10_silk_trade_finish'],ensure_ascii=False))
 report['inhabited_houses']={'mesh_triangles_with_instances':house_tris,'triangle_budget':18000,'shells':8,'true_door_openings':8,'true_window_openings':16,'shared_wall_meshes':1,'door_clear_width_min':min(o['JN_door_clear_width'] for o in shells),'interior_depth_min':min(o['JN_interior_depth'] for o in shells),'ray_tests_passed':40,'floor_support_passed':8,'tea_east_risers_m':[.10,.10],'new_image_texture_bytes':0}
 print('INHABITED_HOUSES',json.dumps(report['inhabited_houses'],ensure_ascii=False))
 report['town_phase2']={'phase':S['JN_town_phase'],'grounded_houses':len(plinths),'street_segments':street_segments,'street_batches':len(streets),'tea_pavilion_columns':4,'market_stalls':2,'bridge_risers_per_side':3,'market_ceramics':len(ceramics),'teacups':len(teacups),'canal_preserved':True,'new_image_texture_bytes':0}

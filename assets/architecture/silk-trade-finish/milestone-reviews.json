@@ -1,0 +1,10 @@
+{
+  "schema": "game-room.milestone-reviews.v1",
+  "roomId": "yanyu-silk-trade-finish-round14",
+  "reviews": [
+    {"gate": "Function", "status": "pending", "criteria": ["shop opening faces the silk street", "gate axis remains clear", "account doorway reaches furnished destination", "boat remains inside loading basin"]},
+    {"gate": "Form", "status": "pending", "criteria": ["shop reads as part of supported Ming warehouse frame", "soft bales no longer read as regular boxes", "silk colors remain restrained", "boat and counter retain human scale"]},
+    {"gate": "Runtime", "status": "pending", "criteria": ["scene triangle budget passes", "16-camera diagnostic passes", "collision and navigation remain explicitly ungenerated", "GLB viewer smoke passes"]}
+  ],
+  "automationPolicy": "CI records evidence only and never upgrades a pending human review to approved."
+}
