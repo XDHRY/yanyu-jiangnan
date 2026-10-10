@@ -1,0 +1,14 @@
+{
+  "schema": "game-room.room-brief.v1",
+  "roomId": "yanyu-silk-trade-finish-round14",
+  "intent": "Turn the raw-silk receiving yard into a legible working silk business without expanding the district footprint.",
+  "mustReadAs": ["supported Ming timber hall", "open street trade bay", "recessed account room", "working loading basin"],
+  "functionBeforeOrnament": [
+    "preserve the gate-to-warehouse circulation axis",
+    "give every opening a visible destination",
+    "keep the transport boat outside the main canal navigation lane",
+    "reuse the existing warehouse roof, columns and plinth"
+  ],
+  "artDirection": ["warm timber against white plaster and dark tile", "muted moon-white, madder-red and indigo silk", "low functional lantern pool", "no new bitmap texture"],
+  "outOfScope": ["new district land expansion", "runtime collision generation", "navigation mesh", "promotional 36-camera render"]
+}
