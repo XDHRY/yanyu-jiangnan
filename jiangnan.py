@@ -1910,12 +1910,14 @@ def town_phase10_silk_trade_finish():
     for tag,y in (('南',69.13),('北',70.51)):
         shutter=box('北河丝行_铺面开启排门_'+tag,(15.35,y,1.72),(.10,.46,1.44),wood,c,.008)
         shutter['JN_open_state']='folded_open';shutter['JN_destination']='silk_trade_counter'
-    for y in (69.38,69.82,70.26):
-        box('北河丝行_铺面陈列横杆',(16.42,y,2.15),(.08,.32,.08),wood,c,.004)
     silk_mats=[material('丝行月白绢',(.62,.68,.66),.72,5),material('丝行绛红绢',(.44,.10,.075),.76,5),material('丝行黛青绢',(.12,.24,.27),.78,5)]
-    for i,(y,mat) in enumerate(zip((69.38,69.82,70.26),silk_mats),1):
-        box(f'北河丝行_铺面绢匹_{i}',(16.38,y,1.58),(.18,.26,1.00),mat,c,.018)
-        box(f'北河丝行_铺面绢匹轴_{i}',(16.38,y,2.12),(.12,.34,.12),wood,c,.004)
+    # Two thin hanging bolts flank the sightline; the red bolt is folded on the
+    # counter so merchandise no longer seals the account-room destination.
+    for i,(y,mat) in enumerate(((69.34,silk_mats[0]),(70.30,silk_mats[2])),1):
+        box(f'北河丝行_铺面绢匹_{i}',(16.38,y,1.58),(.10,.30,1.00),mat,c,.012)
+        box(f'北河丝行_铺面绢匹轴_{i}',(16.38,y,2.12),(.10,.38,.10),wood,c,.004)
+    box('北河丝行_铺面绢匹_3',(15.88,69.82,1.28),(.32,.46,.10),silk_mats[1],c,.012)
+    box('北河丝行_铺面绢匹轴_3',(15.88,69.82,1.34),(.36,.08,.07),wood,c,.003)
 
     # A timber screen behind the merchandise creates a separate account room.
     # Its 0.82 m opening has a recessed desk and ledger beyond, so it is a true
