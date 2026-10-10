@@ -1,0 +1,10 @@
+{
+  "schema": "game-room.props.v1",
+  "roomId": "yanyu-north-grain-wharf-round12",
+  "assets": [
+    {"id": "open-rice-barge", "function": "grain water transport", "dimensionsMeters": [1.44, 4.24, 0.44], "attachmentFace": "hull below waterline", "semanticFront": "north", "reuseClass": "unique-functional", "polygonTarget": 420, "source": "procedural timber geometry", "rejectionCriteria": ["closed solid hull", "blocks third bridge", "missing ribs or seats", "mooring rope misses boat or post"]},
+    {"id": "loading-deck", "function": "transfer grain between street and boat", "dimensionsMeters": [2.55, 2.46, 0.18], "attachmentFace": "four piles", "semanticFront": "east", "reuseClass": "unique-structural", "polygonTarget": 160, "source": "procedural timber geometry", "rejectionCriteria": ["floating deck", "fewer than four piles", "blocks water street"]},
+    {"id": "linked-grain-sack", "function": "active unloading cargo", "dimensionsMeters": [0.72, 0.50, 1.10], "attachmentFace": "bottom", "semanticFront": "east", "reuseClass": "linked-from-round11", "polygonTarget": 168, "source": "north-granary shared mesh", "rejectionCriteria": ["duplicate mesh datablock", "missing tie rope", "floating above deck"]}
+  ],
+  "paidGeneration": {"provider": null, "creditsAuthorized": 0, "creditsConsumed": 0}
+}
