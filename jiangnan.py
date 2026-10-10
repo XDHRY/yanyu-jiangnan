@@ -1851,10 +1851,27 @@ def town_phase9_north_silk_bend():
     # Linked raw-silk bales and a real timber reel rack explain the warehouse
     # function while leaving the 1.40 m gate-to-hall axis unobstructed.
     balemat=material('丝行原麻绢包',(.49,.38,.20),.86,12)
-    bale=box('北河丝行_绢包原型',(0,0,.44),(.82,.58,.72),balemat,c,.060);bale.hide_render=True;bale.hide_viewport=True
+    ropemat=bpy.data.materials.get(PREFIX+'米行麻绳') or material('丝行麻绳',(.34,.21,.08),.90,8)
+    # A gently pinched super-ellipse replaces the old rounded box.  The broad
+    # shoulder, softened belly and compressed top read as a tied textile bale,
+    # while every copy still links the same economical mesh datablock.
+    seg=12;bv=[];bf=[]
+    for z,rx,ry,power in ((0,.32,.22,.42),(.10,.42,.30,.36),(.38,.44,.31,.34),(.66,.39,.27,.38),(.74,.29,.19,.48)):
+        for i in range(seg):
+            a=2*pi*i/seg;ca,sa=cos(a),sin(a)
+            bv.append((rx*(1 if ca>=0 else -1)*abs(ca)**power,ry*(1 if sa>=0 else -1)*abs(sa)**power,z))
+    bf.append(tuple(range(seg-1,-1,-1)))
+    for row in range(4):
+        for i in range(seg):
+            a=row*seg+i;b=row*seg+(i+1)%seg;bf.append((a,b,b+seg,a+seg))
+    bf.append(tuple(range(4*seg,5*seg)))
+    bale=mesh('北河丝行_绢包原型',bv,bf,balemat,c);bale.hide_render=True;bale.hide_viewport=True
     for i,(x,y,rz) in enumerate(((17.25,66.78,.10),(18.25,66.78,-.08),(19.25,66.78,.04),(17.35,69.90,-.10),(18.35,69.90,.08),(19.35,69.90,-.03)),1):
         o=bpy.data.objects.new(PREFIX+f'北河丝行_绢包_{i}',bale.data);c.objects.link(o);o.location=(x,y,.16);o.rotation_euler[2]=rz
-        for dy in (-.18,.18):box(f'北河丝行_绢包束带_{i}',(x,y+dy,.60),(.86,.045,.76),M['edge'],c,.004)
+        for j,dy in enumerate((-.18,.18),1):
+            loop=[(x-.36,y+dy,.30),(x-.41,y+dy,.54),(x-.28,y+dy,.84),(x+.28,y+dy,.84),(x+.41,y+dy,.54),(x+.36,y+dy,.30),(x-.36,y+dy,.30)]
+            line(f'北河丝行_绢包束绳_{i}_{j}',loop,.013,ropemat,c,res=1,bevel_res=1)
+        uv(f'北河丝行_绢包绳结_{i}',(x,y-.19,.86),(.035,.035,.035),ropemat,c,8,4)
     box('北河丝行_络丝架顶梁',(20.15,68.30,2.18),(.18,2.72,.18),wood,c,.008)
     for y in (67.05,69.55):box('北河丝行_络丝架立柱',(20.15,y,1.28),(.18,.18,1.72),wood,c,.008)
     for z in (1.12,1.62):box('北河丝行_络丝架横轴',(20.15,68.30,z),(.16,2.36,.16),wood,c,.006)
@@ -1873,6 +1890,95 @@ def town_phase9_north_silk_bend():
     S['JN_north_silk_bridge_planks']=11
     S['JN_north_silk_linked_bales']=6
     S['JN_north_silk_new_image_bytes']=0
+
+def town_phase10_silk_trade_finish():
+    """Close the silk trade loop with an open shop bay, account room and basin boat."""
+    c=C['water'];stone=M['stone'];wood=M['wood'];wetstone=M['darkstone']
+    ropemat=bpy.data.materials.get(PREFIX+'米行麻绳') or M['edge']
+
+    # The north bay of the existing six-column hall becomes a real west-facing
+    # shop.  It uses the proven warehouse roof, columns and plinth rather than
+    # adding an unsupported decorative facade.  The gate axis remains clear.
+    shop_y=69.82
+    for y in (69.24,70.40):
+        box('北河丝行_铺面前柱',(15.44,y,1.55),(.16,.16,2.34),wood,c,.007)
+    box('北河丝行_铺面额枋',(15.44,shop_y,2.70),(.18,1.36,.18),wood,c,.007)
+    box('北河丝行_临街交易柜台',(15.52,shop_y,.84),(.48,1.06,.76),wood,c,.018)
+    box('北河丝行_柜台青石脚',(15.58,shop_y,.29),(.38,.92,.22),wetstone,c,.012)
+    # Two solid shutters are shown folded open against the posts; the opening
+    # has physical depth and a visible merchandise destination beyond it.
+    for tag,y in (('南',69.13),('北',70.51)):
+        shutter=box('北河丝行_铺面开启排门_'+tag,(15.35,y,1.72),(.10,.46,1.44),wood,c,.008)
+        shutter['JN_open_state']='folded_open';shutter['JN_destination']='silk_trade_counter'
+    for y in (69.38,69.82,70.26):
+        box('北河丝行_铺面陈列横杆',(16.42,y,2.15),(.08,.32,.08),wood,c,.004)
+    silk_mats=[material('丝行月白绢',(.62,.68,.66),.72,5),material('丝行绛红绢',(.44,.10,.075),.76,5),material('丝行黛青绢',(.12,.24,.27),.78,5)]
+    for i,(y,mat) in enumerate(zip((69.38,69.82,70.26),silk_mats),1):
+        box(f'北河丝行_铺面绢匹_{i}',(16.38,y,1.58),(.18,.26,1.00),mat,c,.018)
+        box(f'北河丝行_铺面绢匹轴_{i}',(16.38,y,2.12),(.12,.34,.12),wood,c,.004)
+
+    # A timber screen behind the merchandise creates a separate account room.
+    # Its 0.82 m opening has a recessed desk and ledger beyond, so it is a true
+    # destination rather than a dark plane pasted onto the shop wall.
+    sx=18.66;door_y=69.78
+    for y in (69.20,70.36):box('北河丝行_账房隔扇边柱',(sx,y,1.52),(.15,.15,2.24),wood,c,.006)
+    for tag,y,length in (('南段',69.29,.18),('北段',70.26,.20)):
+        box('北河丝行_账房隔扇_'+tag,(sx,y,1.40),(.12,length,1.88),wood,c,.006)
+    box('北河丝行_账房门楣',(sx,door_y,2.52),(.14,1.12,.16),wood,c,.006)
+    # Thin lattice above the low rail preserves sight through the doorway.
+    for y in (69.30,70.25):
+        for z in (1.16,1.54,1.92):box('北河丝行_账房格心',(sx-.01,y,z),(.09,.30,.035),wood,c,.003)
+    box('北河丝行_账房门槛',(sx-.06,door_y,.30),(.28,.78,.08),wood,c,.005)
+    box('北河丝行_账房案桌',(19.68,69.86,.82),(1.22,.62,.12),wood,c,.012)
+    for x in (19.18,20.18):
+        for y in (69.63,70.09):box('北河丝行_账房案腿',(x,y,.49),(.12,.12,.62),wood,c,.005)
+    box('北河丝行_账册一',(19.52,69.82,.91),(.38,.22,.06),silk_mats[2],c,.004)
+    box('北河丝行_账册二',(19.56,69.84,.98),(.34,.20,.06),M['paper'],c,.004)
+    box('北河丝行_算盘框',(19.92,69.83,.94),(.46,.24,.055),wood,c,.005)
+    for j in range(5):
+        box('北河丝行_算盘档杆',(19.74+j*.09,69.83,.975),(.018,.20,.018),M['bronze'],c,.002)
+        for k in range(3):uv('北河丝行_算盘珠',(19.74+j*.09,69.76+k*.07,.99),(.026,.026,.020),M['bronze'],c,8,4)
+    box('北河丝行_账房方凳',(20.26,69.86,.48),(.42,.42,.10),wood,c,.008)
+    for x in (20.10,20.42):
+        for y in (69.70,70.02):box('北河丝行_账房凳腿',(x,y,.25),(.08,.08,.42),wood,c,.004)
+
+    # A narrow open silk boat sits wholly inside the recessed east basin.  Its
+    # west edge stays east of x=9.80, preserving the full 5 m navigation lane.
+    bx,by=10.38,68.28
+    sections=[(-1.70,.05,.39),(-1.30,.34,.28),(-.62,.46,.22),(0,.49,.20),(.62,.46,.22),(1.30,.34,.28),(1.70,.05,.39)]
+    vv=[];ff=[]
+    for yy,half,bottom in sections:
+        vv.extend(((bx-half,by+yy,.60),(bx+half,by+yy,.60),(bx-half*.52,by+yy,bottom),(bx+half*.52,by+yy,bottom)))
+    for i in range(len(sections)-1):
+        a=4*i;b=a+4
+        ff.extend(((a,b,b+2,a+2),(a+1,a+3,b+3,b+1),(a+2,b+2,b+3,a+3)))
+    ff.extend(((0,1,3,2),(24,26,27,25)))
+    boat=mesh('北河丝行_运丝小舟船壳',vv,ff,wood,c)
+    for p in boat.data.polygons:p.use_smooth=len(p.vertices)==4
+    box('北河丝行_运丝小舟舱底',(bx,by,.39),(.42,2.55,.07),wood,c,.006)
+    for yy in (-.62,.62):box('北河丝行_运丝小舟坐板',(bx,by+yy,.63),(.76,.18,.07),wood,c,.005)
+    for side in (-1,1):line('北河丝行_运丝小舟舷压条',[(bx+side*half,by+yy,.61) for yy,half,_ in sections],.021,wetstone,c,res=2,bevel_res=1)
+    for yy,half in ((-.62,.46),(.62,.46)):
+        line('北河丝行_运丝小舟横肋',[(bx-half*.86,by+yy,.55),(bx,by+yy,.42),(bx+half*.86,by+yy,.55)],.020,wetstone,c,res=2,bevel_res=1)
+    box('北河丝行_运丝小舟艄板',(bx,by+1.30,.50),(.58,.06,.30),wood,c,.005)
+    line('北河丝行_运丝小舟竹篙',[(10.02,66.55,.62),(10.76,69.98,.69)],.022,wood,c,res=2,bevel_res=1)
+    line('北河丝行_运丝小舟系缆',[(10.76,67.63,.58),(11.02,67.48,.78),(11.20,67.36,1.25)],.015,ropemat,c,res=2,bevel_res=1)
+    bale_mesh=bpy.data.objects[PREFIX+'北河丝行_绢包原型'].data
+    for i,(y,rz) in enumerate(((67.96,.05),(68.45,-.06)),1):
+        o=bpy.data.objects.new(PREFIX+f'北河丝行_运丝舟共享绢包_{i}',bale_mesh);c.objects.link(o)
+        o.location=(bx,y,.39);o.rotation_euler[2]=rz;o.scale=(.66,.66,.66)
+
+    # Restrained task lighting separates commerce from storage while retaining
+    # the moonlit hierarchy and adding no bitmap textures.
+    line('北河丝行_铺面灯挑杆',[(15.44,70.38,2.62),(14.92,70.38,2.62),(14.92,70.38,2.18)],.020,wood,c,res=2,bevel_res=1)
+    uv('北河丝行_铺面纱灯',(14.92,70.38,1.98),(.12,.12,.18),M['paper'],c,12,8)
+    light('北河丝行_铺面灯火',(14.92,70.38,1.96),(1,.45,.20),74,.25,kind='POINT')
+
+    S['JN_town_phase']='phase_10_silk_trade_finish'
+    S['JN_silk_shop_opening_width_m']=1.00
+    S['JN_silk_account_door_width_m']=.82
+    S['JN_silk_boat_navigation_clearance_m']=.09
+    S['JN_silk_shop_new_image_bytes']=0
 
 def batch_static_objects(name,objects,mat,col,bev=0):
     """Combine already-built static meshes after art generation so optimization cannot perturb procedural build order."""
@@ -1949,7 +2055,7 @@ def viewport():
                 a.spaces.active.region_3d.view_camera_zoom=0
     bpy.context.view_layer.update()
 def build(stage=None):
-    start();courtyard();village_phase1_skeleton();town_phase2_market();town_phase3_east_wharf();town_phase4_east_residence();town_phase5_cloth_finish_yard();town_phase6_west_wine_court();town_phase7_north_granary();town_phase8_north_grain_wharf();town_phase9_north_silk_bend()
+    start();courtyard();village_phase1_skeleton();town_phase2_market();town_phase3_east_wharf();town_phase4_east_residence();town_phase5_cloth_finish_yard();town_phase6_west_wine_court();town_phase7_north_granary();town_phase8_north_grain_wharf();town_phase9_north_silk_bend();town_phase10_silk_trade_finish()
     level=P['stage'] if stage is None else stage
     if level>=2:vegetation()
     if level>=3:weather()
