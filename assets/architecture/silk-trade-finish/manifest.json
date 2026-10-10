@@ -1,0 +1,38 @@
+{
+  "schema": "yanyu-jiangnan.asset-manifest.v1",
+  "asset": "silk-trade-finish",
+  "source_commit": "14b80047dc5b56378e16cd2999b3fe557fd09ecd",
+  "diagnostic_source_commit": "5aa6c52fb5091b5500ddad799a33c4dca63ec305",
+  "source": "jiangnan.py:town_phase10_silk_trade_finish",
+  "units": "metres",
+  "dimensions": {"shop_opening_evaluated": 1.00, "gate_axis_to_counter_clearance": 0.99, "account_door_clearance": 0.78, "boat_navigation_lane_clearance": 0.09},
+  "implemented": {
+    "street_facing_shop_posts": 2,
+    "folded_open_shutters": 2,
+    "displayed_silk_bolts": 3,
+    "account_room_destinations": ["desk", "ledgers", "abacus", "stool"],
+    "open_boat_hull_faces": 20,
+    "boat_seats": 2,
+    "boat_linked_soft_bales": 2,
+    "warehouse_soft_bales": 6,
+    "warehouse_bale_stack": [3, 3]
+  },
+  "materials": ["JN_wood", "JN_stone", "JN_湿润青石", "JN_paper", "JN_bronze", "JN_丝行原麻绢包", "JN_丝行月白绢", "JN_丝行绛红绢", "JN_丝行黛青绢"],
+  "textures": {"new_bitmap_bytes": 0, "packed_existing_images": 7, "estimated_scene_rgba8_mib": 41.99},
+  "reuse": {"soft_silk_bales": "eight visible objects share one 50-polygon mesh", "paid_assets": 0, "instance_reuse_ratio": 0.5108},
+  "performance": {"objects": 3821, "mesh_objects": 2410, "curve_objects": 1336, "triangles_with_instances": 159808, "materials_used": 36, "diagnostic_render_seconds": 294.47},
+  "evidence": {
+    "pull_request": 20,
+    "ci_run": 38061303093,
+    "smoke_run": 38061303356,
+    "spatial_run": 38061303120,
+    "web_run": 38061303098,
+    "editable_artifact": 11673327116,
+    "diagnostic_artifact": 11673601190,
+    "web_artifact": 11674025609,
+    "review_views": ["15_silk_basin_trade_overview", "16_silk_shop_account_focus"],
+    "persistent_review_files": ["libfile_a75cde8184f08191be72dd52ad30520d", "libfile_36163b0bf5288191a80877bd1b24bafd", "libfile_56a97780b8608191b70e1eb0b0b7fdfb"]
+  },
+  "runtime": {"collision": "pending", "navigation": "pending", "lod": "pending", "uv_normal_export_audit": "pending"},
+  "human_approvals": {"function": "pending", "form": "pending", "runtime": "pending"}
+}
