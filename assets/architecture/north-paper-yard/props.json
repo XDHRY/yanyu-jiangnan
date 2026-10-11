@@ -1,0 +1,11 @@
+{
+  "shared_assets": {
+    "drying_frame": 3,
+    "wet_paper_sheet": 3
+  },
+  "wet_work_props": ["two stone soaking vats", "two water planes", "beating bench", "supported paper mould"],
+  "dry_work_props": ["three linked timber frames", "three linked paper sheets", "three bark bundles"],
+  "lighting": ["one framed paper task lantern"],
+  "new_bitmap_assets": [],
+  "paid_generation_credits": 0
+}
