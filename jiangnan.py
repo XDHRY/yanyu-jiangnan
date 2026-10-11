@@ -2036,7 +2036,9 @@ def town_phase11_west_oar_workshop():
     box('北河修桨作坊_桨架上枋',(wx,74.34,2.34),(4.05,.14,.14),wood,c,.006)
     for i,x in enumerate((-6.18,-5.15,-4.10,-3.08),1):
         o=bpy.data.objects.new(PREFIX+f'北河修桨作坊_共享桨橹_{i}',oar.data);c.objects.link(o)
-        o.location=(x,74.24,.68);o.rotation_euler[1]=(-.045 if i%2 else .055)
+        # Lift the blades above the trestle silhouette and scale the full oars
+        # back under the rear beam, so both blade and shaft read in the human view.
+        o.location=(x,74.24,.98);o.scale=(.82,.82,.82);o.rotation_euler[1]=(-.065 if i%2 else .075)
 
     # Restrained tools and rope explain active maintenance without visual clutter.
     box('北河修桨作坊_木刨',(-5.80,73.47,1.06),(.42,.18,.13),wetstone,c,.006)
@@ -2048,9 +2050,9 @@ def town_phase11_west_oar_workshop():
         line(f'北河修桨作坊_盘绳_{j}',pts,.018,ropemat,c,res=1,bevel_res=1)
 
     # A single task lantern and a low guide lamp preserve the moonlit hierarchy.
-    line('北河修桨作坊_工作灯挑杆',[(-2.40,72.05,2.60),(-3.02,72.05,2.60),(-3.02,72.05,2.19)],.020,wood,c,res=2,bevel_res=1)
-    uv('北河修桨作坊_工作纱灯',(-3.02,72.05,1.98),(.12,.12,.18),M['paper'],c,12,8)
-    light('北河修桨作坊_工作灯火',(-3.02,72.05,1.96),(1,.45,.20),70,.24,kind='POINT')
+    line('北河修桨作坊_工作灯挑杆',[(-3.35,74.60,2.96),(-3.35,73.38,2.96),(-3.35,73.38,2.48)],.020,wood,c,res=2,bevel_res=1)
+    uv('北河修桨作坊_工作纱灯',(-3.35,73.38,2.27),(.12,.12,.18),M['paper'],c,12,8)
+    light('北河修桨作坊_工作灯火',(-3.35,73.38,2.24),(1,.45,.20),76,.24,kind='POINT')
     line('北河修桨作坊_引路灯柱',[(1.95,71.45,.12),(1.95,71.45,.86)],.035,wood,c,res=1,bevel_res=1)
     uv('北河修桨作坊_引路纱灯',(1.95,71.45,1.00),(.10,.10,.14),M['paper'],c,10,6)
     light('北河修桨作坊_引路灯火',(1.95,71.45,.98),(1,.40,.17),36,.18,kind='POINT')
