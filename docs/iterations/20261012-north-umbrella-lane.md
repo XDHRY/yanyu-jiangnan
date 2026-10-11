@@ -46,6 +46,9 @@
 - 可编辑 Blender 构建：[artifact 11710395643](https://github.com/XDHRY/yanyu-jiangnan/actions/runs/38160676960/artifacts/11710395643)
 - 16 张原生诊断图、预算与断言：[artifact 11710505745](https://github.com/XDHRY/yanyu-jiangnan/actions/runs/38160676952/artifacts/11710505745)
 - 浏览器 GLB、16 图与独立查看器：[artifact 11711070264](https://github.com/XDHRY/yanyu-jiangnan/actions/runs/38160676953/artifacts/11711070264)
+- 持久 16 图拼图：`round16-contact-sheet-final.png`，Library `libfile_67d7848b24e08191b53bb752906e4a8d`。
+- 持久首轮/终轮近景对比：`round16-before-after-final.png`，Library `libfile_4d1b33135a2081918c7b237bb2c021de`。
+- 持久第五桥/伞铺重点图：`round16-focus-final.png`，Library `libfile_03fa3d2272048191aaf5a5085d9ea05b`。
 - 结构、洞口、道具和三项人工门禁状态见 `assets/architecture/north-umbrella-lane/`；机器可读证据见 `docs/reviews/round16-north-umbrella-lane/manifest.json`。
 
 ## 已知债务与下一轮
