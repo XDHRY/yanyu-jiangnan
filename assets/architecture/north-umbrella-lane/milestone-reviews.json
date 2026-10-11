@@ -1,0 +1,14 @@
+{
+  "Function": {
+    "status": "pending_human_review",
+    "questions": ["Does the two-bridge loop read as continuous and walkable?", "Does the shop opening lead to a believable business and home destination?"]
+  },
+  "Form": {
+    "status": "pending_human_review",
+    "questions": ["Are roof, column, beam and plinth proportions credible?", "Does the umbrella shop remain subordinate to the river-town silhouette?"]
+  },
+  "Runtime": {
+    "status": "pending_human_review",
+    "questions": ["Does the expanded scene stay within the object, triangle, material, memory and render-time budgets?"]
+  }
+}
