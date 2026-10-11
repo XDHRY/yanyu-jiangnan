@@ -1,0 +1,15 @@
+{
+  "east_work_bay_south": {
+    "orientation": "east",
+    "clear_width_m": 2.6,
+    "destination": "soaking vats and beating bench",
+    "blocked": false
+  },
+  "east_work_bay_north": {
+    "orientation": "east",
+    "clear_width_m": 2.6,
+    "destination": "drying frames",
+    "blocked": false
+  },
+  "false_openings": 0
+}
