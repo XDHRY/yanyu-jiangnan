@@ -2148,6 +2148,7 @@ def town_phase12_north_umbrella_lane():
     for x in (18.19,18.51):
         for y in (80.86,81.18):box('北河伞巷_后宅凳足',(x,y,.21),(.09,.09,.36),wood,c,.004)
     line('北河伞巷_后宅壁灯托架',[(20.48,79.60,2.18),(20.18,79.60,2.18),(20.18,79.60,1.98)],.016,wood,c,res=1,bevel_res=1)
+    # Framed paper shade keeps the rear destination warm without reading as a modern bare bulb.
     box('北河伞巷_后宅壁灯纸罩',(20.18,79.60,1.80),(.22,.22,.32),M['paper'],c,.025)
     for z in (1.63,1.97):box('北河伞巷_后宅壁灯横框',(20.18,79.60,z),(.25,.25,.035),wood,c,.006)
     for x in (20.065,20.295):
