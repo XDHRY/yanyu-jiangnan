@@ -1,0 +1,9 @@
+{
+  "coordinate_system": "Blender Z-up, metres",
+  "canal": {"center_x": 7.3, "center_y": 90.55, "width": 5.0, "length": 7.9},
+  "west_street": {"center_x": 3.5, "width": 1.82},
+  "east_street": {"center_x": 11.1, "width": 1.82},
+  "workshop": {"center": [-1.6, 90.55], "front": "east", "columns": 6, "shoes": 6},
+  "wet_zone": {"side": "south-west", "destinations": ["two soaking vats", "beating bench", "paper mould"]},
+  "dry_zone": {"side": "north", "shared_frames": 3, "shared_sheets": 3}
+}
