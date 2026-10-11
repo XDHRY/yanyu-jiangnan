@@ -1,0 +1,20 @@
+{
+  "id": "north-umbrella-lane",
+  "version": 1,
+  "source": "procedural Blender Python in jiangnan.py",
+  "purpose": "Close the fourth-to-fifth-bridge walking loop and add an east-bank front-shop/back-home oil-paper umbrella house.",
+  "scale_m": {
+    "canal_width": 5.0,
+    "shop_plinth": [8.4, 5.4, 0.32],
+    "shop_opening": 4.7,
+    "home_door": 1.18
+  },
+  "required_evidence": [
+    "16-camera 1024x640 diagnostic set",
+    "Blender smoke and structural assertions",
+    "scene statistics and performance budget",
+    "human Function/Form/Runtime review"
+  ],
+  "image_textures_added_bytes": 0,
+  "license": "repository-native procedural asset"
+}
