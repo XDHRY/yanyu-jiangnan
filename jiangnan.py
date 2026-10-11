@@ -2242,15 +2242,15 @@ def town_phase13_north_paper_yard():
     # Three linked drying frames and three linked paper sheets keep the craft
     # legible at eye height without multiplying unique meshes.
     fv=[];ff=[]
-    for cx,cz,sx,sz in ((-.78,0, .10,2.10),(.78,0,.10,2.10),(0,-1.00,1.66,.10),(0,1.00,1.66,.10)):
+    for cx,cz,sx,sz in ((-.55,0,.08,1.70),(.55,0,.08,1.70),(0,-.80,1.18,.08),(0,.80,1.18,.08)):
         k=len(fv);x=sx/2;y=.10/2;z0=cz-sz/2;z1=cz+sz/2
         fv.extend([(cx-x,-y,z0),(cx-x,-y,z1),(cx-x,y,z0),(cx-x,y,z1),(cx+x,-y,z0),(cx+x,-y,z1),(cx+x,y,z0),(cx+x,y,z1)])
         ff.extend([(k,k+4,k+6,k+2),(k+1,k+3,k+7,k+5),(k,k+1,k+5,k+4),(k+2,k+6,k+7,k+3),(k,k+2,k+3,k+1),(k+4,k+5,k+7,k+6)])
     frame=mesh('北河纸坊_晒纸架原型',fv,ff,wood,c);frame.hide_render=True;frame.hide_viewport=True
-    sheet=mesh('北河纸坊_湿纸原型',[(-.68,0,-.86),(-.68,0,.86),(.68,0,.86),(.68,0,-.86)],[(0,1,2,3)],paper,c);sheet.hide_render=True;sheet.hide_viewport=True
-    for i,(x,y,rz) in enumerate(((-2.30,91.65,0),(-.55,91.65,0),(.15,92.45,pi/2)),1):
+    sheet=mesh('北河纸坊_湿纸原型',[(-.48,0,-.68),(-.48,0,.68),(.48,0,.68),(.48,0,-.68)],[(0,1,2,3)],M['plaster'],c);sheet.hide_render=True;sheet.hide_viewport=True
+    for i,(x,y,rz) in enumerate(((-4.15,88.95,pi/2),(-4.15,90.55,pi/2),(-4.15,92.15,pi/2)),1):
         for proto,tag in ((frame,'共享晒纸架'),(sheet,'共享湿纸')):
-            o=bpy.data.objects.new(PREFIX+f'北河纸坊_{tag}_{i}',proto.data);c.objects.link(o);o.location=(x,y,1.28);o.rotation_euler[2]=rz
+            o=bpy.data.objects.new(PREFIX+f'北河纸坊_{tag}_{i}',proto.data);c.objects.link(o);o.location=(x,y,1.22);o.rotation_euler[2]=rz
 
     # Bark bundles and a framed paper lantern finish the lived-in scale while
     # leaving the eastern frontage and both 2.60 m work bays unobstructed.
