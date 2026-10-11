@@ -1,0 +1,7 @@
+{
+  "schema": "game-room.openings.v1",
+  "roomId": "yanyu-west-oar-workshop-round15",
+  "openings": [
+    {"id": "south-open-work-bay", "type": "open shell boundary", "wall": "no infill between the two south corner posts", "widthMeters": 4.22, "heightMeters": 2.50, "thresholdMeters": 0.30, "depthMeters": 3.00, "destination": "repair trestles, workbench and oar rack", "state": "permanently open", "exception": "craft shed requires an open working frontage; width exceeds the 2.4 m primary-arrival default"}
+  ]
+}

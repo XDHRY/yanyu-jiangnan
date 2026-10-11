@@ -628,6 +628,40 @@ assert all(world_bounds(o)[1][1]<67.20 for o in silk_bales)
 assert min(world_bounds(o)[0][2] for o in stacked_bales)-max(world_bounds(o)[1][2] for o in ground_bales)<.03
 report['town_phase10_silk_trade_finish']={'phase':S['JN_town_phase'],'shop_opening_evaluated_m':round(shop_open,3),'gate_axis_to_counter_clearance_m':round(counter_clear,3),'account_room_door_clearance_m':round(account_clear,3),'displayed_silk_bolts':3,'account_room_destination':'desk-ledgers-abacus-stool','boat_hull_faces':len(silk_boat.data.polygons),'boat_navigation_lane_clearance_m':round(nav_clear,3),'boat_linked_soft_bales':len(boat_bales),'soft_bale_polygons':len(bpy.data.objects['JN_北河丝行_绢包原型'].data.polygons),'soft_bale_shared_instances':len(silk_bales)+len(boat_bales),'warehouse_bale_stack':[len(ground_bales),len(stacked_bales)],'new_image_texture_bytes':S['JN_silk_shop_new_image_bytes']}
 print('TOWN_PHASE10_SILK_TRADE_FINISH',json.dumps(report['town_phase10_silk_trade_finish'],ensure_ascii=False))
+# West oar workshop: verify a continuous public route, grounded four-post shed,
+# generous open arrival, shared oars and supported craft destinations.
+west_bend=world_bounds(bpy.data.objects['JN_北河丝行_西岸延伸地基'])
+oar_lane=world_bounds(bpy.data.objects['JN_北河修桨作坊_候船横巷'])
+west_street=world_bounds(bpy.data.objects['JN_北河丝行_西岸北延石街'])
+lane_overlap=min(oar_lane[1][0],west_street[1][0])-max(oar_lane[0][0],west_street[0][0])
+assert lane_overlap>=.89,lane_overlap
+plinth_bounds=world_bounds(bpy.data.objects['JN_北河修桨作坊_实体台基'])
+assert plinth_bounds[0][0]>=west_bend[0][0] and plinth_bounds[1][0]<=west_bend[1][0]
+assert plinth_bounds[0][1]>=west_bend[0][1] and plinth_bounds[1][1]<=west_bend[1][1]
+oar_cols=[o for o in S.objects if o.name.startswith('JN_北河修桨作坊_木柱')]
+oar_shoes=[o for o in S.objects if o.name.startswith('JN_北河修桨作坊_柱础')]
+assert len(oar_cols)==len(oar_shoes)==4
+for col in oar_cols:
+    candidates=[shoe for shoe in oar_shoes if dist_xy(pos(shoe),pos(col))<.01]
+    assert len(candidates)==1 and abs(world_bounds(col)[0][2]-world_bounds(candidates[0])[1][2])<.002
+front_cols=sorted([o for o in oar_cols if abs(pos(o).y-71.80)<.01],key=lambda o:pos(o).x)
+assert len(front_cols)==2
+oar_open=world_bounds(front_cols[1])[0][0]-world_bounds(front_cols[0])[1][0]
+assert oar_open>=4.20,oar_open
+assert bpy.data.objects['JN_北河修桨作坊_屋面_瓦面'].modifiers.get('修桨作坊真实屋面厚度')
+assert len([o for o in S.objects if o.name.startswith('JN_北河修桨作坊_入坊踏步')])==2
+assert bpy.data.objects.get('JN_北河修桨作坊_工作长案') and bpy.data.objects.get('JN_北河修桨作坊_待刨桨坯')
+shared_oars=[o for o in S.objects if o.name.startswith('JN_北河修桨作坊_共享桨橹_')]
+oar_proto=bpy.data.objects['JN_北河修桨作坊_桨橹原型']
+assert len(shared_oars)==4 and all(o.data.as_pointer()==oar_proto.data.as_pointer() for o in shared_oars)
+assert len(oar_proto.data.polygons)==14
+assert len([o for o in S.objects if o.name.startswith('JN_北河修桨作坊_修桨马凳横木')])==2
+assert len([o for o in S.objects if o.name.startswith('JN_北河修桨作坊_盘绳_')])==2
+assert bpy.data.objects.get('JN_北河修桨作坊_工作纱灯') and bpy.data.objects.get('JN_北河修桨作坊_引路纱灯')
+assert len([o for o in S.objects if o.name.startswith('JN_北河丝行_悬绢包边_')])==2
+assert bpy.data.objects.get('JN_北河丝行_木质招幌牌') and bpy.data.objects.get('JN_北河丝行_账房纱灯')
+report['town_phase11_west_oar_workshop']={'phase':S['JN_town_phase'],'route_overlap_west_water_street_m':round(lane_overlap,3),'shed_within_existing_west_parcel':True,'open_arrival_width_m':round(oar_open,3),'posts_on_shoes':4,'solidified_roof':True,'shared_oars':len(shared_oars),'oar_mesh_polygons':len(oar_proto.data.polygons),'repair_trestles':2,'rope_coils':2,'silk_edge_sets':2,'hanging_shop_signs':1,'new_image_texture_bytes':S['JN_oar_workshop_new_image_bytes']}
+print('TOWN_PHASE11_WEST_OAR_WORKSHOP',json.dumps(report['town_phase11_west_oar_workshop'],ensure_ascii=False))
 report['inhabited_houses']={'mesh_triangles_with_instances':house_tris,'triangle_budget':18000,'shells':8,'true_door_openings':8,'true_window_openings':16,'shared_wall_meshes':1,'door_clear_width_min':min(o['JN_door_clear_width'] for o in shells),'interior_depth_min':min(o['JN_interior_depth'] for o in shells),'ray_tests_passed':40,'floor_support_passed':8,'tea_east_risers_m':[.10,.10],'new_image_texture_bytes':0}
 print('INHABITED_HOUSES',json.dumps(report['inhabited_houses'],ensure_ascii=False))
 report['town_phase2']={'phase':S['JN_town_phase'],'grounded_houses':len(plinths),'street_segments':street_segments,'street_batches':len(streets),'tea_pavilion_columns':4,'market_stalls':2,'bridge_risers_per_side':3,'market_ceramics':len(ceramics),'teacups':len(teacups),'canal_preserved':True,'new_image_texture_bytes':0}
@@ -761,4 +795,5 @@ else:
 with open(os.path.join(VALIDATION,'validation.json'),'w',encoding='utf-8') as f:json.dump(report,f,ensure_ascii=False,indent=2)
 weather(0);S.camera=bpy.data.objects['JN_三分之四'];S.frame_set(80)
 print('ALL_RENDER_JOBS_COMPLETED' if formal_render else 'ALL_ASSERTIONS_COMPLETED',json.dumps(report,ensure_ascii=False))
+
 

@@ -1,0 +1,50 @@
+{
+  "round": 15,
+  "title": "west-oar-workshop",
+  "baseline_main": "5fd29683ccd5e5f5e4bd5522fff2afb86efeddfb",
+  "implementation_head": "77d6c53fcbf3a5cddeef12b1c8f01e628524a31f",
+  "diagnostic_source_commit": "5987b87aa3e830d2b997f5c90904c09a1a49ebeb",
+  "pull_request": 21,
+  "runs": {
+    "ci": 38115151065,
+    "smoke": 38115151043,
+    "spatial": 38115151045,
+    "web": 38115151046
+  },
+  "artifacts": {
+    "blend": 11693392058,
+    "spatial": 11692808702,
+    "web": 11693327707
+  },
+  "diagnostics": {
+    "views": 16,
+    "resolution": [1024, 640],
+    "renderer": "Blender Eevee Next",
+    "seconds": 294.24,
+    "core_views_unchanged": 14,
+    "focus_views": ["15_oar_workshop_node.png", "16_oar_workshop_craft.png"]
+  },
+  "budget": {
+    "objects": 3887,
+    "mesh_objects": 2458,
+    "curve_objects": 1351,
+    "triangles_with_instances": 162530,
+    "triangle_limit": 170000,
+    "materials": 36,
+    "images": 7,
+    "texture_rgba8_mib": 41.99,
+    "instance_reuse_ratio": 0.5028,
+    "new_bitmap_bytes": 0,
+    "paid_generation_credits": 0
+  },
+  "library_review_files": {
+    "contact_sheet": "libfile_eb1243f00ca081918d9ebf95f76dd783",
+    "before_after": "libfile_c90a5cf4e390819180a1ab6da66618e4",
+    "focus": "libfile_693dc7f3aa0c8191a52d7bbc0da574e5"
+  },
+  "human_gates": {
+    "function": "pending",
+    "form": "pending",
+    "runtime": "pending"
+  }
+}

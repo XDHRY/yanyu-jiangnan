@@ -1,0 +1,14 @@
+{
+  "schema": "yanyu-jiangnan.asset-contract.v1",
+  "asset": "west-oar-workshop",
+  "purpose": "Connect the north waiting pavilion to a supported open oar-repair shed while preserving the canal, bridge approaches and restrained night hierarchy.",
+  "source": "jiangnan.py:town_phase11_west_oar_workshop",
+  "units": "metres",
+  "bounds_m": {"x": [-7.68, 3.50], "y": [70.70, 75.33], "z": [0.0, 4.58]},
+  "hero": "four-post open oar workshop with a visible repair bench and shared oar rack",
+  "circulation": {"primary": "west water street -> waiting cross-lane -> 4.22 m open shed bay", "craft": "arrival -> repair trestles -> workbench -> rear oar rack", "minimum_clearance_m": 1.20},
+  "structure": ["existing west parcel carries the full platform", "four timber posts each land on one stone shoe", "solidified curved roof sits on perimeter beams", "south bay remains fully open with no false wall infill", "repair props land on platform or visible trestles"],
+  "production_cameras": ["15_oar_workshop_node", "16_oar_workshop_craft"],
+  "performance": {"max_scene_triangles": 170000, "new_image_bytes": 0, "paid_service_credits": 0, "linked_oars": 4},
+  "runtime": {"collision": "not_generated", "navigation": "not_generated", "lod": "not_generated", "uv_export_audit": "pending"}
+}
