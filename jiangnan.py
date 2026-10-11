@@ -2150,16 +2150,16 @@ def town_phase12_north_umbrella_lane():
 
     # A twelve-gore shared canopy is silhouette geometry, not a painted disc.
     # Three linked display umbrellas sit on supported shafts inside the open bay.
-    seg=12;uvs=[(0,0,.34)]+[(.58*cos(2*pi*i/seg),.58*sin(2*pi*i/seg),0) for i in range(seg)]
+    seg=12;uvs=[(0,0,.30)]+[(.46*cos(2*pi*i/seg),.46*sin(2*pi*i/seg),0) for i in range(seg)]
     ufaces=[]
     for i in range(seg):ufaces.append((0,1+i,1+(i+1)%seg))
     umbrella=mesh('北河伞巷_油纸伞伞面原型',uvs,ufaces,M['paper'],c);umbrella.hide_render=True;umbrella.hide_viewport=True
-    for i,(x,y,z,rz) in enumerate(((15.10,78.10,1.58,.08),(15.10,79.60,1.70,-.08),(15.10,81.10,1.58,.05)),1):
+    for i,(x,y,z,rz) in enumerate(((15.00,81.25,1.48,.08),(15.90,81.25,1.58,-.08),(16.80,81.25,1.48,.05)),1):
         o=bpy.data.objects.new(PREFIX+f'北河伞巷_共享油纸伞_{i}',umbrella.data);c.objects.link(o);o.location=(x,y,z);o.rotation_euler[2]=rz
-        line(f'北河伞巷_油纸伞伞柄_{i}',[(x,y,.38),(x,y,z+.34)],.024,wood,c,res=1,bevel_res=1)
-    box('北河伞巷_油纸伞陈列架下枋',(15.10,79.60,.72),(.16,4.05,.14),wood,c,.006)
-    box('北河伞巷_油纸伞陈列架上枋',(15.10,79.60,2.32),(.16,4.05,.14),wood,c,.006)
-    for y in (77.74,81.46):box('北河伞巷_油纸伞陈列架立柱',(15.10,y,1.50),(.14,.14,1.70),wood,c,.005)
+        line(f'北河伞巷_油纸伞伞柄_{i}',[(x,y,.38),(x,y,z+.30)],.024,wood,c,res=1,bevel_res=1)
+    box('北河伞巷_油纸伞陈列架下枋',(15.90,81.58,.72),(3.45,.16,.14),wood,c,.006)
+    box('北河伞巷_油纸伞陈列架上枋',(15.90,81.58,2.18),(3.45,.16,.14),wood,c,.006)
+    for x in (14.28,17.52):box('北河伞巷_油纸伞陈列架立柱',(x,81.58,1.43),(.14,.14,1.56),wood,c,.005)
 
     # Restrained river furniture and one task light give the bridge landing a
     # lived-in scale without introducing a competing lantern corridor.
