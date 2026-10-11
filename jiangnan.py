@@ -2247,7 +2247,7 @@ def town_phase13_north_paper_yard():
         fv.extend([(cx-x,-y,z0),(cx-x,-y,z1),(cx-x,y,z0),(cx-x,y,z1),(cx+x,-y,z0),(cx+x,-y,z1),(cx+x,y,z0),(cx+x,y,z1)])
         ff.extend([(k,k+4,k+6,k+2),(k+1,k+3,k+7,k+5),(k,k+1,k+5,k+4),(k+2,k+6,k+7,k+3),(k,k+2,k+3,k+1),(k+4,k+5,k+7,k+6)])
     frame=mesh('北河纸坊_晒纸架原型',fv,ff,wood,c);frame.hide_render=True;frame.hide_viewport=True
-    sheet=mesh('北河纸坊_湿纸原型',[(-.48,0,-.68),(-.48,0,.68),(.48,0,.68),(.48,0,-.68)],[(0,1,2,3)],M['plaster'],c);sheet.hide_render=True;sheet.hide_viewport=True
+    sheet=mesh('北河纸坊_湿纸原型',[(-.48,0,-.68),(-.48,0,.68),(.48,0,.68),(.48,0,-.68)],[(0,1,2,3)],M['ivory'],c);sheet.hide_render=True;sheet.hide_viewport=True
     for i,(x,y,rz) in enumerate(((-4.15,88.95,pi/2),(-4.15,90.55,pi/2),(-4.15,92.15,pi/2)),1):
         for proto,tag in ((frame,'共享晒纸架'),(sheet,'共享湿纸')):
             o=bpy.data.objects.new(PREFIX+f'北河纸坊_{tag}_{i}',proto.data);c.objects.link(o);o.location=(x,y,1.22);o.rotation_euler[2]=rz
@@ -2255,6 +2255,9 @@ def town_phase13_north_paper_yard():
     # Bark bundles and a framed paper lantern finish the lived-in scale while
     # leaving the eastern frontage and both 2.60 m work bays unobstructed.
     for i,y in enumerate((89.65,90.15,90.65),1):line(f'北河纸坊_楮皮束_{i}',[(-4.22,y,.35),(-4.08,y+.08,1.38)],.035,wood,c,res=1,bevel_res=1)
+    line('北河纸坊_湿作吊灯索',[(-1.55,89.28,3.08),(-1.55,89.28,2.62)],.012,wood,c,res=1,bevel_res=0)
+    box('北河纸坊_湿作吊灯纸罩',(-1.55,89.28,2.48),(.25,.25,.30),paper,c,.016)
+    light('北河纸坊_湿作吊灯火',(-1.55,89.28,2.40),(1,.42,.18),82,1.10,target=(-2.25,89.35,.62),kind='AREA')
     line('北河纸坊_门侧灯挑杆',[(1.25,93.35,2.84),(1.85,93.35,2.84),(1.85,93.35,2.46)],.018,wood,c,res=1,bevel_res=1)
     box('北河纸坊_门侧纸灯',(1.85,93.35,2.24),(.24,.24,.34),paper,c,.018)
     for zz in (2.06,2.42):box('北河纸坊_纸灯横框',(1.85,93.35,zz),(.27,.27,.035),wood,c,.004)
