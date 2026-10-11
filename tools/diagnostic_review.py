@@ -27,8 +27,8 @@ VIEWS=[
     ('12_village_lane',(1.4,8.4,1.75),(1.4,31.5,1.35),42,0,'村巷人眼：月门北巷通往茶集的连续地面、民居侧廊、桥前横巷和远端茶亭'),
     ('13_canal_bridge',(13.2,11.2,8.6),(7.3,15.1,.9),46,0,'水巷木桥：高位斜俯视完整检查桥板、栏柱、双岸驳岸、桥头落地与临水民居尺度'),
     ('14_village_waterfront',(7.3,29.0,2.25),(7.3,16.0,1.35),40,0,'临水回望：检查八栋民居沿水巷的聚落节奏、河埠和木桥是否形成江南村落层次'),
-    ('15_north_loop_overview',(-4.40,76.10,6.20),(8.60,82.10,1.28),47,0,'北河闭环总览：检查第四桥至第五桥的双岸石街、水巷连续性、桥头落地及东岸前铺后宅的主次轮廓'),
-    ('16_umbrella_shop_eye',(10.34,79.50,1.72),(19.25,79.60,1.15),44,0,'油纸伞铺人眼近景：从东岸石街正中穿过开敞铺面，检查柱梁台基、北侧共享伞架、柜台、后宅真门洞及案榻生活目的地'),
+    ('15_north_paper_yard_overview',(14.40,86.20,7.00),(-.90,90.55,1.30),48,0,'北河纸坊总览：检查第五桥以北双岸、水巷与石街是否连续，西岸纸坊屋檐—柱梁—台基及工艺分区是否落地'),
+    ('16_paper_workshop_eye',(3.22,90.55,1.70),(-2.55,90.55,1.24),43,0,'楮皮纸坊人眼近景：从西岸石街穿过开敞东立面，检查六柱落础、两座浸槽、捣浆案、抄纸帘及共享晒纸架是否可读且不堵塞工作动线'),
 ]
 
 for o in list(bpy.data.objects):
@@ -106,6 +106,7 @@ S.frame_set(orig['frame'])
 S.render.resolution_x=orig['x'];S.render.resolution_y=orig['y'];S.render.resolution_percentage=orig['pct']
 if orig['camera'] and bpy.data.objects.get(orig['camera']):S.camera=bpy.data.objects[orig['camera']]
 print('DIAGNOSTIC_RENDER_COMPLETE',json.dumps({'views':len(VIEWS),'dir':DIAG},ensure_ascii=False))
+
 
 
 
