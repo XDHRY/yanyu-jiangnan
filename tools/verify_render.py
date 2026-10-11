@@ -716,6 +716,45 @@ assert len(umbrella_proto.data.polygons)==12
 assert len([o for o in S.objects if o.name.startswith('JN_北河伞巷_系舟桩') and '础' not in o.name])==2
 report['town_phase12_north_umbrella_lane']={'phase':S['JN_town_phase'],'west_street_overlap_m':round(west_continuity,3),'east_link_overlap_old_new_m':[round(east_old_overlap_y,3),round(east_new_overlap_y,3)],'canal_overlap_m':round(water_overlap,3),'fifth_bridge':{'linked_planks':len(fifth_planks),'posts':len(fifth_posts),'rails':len(fifth_rails),'risers':len(fifth_steps)},'shop_within_east_parcel':True,'shop_opening_m':round(shop_opening,3),'home_door_m':round(home_door,3),'posts_on_shoes':6,'solidified_roof':True,'rear_room_destination':'ming-couch-desk-stool','shared_umbrella_canopies':len(shared_umbrellas),'umbrella_canopy_polygons':len(umbrella_proto.data.polygons),'new_image_texture_bytes':S['JN_umbrella_lane_new_image_bytes']}
 print('TOWN_PHASE12_NORTH_UMBRELLA_LANE',json.dumps(report['town_phase12_north_umbrella_lane'],ensure_ascii=False))
+# North paper yard: both streets and canal continue from Round 16; the west
+# workshop is grounded, open to the public route and contains readable wet/dry
+# papermaking destinations made from shared low-cost geometry.
+old_paper_west=world_bounds(bpy.data.objects['JN_北河伞巷_西岸石街'])
+new_paper_west=world_bounds(bpy.data.objects['JN_北河纸坊_西岸石街'])
+old_paper_east=world_bounds(bpy.data.objects['JN_北河伞巷_东岸石街'])
+new_paper_east=world_bounds(bpy.data.objects['JN_北河纸坊_东岸石街'])
+old_paper_water=world_bounds(bpy.data.objects['JN_北河伞巷_北延水巷'])
+new_paper_water=world_bounds(bpy.data.objects['JN_北河纸坊_北延水巷'])
+paper_overlaps=[]
+for old,new in ((old_paper_west,new_paper_west),(old_paper_east,new_paper_east),(old_paper_water,new_paper_water)):
+    overlap=min(old[1][1],new[1][1])-max(old[0][1],new[0][1]);paper_overlaps.append(overlap);assert overlap>=.09,overlap
+paper_land=world_bounds(bpy.data.objects['JN_北河纸坊_西岸北延地基'])
+paper_plinth=world_bounds(bpy.data.objects['JN_北河纸坊_实体台基'])
+assert paper_plinth[0][0]>=paper_land[0][0] and paper_plinth[1][0]<=paper_land[1][0]
+assert paper_plinth[0][1]>=paper_land[0][1] and paper_plinth[1][1]<=paper_land[1][1]
+paper_cols=[o for o in S.objects if o.name.startswith('JN_北河纸坊_木柱')]
+paper_shoes=[o for o in S.objects if o.name.startswith('JN_北河纸坊_柱础')]
+assert len(paper_cols)==len(paper_shoes)==6
+for col in paper_cols:
+    candidates=[shoe for shoe in paper_shoes if dist_xy(pos(shoe),pos(col))<.01]
+    assert len(candidates)==1 and abs(world_bounds(col)[0][2]-world_bounds(candidates[0])[1][2])<.002
+paper_front=sorted([o for o in paper_cols if abs(pos(o).x-1.25)<.01],key=lambda o:pos(o).y)
+paper_bays=[world_bounds(paper_front[i+1])[0][1]-world_bounds(paper_front[i])[1][1] for i in range(2)]
+assert min(paper_bays)>=2.59,paper_bays
+assert bpy.data.objects['JN_北河纸坊_低模实体瓦面'].modifiers.get('纸坊真实屋面厚度')
+assert len([o for o in S.objects if o.name.startswith('JN_北河纸坊_楮皮浸槽_')])==2
+assert len([o for o in S.objects if o.name.startswith('JN_北河纸坊_浸槽水面_')])==2
+for required in ('JN_北河纸坊_捣浆长案','JN_北河纸坊_抄纸帘框','JN_北河纸坊_门侧纸灯'):
+    assert bpy.data.objects.get(required),required
+paper_frames=[o for o in S.objects if o.name.startswith('JN_北河纸坊_共享晒纸架_')]
+paper_sheets=[o for o in S.objects if o.name.startswith('JN_北河纸坊_共享湿纸_')]
+frame_proto=bpy.data.objects['JN_北河纸坊_晒纸架原型'];sheet_proto=bpy.data.objects['JN_北河纸坊_湿纸原型']
+assert len(paper_frames)==len(paper_sheets)==3
+assert all(o.data.as_pointer()==frame_proto.data.as_pointer() for o in paper_frames)
+assert all(o.data.as_pointer()==sheet_proto.data.as_pointer() for o in paper_sheets)
+assert len(frame_proto.data.polygons)==24 and len(sheet_proto.data.polygons)==1
+report['town_phase13_north_paper_yard']={'phase':S['JN_town_phase'],'street_and_water_overlaps_m':[round(x,3) for x in paper_overlaps],'workshop_within_west_parcel':True,'posts_on_shoes':6,'open_work_bays_m':[round(x,3) for x in paper_bays],'solidified_low_cost_roof':True,'soaking_vats':2,'beating_bench':1,'paper_mould':1,'shared_drying_frames':len(paper_frames),'shared_paper_sheets':len(paper_sheets),'new_image_texture_bytes':S['JN_paper_yard_new_image_bytes']}
+print('TOWN_PHASE13_NORTH_PAPER_YARD',json.dumps(report['town_phase13_north_paper_yard'],ensure_ascii=False))
 report['inhabited_houses']={'mesh_triangles_with_instances':house_tris,'triangle_budget':18000,'shells':8,'true_door_openings':8,'true_window_openings':16,'shared_wall_meshes':1,'door_clear_width_min':min(o['JN_door_clear_width'] for o in shells),'interior_depth_min':min(o['JN_interior_depth'] for o in shells),'ray_tests_passed':40,'floor_support_passed':8,'tea_east_risers_m':[.10,.10],'new_image_texture_bytes':0}
 print('INHABITED_HOUSES',json.dumps(report['inhabited_houses'],ensure_ascii=False))
 report['town_phase2']={'phase':S['JN_town_phase'],'grounded_houses':len(plinths),'street_segments':street_segments,'street_batches':len(streets),'tea_pavilion_columns':4,'market_stalls':2,'bridge_risers_per_side':3,'market_ceramics':len(ceramics),'teacups':len(teacups),'canal_preserved':True,'new_image_texture_bytes':0}
@@ -849,6 +888,7 @@ else:
 with open(os.path.join(VALIDATION,'validation.json'),'w',encoding='utf-8') as f:json.dump(report,f,ensure_ascii=False,indent=2)
 weather(0);S.camera=bpy.data.objects['JN_三分之四'];S.frame_set(80)
 print('ALL_RENDER_JOBS_COMPLETED' if formal_render else 'ALL_ASSERTIONS_COMPLETED',json.dumps(report,ensure_ascii=False))
+
 
 
 
