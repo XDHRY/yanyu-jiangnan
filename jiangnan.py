@@ -2148,10 +2148,11 @@ def town_phase12_north_umbrella_lane():
     for x in (18.19,18.51):
         for y in (80.86,81.18):box('北河伞巷_后宅凳足',(x,y,.21),(.09,.09,.36),wood,c,.004)
     line('北河伞巷_后宅壁灯托架',[(20.48,79.60,2.18),(20.18,79.60,2.18),(20.18,79.60,1.98)],.016,wood,c,res=1,bevel_res=1)
-    box('北河伞巷_后宅壁灯纸罩',(20.18,79.60,1.80),(.22,.22,.32),M['paper'],c,.018)
-    for z in (1.62,1.98):box('北河伞巷_后宅壁灯木压条',(20.18,79.60,z),(.28,.28,.05),wood,c,.006)
-    for y in (79.49,79.71):
-        for x in (20.07,20.29):box('北河伞巷_后宅壁灯木框',(x,y,1.80),(.025,.025,.34),wood,c,.003)
+    # Framed paper shade keeps the rear destination warm without reading as a modern bare bulb.
+    box('北河伞巷_后宅壁灯纸罩',(20.18,79.60,1.80),(.22,.22,.32),M['paper'],c,.025)
+    for z in (1.63,1.97):box('北河伞巷_后宅壁灯横框',(20.18,79.60,z),(.25,.25,.035),wood,c,.006)
+    for x in (20.065,20.295):
+        for y in (79.485,79.715):box('北河伞巷_后宅壁灯竖框',(x,y,1.80),(.025,.025,.35),wood,c,.003)
     light('北河伞巷_后宅壁灯火',(20.18,79.60,1.79),(1,.40,.16),24,.14,kind='POINT')
 
     # A twelve-gore shared canopy is silhouette geometry, not a painted disc.

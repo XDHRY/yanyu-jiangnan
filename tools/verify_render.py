@@ -662,6 +662,60 @@ assert len([o for o in S.objects if o.name.startswith('JN_北河丝行_悬绢包
 assert bpy.data.objects.get('JN_北河丝行_木质招幌牌') and bpy.data.objects.get('JN_北河丝行_账房纱灯')
 report['town_phase11_west_oar_workshop']={'phase':S['JN_town_phase'],'route_overlap_west_water_street_m':round(lane_overlap,3),'shed_within_existing_west_parcel':True,'open_arrival_width_m':round(oar_open,3),'posts_on_shoes':4,'solidified_roof':True,'shared_oars':len(shared_oars),'oar_mesh_polygons':len(oar_proto.data.polygons),'repair_trestles':2,'rope_coils':2,'silk_edge_sets':2,'hanging_shop_signs':1,'new_image_texture_bytes':S['JN_oar_workshop_new_image_bytes']}
 print('TOWN_PHASE11_WEST_OAR_WORKSHOP',json.dumps(report['town_phase11_west_oar_workshop'],ensure_ascii=False))
+# North umbrella lane: verify the fifth bridge closes a walkable two-bank loop,
+# and the mixed-use house has grounded structure, a real shop opening and a
+# second real opening to an inhabited rear room.
+old_west=world_bounds(bpy.data.objects['JN_北河丝行_西岸北延石街'])
+new_west=world_bounds(bpy.data.objects['JN_北河伞巷_西岸石街'])
+west_continuity=min(old_west[1][1],new_west[1][1])-max(old_west[0][1],new_west[0][1])
+assert west_continuity>=.19,west_continuity
+old_east_cross=world_bounds(bpy.data.objects['JN_北河丝行_第四桥东接横巷'])
+east_link=world_bounds(bpy.data.objects['JN_北河伞巷_东岸接桥短巷'])
+new_east=world_bounds(bpy.data.objects['JN_北河伞巷_东岸石街'])
+east_old_overlap_y=min(old_east_cross[1][1],east_link[1][1])-max(old_east_cross[0][1],east_link[0][1])
+east_new_overlap_y=min(east_link[1][1],new_east[1][1])-max(east_link[0][1],new_east[0][1])
+east_old_overlap_x=min(old_east_cross[1][0],east_link[1][0])-max(old_east_cross[0][0],east_link[0][0])
+assert east_old_overlap_y>=.09 and east_new_overlap_y>=.09 and east_old_overlap_x>=.60,(east_old_overlap_y,east_new_overlap_y,east_old_overlap_x)
+previous_water=world_bounds(bpy.data.objects['JN_北河丝行_北延水巷'])
+new_water=world_bounds(bpy.data.objects['JN_北河伞巷_北延水巷'])
+water_overlap=min(previous_water[1][1],new_water[1][1])-max(previous_water[0][1],new_water[0][1])
+assert water_overlap>=.19,water_overlap
+
+fifth_planks=[o for o in S.objects if o.name.startswith('JN_北河伞巷_第五桥板_') and '原型' not in o.name]
+fifth_posts=[o for o in S.objects if o.name.startswith('JN_北河伞巷_第五桥栏柱_')]
+fifth_rails=[o for o in S.objects if o.name.startswith('JN_北河伞巷_第五桥栏杆')]
+fifth_steps=[o for o in S.objects if o.name.startswith('JN_北河伞巷_第五桥') and '阶_' in o.name]
+fifth_proto=bpy.data.objects['JN_北河伞巷_第五桥板原型']
+assert len(fifth_planks)==11 and all(o.data.as_pointer()==fifth_proto.data.as_pointer() for o in fifth_planks)
+assert len(fifth_posts)==12 and len(fifth_rails)==4 and len(fifth_steps)==6
+
+umbrella_land=world_bounds(bpy.data.objects['JN_北河伞巷_东岸北延地基'])
+umbrella_plinth=world_bounds(bpy.data.objects['JN_北河伞巷_油纸伞铺实体台基'])
+assert umbrella_plinth[0][0]>=umbrella_land[0][0] and umbrella_plinth[1][0]<=umbrella_land[1][0]
+assert umbrella_plinth[0][1]>=umbrella_land[0][1] and umbrella_plinth[1][1]<=umbrella_land[1][1]
+umbrella_cols=[o for o in S.objects if o.name.startswith('JN_北河伞巷_油纸伞铺木柱')]
+umbrella_shoes=[o for o in S.objects if o.name.startswith('JN_北河伞巷_油纸伞铺柱础')]
+assert len(umbrella_cols)==len(umbrella_shoes)==6
+for col in umbrella_cols:
+    candidates=[shoe for shoe in umbrella_shoes if dist_xy(pos(shoe),pos(col))<.01]
+    assert len(candidates)==1 and abs(world_bounds(col)[0][2]-world_bounds(candidates[0])[1][2])<.002
+front_shop_cols=sorted([o for o in umbrella_cols if abs(pos(o).x-12.65)<.01],key=lambda o:pos(o).y)
+assert len(front_shop_cols)==2
+shop_opening=world_bounds(front_shop_cols[1])[0][1]-world_bounds(front_shop_cols[0])[1][1]
+assert shop_opening>=4.69,shop_opening
+partition=[bpy.data.objects['JN_北河伞巷_前铺后宅隔墙_南段'],bpy.data.objects['JN_北河伞巷_前铺后宅隔墙_北段']]
+home_door=world_bounds(partition[1])[0][1]-world_bounds(partition[0])[1][1]
+assert home_door>=1.17,home_door
+assert bpy.data.objects['JN_北河伞巷_油纸伞铺_瓦面'].modifiers.get('油纸伞铺真实屋面厚度')
+for required in ('JN_北河伞巷_后宅明式榻','JN_北河伞巷_后宅小案','JN_北河伞巷_后宅方凳','JN_北河伞巷_油纸伞铺临街柜台'):
+    assert bpy.data.objects.get(required),required
+shared_umbrellas=[o for o in S.objects if o.name.startswith('JN_北河伞巷_共享油纸伞_')]
+umbrella_proto=bpy.data.objects['JN_北河伞巷_油纸伞伞面原型']
+assert len(shared_umbrellas)==3 and all(o.data.as_pointer()==umbrella_proto.data.as_pointer() for o in shared_umbrellas)
+assert len(umbrella_proto.data.polygons)==12
+assert len([o for o in S.objects if o.name.startswith('JN_北河伞巷_系舟桩') and '础' not in o.name])==2
+report['town_phase12_north_umbrella_lane']={'phase':S['JN_town_phase'],'west_street_overlap_m':round(west_continuity,3),'east_link_overlap_old_new_m':[round(east_old_overlap_y,3),round(east_new_overlap_y,3)],'canal_overlap_m':round(water_overlap,3),'fifth_bridge':{'linked_planks':len(fifth_planks),'posts':len(fifth_posts),'rails':len(fifth_rails),'risers':len(fifth_steps)},'shop_within_east_parcel':True,'shop_opening_m':round(shop_opening,3),'home_door_m':round(home_door,3),'posts_on_shoes':6,'solidified_roof':True,'rear_room_destination':'ming-couch-desk-stool','shared_umbrella_canopies':len(shared_umbrellas),'umbrella_canopy_polygons':len(umbrella_proto.data.polygons),'new_image_texture_bytes':S['JN_umbrella_lane_new_image_bytes']}
+print('TOWN_PHASE12_NORTH_UMBRELLA_LANE',json.dumps(report['town_phase12_north_umbrella_lane'],ensure_ascii=False))
 report['inhabited_houses']={'mesh_triangles_with_instances':house_tris,'triangle_budget':18000,'shells':8,'true_door_openings':8,'true_window_openings':16,'shared_wall_meshes':1,'door_clear_width_min':min(o['JN_door_clear_width'] for o in shells),'interior_depth_min':min(o['JN_interior_depth'] for o in shells),'ray_tests_passed':40,'floor_support_passed':8,'tea_east_risers_m':[.10,.10],'new_image_texture_bytes':0}
 print('INHABITED_HOUSES',json.dumps(report['inhabited_houses'],ensure_ascii=False))
 report['town_phase2']={'phase':S['JN_town_phase'],'grounded_houses':len(plinths),'street_segments':street_segments,'street_batches':len(streets),'tea_pavilion_columns':4,'market_stalls':2,'bridge_risers_per_side':3,'market_ceramics':len(ceramics),'teacups':len(teacups),'canal_preserved':True,'new_image_texture_bytes':0}
@@ -795,5 +849,6 @@ else:
 with open(os.path.join(VALIDATION,'validation.json'),'w',encoding='utf-8') as f:json.dump(report,f,ensure_ascii=False,indent=2)
 weather(0);S.camera=bpy.data.objects['JN_三分之四'];S.frame_set(80)
 print('ALL_RENDER_JOBS_COMPLETED' if formal_render else 'ALL_ASSERTIONS_COMPLETED',json.dumps(report,ensure_ascii=False))
+
 
 

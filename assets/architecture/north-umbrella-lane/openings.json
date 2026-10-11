@@ -1,0 +1,15 @@
+{
+  "shopfront": {
+    "orientation": "west",
+    "clear_width_m": 4.7,
+    "destination": "umbrella display and counter",
+    "blocked": false
+  },
+  "rear_room_door": {
+    "orientation": "east-west",
+    "clear_width_m": 1.18,
+    "destination": "furnished sleeping room",
+    "blocked": false
+  },
+  "false_openings": 0
+}

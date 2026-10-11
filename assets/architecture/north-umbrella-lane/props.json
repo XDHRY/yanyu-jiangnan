@@ -1,0 +1,12 @@
+{
+  "shared_assets": {
+    "bridge_plank": 11,
+    "umbrella_canopy": 3
+  },
+  "umbrella_canopy_faces": 12,
+  "shop_props": ["counter", "three supported umbrella shafts", "display rack"],
+  "home_props": ["Ming couch", "small desk", "stool"],
+  "waterside_props": ["two grounded mooring posts"],
+  "lighting": ["one shop task lantern"],
+  "new_bitmap_assets": []
+}
