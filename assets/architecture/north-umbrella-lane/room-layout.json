@@ -1,0 +1,9 @@
+{
+  "coordinate_system": "Blender Z-up, metres",
+  "canal": {"center_x": 7.3, "center_y": 81.05, "width": 5.0, "length": 11.3},
+  "fifth_bridge": {"center_y": 84.45, "planks": 11, "posts": 12, "rails": 4, "risers_each_bank": 3},
+  "west_street": {"center_x": 3.5, "width": 1.82},
+  "east_street": {"center_x": 11.1, "width": 1.82},
+  "shop": {"center": [16.65, 79.6], "front": "west", "columns": 6, "shoes": 6},
+  "rear_room": {"side": "east", "destinations": ["Ming couch", "small desk", "stool"]}
+}
