@@ -5,7 +5,7 @@
   },
   "wet_work_props": ["two stone soaking vats", "two water planes", "beating bench", "supported paper mould"],
   "dry_work_props": ["three linked timber frames", "three linked paper sheets", "three bark bundles"],
-  "lighting": ["one framed paper task lantern"],
+  "lighting": ["one framed street-side paper lantern", "one visibly suspended wet-work task lantern"],
   "new_bitmap_assets": [],
   "paid_generation_credits": 0
 }
