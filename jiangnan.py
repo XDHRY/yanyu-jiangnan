@@ -2074,6 +2074,115 @@ def town_phase11_west_oar_workshop():
     S['JN_oar_workshop_shared_oars']=4
     S['JN_oar_workshop_new_image_bytes']=0
 
+def town_phase12_north_umbrella_lane():
+    """Close a two-bridge walking loop with a fifth bridge and a front-shop/back-home umbrella house."""
+    c=C['water'];stone=M['stone'];wood=M['wood'];wetstone=M['darkstone']
+
+    # The new substrates overlap the proven Round 14/15 terminus by 0.15 m.
+    # Both parallel streets stay on land, so the fourth and fifth bridges form
+    # a real public loop instead of an isolated scenic endpoint.
+    west_land=box('北河伞巷_西岸北延地基',(-1.98,81.05,-.30),(12.84,11.30,.60),wetstone,c)
+    east_land=box('北河伞巷_东岸北延地基',(16.15,81.05,-.30),(11.98,11.30,.60),wetstone,c)
+    water=box('北河伞巷_北延水巷',(7.30,81.05,.03),(5.00,11.30,.06),M['water'],c)
+    for o,fn in ((west_land,'north_loop_west_support'),(east_land,'north_loop_east_mixed_use_support'),(water,'continuous_north_canal_water')):
+        o['JN_function']=fn;o['JN_overlap_previous_m']=.15
+    west_street=box('北河伞巷_西岸石街',(3.50,81.05,.06),(1.82,11.30,.12),stone,c,.012)
+    east_street=box('北河伞巷_东岸石街',(11.10,81.05,.06),(1.82,11.30,.12),stone,c,.012)
+    east_link=box('北河伞巷_东岸接桥短巷',(11.10,74.95,.06),(1.82,1.10,.12),stone,c,.012)
+    for o in (west_street,east_street,east_link):o['JN_function']='two_bridge_loop_route'
+
+    # Fifth bridge repeats the economical shared-plank grammar of the earlier
+    # bridges.  Eleven linked planks, twelve posts, four rails and three real
+    # risers per bank preserve the established scale and construction logic.
+    by=84.45
+    plank=box('北河伞巷_第五桥板原型',(0,0,0),(1,1,.14),wood,c,.014);plank.hide_render=True;plank.hide_viewport=True
+    for i in range(11):
+        x=4.60+i*.52
+        o=bpy.data.objects.new(PREFIX+f'北河伞巷_第五桥板_{i+1:02d}',plank.data);c.objects.link(o);o.location=(x,by,.70);o.scale=(.50,1.48,1)
+    for side,y in enumerate((by-.77,by+.77),1):
+        for i,x in enumerate((4.68,5.72,6.76,7.80,8.84,9.78),1):
+            box(f'北河伞巷_第五桥栏柱_{side}_{i}',(x,y,1.29),(.12,.12,1.04),wood,c,.006)
+        for z in (1.18,1.65):box('北河伞巷_第五桥栏杆',(7.23,y,z),(5.22,.10,.10),wood,c,.005)
+    for side,centers in (('西',(3.70,4.02,4.34)),('东',(10.68,10.36,10.04))):
+        for i,x in enumerate(centers,1):
+            top=.20+.20*(i-1 if side=='西' else 3-i)
+            box(f'北河伞巷_第五桥{side}阶_{i}',(x,by,top/2),(.32,1.62,top),stone,c,.012)
+
+    # The east-bank house is a small mixed-use type: an open west-facing shop
+    # in front, a measured internal doorway and a furnished sleeping room in
+    # back.  Six columns sit on six shoes; no false wall seals the shopfront.
+    hx,hy=16.65,79.60
+    box('北河伞巷_油纸伞铺实体台基',(hx,hy,.16),(8.40,5.40,.32),stone,c,.025)
+    box('北河伞巷_油纸伞铺入铺踏步',(12.19,hy,.09),(.52,1.72,.18),stone,c,.012)
+    post_xy=((12.65,77.15),(12.65,82.05),(16.55,77.15),(16.55,82.05),(20.45,77.15),(20.45,82.05))
+    for x,y in post_xy:
+        box('北河伞巷_油纸伞铺柱础',(x,y,.42),(.40,.40,.20),wetstone,c,.014)
+        box('北河伞巷_油纸伞铺木柱',(x,y,1.82),(.20,.20,2.60),wood,c,.008)
+    for y in (77.15,82.05):box('北河伞巷_油纸伞铺檐枋',(hx,y,3.16),(8.00,.22,.22),wood,c,.008)
+    for x in (12.65,16.55,20.45):box('北河伞巷_油纸伞铺穿梁',(x,hy,3.10),(.20,5.10,.20),wood,c,.008)
+    shop_roof=roof('北河伞巷_油纸伞铺',hx,hy,3.24,9.05,6.05,c)
+    mod=shop_roof.modifiers.new('油纸伞铺真实屋面厚度','SOLIDIFY');mod.thickness=.078;mod.offset=-1
+
+    # Rear and side plaster are deliberately partial.  The internal partition
+    # is split around a real one-metre door leading to a visible domestic room.
+    box('北河伞巷_油纸伞铺东后墙',(20.66,hy,1.54),(.20,4.86,2.68),M['plaster'],c,.018)
+    for y in (77.04,82.16):box('北河伞巷_油纸伞铺侧粉墙',(19.10,y,1.47),(3.30,.18,2.54),M['plaster'],c,.018)
+    for tag,y,length in (('南段',78.08,1.86),('北段',81.12,1.86)):
+        box('北河伞巷_前铺后宅隔墙_'+tag,(17.55,y,1.46),(.18,length,2.50),M['plaster'],c,.016)
+    box('北河伞巷_后宅门楣',(17.55,79.60,2.50),(.22,1.18,.18),wood,c,.008)
+    box('北河伞巷_后宅门槛',(17.49,79.60,.22),(.30,.94,.08),wood,c,.006)
+
+    # Shop counter leaves a broad line from the public street to the interior
+    # door.  The domestic room contains a Ming-style couch, desk and stool, so
+    # the doorway has a real destination rather than ending at blank plaster.
+    box('北河伞巷_油纸伞铺临街柜台',(13.55,81.12,.92),(1.32,.58,.16),wood,c,.014)
+    for x in (13.15,13.95):
+        for y in (80.94,81.30):box('北河伞巷_油纸伞铺柜腿',(x,y,.53),(.12,.12,.70),wood,c,.005)
+    box('北河伞巷_后宅明式榻',(19.22,79.60,.52),(2.18,1.18,.22),wood,c,.014)
+    for x in (18.34,20.10):
+        for y in (79.19,80.01):box('北河伞巷_后宅榻足',(x,y,.27),(.15,.15,.46),wood,c,.006)
+    box('北河伞巷_后宅小案',(19.20,81.05,.72),(1.10,.54,.14),wood,c,.012)
+    for x in (18.82,19.58):
+        for y in (80.86,81.24):box('北河伞巷_后宅案足',(x,y,.38),(.12,.12,.62),wood,c,.005)
+    box('北河伞巷_后宅方凳',(18.35,81.02,.42),(.45,.45,.13),wood,c,.010)
+    for x in (18.19,18.51):
+        for y in (80.86,81.18):box('北河伞巷_后宅凳足',(x,y,.21),(.09,.09,.36),wood,c,.004)
+    line('北河伞巷_后宅壁灯托架',[(20.48,79.60,2.18),(20.18,79.60,2.18),(20.18,79.60,1.98)],.016,wood,c,res=1,bevel_res=1)
+    box('北河伞巷_后宅壁灯纸罩',(20.18,79.60,1.80),(.22,.22,.32),M['paper'],c,.018)
+    for z in (1.62,1.98):box('北河伞巷_后宅壁灯木压条',(20.18,79.60,z),(.28,.28,.05),wood,c,.006)
+    for y in (79.49,79.71):
+        for x in (20.07,20.29):box('北河伞巷_后宅壁灯木框',(x,y,1.80),(.025,.025,.34),wood,c,.003)
+    light('北河伞巷_后宅壁灯火',(20.18,79.60,1.79),(1,.40,.16),24,.14,kind='POINT')
+
+    # A twelve-gore shared canopy is silhouette geometry, not a painted disc.
+    # Three linked display umbrellas sit on supported shafts inside the open bay.
+    seg=12;uvs=[(0,0,.30)]+[(.46*cos(2*pi*i/seg),.46*sin(2*pi*i/seg),0) for i in range(seg)]
+    ufaces=[]
+    for i in range(seg):ufaces.append((0,1+i,1+(i+1)%seg))
+    umbrella=mesh('北河伞巷_油纸伞伞面原型',uvs,ufaces,M['paper'],c);umbrella.hide_render=True;umbrella.hide_viewport=True
+    for i,(x,y,z,rz) in enumerate(((15.00,81.25,1.48,.08),(15.90,81.25,1.58,-.08),(16.80,81.25,1.48,.05)),1):
+        o=bpy.data.objects.new(PREFIX+f'北河伞巷_共享油纸伞_{i}',umbrella.data);c.objects.link(o);o.location=(x,y,z);o.rotation_euler[2]=rz
+        line(f'北河伞巷_油纸伞伞柄_{i}',[(x,y,.38),(x,y,z+.30)],.024,wood,c,res=1,bevel_res=1)
+    box('北河伞巷_油纸伞陈列架下枋',(15.90,81.58,.72),(3.45,.16,.14),wood,c,.006)
+    box('北河伞巷_油纸伞陈列架上枋',(15.90,81.58,2.18),(3.45,.16,.14),wood,c,.006)
+    for x in (14.28,17.52):box('北河伞巷_油纸伞陈列架立柱',(x,81.58,1.43),(.14,.14,1.56),wood,c,.005)
+
+    # Restrained river furniture and one task light give the bridge landing a
+    # lived-in scale without introducing a competing lantern corridor.
+    for y in (82.60,85.88):
+        box('北河伞巷_系舟桩础',(10.26,y,.18),(.34,.34,.18),stone,c,.010)
+        box('北河伞巷_系舟桩',(10.26,y,.73),(.16,.16,.92),wood,c,.008)
+    line('北河伞巷_铺面灯挑杆',[(12.65,82.05,2.86),(12.06,82.05,2.86),(12.06,82.05,2.48)],.020,wood,c,res=2,bevel_res=1)
+    uv('北河伞巷_铺面工作纱灯',(12.06,82.05,2.27),(.12,.12,.18),M['paper'],c,12,8)
+    light('北河伞巷_铺面工作灯火',(12.06,82.05,2.24),(1,.43,.18),66,.22,kind='POINT')
+
+    S['JN_town_phase']='phase_12_north_umbrella_lane'
+    S['JN_fifth_bridge_loop_closed']=True
+    S['JN_umbrella_shop_opening_width_m']=4.70
+    S['JN_umbrella_home_door_width_m']=1.00
+    S['JN_umbrella_shop_shared_canopies']=3
+    S['JN_umbrella_lane_new_image_bytes']=0
+
 def batch_static_objects(name,objects,mat,col,bev=0):
     """Combine already-built static meshes after art generation so optimization cannot perturb procedural build order."""
     objects=[o for o in objects if o and o.type=='MESH']
@@ -2149,7 +2258,7 @@ def viewport():
                 a.spaces.active.region_3d.view_camera_zoom=0
     bpy.context.view_layer.update()
 def build(stage=None):
-    start();courtyard();village_phase1_skeleton();town_phase2_market();town_phase3_east_wharf();town_phase4_east_residence();town_phase5_cloth_finish_yard();town_phase6_west_wine_court();town_phase7_north_granary();town_phase8_north_grain_wharf();town_phase9_north_silk_bend();town_phase10_silk_trade_finish();town_phase11_west_oar_workshop()
+    start();courtyard();village_phase1_skeleton();town_phase2_market();town_phase3_east_wharf();town_phase4_east_residence();town_phase5_cloth_finish_yard();town_phase6_west_wine_court();town_phase7_north_granary();town_phase8_north_grain_wharf();town_phase9_north_silk_bend();town_phase10_silk_trade_finish();town_phase11_west_oar_workshop();town_phase12_north_umbrella_lane()
     level=P['stage'] if stage is None else stage
     if level>=2:vegetation()
     if level>=3:weather()
@@ -2166,5 +2275,6 @@ if __name__=='__main__':
         rdir=os.path.join(P['output_dir'],'renders');os.makedirs(rdir,exist_ok=True)
         for name in ['正面','顶视','三分之四']:
             S.camera=bpy.data.objects[PREFIX+name];S.render.filepath=os.path.join(rdir,name+'.png');bpy.ops.render.render(write_still=True)
+
 
 
