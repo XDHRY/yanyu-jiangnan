@@ -1,0 +1,49 @@
+{
+  "round": 16,
+  "title": "north umbrella lane and fifth bridge",
+  "repository": "XDHRY/yanyu-jiangnan",
+  "baseline": "ab889f12aa1c7dc926c5b093de6626c51c2b2ba2",
+  "pull_request": 22,
+  "implementation_head": "6ea224214754a7ef3854d1acd7efc5049051177e",
+  "merge_commit": "3f1eb49d15c922e76df954fa7439d5afa1918a55",
+  "verified_head": "6ea224214754a7ef3854d1acd7efc5049051177e",
+  "final_head_status": "merged-after-all-four-workflows-passed",
+  "diagnostic_views": 16,
+  "diagnostic_resolution": [
+    1024,
+    640
+  ],
+  "verified_render_seconds": 151.59,
+  "verified_scene": {
+    "objects": 4006,
+    "mesh_objects": 2565,
+    "curve_objects": 1361,
+    "vertices": 169377,
+    "polygons": 99435,
+    "triangles_with_instances": 167228,
+    "instance_reuse_ratio": 0.4881,
+    "materials": 36,
+    "images": 7,
+    "texture_rgba8_mib": 41.99
+  },
+  "new_bitmap_bytes": 0,
+  "paid_credits": 0,
+  "human_gates": {
+    "function": "pending",
+    "form": "pending",
+    "runtime": "pending"
+  },
+  "workflow_runs": {
+    "ci": 38160676936,
+    "blender_smoke": 38160676960,
+    "spatial_diagnostic": 38160676952,
+    "web_viewer": 38160676953
+  },
+  "artifacts": {
+    "blender_scene": 11710395643,
+    "spatial_diagnostics": 11710505745,
+    "web_viewer": 11711070264
+  },
+  "last_verified_delta": "rear-room bare glow replaced by framed paper shade",
+  "next": "verify final head, then extend the north loop toward a paper or dye craft lane"
+}
