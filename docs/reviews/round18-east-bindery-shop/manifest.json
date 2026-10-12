@@ -1,0 +1,46 @@
+{
+  "round": "18",
+  "title": "east-bindery-shop",
+  "baseline_commit": "f4240c1300dab3102d7c4b5729d759fac6d59232",
+  "final_head": "c52cda29a20565c4706cd8acb537000a736d3f49",
+  "merge_commit": "3cf9eb9e3a40cced68b31e8f5c273e0bb285aa5c",
+  "pull_request": 24,
+  "workflow_runs": {
+    "ci": 38244428573,
+    "smoke": 38244428521,
+    "spatial": 38244428591,
+    "web": 38244428627
+  },
+  "artifacts": {
+    "spatial": 11744890335,
+    "blender": 11744750026,
+    "web": 11744354857
+  },
+  "scene": {
+    "objects": 4139,
+    "mesh_objects": 2670,
+    "curve_objects": 1386,
+    "expanded_triangles": 165562,
+    "triangle_budget": 170000,
+    "materials": 36,
+    "images": 7,
+    "texture_mib": 41.99,
+    "instance_reuse_ratio": 0.4768,
+    "render_seconds": 159.56
+  },
+  "render_loops": 3,
+  "final_focus_views": [
+    "15_north_paper_trade_overview.png",
+    "16_east_bindery_eye.png"
+  ],
+  "library_files": {
+    "contact_sheet": "libfile_bb41b31cd2ec8191a94b8ab659951fb7",
+    "focus": "libfile_03191feca5ec8191aac78ee2d8283b0f",
+    "before_after": "libfile_06a127df42d48191a55d03b59831da83"
+  },
+  "human_gates": {
+    "Function": "pending_human_review",
+    "Form": "pending_human_review",
+    "Runtime": "pending_human_review"
+  }
+}
