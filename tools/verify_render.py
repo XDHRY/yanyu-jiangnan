@@ -782,6 +782,45 @@ assert all(o.data.as_pointer()==ream_proto.data.as_pointer() for o in reams)
 assert all(o.data.as_pointer()==book_proto.data.as_pointer() for o in books)
 report['town_phase14_east_bindery_shop']={'phase':S['JN_town_phase'],'shop_within_round17_east_parcel':True,'posts_on_shoes':6,'open_front_bays_m':[round(x,3) for x in bindery_bays],'solidified_low_cost_roof':True,'shared_paper_reams':len(reams),'shared_stitched_books':len(books),'binding_press':'four-feet-two-posts-beam-screw-platen','new_image_texture_bytes':S['JN_bindery_shop_new_image_bytes']}
 print('TOWN_PHASE14_EAST_BINDERY_SHOP',json.dumps(report['town_phase14_east_bindery_shop'],ensure_ascii=False))
+
+# East dyed-paper court: continuation, support, structure and shared craft props.
+old_dye_west=world_bounds(bpy.data.objects['JN_北河纸坊_西岸石街'])
+new_dye_west=world_bounds(bpy.data.objects['JN_北河染纸坊_西岸石街'])
+old_dye_east=world_bounds(bpy.data.objects['JN_北河纸坊_东岸石街'])
+new_dye_east=world_bounds(bpy.data.objects['JN_北河染纸坊_东岸石街'])
+old_dye_water=world_bounds(bpy.data.objects['JN_北河纸坊_北延水巷'])
+new_dye_water=world_bounds(bpy.data.objects['JN_北河染纸坊_北延水巷'])
+dye_overlaps=[]
+for old_bounds,new_bounds in ((old_dye_west,new_dye_west),(old_dye_east,new_dye_east),(old_dye_water,new_dye_water)):
+    overlap=min(old_bounds[1][1],new_bounds[1][1])-max(old_bounds[0][1],new_bounds[0][1]);dye_overlaps.append(overlap);assert overlap>=.09,overlap
+dye_land=world_bounds(bpy.data.objects['JN_北河染纸坊_东岸北延地基'])
+dye_plinth=world_bounds(bpy.data.objects['JN_北河染纸坊_实体台基'])
+assert dye_plinth[0][0]>=dye_land[0][0] and dye_plinth[1][0]<=dye_land[1][0]
+assert dye_plinth[0][1]>=dye_land[0][1] and dye_plinth[1][1]<=dye_land[1][1]
+dye_cols=[o for o in S.objects if o.name.startswith('JN_北河染纸坊_木柱')]
+dye_shoes=[o for o in S.objects if o.name.startswith('JN_北河染纸坊_柱础')]
+assert len(dye_cols)==len(dye_shoes)==6
+for col in dye_cols:
+    candidates=[shoe for shoe in dye_shoes if dist_xy(pos(shoe),pos(col))<.01]
+    assert len(candidates)==1 and abs(world_bounds(col)[0][2]-world_bounds(candidates[0])[1][2])<.002
+dye_front=sorted([o for o in dye_cols if abs(pos(o).x-12.65)<.01],key=lambda o:pos(o).y)
+dye_bays=[world_bounds(dye_front[i+1])[0][1]-world_bounds(dye_front[i])[1][1] for i in range(2)]
+assert min(dye_bays)>=1.94,dye_bays
+assert bpy.data.objects['JN_北河染纸坊_低模实体瓦面'].modifiers.get('染纸坊真实屋面厚度')
+for required in ('JN_北河染纸坊_漂洗槽','JN_北河染纸坊_排水石槽','JN_北河染纸坊_街侧泄水口','JN_北河染纸坊_搅染长案','JN_北河染纸坊_梁下纸灯罩'):
+    assert bpy.data.objects.get(required),required
+vats=[o for o in S.objects if o.name.startswith('JN_北河染纸坊_共享染缸_')]
+liquids=[o for o in S.objects if o.name.startswith('JN_北河染纸坊_共享染液_')]
+sheets=[o for o in S.objects if o.name.startswith('JN_北河染纸坊_共享靛纸_')]
+vat_proto=bpy.data.objects['JN_北河染纸坊_染缸原型'];liquid_proto=bpy.data.objects['JN_北河染纸坊_染液原型'];sheet_proto=bpy.data.objects['JN_北河染纸坊_靛纸原型']
+assert len(vats)==len(liquids)==2 and len(sheets)==6
+assert all(o.data.as_pointer()==vat_proto.data.as_pointer() for o in vats)
+assert all(o.data.as_pointer()==liquid_proto.data.as_pointer() for o in liquids)
+assert all(o.data.as_pointer()==sheet_proto.data.as_pointer() for o in sheets)
+assert len(sheet_proto.data.polygons)==1
+report['town_phase15_east_dyed_paper_court']={'phase':S['JN_town_phase'],'street_and_water_overlaps_m':[round(x,3) for x in dye_overlaps],'atelier_within_east_parcel':True,'posts_on_shoes':6,'open_front_bays_m':[round(x,3) for x in dye_bays],'solidified_low_cost_roof':True,'shared_dye_vats':len(vats),'shared_dye_liquids':len(liquids),'shared_dyed_sheets':len(sheets),'drainage_to_street':True,'new_image_texture_bytes':S['JN_dyed_paper_new_image_bytes']}
+print('TOWN_PHASE15_EAST_DYED_PAPER_COURT',json.dumps(report['town_phase15_east_dyed_paper_court'],ensure_ascii=False))
+
 report['inhabited_houses']={'mesh_triangles_with_instances':house_tris,'triangle_budget':18000,'shells':8,'true_door_openings':8,'true_window_openings':16,'shared_wall_meshes':1,'door_clear_width_min':min(o['JN_door_clear_width'] for o in shells),'interior_depth_min':min(o['JN_interior_depth'] for o in shells),'ray_tests_passed':40,'floor_support_passed':8,'tea_east_risers_m':[.10,.10],'new_image_texture_bytes':0}
 print('INHABITED_HOUSES',json.dumps(report['inhabited_houses'],ensure_ascii=False))
 report['town_phase2']={'phase':S['JN_town_phase'],'grounded_houses':len(plinths),'street_segments':street_segments,'street_batches':len(streets),'tea_pavilion_columns':4,'market_stalls':2,'bridge_risers_per_side':3,'market_ceramics':len(ceramics),'teacups':len(teacups),'canal_preserved':True,'new_image_texture_bytes':0}
