@@ -1,0 +1,16 @@
+{
+  "experience": "A compact east-bank paper shop where blank reams from the opposite workshop become stitched books in view of the stone street and canal.",
+  "hero_read": "open two-bay shopfront, warm counter, pale paper stacks, wall shelves and a grounded four-foot binding press",
+  "circulation": [
+    "east stone street remains continuous past the shop",
+    "two short bluestone thresholds lead from street to the open west frontage",
+    "two front bays keep counter sales and binding work visually distinct",
+    "rear shelves remain legible without becoming a false doorway"
+  ],
+  "style_guardrails": [
+    "restrained Ming timber frame with real post-shoe-beam contacts",
+    "white plaster, dark roof, warm wood, bluestone and paper-white accents",
+    "small trade building remains subordinate to the west-bank production shed",
+    "shared low-polygon paper and book meshes; no new bitmap textures"
+  ]
+}

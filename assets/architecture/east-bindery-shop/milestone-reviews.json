@@ -1,0 +1,14 @@
+{
+  "Function": {
+    "status": "pending_human_review",
+    "questions": ["Does the east stone street remain unobstructed?", "Are sales and binding destinations readable from both front bays?"]
+  },
+  "Form": {
+    "status": "pending_human_review",
+    "questions": ["Are the six post-shoe contacts and roof-to-beam hierarchy credible?", "Does the paper shop remain subordinate to the west-bank workshop while completing the trade ensemble?"]
+  },
+  "Runtime": {
+    "status": "pending_human_review",
+    "questions": ["Does the dew LOD recovery preserve the established courtyard read?", "Does the expanded scene remain below 170000 expanded triangles and within memory/render-time budgets?"]
+  }
+}
