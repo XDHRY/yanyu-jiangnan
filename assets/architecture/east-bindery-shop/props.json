@@ -1,0 +1,11 @@
+{
+  "shared_assets": {
+    "paper_ream": 6,
+    "stitched_book": 5
+  },
+  "sales_props": ["supported street counter", "six linked paper reams", "east-wall shelf run"],
+  "binding_props": ["four-foot press table", "two press posts", "crossbeam", "bronze screw", "platen", "five linked stitched books", "visible spine cords"],
+  "lighting": ["one visibly suspended counter task lantern"],
+  "new_bitmap_assets": [],
+  "paid_generation_credits": 0
+}
