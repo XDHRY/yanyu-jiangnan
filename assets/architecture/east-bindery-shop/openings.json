@@ -1,0 +1,15 @@
+{
+  "west_shop_bay_south": {
+    "orientation": "west",
+    "clear_width_m": 2.4,
+    "destination": "sales counter and paper reams",
+    "blocked": false
+  },
+  "west_shop_bay_north": {
+    "orientation": "west",
+    "clear_width_m": 2.4,
+    "destination": "binding press and stitched books",
+    "blocked": false
+  },
+  "false_openings": 0
+}
