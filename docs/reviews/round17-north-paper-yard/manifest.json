@@ -1,0 +1,40 @@
+{
+  "round": 17,
+  "title": "北河楮皮纸坊与晒纸院",
+  "baseline_commit": "d822660f10a9c7e23bb5dbf182115366d2058ee7",
+  "implementation_head": "336382d8ba4dd691148beadb38decea606216516",
+  "pull_request": 23,
+  "workflow_runs": {
+    "ci": 38185979962,
+    "smoke": 38185979940,
+    "spatial": 38185979924,
+    "web": 38185979906
+  },
+  "artifacts": {
+    "blender": 11719372363,
+    "spatial": 11719771886,
+    "web": 11719642085
+  },
+  "review_files": {
+    "contact_sheet": "libfile_ad64381379448191ba3301e657dfc32f",
+    "focus": "libfile_a172d21197a881918f36245bf1bdf384",
+    "before_after": "libfile_8420bc2054a481918838db9b17664a95"
+  },
+  "metrics": {
+    "objects": 4069,
+    "mesh_objects": 2616,
+    "curve_objects": 1371,
+    "triangles_with_instances": 167964,
+    "triangle_budget": 170000,
+    "materials": 36,
+    "images": 7,
+    "texture_mib_rgba8_estimate": 41.99,
+    "instance_reuse_ratio": 0.4817,
+    "diagnostic_render_seconds": 295.86
+  },
+  "human_gates": {
+    "function": "pending",
+    "form": "pending",
+    "runtime": "pending"
+  }
+}
