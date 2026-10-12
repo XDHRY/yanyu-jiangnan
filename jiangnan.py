@@ -2184,6 +2184,90 @@ def town_phase12_north_umbrella_lane():
     S['JN_umbrella_shop_shared_canopies']=3
     S['JN_umbrella_lane_new_image_bytes']=0
 
+def town_phase13_north_paper_yard():
+    """Extend the north canal with a west-bank mulberry-paper workshop and drying court."""
+    c=C['water'];stone=M['stone'];wood=M['wood'];wetstone=M['darkstone'];paper=M['paper']
+
+    # Continue both banks and the five-metre canal by 7.90 m.  The 0.10 m
+    # overlap keeps water and both public streets continuous without spending
+    # triangle budget on another bridge in the same visual beat.
+    cy=90.55
+    west_land=box('北河纸坊_西岸北延地基',(-1.98,cy,-.30),(12.84,7.90,.60),wetstone,c)
+    east_land=box('北河纸坊_东岸北延地基',(16.15,cy,-.30),(11.98,7.90,.60),wetstone,c)
+    water=box('北河纸坊_北延水巷',(7.30,cy,.03),(5.00,7.90,.06),M['water'],c)
+    west_street=box('北河纸坊_西岸石街',(3.50,cy,.06),(1.82,7.90,.12),stone,c,.012)
+    east_street=box('北河纸坊_东岸石街',(11.10,cy,.06),(1.82,7.90,.12),stone,c,.012)
+    for o,fn in ((west_land,'paper_workshop_support'),(east_land,'future_east_bank_support'),(water,'continuous_north_canal_water'),(west_street,'north_paper_public_route'),(east_street,'north_paper_public_route')):
+        o['JN_function']=fn;o['JN_overlap_previous_m']=.10
+
+    # Open east-facing craft shed: six posts land on six shoes, two transverse
+    # beams and three tie beams carry a deliberately low-cost solid roof.  The
+    # sparse roof preserves the silhouette and support logic while keeping the
+    # town below the established 170k expanded-triangle ceiling.
+    px,py=-1.60,90.55
+    box('北河纸坊_实体台基',(px,py,.16),(6.70,6.90,.32),stone,c,.022)
+    for i,y in enumerate((87.75,90.55,93.35),1):
+        box(f'北河纸坊_入坊踏步_{i}',(2.00,y,.09),(.52,.92,.18),stone,c,.010)
+    post_xy=tuple((x,y) for x in (-4.45,1.25) for y in (87.75,90.55,93.35))
+    for x,y in post_xy:
+        box('北河纸坊_柱础',(x,y,.42),(.40,.40,.20),wetstone,c,.012)
+        box('北河纸坊_木柱',(x,y,1.82),(.20,.20,2.60),wood,c,.007)
+    for x in (-4.45,1.25):box('北河纸坊_纵向檐枋',(x,py,3.16),(.22,6.00,.22),wood,c,.007)
+    for y in (87.75,90.55,93.35):box('北河纸坊_横向穿梁',(px,y,3.10),(5.90,.20,.20),wood,c,.007)
+
+    # Four-quadrilateral gabled roof with visible ridge/eaves and Solidify:
+    # important profile remains geometric, repeated tile relief stays in the
+    # established material rather than consuming thousands of roof triangles.
+    z=3.22;xl=-4.82;xr=1.62;ymn=87.32;ymx=93.78;ridge=-1.60
+    rv=[(xl,ymn,z),(ridge,ymn,z+1.02),(xr,ymn,z),(xl,ymx,z),(ridge,ymx,z+1.02),(xr,ymx,z)]
+    roof_obj=mesh('北河纸坊_低模实体瓦面',rv,[(0,3,4,1),(1,4,5,2)],M['tile'],c)
+    mod=roof_obj.modifiers.new('纸坊真实屋面厚度','SOLIDIFY');mod.thickness=.075;mod.offset=-1
+    line('北河纸坊_正脊',[(ridge,ymn-.08,z+1.05),(ridge,ymx+.08,z+1.05)],.085,M['edge'],c,res=1,bevel_res=1)
+    for x in (xl,xr):line('北河纸坊_檐口',[(x,ymn-.08,z),(x,ymx+.08,z)],.065,M['edge'],c,res=1,bevel_res=1)
+    box('北河纸坊_西后粉墙',(-4.58,py,1.50),(.18,5.30,2.54),M['plaster'],c,.014)
+    box('北河纸坊_北侧粉墙',(-2.90,93.43,1.42),(3.55,.18,2.38),M['plaster'],c,.014)
+
+    # Wet craft zone: two grounded soaking vats with restrained water planes,
+    # a beating bench and a supported mould.  These are explicit destinations
+    # rather than decorative clutter in the circulation bay.
+    for i,y in enumerate((88.55,90.10),1):
+        box(f'北河纸坊_楮皮浸槽_{i}',(-3.58,y,.48),(1.34,1.06,.62),stone,c,.045)
+        box(f'北河纸坊_浸槽水面_{i}',(-3.58,y,.77),(1.08,.80,.025),M['water'],c,.004)
+    box('北河纸坊_捣浆长案',(-1.38,88.65,.78),(2.20,.72,.16),wood,c,.012)
+    for x in (-2.22,-.54):
+        for y in (88.39,88.91):box('北河纸坊_捣浆案足',(x,y,.43),(.13,.13,.70),wood,c,.004)
+    box('北河纸坊_抄纸帘框',(-1.38,88.65,.91),(1.36,.56,.055),wood,c,.005)
+    for x in (-1.92,-.84):line('北河纸坊_抄纸帘经线',[(x,88.41,.945),(x,88.89,.945)],.006,wetstone,c,res=1,bevel_res=0)
+
+    # Three linked drying frames and three linked paper sheets keep the craft
+    # legible at eye height without multiplying unique meshes.
+    fv=[];ff=[]
+    for cx,cz,sx,sz in ((-.55,0,.08,1.70),(.55,0,.08,1.70),(0,-.80,1.18,.08),(0,.80,1.18,.08)):
+        k=len(fv);x=sx/2;y=.10/2;z0=cz-sz/2;z1=cz+sz/2
+        fv.extend([(cx-x,-y,z0),(cx-x,-y,z1),(cx-x,y,z0),(cx-x,y,z1),(cx+x,-y,z0),(cx+x,-y,z1),(cx+x,y,z0),(cx+x,y,z1)])
+        ff.extend([(k,k+4,k+6,k+2),(k+1,k+3,k+7,k+5),(k,k+1,k+5,k+4),(k+2,k+6,k+7,k+3),(k,k+2,k+3,k+1),(k+4,k+5,k+7,k+6)])
+    frame=mesh('北河纸坊_晒纸架原型',fv,ff,wood,c);frame.hide_render=True;frame.hide_viewport=True
+    sheet=mesh('北河纸坊_湿纸原型',[(-.48,0,-.68),(-.48,0,.68),(.48,0,.68),(.48,0,-.68)],[(0,1,2,3)],M['ivory'],c);sheet.hide_render=True;sheet.hide_viewport=True
+    for i,(x,y,rz) in enumerate(((-4.15,88.95,pi/2),(-4.15,90.55,pi/2),(-4.15,92.15,pi/2)),1):
+        for proto,tag in ((frame,'共享晒纸架'),(sheet,'共享湿纸')):
+            o=bpy.data.objects.new(PREFIX+f'北河纸坊_{tag}_{i}',proto.data);c.objects.link(o);o.location=(x,y,1.22);o.rotation_euler[2]=rz
+
+    # Bark bundles and a framed paper lantern finish the lived-in scale while
+    # leaving the eastern frontage and both 2.60 m work bays unobstructed.
+    for i,y in enumerate((89.65,90.15,90.65),1):line(f'北河纸坊_楮皮束_{i}',[(-4.22,y,.35),(-4.08,y+.08,1.38)],.035,wood,c,res=1,bevel_res=1)
+    line('北河纸坊_湿作吊灯索',[(-1.55,89.28,3.08),(-1.55,89.28,2.62)],.012,wood,c,res=1,bevel_res=0)
+    box('北河纸坊_湿作吊灯纸罩',(-1.55,89.28,2.48),(.25,.25,.30),paper,c,.016)
+    light('北河纸坊_湿作吊灯火',(-1.55,89.28,2.40),(1,.42,.18),82,1.10,target=(-2.25,89.35,.62),kind='AREA')
+    line('北河纸坊_门侧灯挑杆',[(1.25,93.35,2.84),(1.85,93.35,2.84),(1.85,93.35,2.46)],.018,wood,c,res=1,bevel_res=1)
+    box('北河纸坊_门侧纸灯',(1.85,93.35,2.24),(.24,.24,.34),paper,c,.018)
+    for zz in (2.06,2.42):box('北河纸坊_纸灯横框',(1.85,93.35,zz),(.27,.27,.035),wood,c,.004)
+    light('北河纸坊_工作灯火',(1.85,93.35,2.23),(1,.42,.18),42,.18,kind='POINT')
+
+    S['JN_town_phase']='phase_13_north_paper_yard'
+    S['JN_paper_yard_open_bay_m']=2.60
+    S['JN_paper_yard_shared_frames']=3
+    S['JN_paper_yard_new_image_bytes']=0
+
 def batch_static_objects(name,objects,mat,col,bev=0):
     """Combine already-built static meshes after art generation so optimization cannot perturb procedural build order."""
     objects=[o for o in objects if o and o.type=='MESH']
@@ -2259,7 +2343,7 @@ def viewport():
                 a.spaces.active.region_3d.view_camera_zoom=0
     bpy.context.view_layer.update()
 def build(stage=None):
-    start();courtyard();village_phase1_skeleton();town_phase2_market();town_phase3_east_wharf();town_phase4_east_residence();town_phase5_cloth_finish_yard();town_phase6_west_wine_court();town_phase7_north_granary();town_phase8_north_grain_wharf();town_phase9_north_silk_bend();town_phase10_silk_trade_finish();town_phase11_west_oar_workshop();town_phase12_north_umbrella_lane()
+    start();courtyard();village_phase1_skeleton();town_phase2_market();town_phase3_east_wharf();town_phase4_east_residence();town_phase5_cloth_finish_yard();town_phase6_west_wine_court();town_phase7_north_granary();town_phase8_north_grain_wharf();town_phase9_north_silk_bend();town_phase10_silk_trade_finish();town_phase11_west_oar_workshop();town_phase12_north_umbrella_lane();town_phase13_north_paper_yard()
     level=P['stage'] if stage is None else stage
     if level>=2:vegetation()
     if level>=3:weather()
@@ -2276,6 +2360,7 @@ if __name__=='__main__':
         rdir=os.path.join(P['output_dir'],'renders');os.makedirs(rdir,exist_ok=True)
         for name in ['正面','顶视','三分之四']:
             S.camera=bpy.data.objects[PREFIX+name];S.render.filepath=os.path.join(rdir,name+'.png');bpy.ops.render.render(write_still=True)
+
 
 
 

@@ -1,0 +1,16 @@
+{
+  "experience": "A quiet craft edge north of the fifth bridge where the public west street opens directly onto wet papermaking and a paper-drying court.",
+  "hero_read": "low dark gable, six grounded timber posts, two stone soaking vats and three pale drying sheets",
+  "circulation": [
+    "west street north from the fifth bridge",
+    "east street and canal reserved for the next linked district",
+    "three short steps from west street into the open workshop",
+    "clear east frontage through two 2.60 metre work bays"
+  ],
+  "style_guardrails": [
+    "Ming timber-frame proportions and restrained craft tools",
+    "white plaster, dark tile, warm wood, bluestone and natural water",
+    "real supports, contacts, openings and visible work destinations",
+    "shared low-polygon frames and no new bitmap textures"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "Function": {
+    "status": "pending_human_review",
+    "questions": ["Does the north extension read as a continuous public route?", "Are wet-work and drying destinations understandable without blocking circulation?"]
+  },
+  "Form": {
+    "status": "pending_human_review",
+    "questions": ["Are roof, post, beam and plinth proportions credible?", "Does the economical roof retain a convincing Jiangnan craft-shed silhouette?"]
+  },
+  "Runtime": {
+    "status": "pending_human_review",
+    "questions": ["Does the expanded scene remain below 170000 expanded triangles and within memory/render-time budgets?"]
+  }
+}
