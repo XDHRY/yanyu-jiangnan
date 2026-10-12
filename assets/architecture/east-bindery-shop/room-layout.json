@@ -1,0 +1,8 @@
+{
+  "coordinate_system": "Blender Z-up, metres",
+  "canal": {"center_x": 7.3, "center_y": 90.55, "width": 5.0},
+  "east_street": {"center_x": 11.1, "width": 1.82},
+  "shop": {"center": [15.05, 90.55], "front": "west", "columns": 6, "shoes": 6},
+  "sales_zone": {"side": "south-west", "destinations": ["street counter", "shared paper reams"]},
+  "binding_zone": {"side": "north-east", "destinations": ["binding press", "stitched books", "wall shelves"]}
+}
