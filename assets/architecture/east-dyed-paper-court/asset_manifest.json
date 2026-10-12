@@ -1,0 +1,15 @@
+{
+  "asset_id": "east-dyed-paper-court",
+  "generator": "jiangnan.py::town_phase15_east_dyed_paper_court",
+  "units": "metre",
+  "source_baseline": "e537255e27c7bf1107e4370c211c7462198f87f1",
+  "placement": {"east_parcel_center": [16.15, 97.95, -0.30], "atelier_center": [15.05, 98.15, 0.16]},
+  "geometry": {"posts": 6, "stone_shoes": 6, "open_front_bays": 2, "shared_dye_vats": 2, "shared_dye_liquids": 2, "shared_dyed_sheets": 6},
+  "materials": ["stone", "darkstone", "wood", "tile", "plaster", "water", "paper", "染纸靛青", "染纸茜红"],
+  "textures": [],
+  "uv": "No new bitmap-mapped mesh; procedural/shared low-cost geometry only.",
+  "normals": "Blender evaluated by existing smoke/export workflows.",
+  "lod": "Hero diagnostic source; shared low-segment props; no separate runtime LOD chain yet.",
+  "license": "Project-generated procedural geometry; no paid or external generated asset.",
+  "human_gates": {"function": "pending", "form": "pending", "runtime": "pending"}
+}
