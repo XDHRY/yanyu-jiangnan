@@ -1,0 +1,21 @@
+{
+  "id": "east-bindery-shop",
+  "version": 1,
+  "source": "procedural Blender Python in jiangnan.py",
+  "purpose": "Reuse the east-bank paper-trade parcel as a small bookbinding shop that faces the Round 17 workshop across the canal while recovering enough shared-scene triangle budget for continued expansion.",
+  "scale_m": {
+    "shop_plinth": [5.8, 6.5, 0.28],
+    "front_bay_clear_width": 2.4,
+    "street_threshold_count": 2,
+    "canal_width": 5.0
+  },
+  "required_evidence": [
+    "16-camera 1024x640 diagnostic set",
+    "Blender smoke and structural assertions",
+    "scene statistics and 170000 expanded-triangle ceiling",
+    "human Function/Form/Runtime review"
+  ],
+  "budget_recovery": "shared dew prototype reduced from 6x4 to 6x3 UV sphere segments; silhouette change is limited to 2-4 cm droplets",
+  "image_textures_added_bytes": 0,
+  "license": "repository-native procedural asset"
+}
