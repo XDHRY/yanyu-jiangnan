@@ -755,6 +755,33 @@ assert all(o.data.as_pointer()==sheet_proto.data.as_pointer() for o in paper_she
 assert len(frame_proto.data.polygons)==24 and len(sheet_proto.data.polygons)==1
 report['town_phase13_north_paper_yard']={'phase':S['JN_town_phase'],'street_and_water_overlaps_m':[round(x,3) for x in paper_overlaps],'workshop_within_west_parcel':True,'posts_on_shoes':6,'open_work_bays_m':[round(x,3) for x in paper_bays],'solidified_low_cost_roof':True,'soaking_vats':2,'beating_bench':1,'paper_mould':1,'shared_drying_frames':len(paper_frames),'shared_paper_sheets':len(paper_sheets),'new_image_texture_bytes':S['JN_paper_yard_new_image_bytes']}
 print('TOWN_PHASE13_NORTH_PAPER_YARD',json.dumps(report['town_phase13_north_paper_yard'],ensure_ascii=False))
+# East bindery shop: the east-bank parcel is reused rather than extended.
+# Check containment, structural contact, two open front bays and economical
+# shared retail/craft props.
+bindery_land=world_bounds(bpy.data.objects['JN_北河纸坊_东岸北延地基'])
+bindery_plinth=world_bounds(bpy.data.objects['JN_北河纸铺_实体台基'])
+assert bindery_plinth[0][0]>=bindery_land[0][0] and bindery_plinth[1][0]<=bindery_land[1][0]
+assert bindery_plinth[0][1]>=bindery_land[0][1] and bindery_plinth[1][1]<=bindery_land[1][1]
+bindery_cols=[o for o in S.objects if o.name.startswith('JN_北河纸铺_木柱')]
+bindery_shoes=[o for o in S.objects if o.name.startswith('JN_北河纸铺_柱础')]
+assert len(bindery_cols)==len(bindery_shoes)==6
+for col in bindery_cols:
+    candidates=[shoe for shoe in bindery_shoes if dist_xy(pos(shoe),pos(col))<.01]
+    assert len(candidates)==1 and abs(world_bounds(col)[0][2]-world_bounds(candidates[0])[1][2])<.002
+bindery_front=sorted([o for o in bindery_cols if abs(pos(o).x-12.65)<.01],key=lambda o:pos(o).y)
+bindery_bays=[world_bounds(bindery_front[i+1])[0][1]-world_bounds(bindery_front[i])[1][1] for i in range(2)]
+assert min(bindery_bays)>=2.39,bindery_bays
+assert bpy.data.objects['JN_北河纸铺_低模实体瓦面'].modifiers.get('纸铺真实屋面厚度')
+for required in ('JN_北河纸铺_临街柜台','JN_北河纸铺_装订压台','JN_北河纸铺_压书横梁','JN_北河纸铺_压书螺杆','JN_北河纸铺_柜上吊灯纸罩'):
+    assert bpy.data.objects.get(required),required
+reams=[o for o in S.objects if o.name.startswith('JN_北河纸铺_共享纸张_')]
+books=[o for o in S.objects if o.name.startswith('JN_北河纸铺_共享线装书_')]
+ream_proto=bpy.data.objects['JN_北河纸铺_纸张原型'];book_proto=bpy.data.objects['JN_北河纸铺_线装书原型']
+assert len(reams)==6 and len(books)==5
+assert all(o.data.as_pointer()==ream_proto.data.as_pointer() for o in reams)
+assert all(o.data.as_pointer()==book_proto.data.as_pointer() for o in books)
+report['town_phase14_east_bindery_shop']={'phase':S['JN_town_phase'],'shop_within_round17_east_parcel':True,'posts_on_shoes':6,'open_front_bays_m':[round(x,3) for x in bindery_bays],'solidified_low_cost_roof':True,'shared_paper_reams':len(reams),'shared_stitched_books':len(books),'binding_press':'four-feet-two-posts-beam-screw-platen','new_image_texture_bytes':S['JN_bindery_shop_new_image_bytes']}
+print('TOWN_PHASE14_EAST_BINDERY_SHOP',json.dumps(report['town_phase14_east_bindery_shop'],ensure_ascii=False))
 report['inhabited_houses']={'mesh_triangles_with_instances':house_tris,'triangle_budget':18000,'shells':8,'true_door_openings':8,'true_window_openings':16,'shared_wall_meshes':1,'door_clear_width_min':min(o['JN_door_clear_width'] for o in shells),'interior_depth_min':min(o['JN_interior_depth'] for o in shells),'ray_tests_passed':40,'floor_support_passed':8,'tea_east_risers_m':[.10,.10],'new_image_texture_bytes':0}
 print('INHABITED_HOUSES',json.dumps(report['inhabited_houses'],ensure_ascii=False))
 report['town_phase2']={'phase':S['JN_town_phase'],'grounded_houses':len(plinths),'street_segments':street_segments,'street_batches':len(streets),'tea_pavilion_columns':4,'market_stalls':2,'bridge_risers_per_side':3,'market_ceramics':len(ceramics),'teacups':len(teacups),'canal_preserved':True,'new_image_texture_bytes':0}
