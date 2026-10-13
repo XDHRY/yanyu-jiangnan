@@ -821,6 +821,37 @@ assert len(sheet_proto.data.polygons)==1
 report['town_phase15_east_dyed_paper_court']={'phase':S['JN_town_phase'],'street_and_water_overlaps_m':[round(x,3) for x in dye_overlaps],'atelier_within_east_parcel':True,'posts_on_shoes':6,'open_front_bays_m':[round(x,3) for x in dye_bays],'solidified_low_cost_roof':True,'shared_dye_vats':len(vats),'shared_dye_liquids':len(liquids),'shared_dyed_sheets':len(sheets),'drainage_to_street':True,'new_image_texture_bytes':S['JN_dyed_paper_new_image_bytes']}
 print('TOWN_PHASE15_EAST_DYED_PAPER_COURT',json.dumps(report['town_phase15_east_dyed_paper_court'],ensure_ascii=False))
 
+# West dye-material receiving court: reuse of the Round 19 parcel, grounded
+# canopy structure, open arrival, and linked low-cost stock/handling props.
+receiving_land=world_bounds(bpy.data.objects['JN_北河染纸坊_西岸北延地基'])
+receiving_plinth=world_bounds(bpy.data.objects['JN_北河染料行_收货实体台基'])
+assert receiving_plinth[0][0]>=receiving_land[0][0] and receiving_plinth[1][0]<=receiving_land[1][0]
+assert receiving_plinth[0][1]>=receiving_land[0][1] and receiving_plinth[1][1]<=receiving_land[1][1]
+receiving_cols=[o for o in S.objects if o.name.startswith('JN_北河染料行_木柱')]
+receiving_shoes=[o for o in S.objects if o.name.startswith('JN_北河染料行_柱础')]
+assert len(receiving_cols)==len(receiving_shoes)==4
+for col in receiving_cols:
+    candidates=[shoe for shoe in receiving_shoes if dist_xy(pos(shoe),pos(col))<.01]
+    assert len(candidates)==1 and abs(world_bounds(col)[0][2]-world_bounds(candidates[0])[1][2])<.002
+receiving_front=sorted([o for o in receiving_cols if abs(pos(o).x-2.45)<.01],key=lambda o:pos(o).y)
+receiving_open=world_bounds(receiving_front[1])[0][1]-world_bounds(receiving_front[0])[1][1]
+assert receiving_open>=4.59,receiving_open
+assert bpy.data.objects['JN_北河染料行_单坡实体雨棚'].modifiers.get('染料行真实雨棚厚度')
+for required in ('JN_北河染料行_落地衡底座','JN_北河染料行_落地衡立柱','JN_北河染料行_落地衡横梁','JN_北河染料行_铜秤盘','JN_北河染料行_手车货板','JN_北河染料行_染料商号悬牌','JN_北河染料行_梁下纸灯罩'):
+    assert bpy.data.objects.get(required),required
+receiving_bales=[o for o in S.objects if o.name.startswith('JN_北河染料行_共享纸包_')]
+receiving_sacks=[o for o in S.objects if o.name.startswith('JN_北河染料行_共享染料袋_')]
+receiving_jars=[o for o in S.objects if o.name.startswith('JN_北河染料行_共享颜料罐_')]
+receiving_wheels=[o for o in S.objects if o.name.startswith('JN_北河染料行_共享手车轮_')]
+bale_proto=bpy.data.objects['JN_北河染料行_纸包原型'];sack_proto=bpy.data.objects['JN_北河染料行_染料袋原型'];jar_proto=bpy.data.objects['JN_北河染料行_颜料罐原型'];wheel_proto=bpy.data.objects['JN_北河染料行_手车轮原型']
+assert len(receiving_bales)==6 and len(receiving_sacks)==5 and len(receiving_jars)==4 and len(receiving_wheels)==2
+assert all(o.data.as_pointer()==bale_proto.data.as_pointer() for o in receiving_bales)
+assert all(o.data.as_pointer()==sack_proto.data.as_pointer() for o in receiving_sacks)
+assert all(o.data.as_pointer()==jar_proto.data.as_pointer() for o in receiving_jars)
+assert all(o.data.as_pointer()==wheel_proto.data.as_pointer() for o in receiving_wheels)
+report['town_phase16_west_dye_receiving_court']={'phase':S['JN_town_phase'],'reuses_round19_west_parcel':True,'posts_on_shoes':4,'open_receiving_bay_m':round(receiving_open,3),'solidified_mono_pitch_awning':True,'shared_paper_bales':len(receiving_bales),'shared_dye_sacks':len(receiving_sacks),'shared_pigment_jars':len(receiving_jars),'shared_handcart_wheels':len(receiving_wheels),'receiving_equipment':'grounded-beam-scale-and-two-wheel-handcart','shop_identity_sign':True,'new_image_texture_bytes':S['JN_dye_receiving_new_image_bytes']}
+print('TOWN_PHASE16_WEST_DYE_RECEIVING_COURT',json.dumps(report['town_phase16_west_dye_receiving_court'],ensure_ascii=False))
+
 report['inhabited_houses']={'mesh_triangles_with_instances':house_tris,'triangle_budget':18000,'shells':8,'true_door_openings':8,'true_window_openings':16,'shared_wall_meshes':1,'door_clear_width_min':min(o['JN_door_clear_width'] for o in shells),'interior_depth_min':min(o['JN_interior_depth'] for o in shells),'ray_tests_passed':40,'floor_support_passed':8,'tea_east_risers_m':[.10,.10],'new_image_texture_bytes':0}
 print('INHABITED_HOUSES',json.dumps(report['inhabited_houses'],ensure_ascii=False))
 report['town_phase2']={'phase':S['JN_town_phase'],'grounded_houses':len(plinths),'street_segments':street_segments,'street_batches':len(streets),'tea_pavilion_columns':4,'market_stalls':2,'bridge_risers_per_side':3,'market_ceramics':len(ceramics),'teacups':len(teacups),'canal_preserved':True,'new_image_texture_bytes':0}

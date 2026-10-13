@@ -1,0 +1,26 @@
+{
+  "asset_id": "west-dye-receiving-court",
+  "generator": "jiangnan.py::town_phase16_west_dye_receiving_court",
+  "units": "metre",
+  "source_baseline": "67c4c3736889f721c3ee55796c958c4761c22949",
+  "placement": {
+    "reused_parcel": "JN_北河染纸坊_西岸北延地基",
+    "receiving_plinth_center": [0.05, 98.1, 0.16]
+  },
+  "geometry": {
+    "posts": 4,
+    "stone_shoes": 4,
+    "open_receiving_bays": 1,
+    "shared_paper_bales": 6,
+    "shared_dye_sacks": 5,
+    "shared_pigment_jars": 4,
+    "shared_handcart_wheels": 2
+  },
+  "materials": ["stone", "darkstone", "wood", "tile", "plaster", "paper", "bronze", "ivory", "染料麻袋", "染料赭黄", "染纸靛青", "gold"],
+  "textures": [],
+  "uv": "No new bitmap-mapped mesh; procedural/shared low-cost geometry only.",
+  "normals": "Blender evaluated by existing smoke/export workflows.",
+  "lod": "Hero diagnostic source; shared low-segment props; no separate runtime LOD chain yet.",
+  "license": "Project-generated procedural geometry; no paid or external generated asset.",
+  "human_gates": {"function": "pending", "form": "pending", "runtime": "pending"}
+}

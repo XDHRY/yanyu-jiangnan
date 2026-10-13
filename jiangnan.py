@@ -2409,6 +2409,107 @@ def town_phase15_east_dyed_paper_court():
     S['JN_dyed_paper_shared_sheets']=6
     S['JN_dyed_paper_new_image_bytes']=0
 
+def town_phase16_west_dye_receiving_court():
+    """Balance the north paper quarter with a west-bank dye-material receiving court."""
+    c=C['water'];stone=M['stone'];wood=M['wood'];wetstone=M['darkstone']
+    jute=material('染料麻袋',(.34,.24,.12),.78,7)
+    ochre=material('染料赭黄',(.48,.28,.07),.62,4)
+
+    # Reuse the Round 19 west parcel instead of extending the canal again.  The
+    # receiving apron faces the existing 1.82 m street and leaves the north edge
+    # available for the next public connection.
+    px,py=.05,98.10
+    plinth=box('北河染料行_收货实体台基',(px,py,.16),(5.50,5.80,.32),stone,c,.022)
+    for i,(x,z,w) in enumerate(((3.02,.08,.50),(2.82,.17,.42)),1):
+        box(f'北河染料行_临街踏步_{i}',(x,py,z),(w,1.70,.16),stone,c,.012)
+
+    post_xy=tuple((x,y) for x in (-2.30,2.45) for y in (95.70,100.50))
+    for x,y in post_xy:
+        box('北河染料行_柱础',(x,y,.42),(.40,.40,.20),wetstone,c,.012)
+        box('北河染料行_木柱',(x,y,1.82),(.20,.20,2.60),wood,c,.007)
+    for x in (-2.30,2.45):box('北河染料行_纵向檐枋',(x,98.10,3.16),(.22,5.02,.22),wood,c,.007)
+    for y in (95.70,100.50):box('北河染料行_横向穿梁',(.05,y,3.10),(4.95,.20,.20),wood,c,.007)
+
+    # One economical mono-pitch awning is enough to give the west bank a clear
+    # cross-canal silhouette.  Solidify supplies genuine thickness while the
+    # four posts, shoes and beams keep every corner visibly supported.
+    rv=[(-2.62,95.35,3.20),(2.78,95.35,3.58),(-2.62,100.85,3.20),(2.78,100.85,3.58)]
+    awning=mesh('北河染料行_单坡实体雨棚',rv,[(0,1,3,2)],M['tile'],c)
+    mod=awning.modifiers.new('染料行真实雨棚厚度','SOLIDIFY');mod.thickness=.075;mod.offset=-1
+    line('北河染料行_高檐口',[(2.78,95.30,3.58),(2.78,100.90,3.58)],.065,M['edge'],c,res=1,bevel_res=1)
+    line('北河染料行_低檐口',[(-2.62,95.30,3.20),(-2.62,100.90,3.20)],.065,M['edge'],c,res=1,bevel_res=1)
+    box('北河染料行_西后粉墙',(-2.46,98.10,1.46),(.18,4.45,2.46),M['plaster'],c,.014)
+    box('北河染料行_南侧矮墙',(-.95,95.55,.72),(3.20,.18,1.12),M['plaster'],c,.012)
+
+    # Shared paper bales: a restrained chamfered-looking prism plus two visible
+    # binding straps per bale.  Instances carry stock volume without unique mesh
+    # inflation.
+    bv=[(-.48,-.34,-.28),(.48,-.34,-.28),(.48,.34,-.28),(-.48,.34,-.28),
+        (-.43,-.30,.28),(.43,-.30,.28),(.43,.30,.28),(-.43,.30,.28)]
+    bf=[(0,1,2,3),(4,7,6,5),(0,4,5,1),(1,5,6,2),(2,6,7,3),(3,7,4,0)]
+    bale=mesh('北河染料行_纸包原型',bv,bf,M['ivory'],c);bale.hide_render=True;bale.hide_viewport=True
+    bale_positions=((-1.55,96.55,.60),(-.48,96.55,.60),(.59,96.55,.60),
+                    (-1.02,97.32,.60),(.05,97.32,.60),(1.12,97.32,.60))
+    for i,(x,y,z0) in enumerate(bale_positions,1):
+        o=bpy.data.objects.new(PREFIX+f'北河染料行_共享纸包_{i}',bale.data);c.objects.link(o);o.location=(x,y,z0)
+        for dy in (-.17,.17):box('北河染料行_纸包束带',(x,y+dy,z0),(1.00,.045,.60),jute,c,.003)
+
+    # Five linked low-segment sacks define the dye-material stock.  Neck ties
+    # remain geometry at eye height; no bitmap label is required.
+    sack=uv('北河染料行_染料袋原型',(0,0,0),(.34,.34,.52),jute,c,8,4)
+    sack.hide_render=True;sack.hide_viewport=True
+    for i,(x,y) in enumerate(((-1.70,99.10),(-.90,99.18),(-.10,99.08),(.70,99.20),(1.50,99.08)),1):
+        o=bpy.data.objects.new(PREFIX+f'北河染料行_共享染料袋_{i}',sack.data);c.objects.link(o);o.location=(x,y,.84)
+        line('北河染料行_袋口麻绳',[(x-.12,y,1.20),(x+.12,y,1.20)],.014,wood,c,res=1,bevel_res=0)
+
+    # Four lidded pigment jars share a single ten-sided closed mesh.
+    seg=10;jv=[];jf=[]
+    for zz,rr in ((-.34,.29),(.22,.34),(.34,.25)):
+        jv.extend([(rr*cos(2*pi*i/seg),rr*sin(2*pi*i/seg),zz) for i in range(seg)])
+    for ring in range(2):
+        for i in range(seg):jf.append((ring*seg+i,ring*seg+(i+1)%seg,(ring+1)*seg+(i+1)%seg,(ring+1)*seg+i))
+    jf.extend([tuple(range(seg-1,-1,-1)),tuple(range(2*seg,3*seg))])
+    jar=mesh('北河染料行_颜料罐原型',jv,jf,ochre,c);jar.hide_render=True;jar.hide_viewport=True
+    for i,(x,y) in enumerate(((-1.75,100.00),(-.95,100.00),(-.15,100.00),(.65,100.00)),1):
+        o=bpy.data.objects.new(PREFIX+f'北河染料行_共享颜料罐_{i}',jar.data);c.objects.link(o);o.location=(x,y,.66)
+
+    # Receiving scale and handcart explain how river/street goods move through
+    # the open bay.  Both wheel objects link the same low-segment wheel mesh.
+    box('北河染料行_落地衡底座',(1.42,97.90,.38),(1.10,.64,.16),wood,c,.018)
+    box('北河染料行_落地衡立柱',(1.02,97.90,1.18),(.16,.16,1.52),wood,c,.006)
+    box('北河染料行_落地衡横梁',(1.48,97.90,1.80),(1.12,.12,.12),wood,c,.004)
+    line('北河染料行_铜秤盘吊索',[(1.82,97.90,1.78),(1.82,97.90,.98)],.012,M['bronze'],c,res=1,bevel_res=0)
+    uv('北河染料行_铜秤盘',(1.82,97.90,.92),(.34,.34,.055),M['bronze'],c,10,3)
+    box('北河染料行_手车货板',(-.55,98.15,1.00),(1.72,.90,.14),wood,c,.014)
+    line('北河染料行_手车双把',[(-1.30,97.82,1.04),(-2.12,97.82,1.32)],.035,wood,c,res=1,bevel_res=1)
+    line('北河染料行_手车双把',[(-1.30,98.48,1.04),(-2.12,98.48,1.32)],.035,wood,c,res=1,bevel_res=1)
+    wv=[];wf=[]
+    for yy in (-.055,.055):wv.extend([(.30*cos(2*pi*i/10),yy,.30*sin(2*pi*i/10)) for i in range(10)])
+    for i in range(10):wf.append((i,(i+1)%10,10+(i+1)%10,10+i))
+    wf.extend([tuple(range(9,-1,-1)),tuple(range(10,20))])
+    wheel=mesh('北河染料行_手车轮原型',wv,wf,wetstone,c);wheel.hide_render=True;wheel.hide_viewport=True
+    for i,y in enumerate((97.68,98.62),1):
+        o=bpy.data.objects.new(PREFIX+f'北河染料行_共享手车轮_{i}',wheel.data);c.objects.link(o);o.location=(-.25,y,.62)
+
+    # Shop identity and one task light finish the public frontage without
+    # blocking the 4.60 m receiving bay.
+    line('北河染料行_悬牌双索',[(2.36,99.80,3.05),(2.36,99.80,2.62)],.012,wood,c,res=1,bevel_res=0)
+    line('北河染料行_悬牌双索',[(2.36,100.18,3.05),(2.36,100.18,2.62)],.012,wood,c,res=1,bevel_res=0)
+    box('北河染料行_染料商号悬牌',(2.36,99.99,2.38),(.12,.72,.44),wood,c,.014)
+    for i,(y,mat) in enumerate(((99.78,ochre),(99.99,M['gold']),(100.20,bpy.data.materials[PREFIX+'染纸靛青'])),1):
+        box(f'北河染料行_悬牌色标_{i}',(2.28,y,2.38),(.03,.12,.24),mat,c,.003)
+    line('北河染料行_梁下吊灯索',[(1.52,96.92,3.06),(1.52,96.92,2.58)],.012,wood,c,res=1,bevel_res=0)
+    box('北河染料行_梁下纸灯罩',(1.52,96.92,2.43),(.25,.25,.30),M['paper'],c,.016)
+    light('北河染料行_梁下工作灯',(1.52,96.92,2.35),(1,.40,.16),68,.90,target=(.30,98.00,.72),kind='AREA')
+
+    plinth['JN_function']='west_bank_dye_material_receiving_court'
+    S['JN_town_phase']='phase_16_west_dye_receiving_court'
+    S['JN_dye_receiving_open_bay_m']=4.60
+    S['JN_dye_receiving_shared_bales']=6
+    S['JN_dye_receiving_shared_sacks']=5
+    S['JN_dye_receiving_shared_jars']=4
+    S['JN_dye_receiving_new_image_bytes']=0
+
 def batch_static_objects(name,objects,mat,col,bev=0):
     """Combine already-built static meshes after art generation so optimization cannot perturb procedural build order."""
     objects=[o for o in objects if o and o.type=='MESH']
@@ -2484,7 +2585,7 @@ def viewport():
                 a.spaces.active.region_3d.view_camera_zoom=0
     bpy.context.view_layer.update()
 def build(stage=None):
-    start();courtyard();village_phase1_skeleton();town_phase2_market();town_phase3_east_wharf();town_phase4_east_residence();town_phase5_cloth_finish_yard();town_phase6_west_wine_court();town_phase7_north_granary();town_phase8_north_grain_wharf();town_phase9_north_silk_bend();town_phase10_silk_trade_finish();town_phase11_west_oar_workshop();town_phase12_north_umbrella_lane();town_phase13_north_paper_yard();town_phase14_east_bindery_shop();town_phase15_east_dyed_paper_court()
+    start();courtyard();village_phase1_skeleton();town_phase2_market();town_phase3_east_wharf();town_phase4_east_residence();town_phase5_cloth_finish_yard();town_phase6_west_wine_court();town_phase7_north_granary();town_phase8_north_grain_wharf();town_phase9_north_silk_bend();town_phase10_silk_trade_finish();town_phase11_west_oar_workshop();town_phase12_north_umbrella_lane();town_phase13_north_paper_yard();town_phase14_east_bindery_shop();town_phase15_east_dyed_paper_court();town_phase16_west_dye_receiving_court()
     level=P['stage'] if stage is None else stage
     if level>=2:vegetation()
     if level>=3:weather()
