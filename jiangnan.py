@@ -2341,7 +2341,7 @@ def town_phase14_east_bindery_shop():
 def town_phase15_east_dyed_paper_court():
     """Extend the paper quarter with an open east-bank dyed-paper atelier."""
     c=C['water'];stone=M['stone'];wood=M['wood'];wetstone=M['darkstone']
-    indigo=material('染纸靛青',(.055,.16,.25),.48,0)
+    indigo=material('染纸靛青',(.08,.24,.38),.50,0)
     madder=material('染纸茜红',(.48,.07,.08),.52,0)
     cy=97.95
     west_land=box('北河染纸坊_西岸北延地基',(-1.98,cy,-.30),(12.84,7.10,.60),wetstone,c)
@@ -2384,7 +2384,7 @@ def town_phase15_east_dyed_paper_court():
     box('北河染纸坊_漂洗水面',(13.72,96.52,.76),(1.12,.56,.025),M['water'],c,.004)
     box('北河染纸坊_排水石槽',(12.82,96.52,.20),(1.00,.22,.18),stone,c,.018)
     box('北河染纸坊_街侧泄水口',(12.28,96.52,.13),(.22,.30,.16),wetstone,c,.010)
-    sheet=mesh('北河染纸坊_靛纸原型',[(-.42,0,-.62),(-.42,0,.62),(.42,0,.62),(.42,0,-.62)],[(0,1,2,3)],indigo,c)
+    sheet=mesh('北河染纸坊_靛纸原型',[(-.15,0,-.62),(-.15,0,.62),(.15,0,.62),(.15,0,-.62)],[(0,1,2,3)],indigo,c)
     sheet.hide_render=True;sheet.hide_viewport=True
     box('北河染纸坊_晾纸上枋',(16.40,99.78,2.24),(2.35,.12,.12),wood,c,.005)
     box('北河染纸坊_晾纸下枋',(16.40,99.78,.76),(2.35,.12,.12),wood,c,.005)
