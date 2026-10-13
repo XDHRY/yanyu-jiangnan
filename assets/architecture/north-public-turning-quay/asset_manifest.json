@@ -1,0 +1,34 @@
+{
+  "asset_id": "north-public-turning-quay",
+  "generator": "jiangnan.py::town_phase17_north_public_turning_quay",
+  "units": "metre",
+  "source_baseline": "612d2a84997dfeb557c58dcbfaccac9c4757fe35",
+  "placement": {
+    "extension_center_y": 104.15,
+    "extension_length_m": 5.5,
+    "overlap_previous_m": 0.1,
+    "terminal_water_width_m": 5.0
+  },
+  "geometry": {
+    "shared_stone_bridge_slabs": 9,
+    "stone_bridge_piers": 3,
+    "bridge_threshold_steps": 4,
+    "waterside_steps": 3,
+    "shared_bench_seats": 2,
+    "shared_bench_legs": 4,
+    "shared_mooring_bollards": 2,
+    "shared_lantern_shades": 2
+  },
+  "optimization": {
+    "snow_particle_count_preserved": true,
+    "snow_particle_segments": 4,
+    "snow_particle_rings": 2
+  },
+  "materials": ["stone", "darkstone", "wood", "paper", "water"],
+  "textures": [],
+  "uv": "No new bitmap-mapped mesh; project procedural materials only.",
+  "normals": "Blender evaluated by existing smoke and web-export workflows.",
+  "lod": "Hero diagnostic source; low-segment repeated props use linked mesh datablocks; no separate runtime LOD chain yet.",
+  "license": "Project-generated procedural geometry; no paid or external generated asset.",
+  "human_gates": {"function": "pending", "form": "pending", "runtime": "pending"}
+}

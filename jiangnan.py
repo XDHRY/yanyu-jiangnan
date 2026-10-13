@@ -352,7 +352,13 @@ def weather():
         for i in range(count):
             x=R.uniform(-10,10);y=R.uniform(-8,9);z=R.uniform(.3,10)
             if proto is None:
-                if snow:proto=uv('雪粒',(0,0,0),(.024,.018,.024),M['snow'],col,4,3)
+                if snow:
+                    # Hundreds of 2--4 cm particles never need three latitude
+                    # rings.  Keep the four-sided silhouette and count, but use
+                    # two rings so the repeated mesh leaves budget for public
+                    # circulation geometry at the north end of the town.
+                    proto=uv('雪粒',(0,0,0),(.024,.018,.024),M['snow'],col,4,2)
+                    S['JN_snow_particle_segments']=4;S['JN_snow_particle_rings']=2
                 else:proto=line('雨丝',[(0,0,0),(.016,.008,-.17)],.0017,M['rain'],col)
                 o=proto
             else:o=bpy.data.objects.new(PREFIX+('雪粒' if snow else '雨丝'),proto.data);col.objects.link(o)
@@ -2510,6 +2516,88 @@ def town_phase16_west_dye_receiving_court():
     S['JN_dye_receiving_shared_jars']=4
     S['JN_dye_receiving_new_image_bytes']=0
 
+def town_phase17_north_public_turning_quay():
+    """Close the paper quarter with a low, open public crossing and quay."""
+    c=C['water'];stone=M['stone'];wetstone=M['darkstone'];wood=M['wood']
+
+    # Continue every load-bearing surface by 5.50 m with a measured 0.10 m
+    # overlap.  This is a terminal public node, not another workshop parcel:
+    # the canal remains visible and both bank routes meet one low crossing.
+    cy=104.15
+    west_land=box('北河转水埠_西岸北延地基',(-1.98,cy,-.30),(12.84,5.50,.60),wetstone,c)
+    east_land=box('北河转水埠_东岸北延地基',(16.15,cy,-.30),(11.98,5.50,.60),wetstone,c)
+    water=box('北河转水埠_终端水湾',(7.30,cy,.03),(5.00,5.50,.06),M['water'],c)
+    west_street=box('北河转水埠_西岸石街',(3.50,cy,.06),(1.82,5.50,.12),stone,c,.012)
+    east_street=box('北河转水埠_东岸石街',(11.10,cy,.06),(1.82,5.50,.12),stone,c,.012)
+    for o,role in ((west_land,'terminal_public_support'),(east_land,'terminal_public_support'),
+                   (water,'terminal_turning_basin'),(west_street,'north_public_route'),
+                   (east_street,'north_public_route')):
+        o['JN_function']=role;o['JN_overlap_previous_m']=.10
+
+    # Widen only the final two metres into quiet turning pockets.  Their low
+    # profile preserves negative space and keeps the industrial roofs dominant.
+    box('北河转水埠_西岸转身石坪',(2.05,105.72,.08),(4.72,2.05,.16),stone,c,.016)
+    box('北河转水埠_东岸转身石坪',(12.55,105.72,.08),(4.72,2.05,.16),stone,c,.016)
+
+    # Nine linked青石 slabs form one continuous terminal foot crossing.  It is
+    # intentionally flat and unroofed: a public seam between two working banks,
+    # with two short threshold ramps rather than decorative bridge mass.
+    slab=box('北河转水埠_青石踏桥原型',(0,0,0),(.66,1.24,.22),stone,c,.012)
+    slab.hide_render=True;slab.hide_viewport=True
+    for i in range(9):
+        o=bpy.data.objects.new(PREFIX+f'北河转水埠_共享青石桥板_{i+1:02d}',slab.data);c.objects.link(o)
+        o.location=(4.72+.645*i,104.72,.47)
+    # Three submerged stone piers carry the long slab chain.  Their tops meet
+    # the bridge soffit at 0.36 m and their bases meet the canal bed at Z=0.
+    for i,x in enumerate((6.01,7.30,8.59),1):
+        box(f'北河转水埠_踏桥石墩_{i}',(x,104.72,.18),(.42,.78,.36),wetstone,c,.012)
+    for side,x0,x1 in (('西',4.34,4.55),('东',10.26,10.05)):
+        box(f'北河转水埠_{side}桥槛低阶',(x0,104.72,.13),(.42,1.34,.26),stone,c,.010)
+        box(f'北河转水埠_{side}桥槛高阶',(x1,104.72,.23),(.42,1.30,.46),stone,c,.010)
+
+    # The east pocket has a genuine three-tread descent to the terminal basin.
+    # Tops fall from paving height to 6 cm above the water, with overlapping
+    # footprints so no implied jump or floating landing remains.
+    for i,(x,z,top) in enumerate(((10.43,.08,.16),(10.12,.055,.11),(9.82,.03,.06)),1):
+        box(f'北河转水埠_亲水踏步_{i}',(x,106.08,z),(.42,1.08,top),stone,c,.010)
+
+    # Two facing benches share a seat mesh and one leg mesh.  Four grounded
+    # supports make the furniture load path explicit while keeping the centre
+    # clear for handcarts and pedestrians.
+    seat=box('北河转水埠_石凳面原型',(0,0,0),(1.52,.42,.12),stone,c,.014)
+    leg=box('北河转水埠_石凳足原型',(0,0,0),(.18,.34,.42),wetstone,c,.008)
+    seat.hide_render=True;seat.hide_viewport=True;leg.hide_render=True;leg.hide_viewport=True
+    for i,(x,y) in enumerate(((1.25,105.92),(13.32,105.92)),1):
+        o=bpy.data.objects.new(PREFIX+f'北河转水埠_共享石凳面_{i}',seat.data);c.objects.link(o);o.location=(x,y,.64)
+        for j,dx in enumerate((-.55,.55),1):
+            o=bpy.data.objects.new(PREFIX+f'北河转水埠_共享石凳足_{i}_{j}',leg.data);c.objects.link(o);o.location=(x+dx,y,.37)
+
+    # Low-segment mooring posts and paired lamps reuse their respective meshes.
+    # Lights occupy the outer pocket edges, leaving the crossing and landing
+    # unobstructed and making the public node legible in the nocturnal scene.
+    bollard=uv('北河转水埠_系舟石原型',(0,0,0),(.18,.18,.28),wetstone,c,8,2)
+    bollard.hide_render=True;bollard.hide_viewport=True
+    for i,(x,y) in enumerate(((9.98,105.55),(9.98,106.55)),1):
+        o=bpy.data.objects.new(PREFIX+f'北河转水埠_共享系舟石_{i}',bollard.data);c.objects.link(o);o.location=(x,y,.45)
+    shade=box('北河转水埠_纸灯罩原型',(0,0,0),(.30,.30,.34),M['paper'],c,.018)
+    shade.hide_render=True;shade.hide_viewport=True
+    for i,(x,y) in enumerate(((.35,104.72),(14.18,104.72)),1):
+        box(f'北河转水埠_灯柱_{i}',(x,y,1.16),(.15,.15,2.00),wood,c,.006)
+        box(f'北河转水埠_灯挑杆_{i}',(x+( .28 if i==1 else -.28),y,2.12),(.68,.10,.10),wood,c,.004)
+        sx=x+( .54 if i==1 else -.54)
+        o=bpy.data.objects.new(PREFIX+f'北河转水埠_共享纸灯罩_{i}',shade.data);c.objects.link(o);o.location=(sx,y,1.90)
+        light(f'北河转水埠_公共灯火_{i}',(sx,y,1.82),(1,.43,.18),52,.85,target=(7.30,104.72,.30),kind='AREA')
+
+    west_street['JN_function']='west_bank_public_route_to_terminal_crossing'
+    east_street['JN_function']='east_bank_public_route_to_terminal_crossing'
+    S['JN_town_phase']='phase_17_north_public_turning_quay'
+    S['JN_turning_quay_crossing_clear_width_m']=1.24
+    S['JN_turning_quay_shared_bridge_slabs']=9
+    S['JN_turning_quay_shared_bench_seats']=2
+    S['JN_turning_quay_shared_bench_legs']=4
+    S['JN_turning_quay_shared_bollards']=2
+    S['JN_turning_quay_new_image_bytes']=0
+
 def batch_static_objects(name,objects,mat,col,bev=0):
     """Combine already-built static meshes after art generation so optimization cannot perturb procedural build order."""
     objects=[o for o in objects if o and o.type=='MESH']
@@ -2585,7 +2673,7 @@ def viewport():
                 a.spaces.active.region_3d.view_camera_zoom=0
     bpy.context.view_layer.update()
 def build(stage=None):
-    start();courtyard();village_phase1_skeleton();town_phase2_market();town_phase3_east_wharf();town_phase4_east_residence();town_phase5_cloth_finish_yard();town_phase6_west_wine_court();town_phase7_north_granary();town_phase8_north_grain_wharf();town_phase9_north_silk_bend();town_phase10_silk_trade_finish();town_phase11_west_oar_workshop();town_phase12_north_umbrella_lane();town_phase13_north_paper_yard();town_phase14_east_bindery_shop();town_phase15_east_dyed_paper_court();town_phase16_west_dye_receiving_court()
+    start();courtyard();village_phase1_skeleton();town_phase2_market();town_phase3_east_wharf();town_phase4_east_residence();town_phase5_cloth_finish_yard();town_phase6_west_wine_court();town_phase7_north_granary();town_phase8_north_grain_wharf();town_phase9_north_silk_bend();town_phase10_silk_trade_finish();town_phase11_west_oar_workshop();town_phase12_north_umbrella_lane();town_phase13_north_paper_yard();town_phase14_east_bindery_shop();town_phase15_east_dyed_paper_court();town_phase16_west_dye_receiving_court();town_phase17_north_public_turning_quay()
     level=P['stage'] if stage is None else stage
     if level>=2:vegetation()
     if level>=3:weather()
