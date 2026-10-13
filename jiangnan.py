@@ -491,6 +491,9 @@ def image_material(key,asset,scale,depth=.035,uv=False,tint=None):
 def art_upgrade():
     from mathutils import noise
     import bmesh
+    # Blender's procedural noise state is independent from Python's `random`.
+    # Seed it explicitly so separate CI rebuilds author identical rock inputs.
+    noise.seed_set(P['seed'])
     def weld(o):
         bm=bmesh.new();bm.from_mesh(o.data);bmesh.ops.remove_doubles(bm,verts=list(bm.verts),dist=.00001);bmesh.ops.recalc_face_normals(bm,faces=list(bm.faces));bm.to_mesh(o.data);bm.free()
     for args in [('plaster','plaster',(.32,.32,.32),.035),('stone','stone',(.7,.7,.7),.07),('edge','stone',(1,1,1),.035),('bark','bark',(1.6,1.6,.45),.10),('wood','wood',(1.1,1.1,.30),.035),('tile','clay',(.85,.85,.85),.022)]:image_material(*args)
@@ -518,7 +521,7 @@ def art_upgrade():
             z=.48+j*h*.27;cx=x+(.15 if j%2 else -.12);sz=.18+j*.035
             cutter=uv('布尔孔_临时',(cx,y,z),(.30 if idx==0 else .21,1.3,sz),None,C['water'],24,16)
             weld(cutter)
-            mod=rock.modifiers.new('天然穿孔','BOOLEAN');mod.operation='DIFFERENCE';mod.solver='EXACT';mod.object=cutter
+            mod=rock.modifiers.new('天然穿孔','BOOLEAN');mod.operation='DIFFERENCE';mod.solver='MANIFOLD';mod.object=cutter
             bpy.context.view_layer.objects.active=rock
             bpy.ops.object.modifier_apply(modifier=mod.name)
             bpy.data.objects.remove(cutter,do_unlink=True)
@@ -527,6 +530,8 @@ def art_upgrade():
             a=R.uniform(0,2*pi);r=R.uniform(.3,.9)
             uv('湖石苔脚',(x+cos(a)*r,y+sin(a)*r*.55,.12),(R.uniform(.12,.28),.16,.065),M['moss'],C['water'],10,5)
         cap=uv('湖石残雪',(x+.05,y,h+.02),(.30,.21,.07),M['snow'],C['cover'],16,8);weather_visibility(cap,True)
+    S['JN_scholar_stone_noise_seed']=P['seed']
+    S['JN_scholar_stone_boolean_solver']='MANIFOLD'
     # Continuous site terrain prevents a floating display-plinth appearance.
     ground=material('庭外湿土',(.032,.052,.038),.93,16)
     vv=[];ff=[];nx=55;ny=42

@@ -920,6 +920,8 @@ assert len({o.data.as_pointer() for o in shades})==1
 assert all(abs(world_bounds(o)[0][2]-.16)<.002 for o in bollards)
 assert all(world_bounds(o)[0][0]>=turning_water[1][0] for o in bollards)
 assert S['JN_snow_particle_segments']==4 and S['JN_snow_particle_rings']==2
+assert S['JN_scholar_stone_noise_seed']==36
+assert S['JN_scholar_stone_boolean_solver']=='MANIFOLD'
 
 expanded_tris=0
 for o in (o for o in S.objects if o.type=='MESH'):
@@ -936,6 +938,7 @@ report['town_phase17_north_public_turning_quay']={
     'shared_bench_seats':len(bench_seats),'grounded_bench_legs':len(bench_legs),
     'shared_bollards':len(bollards),'public_lanterns':len(shades),
     'snow_particle_segments':[S['JN_snow_particle_segments'],S['JN_snow_particle_rings']],
+    'reproducible_scholar_stones':{'noise_seed':S['JN_scholar_stone_noise_seed'],'boolean_solver':S['JN_scholar_stone_boolean_solver']},
     'expanded_triangles':expanded_tris,'triangle_limit':170000,
     'new_image_texture_bytes':S['JN_turning_quay_new_image_bytes'],
 }
