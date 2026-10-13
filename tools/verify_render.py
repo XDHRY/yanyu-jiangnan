@@ -852,6 +852,98 @@ assert all(o.data.as_pointer()==wheel_proto.data.as_pointer() for o in receiving
 report['town_phase16_west_dye_receiving_court']={'phase':S['JN_town_phase'],'reuses_round19_west_parcel':True,'posts_on_shoes':4,'open_receiving_bay_m':round(receiving_open,3),'solidified_mono_pitch_awning':True,'shared_paper_bales':len(receiving_bales),'shared_dye_sacks':len(receiving_sacks),'shared_pigment_jars':len(receiving_jars),'shared_handcart_wheels':len(receiving_wheels),'receiving_equipment':'grounded-beam-scale-and-two-wheel-handcart','shop_identity_sign':True,'new_image_texture_bytes':S['JN_dye_receiving_new_image_bytes']}
 print('TOWN_PHASE16_WEST_DYE_RECEIVING_COURT',json.dumps(report['town_phase16_west_dye_receiving_court'],ensure_ascii=False))
 
+# North public turning quay: the latest extension must overlap all five Round 19
+# carrier surfaces, retain an open terminal basin, and connect both streets with
+# a genuinely continuous low crossing rather than a decorative floating prop.
+old_public=(
+    world_bounds(bpy.data.objects['JN_北河染纸坊_西岸北延地基']),
+    world_bounds(bpy.data.objects['JN_北河染纸坊_东岸北延地基']),
+    world_bounds(bpy.data.objects['JN_北河染纸坊_北延水巷']),
+    world_bounds(bpy.data.objects['JN_北河染纸坊_西岸石街']),
+    world_bounds(bpy.data.objects['JN_北河染纸坊_东岸石街']),
+)
+new_public=(
+    world_bounds(bpy.data.objects['JN_北河转水埠_西岸北延地基']),
+    world_bounds(bpy.data.objects['JN_北河转水埠_东岸北延地基']),
+    world_bounds(bpy.data.objects['JN_北河转水埠_终端水湾']),
+    world_bounds(bpy.data.objects['JN_北河转水埠_西岸石街']),
+    world_bounds(bpy.data.objects['JN_北河转水埠_东岸石街']),
+)
+public_overlaps=[]
+for old_bounds,new_bounds in zip(old_public,new_public):
+    overlap=min(old_bounds[1][1],new_bounds[1][1])-max(old_bounds[0][1],new_bounds[0][1])
+    public_overlaps.append(overlap);assert overlap>=.09,overlap
+turning_water=new_public[2]
+assert turning_water[0][0]>=4.79 and turning_water[1][0]<=9.81
+
+bridge_slabs=[o for o in S.objects if o.name.startswith('JN_北河转水埠_共享青石桥板_')]
+bridge_proto=bpy.data.objects['JN_北河转水埠_青石踏桥原型']
+assert len(bridge_slabs)==9
+assert all(o.data.as_pointer()==bridge_proto.data.as_pointer() for o in bridge_slabs)
+bridge_slabs.sort(key=lambda o:pos(o).x)
+assert world_bounds(bridge_slabs[0])[0][0] < turning_water[0][0]
+assert world_bounds(bridge_slabs[-1])[1][0] > turning_water[1][0]
+assert all(world_bounds(b)[0][0] <= world_bounds(a)[1][0]+.01 for a,b in zip(bridge_slabs,bridge_slabs[1:]))
+bridge_piers=[bpy.data.objects[f'JN_北河转水埠_踏桥石墩_{i}'] for i in range(1,4)]
+bridge_soffit=min(world_bounds(o)[0][2] for o in bridge_slabs)
+assert all(abs(world_bounds(o)[0][2])<.002 and abs(world_bounds(o)[1][2]-bridge_soffit)<.002 for o in bridge_piers)
+assert all(any(world_bounds(s)[0][0]<=pos(p).x<=world_bounds(s)[1][0] for s in bridge_slabs) for p in bridge_piers)
+for side in ('西','东'):
+    low=world_bounds(bpy.data.objects[f'JN_北河转水埠_{side}桥槛低阶'])
+    high=world_bounds(bpy.data.objects[f'JN_北河转水埠_{side}桥槛高阶'])
+    assert abs(low[0][2])<.002 and abs(high[0][2])<.002
+    assert high[1][2]>low[1][2]
+
+landing=[bpy.data.objects[f'JN_北河转水埠_亲水踏步_{i}'] for i in range(1,4)]
+landing_tops=[world_bounds(o)[1][2] for o in landing]
+assert all(abs(a-b-.05)<.003 for a,b in zip(landing_tops,landing_tops[1:])),landing_tops
+assert all(abs(world_bounds(o)[0][2])<.002 for o in landing)
+assert world_bounds(landing[0])[1][0]>turning_water[1][0] and world_bounds(landing[-1])[0][0]<turning_water[1][0]
+
+bench_seats=[o for o in S.objects if o.name.startswith('JN_北河转水埠_共享石凳面_')]
+bench_legs=[o for o in S.objects if o.name.startswith('JN_北河转水埠_共享石凳足_')]
+seat_proto=bpy.data.objects['JN_北河转水埠_石凳面原型'];leg_proto=bpy.data.objects['JN_北河转水埠_石凳足原型']
+assert len(bench_seats)==2 and len(bench_legs)==4
+assert all(o.data.as_pointer()==seat_proto.data.as_pointer() for o in bench_seats)
+assert all(o.data.as_pointer()==leg_proto.data.as_pointer() for o in bench_legs)
+for leg in bench_legs:
+    assert abs(world_bounds(leg)[0][2]-.16)<.002
+for seat in bench_seats:
+    supporting=[leg for leg in bench_legs if abs(pos(leg).x-pos(seat).x)<.70 and dist_xy(pos(leg),pos(seat))<.75]
+    assert len(supporting)==2 and all(abs(world_bounds(leg)[1][2]-world_bounds(seat)[0][2])<.002 for leg in supporting)
+
+bollards=[o for o in S.objects if o.name.startswith('JN_北河转水埠_共享系舟石_')]
+shades=[o for o in S.objects if o.name.startswith('JN_北河转水埠_共享纸灯罩_')]
+assert len(bollards)==2 and len(shades)==2
+assert len({o.data.as_pointer() for o in bollards})==1
+assert len({o.data.as_pointer() for o in shades})==1
+assert all(abs(world_bounds(o)[0][2]-.16)<.002 for o in bollards)
+assert all(world_bounds(o)[0][0]>=turning_water[1][0] for o in bollards)
+assert S['JN_snow_particle_segments']==4 and S['JN_snow_particle_rings']==2
+assert S['JN_scholar_stone_noise_seed']==36
+assert S['JN_scholar_stone_boolean_solver']=='MANIFOLD'
+
+expanded_tris=0
+for o in (o for o in S.objects if o.type=='MESH'):
+    o.data.calc_loop_triangles();expanded_tris+=len(o.data.loop_triangles)
+assert expanded_tris<=170000,expanded_tris
+report['town_phase17_north_public_turning_quay']={
+    'phase':S['JN_town_phase'],
+    'carrier_overlaps_m':[round(x,3) for x in public_overlaps],
+    'terminal_water_width_m':round(turning_water[1][0]-turning_water[0][0],3),
+    'shared_bridge_slabs':len(bridge_slabs),
+    'bridge_piers_to_soffit':len(bridge_piers),
+    'crossing_clear_width_m':S['JN_turning_quay_crossing_clear_width_m'],
+    'landing_tops_m':[round(x,3) for x in landing_tops],
+    'shared_bench_seats':len(bench_seats),'grounded_bench_legs':len(bench_legs),
+    'shared_bollards':len(bollards),'public_lanterns':len(shades),
+    'snow_particle_segments':[S['JN_snow_particle_segments'],S['JN_snow_particle_rings']],
+    'reproducible_scholar_stones':{'noise_seed':S['JN_scholar_stone_noise_seed'],'boolean_solver':S['JN_scholar_stone_boolean_solver']},
+    'expanded_triangles':expanded_tris,'triangle_limit':170000,
+    'new_image_texture_bytes':S['JN_turning_quay_new_image_bytes'],
+}
+print('TOWN_PHASE17_NORTH_PUBLIC_TURNING_QUAY',json.dumps(report['town_phase17_north_public_turning_quay'],ensure_ascii=False))
+
 report['inhabited_houses']={'mesh_triangles_with_instances':house_tris,'triangle_budget':18000,'shells':8,'true_door_openings':8,'true_window_openings':16,'shared_wall_meshes':1,'door_clear_width_min':min(o['JN_door_clear_width'] for o in shells),'interior_depth_min':min(o['JN_interior_depth'] for o in shells),'ray_tests_passed':40,'floor_support_passed':8,'tea_east_risers_m':[.10,.10],'new_image_texture_bytes':0}
 print('INHABITED_HOUSES',json.dumps(report['inhabited_houses'],ensure_ascii=False))
 report['town_phase2']={'phase':S['JN_town_phase'],'grounded_houses':len(plinths),'street_segments':street_segments,'street_batches':len(streets),'tea_pavilion_columns':4,'market_stalls':2,'bridge_risers_per_side':3,'market_ceramics':len(ceramics),'teacups':len(teacups),'canal_preserved':True,'new_image_texture_bytes':0}
