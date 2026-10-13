@@ -388,7 +388,7 @@ def volume_material(name,color,density):
 def sky():
     c=C['sky']
     moon=material('月华',(.75,.87,1),.9,4,0,1.8)
-    uv('明月',(1.5,25,10.3),(1.12,1.12,1.12),moon,c,64,32)
+    uv('明月',(1.5,25,10.3),(1.12,1.12,1.12),moon,c,40,20)
     # Layers of distant ridges make the moon-gate opening a framed landscape.
     for layer in range(3):
         mat=material('远山'+str(layer),(.07+layer*.025,.14+layer*.023,.18+layer*.027),1)
@@ -2337,6 +2337,78 @@ def town_phase14_east_bindery_shop():
     S['JN_bindery_shop_shared_books']=5
     S['JN_bindery_shop_new_image_bytes']=0
 
+
+def town_phase15_east_dyed_paper_court():
+    """Extend the paper quarter with an open east-bank dyed-paper atelier."""
+    c=C['water'];stone=M['stone'];wood=M['wood'];wetstone=M['darkstone']
+    indigo=material('染纸靛青',(.08,.24,.38),.50,0)
+    madder=material('染纸茜红',(.48,.07,.08),.52,0)
+    cy=97.95
+    west_land=box('北河染纸坊_西岸北延地基',(-1.98,cy,-.30),(12.84,7.10,.60),wetstone,c)
+    east_land=box('北河染纸坊_东岸北延地基',(16.15,cy,-.30),(11.98,7.10,.60),wetstone,c)
+    water=box('北河染纸坊_北延水巷',(7.30,cy,.03),(5.00,7.10,.06),M['water'],c)
+    west_street=box('北河染纸坊_西岸石街',(3.50,cy,.06),(1.82,7.10,.12),stone,c,.012)
+    east_street=box('北河染纸坊_东岸石街',(11.10,cy,.06),(1.82,7.10,.12),stone,c,.012)
+    for o,role in ((west_land,'north_future_support'),(east_land,'dyed_paper_support'),(water,'continuous_north_canal_water'),(west_street,'north_public_route'),(east_street,'north_public_route')):
+        o['JN_function']=role;o['JN_overlap_previous_m']=.10
+    px,py=15.05,98.15
+    plinth=box('北河染纸坊_实体台基',(px,py,.16),(5.80,5.80,.32),stone,c,.022)
+    for i,(x,z,w) in enumerate(((12.02,.08,.54),(12.20,.17,.42)),1):
+        box(f'北河染纸坊_临街踏步_{i}',(x,py,z),(w,1.54,.16),stone,c,.012)
+    post_xy=tuple((x,y) for x in (12.65,17.45) for y in (96.00,98.15,100.30))
+    for x,y in post_xy:
+        box('北河染纸坊_柱础',(x,y,.42),(.40,.40,.20),wetstone,c,.012)
+        box('北河染纸坊_木柱',(x,y,1.82),(.20,.20,2.60),wood,c,.007)
+    for x in (12.65,17.45):box('北河染纸坊_纵向檐枋',(x,py,3.16),(.22,4.90,.22),wood,c,.007)
+    for y in (96.00,98.15,100.30):box('北河染纸坊_横向穿梁',(px,y,3.10),(5.00,.20,.20),wood,c,.007)
+    z=3.22;xl=12.28;xr=17.82;ymn=95.62;ymx=100.68;ridge=15.05
+    rv=[(xl,ymn,z),(ridge,ymn,z+.92),(xr,ymn,z),(xl,ymx,z),(ridge,ymx,z+.92),(xr,ymx,z)]
+    roof_obj=mesh('北河染纸坊_低模实体瓦面',rv,[(0,3,4,1),(1,4,5,2)],M['tile'],c)
+    mod=roof_obj.modifiers.new('染纸坊真实屋面厚度','SOLIDIFY');mod.thickness=.075;mod.offset=-1
+    line('北河染纸坊_正脊',[(ridge,ymn-.08,z+.95),(ridge,ymx+.08,z+.95)],.082,M['edge'],c,res=1,bevel_res=1)
+    for x in (xl,xr):line('北河染纸坊_檐口',[(x,ymn-.08,z),(x,ymx+.08,z)],.062,M['edge'],c,res=1,bevel_res=1)
+    box('北河染纸坊_东后粉墙',(17.58,py,1.50),(.18,4.30,2.54),M['plaster'],c,.014)
+    box('北河染纸坊_北侧粉墙',(16.00,100.43,1.42),(3.30,.18,2.38),M['plaster'],c,.014)
+    seg=12;vv=[];ff=[]
+    for zz,rr in ((0,.54),(.58,.62)):
+        vv.extend([(rr*cos(2*pi*i/seg),rr*sin(2*pi*i/seg),zz) for i in range(seg)])
+    for i in range(seg):ff.append((i,(i+1)%seg,seg+(i+1)%seg,seg+i))
+    ff.append(tuple(range(seg-1,-1,-1)))
+    vat=mesh('北河染纸坊_染缸原型',vv,ff,wetstone,c);vat.hide_render=True;vat.hide_viewport=True
+    dv=[(.48*cos(2*pi*i/seg),.48*sin(2*pi*i/seg),0) for i in range(seg)]
+    dye=mesh('北河染纸坊_染液原型',dv,[tuple(range(seg))],indigo,c);dye.hide_render=True;dye.hide_viewport=True
+    for i,(x,y) in enumerate(((15.90,96.55),(15.90,98.00)),1):
+        for proto,tag,z0 in ((vat,'共享染缸',.32),(dye,'共享染液',.83)):
+            o=bpy.data.objects.new(PREFIX+f'北河染纸坊_{tag}_{i}',proto.data);c.objects.link(o);o.location=(x,y,z0)
+    box('北河染纸坊_漂洗槽',(13.72,96.52,.48),(1.38,.82,.58),stone,c,.040)
+    box('北河染纸坊_漂洗水面',(13.72,96.52,.76),(1.12,.56,.025),M['water'],c,.004)
+    box('北河染纸坊_排水石槽',(12.82,96.52,.20),(1.00,.22,.18),stone,c,.018)
+    box('北河染纸坊_街侧泄水口',(12.28,96.52,.13),(.22,.30,.16),wetstone,c,.010)
+    sheet=mesh('北河染纸坊_靛纸原型',[(-.15,0,-.62),(-.15,0,.62),(.15,0,.62),(.15,0,-.62)],[(0,1,2,3)],indigo,c)
+    sheet.hide_render=True;sheet.hide_viewport=True
+    box('北河染纸坊_晾纸上枋',(16.40,99.78,2.24),(2.35,.12,.12),wood,c,.005)
+    box('北河染纸坊_晾纸下枋',(16.40,99.78,.76),(2.35,.12,.12),wood,c,.005)
+    for x in (15.28,17.52):box('北河染纸坊_晾纸立柱',(x,99.78,1.50),(.12,.12,1.60),wood,c,.004)
+    for i,x in enumerate((15.48,15.86,16.24,16.62,17.00,17.38),1):
+        o=bpy.data.objects.new(PREFIX+f'北河染纸坊_共享靛纸_{i}',sheet.data);c.objects.link(o);o.location=(x,99.70,1.49)
+    for zz in (.72,1.32,1.92):box('北河染纸坊_颜料架',(17.22,97.95,zz),(.40,1.90,.12),wood,c,.005)
+    for y in (97.28,98.62):box('北河染纸坊_颜料架立柱',(17.22,y,1.30),(.12,.12,1.90),wood,c,.004)
+    for i,(y,mat) in enumerate(((97.45,madder),(98.05,M['gold']),(98.65,indigo)),1):
+        box(f'北河染纸坊_颜料盒_{i}',(17.02,y,1.42),(.30,.38,.18),mat,c,.018)
+    box('北河染纸坊_搅染长案',(13.72,98.48,.74),(1.52,.64,.16),wood,c,.010)
+    for x in (13.16,14.28):
+        for y in (98.25,98.71):box('北河染纸坊_长案足',(x,y,.40),(.12,.12,.68),wood,c,.004)
+    line('北河染纸坊_染纸竹夹',[(13.12,98.42,.86),(14.26,98.52,.92)],.025,wood,c,res=1,bevel_res=1)
+    line('北河染纸坊_梁下吊灯索',[(14.30,98.48,3.08),(14.30,98.48,2.58)],.012,wood,c,res=1,bevel_res=0)
+    box('北河染纸坊_梁下纸灯罩',(14.30,98.48,2.43),(.25,.25,.30),M['paper'],c,.016)
+    light('北河染纸坊_梁下工作灯',(14.30,98.48,2.35),(1,.40,.16),72,.95,target=(14.70,97.60,.70),kind='AREA')
+    plinth['JN_function']='east_bank_dyed_paper_atelier'
+    S['JN_town_phase']='phase_15_east_dyed_paper_court'
+    S['JN_dyed_paper_open_bay_m']=1.95
+    S['JN_dyed_paper_shared_vats']=2
+    S['JN_dyed_paper_shared_sheets']=6
+    S['JN_dyed_paper_new_image_bytes']=0
+
 def batch_static_objects(name,objects,mat,col,bev=0):
     """Combine already-built static meshes after art generation so optimization cannot perturb procedural build order."""
     objects=[o for o in objects if o and o.type=='MESH']
@@ -2412,7 +2484,7 @@ def viewport():
                 a.spaces.active.region_3d.view_camera_zoom=0
     bpy.context.view_layer.update()
 def build(stage=None):
-    start();courtyard();village_phase1_skeleton();town_phase2_market();town_phase3_east_wharf();town_phase4_east_residence();town_phase5_cloth_finish_yard();town_phase6_west_wine_court();town_phase7_north_granary();town_phase8_north_grain_wharf();town_phase9_north_silk_bend();town_phase10_silk_trade_finish();town_phase11_west_oar_workshop();town_phase12_north_umbrella_lane();town_phase13_north_paper_yard();town_phase14_east_bindery_shop()
+    start();courtyard();village_phase1_skeleton();town_phase2_market();town_phase3_east_wharf();town_phase4_east_residence();town_phase5_cloth_finish_yard();town_phase6_west_wine_court();town_phase7_north_granary();town_phase8_north_grain_wharf();town_phase9_north_silk_bend();town_phase10_silk_trade_finish();town_phase11_west_oar_workshop();town_phase12_north_umbrella_lane();town_phase13_north_paper_yard();town_phase14_east_bindery_shop();town_phase15_east_dyed_paper_court()
     level=P['stage'] if stage is None else stage
     if level>=2:vegetation()
     if level>=3:weather()
