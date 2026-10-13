@@ -917,6 +917,8 @@ shades=[o for o in S.objects if o.name.startswith('JN_北河转水埠_共享纸�
 assert len(bollards)==2 and len(shades)==2
 assert len({o.data.as_pointer() for o in bollards})==1
 assert len({o.data.as_pointer() for o in shades})==1
+assert all(abs(world_bounds(o)[0][2]-.16)<.002 for o in bollards)
+assert all(world_bounds(o)[0][0]>=turning_water[1][0] for o in bollards)
 assert S['JN_snow_particle_segments']==4 and S['JN_snow_particle_rings']==2
 
 expanded_tris=0

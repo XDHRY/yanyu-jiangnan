@@ -17,6 +17,7 @@
     "shared_bench_seats": 2,
     "shared_bench_legs": 4,
     "shared_mooring_bollards": 2,
+    "mooring_bollard_segments": 8,
     "shared_lantern_shades": 2
   },
   "optimization": {

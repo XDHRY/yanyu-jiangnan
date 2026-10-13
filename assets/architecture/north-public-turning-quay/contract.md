@@ -20,7 +20,7 @@ The paper-quarter canal terminates in a public turning basin rather than another
 - The crossing slabs share one mesh datablock and cover both canal edges.
 - Three stone piers rise from the canal bed to the bridge soffit, so the 5 m crossing has an explicit load path.
 - Two bench seats share one mesh; four bench legs share one mesh and meet paving and seat underside exactly.
-- Two mooring bollards share one 8-segment/2-ring mesh; two lantern shades share one mesh.
+- Two flat-topped mooring bollards share one closed 8-sided tapered mesh and stand on the east stone pocket; two lantern shades share one mesh.
 - Land, streets, pockets and all steps are explicit load-bearing geometry; no floating decorative connection is accepted.
 
 ## Performance and LOD note

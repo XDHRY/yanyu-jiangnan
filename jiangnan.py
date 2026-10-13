@@ -2575,10 +2575,15 @@ def town_phase17_north_public_turning_quay():
     # Low-segment mooring posts and paired lamps reuse their respective meshes.
     # Lights occupy the outer pocket edges, leaving the crossing and landing
     # unobstructed and making the public node legible in the nocturnal scene.
-    bollard=uv('北河转水埠_系舟石原型',(0,0,0),(.18,.18,.28),wetstone,c,8,2)
+    bv=[];bf=[];seg=8
+    bv.extend([(.16*cos(2*pi*i/seg),.16*sin(2*pi*i/seg),0) for i in range(seg)])
+    bv.extend([(.13*cos(2*pi*i/seg),.13*sin(2*pi*i/seg),.38) for i in range(seg)])
+    for i in range(seg):bf.append((i,(i+1)%seg,seg+(i+1)%seg,seg+i))
+    bf.extend([tuple(range(seg-1,-1,-1)),tuple(range(seg,2*seg))])
+    bollard=mesh('北河转水埠_系舟石原型',bv,bf,wetstone,c)
     bollard.hide_render=True;bollard.hide_viewport=True
-    for i,(x,y) in enumerate(((9.98,105.55),(9.98,106.55)),1):
-        o=bpy.data.objects.new(PREFIX+f'北河转水埠_共享系舟石_{i}',bollard.data);c.objects.link(o);o.location=(x,y,.45)
+    for i,(x,y) in enumerate(((10.32,105.48),(10.32,106.48)),1):
+        o=bpy.data.objects.new(PREFIX+f'北河转水埠_共享系舟石_{i}',bollard.data);c.objects.link(o);o.location=(x,y,.16)
     shade=box('北河转水埠_纸灯罩原型',(0,0,0),(.30,.30,.34),M['paper'],c,.018)
     shade.hide_render=True;shade.hide_viewport=True
     for i,(x,y) in enumerate(((.35,104.72),(14.18,104.72)),1):
