@@ -960,6 +960,32 @@ assert len(wet_marks)==4 and all(o.data.as_pointer()==wet_proto.data.as_pointer(
 assert all(world_bounds(o)[0][2]>.58 for o in wet_marks)
 assert bpy.data.objects.get('JN_北河转水埠_借用架盘绳') and bpy.data.objects.get('JN_北河转水埠_舢板系缆')
 
+# Portable quay tea service: the shoulder-load must remain wholly in the west
+# public pocket, clear both the through street and existing stone bench.  Its
+# repeated baskets, cups and coals must link real mesh datablocks.
+tea_objects=[o for o in S.objects if o.name.startswith(('JN_北河转水埠_茶担','JN_北河转水埠_共享茶担')) and not o.hide_render]
+assert tea_objects
+tea_bounds=[world_bounds(o) for o in tea_objects]
+tea_min_x=min(b[0][0] for b in tea_bounds);tea_max_x=max(b[1][0] for b in tea_bounds)
+tea_min_y=min(b[0][1] for b in tea_bounds);tea_max_y=max(b[1][1] for b in tea_bounds)
+west_route=world_bounds(bpy.data.objects['JN_北河转水埠_西岸石街'])
+west_bench=world_bounds(bpy.data.objects['JN_北河转水埠_共享石凳面_1'])
+tea_street_clearance=west_route[0][0]-tea_max_x
+tea_bench_clearance=west_bench[0][1]-tea_max_y
+assert tea_min_x>=.50 and tea_street_clearance>=.24,tea_street_clearance
+assert tea_min_y>=104.68 and tea_bench_clearance>=.40,tea_bench_clearance
+tea_baskets=[o for o in S.objects if o.name.startswith('JN_北河转水埠_共享茶担提篮_')]
+tea_cups=[o for o in S.objects if o.name.startswith('JN_北河转水埠_共享茶担茶盏_')]
+tea_coals=[o for o in S.objects if o.name.startswith('JN_北河转水埠_共享茶担炭块_')]
+assert len(tea_baskets)==2 and len({o.data.as_pointer() for o in tea_baskets})==1
+assert len(tea_cups)==3 and len({o.data.as_pointer() for o in tea_cups})==1
+assert len(tea_coals)==3 and len({o.data.as_pointer() for o in tea_coals})==1
+assert all(abs(world_bounds(o)[0][2]-.16)<.002 for o in tea_baskets)
+for required in ('JN_北河转水埠_茶担扁担','JN_北河转水埠_茶担茶盘','JN_北河转水埠_茶担铜壶','JN_北河转水埠_茶担壶盖','JN_北河转水埠_茶担壶把','JN_北河转水埠_茶担壶嘴'):
+    assert bpy.data.objects.get(required),required
+rain_mat=bpy.data.materials['JN_转水埠桥面雨湿']
+assert rain_mat.diffuse_color[0]>=.18 and rain_mat.diffuse_color[1]>=.24
+
 expanded_tris=0
 for o in (o for o in S.objects if o.type=='MESH'):
     o.data.calc_loop_triangles();expanded_tris+=len(o.data.loop_triangles)
@@ -994,6 +1020,17 @@ report['town_phase18_quay_boat_gear']={
     'new_image_texture_bytes':S['JN_quay_new_image_bytes'],
 }
 print('TOWN_PHASE18_QUAY_BOAT_GEAR',json.dumps(report['town_phase18_quay_boat_gear'],ensure_ascii=False))
+
+report['town_phase19_quay_tea_porter']={
+    'phase':S['JN_town_phase'],'reuses_west_turning_pocket':True,
+    'tea_service_bounds_m':[round(tea_min_x,3),round(tea_max_x,3),round(tea_min_y,3),round(tea_max_y,3)],
+    'street_clearance_m':round(tea_street_clearance,3),'bench_clearance_m':round(tea_bench_clearance,3),
+    'grounded_linked_baskets':len(tea_baskets),'shared_cups':len(tea_cups),'shared_coals':len(tea_coals),
+    'kettle_and_yoke_readable':True,'roof_added':False,
+    'wet_mark_tone_lifted':True,'expanded_triangles':expanded_tris,'triangle_limit':170000,
+    'new_image_texture_bytes':S['JN_quay_tea_new_image_bytes'],
+}
+print('TOWN_PHASE19_QUAY_TEA_PORTER',json.dumps(report['town_phase19_quay_tea_porter'],ensure_ascii=False))
 
 report['inhabited_houses']={'mesh_triangles_with_instances':house_tris,'triangle_budget':18000,'shells':8,'true_door_openings':8,'true_window_openings':16,'shared_wall_meshes':1,'door_clear_width_min':min(o['JN_door_clear_width'] for o in shells),'interior_depth_min':min(o['JN_interior_depth'] for o in shells),'ray_tests_passed':40,'floor_support_passed':8,'tea_east_risers_m':[.10,.10],'new_image_texture_bytes':0}
 print('INHABITED_HOUSES',json.dumps(report['inhabited_houses'],ensure_ascii=False))
