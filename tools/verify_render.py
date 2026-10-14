@@ -923,6 +923,43 @@ assert S['JN_snow_particle_segments']==4 and S['JN_snow_particle_rings']==2
 assert S['JN_scholar_stone_noise_seed']==36
 assert S['JN_scholar_stone_boolean_solver']=='MANIFOLD'
 
+# Quay boat gear: the sampan must remain in the terminal water south of the
+# bridge; the open lending rack has grounded load paths, and all repeated close
+# props must actually share their mesh datablocks.
+sampan=bpy.data.objects['JN_北河转水埠_停泊舢板船壳'];sampan_bounds=world_bounds(sampan)
+assert sampan_bounds[0][0]>=turning_water[0][0] and sampan_bounds[1][0]<=turning_water[1][0]
+assert sampan_bounds[0][1]>=turning_water[0][1] and sampan_bounds[1][1]<=turning_water[1][1]
+bridge_bounds=[world_bounds(o) for o in bridge_slabs]
+bridge_y_min=min(b[0][1] for b in bridge_bounds)
+sampan_bridge_clearance=bridge_y_min-sampan_bounds[1][1]
+assert sampan_bridge_clearance>=.25,sampan_bridge_clearance
+assert len(sampan.data.polygons)==14
+
+rails=[o for o in S.objects if o.name.startswith('JN_北河转水埠_共享舢板舷条_')]
+seats=[o for o in S.objects if o.name.startswith('JN_北河转水埠_共享舢板坐板_')]
+ribs=[o for o in S.objects if o.name.startswith('JN_北河转水埠_共享舢板横肋_')]
+assert len(rails)==2 and len(seats)==2 and len(ribs)==3
+assert len({o.data.as_pointer() for o in rails})==1
+assert len({o.data.as_pointer() for o in seats})==1
+assert len({o.data.as_pointer() for o in ribs})==1
+
+rack_posts=[bpy.data.objects[f'JN_北河转水埠_船具架立柱_{i}'] for i in range(1,3)]
+rack_shoes=[bpy.data.objects[f'JN_北河转水埠_船具架柱础_{i}'] for i in range(1,3)]
+for post,shoe in zip(rack_posts,rack_shoes):
+    assert dist_xy(pos(post),pos(shoe))<.01
+    assert abs(world_bounds(post)[0][2]-world_bounds(shoe)[1][2])<.002
+    assert world_bounds(shoe)[0][2]>=.159
+assert all(world_bounds(o)[0][0]>=14.29 for o in rack_posts)
+
+oars=[o for o in S.objects if o.name.startswith('JN_北河转水埠_共享船桨_')]
+oar_proto=bpy.data.objects['JN_北河转水埠_船桨原型']
+wet_marks=[o for o in S.objects if o.name.startswith('JN_北河转水埠_共享桥面湿痕_')]
+wet_proto=bpy.data.objects['JN_北河转水埠_桥面湿痕原型']
+assert len(oars)==3 and all(o.data.as_pointer()==oar_proto.data.as_pointer() for o in oars)
+assert len(wet_marks)==4 and all(o.data.as_pointer()==wet_proto.data.as_pointer() for o in wet_marks)
+assert all(world_bounds(o)[0][2]>.58 for o in wet_marks)
+assert bpy.data.objects.get('JN_北河转水埠_借用架盘绳') and bpy.data.objects.get('JN_北河转水埠_舢板系缆')
+
 expanded_tris=0
 for o in (o for o in S.objects if o.type=='MESH'):
     o.data.calc_loop_triangles();expanded_tris+=len(o.data.loop_triangles)
@@ -943,6 +980,20 @@ report['town_phase17_north_public_turning_quay']={
     'new_image_texture_bytes':S['JN_turning_quay_new_image_bytes'],
 }
 print('TOWN_PHASE17_NORTH_PUBLIC_TURNING_QUAY',json.dumps(report['town_phase17_north_public_turning_quay'],ensure_ascii=False))
+
+report['town_phase18_quay_boat_gear']={
+    'phase':S['JN_town_phase'],
+    'sampan_length_m':S['JN_quay_sampan_length_m'],
+    'sampan_inside_terminal_water':True,
+    'sampan_bridge_clearance_m':round(sampan_bridge_clearance,3),
+    'open_hull_faces':len(sampan.data.polygons),
+    'shared_gunwales':len(rails),'shared_seats':len(seats),'shared_ribs':len(ribs),
+    'grounded_lending_rack_posts':len(rack_posts),
+    'shared_oars':len(oars),'shared_bridge_wet_marks':len(wet_marks),
+    'roof_added':False,'expanded_triangles':expanded_tris,'triangle_limit':170000,
+    'new_image_texture_bytes':S['JN_quay_new_image_bytes'],
+}
+print('TOWN_PHASE18_QUAY_BOAT_GEAR',json.dumps(report['town_phase18_quay_boat_gear'],ensure_ascii=False))
 
 report['inhabited_houses']={'mesh_triangles_with_instances':house_tris,'triangle_budget':18000,'shells':8,'true_door_openings':8,'true_window_openings':16,'shared_wall_meshes':1,'door_clear_width_min':min(o['JN_door_clear_width'] for o in shells),'interior_depth_min':min(o['JN_interior_depth'] for o in shells),'ray_tests_passed':40,'floor_support_passed':8,'tea_east_risers_m':[.10,.10],'new_image_texture_bytes':0}
 print('INHABITED_HOUSES',json.dumps(report['inhabited_houses'],ensure_ascii=False))
