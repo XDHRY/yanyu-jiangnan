@@ -2612,7 +2612,10 @@ def town_phase18_quay_boat_gear():
     """Inhabit the terminal quay with one low sampan, boat gear and rain marks."""
     c=C['water'];stone=M['stone'];wetstone=M['darkstone'];wood=M['wood'];jute=M['bark']
     boatwood=material('转水埠旧船木',(.24,.105,.038),.55,4)
-    rainwet=material('转水埠桥面雨湿',(.13,.18,.16),.14,3)
+    # Wet stone should catch lantern highlights without reading as four holes
+    # cut through the bridge.  A lifted green-grey base and broader roughness
+    # keep the patches subordinate to the sampan and public crossing.
+    rainwet=material('转水埠桥面雨湿',(.19,.25,.22),.28,3)
 
     # A compact open sampan occupies the quiet water south of the foot crossing.
     # Its 2.36 m hull remains wholly inside the terminal basin and leaves a clear
@@ -2693,6 +2696,73 @@ def town_phase18_quay_boat_gear():
     S['JN_quay_shared_wet_marks']=4
     S['JN_quay_new_image_bytes']=0
 
+def town_phase19_quay_tea_porter():
+    """Set down one roofless tea shoulder-load beside the west quay bench."""
+    c=C['water'];stone=M['stone'];wood=M['wood'];bronze=M['bronze'];jute=M['bark']
+    tea_wood=material('转水埠茶担暖木',(.22,.105,.045),.62,5)
+    tea_ceramic=material('转水埠茶盏青瓷',(.19,.31,.28),.34,2)
+
+    # The entire tea load stays west of the 1.82 m through street and south of
+    # the existing bench.  It serves waiting boat users without claiming the
+    # central turning pocket or adding another roof to the terminal skyline.
+    # Two low octagonal carrying baskets sit directly on the stone paving.
+    bv=[];bf=[];seg=8
+    for z,r in ((.16,.23),(.60,.27),(.69,.22)):
+        bv.extend([(r*cos(2*pi*i/seg),r*sin(2*pi*i/seg),z) for i in range(seg)])
+    for ring in range(2):
+        for i in range(seg):bf.append((ring*seg+i,ring*seg+(i+1)%seg,(ring+1)*seg+(i+1)%seg,(ring+1)*seg+i))
+    bf.extend([tuple(range(seg-1,-1,-1)),tuple(range(2*seg,3*seg))])
+    basket=mesh('北河转水埠_茶担提篮原型',bv,bf,jute,c);basket.hide_render=True;basket.hide_viewport=True
+    for i,x in enumerate((.88,1.86),1):
+        o=bpy.data.objects.new(PREFIX+f'北河转水埠_共享茶担提篮_{i}',basket.data);c.objects.link(o);o.location=(x,104.98,0)
+
+    # A removable shoulder yoke rests across both loads.  Short rope drops and
+    # grounded baskets make its carrying logic legible instead of floating.
+    line('北河转水埠_茶担扁担',[(.56,105.28,.96),(1.36,105.28,1.08),(2.18,105.28,.96)],.027,tea_wood,c,res=1,bevel_res=1)
+    for i,x in enumerate((.88,1.86),1):
+        line(f'北河转水埠_茶担吊绳_{i}',[(x-.16,105.28,.97),(x-.16,105.16,.68),(x+.16,105.16,.68),(x+.16,105.28,.97)],.010,jute,c,res=1,bevel_res=0)
+
+    # The western basket carries a small serving tray.  Three linked low-poly
+    # cups provide scale and repeat discipline; the nearby public stone bench
+    # remains the seating rather than adding another furniture family.
+    box('北河转水埠_茶担茶盘',(.88,104.98,.735),(.60,.42,.06),tea_wood,c,.008)
+    cv=[];cf=[]
+    for z,r in ((0,.045),(.065,.058),(.085,.052)):
+        cv.extend([(r*cos(2*pi*i/seg),r*sin(2*pi*i/seg),z) for i in range(seg)])
+    for ring in range(2):
+        for i in range(seg):cf.append((ring*seg+i,ring*seg+(i+1)%seg,(ring+1)*seg+(i+1)%seg,(ring+1)*seg+i))
+    cf.append(tuple(range(2*seg,3*seg)))
+    cup=mesh('北河转水埠_茶担茶盏原型',cv,cf,tea_ceramic,c);cup.hide_render=True;cup.hide_viewport=True
+    for i,(x,y) in enumerate(((.72,104.90),(.88,105.04),(1.04,104.90)),1):
+        o=bpy.data.objects.new(PREFIX+f'北河转水埠_共享茶担茶盏_{i}',cup.data);c.objects.link(o);o.location=(x,y,.765)
+
+    # The eastern load is a brazier-and-kettle unit.  The brazier has a closed
+    # octagonal body; kettle lid, low-resolution handle and spout remain
+    # geometric at the two rotating review cameras without costly subdivision.
+    kv=[];kf=[]
+    for z,r in ((.69,.20),(.78,.23),(.91,.19)):
+        kv.extend([(r*cos(2*pi*i/seg),r*sin(2*pi*i/seg),z) for i in range(seg)])
+    for ring in range(2):
+        for i in range(seg):kf.append((ring*seg+i,ring*seg+(i+1)%seg,(ring+1)*seg+(i+1)%seg,(ring+1)*seg+i))
+    kf.extend([tuple(range(seg-1,-1,-1)),tuple(range(2*seg,3*seg))])
+    kettle=mesh('北河转水埠_茶担铜壶',(tuple((x+1.86,y+104.98,z) for x,y,z in kv)),kf,bronze,c)
+    uv('北河转水埠_茶担壶盖',(1.86,104.98,.945),(.16,.16,.045),bronze,c,8,2)
+    line('北河转水埠_茶担壶把',[(1.68,104.98,.89),(1.72,104.98,1.15),(2.00,104.98,1.18),(2.05,104.98,.89)],.018,tea_wood,c,res=1,bevel_res=1)
+    line('北河转水埠_茶担壶嘴',[(2.03,104.98,.84),(2.23,104.98,.93),(2.29,104.98,1.03)],.035,bronze,c,radii=(1,.72,.42),res=1,bevel_res=1)
+    # Three tiny coals sit inside the eastern basket, below the kettle body.
+    coal=box('北河转水埠_茶担炭块原型',(0,0,0),(.08,.08,.045),M['darkstone'],c,.006);coal.hide_render=True;coal.hide_viewport=True
+    for i,(dx,dy) in enumerate(((-.08,-.06),(.06,-.04),(0,.08)),1):
+        o=bpy.data.objects.new(PREFIX+f'北河转水埠_共享茶担炭块_{i}',coal.data);c.objects.link(o);o.location=(1.86+dx,104.98+dy,.705)
+
+    kettle['JN_function']='portable_quay_tea_service'
+    S['JN_town_phase']='phase_19_quay_tea_porter'
+    S['JN_quay_tea_service_width_m']=1.77
+    S['JN_quay_tea_street_clearance_m']=.26
+    S['JN_quay_tea_bench_clearance_m']=.45
+    S['JN_quay_tea_shared_baskets']=2
+    S['JN_quay_tea_shared_cups']=3
+    S['JN_quay_tea_new_image_bytes']=0
+
 def batch_static_objects(name,objects,mat,col,bev=0):
     """Combine already-built static meshes after art generation so optimization cannot perturb procedural build order."""
     objects=[o for o in objects if o and o.type=='MESH']
@@ -2768,7 +2838,7 @@ def viewport():
                 a.spaces.active.region_3d.view_camera_zoom=0
     bpy.context.view_layer.update()
 def build(stage=None):
-    start();courtyard();village_phase1_skeleton();town_phase2_market();town_phase3_east_wharf();town_phase4_east_residence();town_phase5_cloth_finish_yard();town_phase6_west_wine_court();town_phase7_north_granary();town_phase8_north_grain_wharf();town_phase9_north_silk_bend();town_phase10_silk_trade_finish();town_phase11_west_oar_workshop();town_phase12_north_umbrella_lane();town_phase13_north_paper_yard();town_phase14_east_bindery_shop();town_phase15_east_dyed_paper_court();town_phase16_west_dye_receiving_court();town_phase17_north_public_turning_quay();town_phase18_quay_boat_gear()
+    start();courtyard();village_phase1_skeleton();town_phase2_market();town_phase3_east_wharf();town_phase4_east_residence();town_phase5_cloth_finish_yard();town_phase6_west_wine_court();town_phase7_north_granary();town_phase8_north_grain_wharf();town_phase9_north_silk_bend();town_phase10_silk_trade_finish();town_phase11_west_oar_workshop();town_phase12_north_umbrella_lane();town_phase13_north_paper_yard();town_phase14_east_bindery_shop();town_phase15_east_dyed_paper_court();town_phase16_west_dye_receiving_court();town_phase17_north_public_turning_quay();town_phase18_quay_boat_gear();town_phase19_quay_tea_porter()
     level=P['stage'] if stage is None else stage
     if level>=2:vegetation()
     if level>=3:weather()

@@ -1,0 +1,32 @@
+{
+  "asset_id": "quay-tea-porter",
+  "generator": "jiangnan.py::town_phase19_quay_tea_porter",
+  "units": "metre",
+  "source_baseline": "e4ba42b182dd36f22a72be15f29964d1381a494a",
+  "placement": {
+    "reused_area": "north-public-turning-quay-west-pocket",
+    "service_center": [1.37, 104.98, 0.16],
+    "minimum_west_street_clearance_m": 0.24,
+    "minimum_bench_clearance_m": 0.40
+  },
+  "geometry": {
+    "shared_grounded_baskets": 2,
+    "shoulder_yoke": 1,
+    "rope_drops": 2,
+    "serving_tray": 1,
+    "shared_cups": 3,
+    "closed_kettle": 1,
+    "kettle_lid": 1,
+    "kettle_handle": 1,
+    "kettle_spout": 1,
+    "shared_coals": 3,
+    "roof": 0
+  },
+  "materials": ["stone", "darkstone", "wood", "bronze", "bark", "转水埠茶担暖木", "转水埠茶盏青瓷"],
+  "textures": [],
+  "uv": "No new bitmap-mapped mesh; procedural and solid-colour project materials only.",
+  "normals": "Closed low-poly baskets, kettle and cups plus low-resolution curve fittings; evaluated by Blender smoke and web export.",
+  "lod": "Diagnostic source; repeated baskets, cups and coals use linked mesh datablocks; no separate runtime LOD chain yet.",
+  "license": "Project-generated procedural geometry; no paid or external generated asset.",
+  "human_gates": {"function": "pending", "form": "pending", "runtime": "pending"}
+}
