@@ -2611,6 +2611,8 @@ def town_phase17_north_public_turning_quay():
 def town_phase18_quay_boat_gear():
     """Inhabit the terminal quay with one low sampan, boat gear and rain marks."""
     c=C['water'];stone=M['stone'];wetstone=M['darkstone'];wood=M['wood'];jute=M['bark']
+    boatwood=material('转水埠旧船木',(.16,.085,.042),.62,5)
+    rainwet=material('转水埠桥面雨湿',(.055,.080,.072),.12,3)
 
     # A compact open sampan occupies the quiet water south of the foot crossing.
     # Its 2.36 m hull remains wholly inside the terminal basin and leaves a clear
@@ -2624,16 +2626,16 @@ def town_phase18_quay_boat_gear():
         a=4*k;b=4*(k+1)
         hf.extend(((a,b,b+1,a+1),(a+1,b+1,b+2,a+2),(a+2,b+2,b+3,a+3)))
     hf.extend(((0,1,2,3),(16,19,18,17)))
-    hull=mesh('北河转水埠_停泊舢板船壳',hv,hf,wood,c)
+    hull=mesh('北河转水埠_停泊舢板船壳',hv,hf,boatwood,c)
     hull.location=(7.30,102.65,0)
     hull['JN_function']='open_mooring_sampan';hull['JN_length_m']=2.36;hull['JN_beam_m']=.88
     # Gunwales, ribs and seats explain construction at eye height.  The paired
     # members are linked rather than repeatedly tessellated.
-    rail=box('北河转水埠_舢板舷条原型',(0,0,0),(.075,2.10,.075),wood,c,.012)
+    rail=box('北河转水埠_舢板舷条原型',(0,0,0),(.075,2.10,.075),boatwood,c,.012)
     rail.hide_render=True;rail.hide_viewport=True
     for i,x in enumerate((6.90,7.70),1):
         o=bpy.data.objects.new(PREFIX+f'北河转水埠_共享舢板舷条_{i}',rail.data);c.objects.link(o);o.location=(x,102.65,.51)
-    seat=box('北河转水埠_舢板坐板原型',(0,0,0),(.70,.24,.07),wood,c,.010)
+    seat=box('北河转水埠_舢板坐板原型',(0,0,0),(.70,.24,.07),boatwood,c,.010)
     seat.hide_render=True;seat.hide_viewport=True
     for i,y in enumerate((102.28,103.02),1):
         o=bpy.data.objects.new(PREFIX+f'北河转水埠_共享舢板坐板_{i}',seat.data);c.objects.link(o);o.location=(7.30,y,.49)
@@ -2655,7 +2657,7 @@ def town_phase18_quay_boat_gear():
     ov=[(-.035,-1.08,-.025),(.035,-1.08,-.025),(.035,.58,-.025),(.13,1.02,-.025),
         (-.035,-1.08,.025),(.035,-1.08,.025),(.035,.58,.025),(.13,1.02,.025)]
     of=[(0,1,2,3),(4,7,6,5),(0,4,5,1),(1,5,6,2),(2,6,7,3),(3,7,4,0)]
-    oar=mesh('北河转水埠_船桨原型',ov,of,wood,c);oar.hide_render=True;oar.hide_viewport=True
+    oar=mesh('北河转水埠_船桨原型',ov,of,boatwood,c);oar.hide_render=True;oar.hide_viewport=True
     o=bpy.data.objects.new(PREFIX+'北河转水埠_共享船桨_舢板',oar.data);c.objects.link(o);o.location=(7.28,102.65,.61);o.rotation_euler[2]=-.16
     for i,(x,y,ang) in enumerate(((14.30,105.38,.04),(14.31,106.02,-.05)),1):
         o=bpy.data.objects.new(PREFIX+f'北河转水埠_共享船桨_借用架_{i}',oar.data);c.objects.link(o)
@@ -2673,11 +2675,16 @@ def town_phase18_quay_boat_gear():
     # light on the bridge surface.  They are deliberately partial stains rather
     # than full slab overlays, avoiding both z-fighting and a tiled appearance.
     wv=[(-.22,-.15,0),(.20,-.11,0),(.16,.14,0),(-.18,.17,0)]
-    wet=mesh('北河转水埠_桥面湿痕原型',wv,[(0,1,2,3)],wetstone,c)
+    wet=mesh('北河转水埠_桥面湿痕原型',wv,[(0,1,2,3)],rainwet,c)
     wet.hide_render=True;wet.hide_viewport=True
     for i,(x,y,ang,sx,sy) in enumerate(((5.35,104.46,.10,1.0,.72),(6.62,104.91,-.08,.82,.58),(7.90,104.48,.04,1.08,.66),(9.18,104.93,-.12,.74,.60)),1):
         o=bpy.data.objects.new(PREFIX+f'北河转水埠_共享桥面湿痕_{i}',wet.data);c.objects.link(o)
         o.location=(x,y,.592);o.rotation_euler[2]=ang;o.scale=(sx,sy,1)
+
+    # The visible east-bank lantern remains the physical source; a low-energy
+    # co-located area emitter redirects a little of that warm light onto the
+    # dark hull so its open construction remains readable in diagnostic views.
+    light('北河转水埠_东岸灯照船补光',(13.64,104.72,1.82),(1,.43,.18),34,1.10,target=(7.30,102.65,.35),kind='AREA')
 
     S['JN_town_phase']='phase_18_quay_boat_gear'
     S['JN_quay_sampan_length_m']=2.36

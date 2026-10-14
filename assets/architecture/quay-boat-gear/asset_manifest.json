@@ -21,7 +21,7 @@
     "shared_bridge_wet_marks": 4,
     "rope_curves": 2
   },
-  "materials": ["stone", "darkstone", "wood", "bark"],
+  "materials": ["stone", "darkstone", "wood", "bark", "转水埠旧船木", "转水埠桥面雨湿"],
   "textures": [],
   "uv": "No new bitmap-mapped mesh; procedural and solid-colour project materials only.",
   "normals": "Simple closed low-poly props plus one-sided raised wet-mark cards; evaluated by Blender smoke and web export.",
