@@ -2718,9 +2718,9 @@ def town_phase19_quay_tea_porter():
 
     # A removable shoulder yoke rests across both loads.  Short rope drops and
     # grounded baskets make its carrying logic legible instead of floating.
-    line('北河转水埠_茶担扁担',[(.56,104.98,.91),(1.36,104.98,1.02),(2.18,104.98,.91)],.027,tea_wood,c,res=1,bevel_res=1)
+    line('北河转水埠_茶担扁担',[(.56,105.28,.96),(1.36,105.28,1.08),(2.18,105.28,.96)],.027,tea_wood,c,res=1,bevel_res=1)
     for i,x in enumerate((.88,1.86),1):
-        line(f'北河转水埠_茶担吊绳_{i}',[(x-.16,104.98,.91),(x-.16,104.98,.68),(x+.16,104.98,.68),(x+.16,104.98,.91)],.010,jute,c,res=1,bevel_res=0)
+        line(f'北河转水埠_茶担吊绳_{i}',[(x-.16,105.28,.97),(x-.16,105.16,.68),(x+.16,105.16,.68),(x+.16,105.28,.97)],.010,jute,c,res=1,bevel_res=0)
 
     # The western basket carries a small serving tray.  Three linked low-poly
     # cups provide scale and repeat discipline; the nearby public stone bench
