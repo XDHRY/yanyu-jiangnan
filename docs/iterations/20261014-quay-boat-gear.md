@@ -48,6 +48,7 @@ The first 14 diagnostic cameras remain unchanged. Only cameras 15 and 16 rotate 
 | New bitmap / paid asset | 0 B / 0 |
 
 Artifacts:
+- [Persistent compact review package](https://github.com/XDHRY/yanyu-jiangnan/blob/review/round-38519189946/docs/reviews/round-38519189946/README.md)
 - [Editable Blender build](https://github.com/XDHRY/yanyu-jiangnan/actions/runs/38519189917/artifacts/11873545407)
 - [Sixteen PNGs, assertions and budgets](https://github.com/XDHRY/yanyu-jiangnan/actions/runs/38519189946/artifacts/11872744405)
 - [GLB and standalone Web viewer](https://github.com/XDHRY/yanyu-jiangnan/actions/runs/38519189934/artifacts/11873585880)

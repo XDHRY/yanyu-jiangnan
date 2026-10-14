@@ -19,7 +19,7 @@ Round 22 inhabits the existing public turning quay without expanding the settlem
 - The open 14-face hull has explicit side, bottom and end geometry; paired gunwales, seats and three ribs use linked meshes.
 - Two rack posts meet individual stone shoes exactly; one crossbeam carries two hanging linked oars.
 - One further linked oar lies aboard the sampan. Curved rope uses resolution 1 and bevel resolution 0.
-- Four linked single-quad wet marks sit 12 mm above selected bridge slabs, avoiding coplanar overlap and full-surface tiling.
+- Four linked single-face, irregular six-sided wet marks sit 12 mm above selected bridge slabs, avoiding coplanar overlap and full-surface tiling.
 
 ## Required machine gates
 - Python compile and CI contract
