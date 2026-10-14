@@ -1,0 +1,31 @@
+{
+  "asset_id": "quay-boat-gear",
+  "generator": "jiangnan.py::town_phase18_quay_boat_gear",
+  "units": "metre",
+  "source_baseline": "5904bbbcc0ccc886d3ffc772a41708b18291068d",
+  "placement": {
+    "reused_area": "north-public-turning-quay",
+    "sampan_center": [7.3, 102.65, 0.0],
+    "sampan_length_m": 2.36,
+    "minimum_bridge_clearance_m": 0.25,
+    "lending_rack_east_edge_x": 14.48
+  },
+  "geometry": {
+    "open_sampan_hull_faces": 14,
+    "shared_gunwales": 2,
+    "shared_seats": 2,
+    "shared_ribs": 3,
+    "grounded_rack_posts": 2,
+    "grounded_rack_shoes": 2,
+    "shared_oars": 3,
+    "shared_bridge_wet_marks": 4,
+    "rope_curves": 2
+  },
+  "materials": ["stone", "darkstone", "wood", "bark", "转水埠旧船木", "转水埠桥面雨湿"],
+  "textures": [],
+  "uv": "No new bitmap-mapped mesh; procedural and solid-colour project materials only.",
+  "normals": "Simple closed low-poly props plus one-sided raised wet-mark cards; evaluated by Blender smoke and web export.",
+  "lod": "Hero diagnostic source; repeated rails, seats, ribs, oars and wet marks use linked mesh datablocks; no separate runtime LOD chain yet.",
+  "license": "Project-generated procedural geometry; no paid or external generated asset.",
+  "human_gates": {"function": "pending", "form": "pending", "runtime": "pending"}
+}

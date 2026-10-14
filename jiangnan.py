@@ -2608,6 +2608,91 @@ def town_phase17_north_public_turning_quay():
     S['JN_turning_quay_shared_bollards']=2
     S['JN_turning_quay_new_image_bytes']=0
 
+def town_phase18_quay_boat_gear():
+    """Inhabit the terminal quay with one low sampan, boat gear and rain marks."""
+    c=C['water'];stone=M['stone'];wetstone=M['darkstone'];wood=M['wood'];jute=M['bark']
+    boatwood=material('转水埠旧船木',(.24,.105,.038),.55,4)
+    rainwet=material('转水埠桥面雨湿',(.13,.18,.16),.14,3)
+
+    # A compact open sampan occupies the quiet water south of the foot crossing.
+    # Its 2.36 m hull remains wholly inside the terminal basin and leaves a clear
+    # water gap before the bridge, so the public crossing and turning space stay
+    # visually dominant.  Four longitudinal rings make a genuinely open hull.
+    sections=((-1.18,.10,.31,.51),(-.72,.38,.22,.50),(0,.44,.19,.49),(.72,.38,.22,.50),(1.18,.10,.31,.51))
+    hv=[];hf=[]
+    for yy,half,bottom,top in sections:
+        hv.extend([(-half,yy,top),(-half*.72,yy,bottom),(half*.72,yy,bottom),(half,yy,top)])
+    for k in range(len(sections)-1):
+        a=4*k;b=4*(k+1)
+        hf.extend(((a,b,b+1,a+1),(a+1,b+1,b+2,a+2),(a+2,b+2,b+3,a+3)))
+    hf.extend(((0,1,2,3),(16,19,18,17)))
+    hull=mesh('北河转水埠_停泊舢板船壳',hv,hf,boatwood,c)
+    hull.location=(7.30,102.65,0)
+    hull['JN_function']='open_mooring_sampan';hull['JN_length_m']=2.36;hull['JN_beam_m']=.88
+    # Gunwales, ribs and seats explain construction at eye height.  The paired
+    # members are linked rather than repeatedly tessellated.
+    rail=box('北河转水埠_舢板舷条原型',(0,0,0),(.075,2.10,.075),boatwood,c,.012)
+    rail.hide_render=True;rail.hide_viewport=True
+    for i,x in enumerate((6.90,7.70),1):
+        o=bpy.data.objects.new(PREFIX+f'北河转水埠_共享舢板舷条_{i}',rail.data);c.objects.link(o);o.location=(x,102.65,.51)
+    seat=box('北河转水埠_舢板坐板原型',(0,0,0),(.70,.24,.07),boatwood,c,.010)
+    seat.hide_render=True;seat.hide_viewport=True
+    for i,y in enumerate((102.28,103.02),1):
+        o=bpy.data.objects.new(PREFIX+f'北河转水埠_共享舢板坐板_{i}',seat.data);c.objects.link(o);o.location=(7.30,y,.49)
+    rib=box('北河转水埠_舢板横肋原型',(0,0,0),(.66,.055,.18),wetstone,c,.006)
+    rib.hide_render=True;rib.hide_viewport=True
+    for i,y in enumerate((102.05,102.65,103.25),1):
+        o=bpy.data.objects.new(PREFIX+f'北河转水埠_共享舢板横肋_{i}',rib.data);c.objects.link(o);o.location=(7.30,y,.32)
+
+    # One low east-edge lending rack makes the quay use readable without adding
+    # another roof.  Stone shoes carry two posts; their crossbeam hangs two
+    # linked oars while leaving the adjacent bench and 1.82 m street untouched.
+    for i,y in enumerate((105.05,106.42),1):
+        box(f'北河转水埠_船具架柱础_{i}',(14.48,y,.23),(.36,.36,.14),stone,c,.010)
+        box(f'北河转水埠_船具架立柱_{i}',(14.48,y,1.12),(.14,.14,1.64),wood,c,.006)
+    box('北河转水埠_船具架横梁',(14.48,105.735,1.92),(.16,1.70,.14),wood,c,.006)
+    box('北河转水埠_船具箱',(14.18,105.08,.45),(.52,.82,.44),wood,c,.014)
+    # Closed six-face oar prism: one mesh is used once aboard and twice on the
+    # lending rack.  The broad blade remains geometric at this close range.
+    ov=[(-.035,-1.08,-.025),(.035,-1.08,-.025),(.035,.58,-.025),(.13,1.02,-.025),
+        (-.035,-1.08,.025),(.035,-1.08,.025),(.035,.58,.025),(.13,1.02,.025)]
+    of=[(0,1,2,3),(4,7,6,5),(0,4,5,1),(1,5,6,2),(2,6,7,3),(3,7,4,0)]
+    oar=mesh('北河转水埠_船桨原型',ov,of,boatwood,c);oar.hide_render=True;oar.hide_viewport=True
+    o=bpy.data.objects.new(PREFIX+'北河转水埠_共享船桨_舢板',oar.data);c.objects.link(o);o.location=(7.28,102.65,.61);o.rotation_euler[2]=-.16
+    for i,(x,y,ang) in enumerate(((14.30,105.38,.04),(14.31,106.02,-.05)),1):
+        o=bpy.data.objects.new(PREFIX+f'北河转水埠_共享船桨_借用架_{i}',oar.data);c.objects.link(o)
+        o.location=(x,y,1.08);o.rotation_euler=(pi/2,0,ang)
+
+    # Coiled rope and a taut mooring line visually connect rack, bollard and
+    # boat. Curves stay at resolution 1 / bevel 0 to avoid repeated subdivision.
+    coil=[]
+    for i in range(17):
+        a=2*pi*i/16;coil.append((14.36,105.73+.22*cos(a),1.43+.22*sin(a)))
+    line('北河转水埠_借用架盘绳',coil,.018,jute,c,res=1,bevel_res=0)
+    line('北河转水埠_舢板系缆',[(7.30,103.78,.45),(8.55,104.72,.34),(10.32,105.48,.42)],.014,jute,c,res=1,bevel_res=0)
+
+    # Four linked, slightly raised polygon patches catch the existing public
+    # light on the bridge surface.  They are deliberately partial stains rather
+    # than full slab overlays, avoiding both z-fighting and a tiled appearance.
+    wv=[(-.22,-.10,0),(-.08,-.17,0),(.19,-.10,0),(.17,.05,0),(.05,.16,0),(-.18,.13,0)]
+    wet=mesh('北河转水埠_桥面湿痕原型',wv,[(0,1,2,3,4,5)],rainwet,c)
+    wet.hide_render=True;wet.hide_viewport=True
+    for i,(x,y,ang,sx,sy) in enumerate(((5.35,104.46,.10,1.0,.72),(6.62,104.91,-.08,.82,.58),(7.90,104.48,.04,1.08,.66),(9.18,104.93,-.12,.74,.60)),1):
+        o=bpy.data.objects.new(PREFIX+f'北河转水埠_共享桥面湿痕_{i}',wet.data);c.objects.link(o)
+        o.location=(x,y,.592);o.rotation_euler[2]=ang;o.scale=(sx,sy,1)
+
+    # The visible east-bank lantern remains the physical source; a low-energy
+    # co-located area emitter redirects a little of that warm light onto the
+    # dark hull so its open construction remains readable in diagnostic views.
+    light('北河转水埠_东岸灯照船补光',(13.64,104.72,1.82),(1,.43,.18),90,1.10,target=(7.30,102.65,.35),kind='AREA')
+
+    S['JN_town_phase']='phase_18_quay_boat_gear'
+    S['JN_quay_sampan_length_m']=2.36
+    S['JN_quay_sampan_bridge_clearance_m']=.27
+    S['JN_quay_shared_oars']=3
+    S['JN_quay_shared_wet_marks']=4
+    S['JN_quay_new_image_bytes']=0
+
 def batch_static_objects(name,objects,mat,col,bev=0):
     """Combine already-built static meshes after art generation so optimization cannot perturb procedural build order."""
     objects=[o for o in objects if o and o.type=='MESH']
@@ -2683,7 +2768,7 @@ def viewport():
                 a.spaces.active.region_3d.view_camera_zoom=0
     bpy.context.view_layer.update()
 def build(stage=None):
-    start();courtyard();village_phase1_skeleton();town_phase2_market();town_phase3_east_wharf();town_phase4_east_residence();town_phase5_cloth_finish_yard();town_phase6_west_wine_court();town_phase7_north_granary();town_phase8_north_grain_wharf();town_phase9_north_silk_bend();town_phase10_silk_trade_finish();town_phase11_west_oar_workshop();town_phase12_north_umbrella_lane();town_phase13_north_paper_yard();town_phase14_east_bindery_shop();town_phase15_east_dyed_paper_court();town_phase16_west_dye_receiving_court();town_phase17_north_public_turning_quay()
+    start();courtyard();village_phase1_skeleton();town_phase2_market();town_phase3_east_wharf();town_phase4_east_residence();town_phase5_cloth_finish_yard();town_phase6_west_wine_court();town_phase7_north_granary();town_phase8_north_grain_wharf();town_phase9_north_silk_bend();town_phase10_silk_trade_finish();town_phase11_west_oar_workshop();town_phase12_north_umbrella_lane();town_phase13_north_paper_yard();town_phase14_east_bindery_shop();town_phase15_east_dyed_paper_court();town_phase16_west_dye_receiving_court();town_phase17_north_public_turning_quay();town_phase18_quay_boat_gear()
     level=P['stage'] if stage is None else stage
     if level>=2:vegetation()
     if level>=3:weather()
