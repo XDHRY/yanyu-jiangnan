@@ -6,6 +6,14 @@ The resting destination is a 0.90×2.10m Ming-style daybed with four floor-bound
 feet, aprons, end stretchers, three-sided low railing, thin mat, folded linen
 and one closed low-poly cushion. Repeats use seven linked Mesh families.
 
+Round27 keeps supports and furniture positions unchanged. Four linked feet and
+five linked railing posts receive sparse chamfered cross-sections. Mat, blanket
+and cushion use closed 8-corner profiles; blanket and cushion have three rings,
+24 vertices each. No subdivision or deferred bevel modifier. New-triangle target
+<=600 relative to Round26. All contact and arrival-strip assertions still apply.
+View15 must fit actual evaluated house05 bounds inside a 4.5% screen margin and
+pass three clear door-centre observation rays; this is camera QA, not navigation.
+
 Retain an interior 1.00m-wide, 3.20m-long arrival strip at x13.65..16.85,
 y9.60..10.60. This is NOT a claim about the narrower inherited domestic door
 or production navigation. Original doorway aperture remains unchanged.
