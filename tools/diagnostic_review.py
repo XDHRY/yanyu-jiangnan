@@ -75,8 +75,12 @@ def fit_house05(cam):
     cam.location += cam.rotation_euler.to_quaternion() @ Vector(((lo[0]+hi[0])/2,(lo[1]+hi[1])/2,0))
     cam.data.ortho_scale=max(hi[0]-lo[0],(hi[1]-lo[1])*1024/640)*1.18
     bpy.context.view_layer.update()
-    projected=[world_to_camera_view(S,cam,p) for p in pts]
-    bounds=[min(p.x for p in projected),max(p.x for p in projected),min(p.y for p in projected),max(p.y for p in projected)]
+    for _ in range(3):
+        projected=[world_to_camera_view(S,cam,p) for p in pts]
+        bounds=[min(p.x for p in projected),max(p.x for p in projected),min(p.y for p in projected),max(p.y for p in projected)]
+        factor=max(abs(v-.5) for v in bounds)/.44
+        if factor<=1:break
+        cam.data.ortho_scale*=factor*1.01;bpy.context.view_layer.update()
     assert min(bounds[0],bounds[2])>.045 and max(bounds[1],bounds[3])<.955,bounds
     # Orthographic door-centre rays start on the actual camera near plane.
     inv=cam.matrix_world.inverted();direction=cam.rotation_euler.to_quaternion()@Vector((0,0,-1))
@@ -87,7 +91,7 @@ def fit_house05(cam):
         assert not hit[0],('house05 diagnostic door occlusion',hit[4].name if hit[4] else None)
     return {'objects':len(selected),'projected_bounds':bounds,'padding_fraction':.045,'clear_door_rays':3,'orthographic_width_m':cam.data.ortho_scale}
 # Reject bad framing before spending time on the fourteen fixed render views.
-probe=add_cam(*VIEWS[14][:6]);fit_house05(probe);created.remove(probe)
+probe=add_cam(*VIEWS[14][:5]);fit_house05(probe);created.remove(probe)
 probe_data=probe.data;bpy.data.objects.remove(probe,do_unlink=True);bpy.data.cameras.remove(probe_data)
 for name,loc,target,lens,ortho,question in VIEWS:
     cam=add_cam(name,loc,target,lens,ortho)
