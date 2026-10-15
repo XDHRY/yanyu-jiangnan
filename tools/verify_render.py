@@ -1057,7 +1057,7 @@ report['town_phase19_quay_tea_porter']={
 print('TOWN_PHASE19_QUAY_TEA_PORTER',json.dumps(report['town_phase19_quay_tea_porter'],ensure_ascii=False))
 
 # Round 25: furniture and writing props belong only to the existing house03.
-study_feet=objs('JN_西岸书户_书格足')
+study_feet=[o for o in objs('JN_西岸书户_书格足_') if not o.hide_render]
 assert len(study_feet)==4
 floor03=world_bounds(bpy.data.objects['JN_村落民居_03_室内地坪'])
 for foot in study_feet:
@@ -1065,7 +1065,7 @@ for foot in study_feet:
     assert abs(lo[2]-floor03[1][2])<.0001
     assert floor03[0][0]<lo[0]<hi[0]<floor03[1][0]
     assert floor03[0][1]<lo[1]<hi[1]<floor03[1][1]
-shelves=sorted(objs('JN_西岸书户_书格层板'),key=lambda o:world_bounds(o)[0][2])
+shelves=sorted([o for o in objs('JN_西岸书户_书格层板_') if not o.hide_render],key=lambda o:world_bounds(o)[0][2])
 assert len(shelves)==3 and abs(world_bounds(shelves[0])[0][2]-.43)<.0001
 books=objs('JN_西岸书户_共享书册_')
 assert len(books)==5 and len({o.data.as_pointer() for o in books})==1
@@ -1082,7 +1082,15 @@ ring_mount=world_bounds(bpy.data.objects['JN_西岸书户_门环座'])
 assert ring_mount[1][1]>=door03[0][1] and ring_mount[0][1]<door03[0][1]
 assert bpy.data.lights['JN_村落民居_03_室内灯火'].energy==65
 assert S['JN_house03_study_new_image_bytes']==0
-report['house03_study']={'grounded_cabinet_feet':4,'shelves':3,'supported_linked_books':5,'tabletop_contact_passed':True,'door_mount_contact_passed':True,'retained_open_door_clear_width_m':1.144,'new_bitmap_bytes':0}
+assert len({o.data.as_pointer() for o in study_feet})==1 and len({o.data.as_pointer() for o in shelves})==1
+for prefix,n in [('书封_',5),('书格边框_',2),('案腿横枨_',2),('门扇边挺_',2),('门扇穿带_',2)]:
+    repeated=[o for o in objs('JN_西岸书户_'+prefix) if not o.hide_render]
+    assert len(repeated)==n and len({o.data.as_pointer() for o in repeated})==1
+door_hardware=[o for o in S.objects if o.name.startswith(('JN_西岸书户_门扇','JN_西岸书户_门环')) and not o.hide_render]
+min_north_edge=min([door03[0][1]]+[world_bounds(o)[0][1] for o in door_hardware])
+conservative_width=min_north_edge-(20.1-.55*1.04)
+assert conservative_width>=1.00,conservative_width
+report['house03_study']={'grounded_cabinet_feet':4,'shelves':3,'supported_linked_books':5,'linked_repeat_families':8,'tabletop_contact_passed':True,'door_mount_contact_passed':True,'architectural_door_width_m':1.144,'hardware_inclusive_conservative_width_m':round(conservative_width,4),'new_bitmap_bytes':0}
 
 report['inhabited_houses']={'mesh_triangles_with_instances':house_tris,'triangle_budget':18000,'shells':8,'true_door_openings':8,'true_window_openings':16,'shared_wall_meshes':1,'door_clear_width_min':min(o['JN_door_clear_width'] for o in shells),'interior_depth_min':min(o['JN_interior_depth'] for o in shells),'ray_tests_passed':40,'floor_support_passed':8,'tea_east_risers_m':[.10,.10],'new_image_texture_bytes':0}
 print('INHABITED_HOUSES',json.dumps(report['inhabited_houses'],ensure_ascii=False))

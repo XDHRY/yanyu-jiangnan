@@ -2776,12 +2776,17 @@ def town_phase19_quay_tea_porter():
 def refine_village_house03_study():
     """Give the existing third west-bank house a restrained reading destination."""
     c=C['water']; wood=M['wood']; paper=bpy.data.materials['JN_纸坊楮皮宣纸']
+    def linked_boxes(label,centers,size,mat):
+        proto=box('西岸书户_'+label+'原型',(0,0,0),size,mat,c)
+        proto.hide_render=True;proto.hide_viewport=True
+        for i,center in enumerate(centers,1):
+            obj=bpy.data.objects.new(PREFIX+'西岸书户_'+label+f'_{i}',proto.data)
+            c.objects.link(obj);obj.location=center
     # Existing house03: hx=-2.2, hy=20.1, hs=1.04, interior floor top=.26.
     # Keep its shared shell, opening and furniture prototypes unchanged.
     tx,ty=-3.032,20.932
     box('西岸书户_案下牙板',(tx,ty-.338,.74),(1.14,.045,.12),wood,c)
-    for yy in (ty-.239,ty+.239):
-        box('西岸书户_案腿横枨',(tx,yy,.43),(1.24,.06,.06),wood,c)
+    linked_boxes('案腿横枨',[(tx,yy,.43) for yy in (ty-.239,ty+.239)],(1.24,.06,.06),wood)
     # Writing sheet, inkstone and brush rest have actual tabletop contact.
     box('西岸书户_展纸',(tx+.33,ty-.035,.842),(.48,.36,.004),paper,c)
     box('西岸书户_砚台',(tx-.40,ty-.035,.850),(.20,.14,.020),M['darkstone'],c)
@@ -2790,22 +2795,22 @@ def refine_village_house03_study():
     line('西岸书户_毛笔杆',[(tx-.16,ty-.09,.865),(tx-.16,ty+.16,.865)],.007,wood,c,res=1,bevel_res=0)
     line('西岸书户_毛笔毫',[(tx-.16,ty-.15,.850),(tx-.16,ty-.09,.865)],.010,M['edge'],c,res=1,bevel_res=0)
     # A freestanding open book cabinet: four feet, back, sides and three shelves.
-    for x in (-4.48,-4.12):
-        for y in (20.57,21.63):box('西岸书户_书格足',(x,y,.345),(.08,.08,.17),wood,c)
-    for z in (.46,1.04,1.69):box('西岸书户_书格层板',(-4.30,21.10,z),(.50,1.30,.06),wood,c)
-    for y in (20.48,21.72):box('西岸书户_书格边框',(-4.30,y,1.075),(.50,.06,1.29),wood,c)
-    box('西岸书户_书格背板',(-4.56,21.10,1.075),(.04,1.30,1.29),wood,c)
+    linked_boxes('书格足',[(x,y,.345) for x in (-4.48,-4.12) for y in (18.97,20.03)],(.08,.08,.17),wood)
+    linked_boxes('书格层板',[(-4.30,19.50,z) for z in (.46,1.04,1.69)],(.50,1.30,.06),wood)
+    linked_boxes('书格边框',[(-4.30,y,1.075) for y in (18.88,20.12)],(.50,.06,1.29),wood)
+    box('西岸书户_书格背板',(-4.56,19.50,1.075),(.04,1.30,1.29),wood,c)
     book=box('西岸书户_书册原型',(0,0,0),(.34,.23,.035),paper,c)
     book.hide_render=True;book.hide_viewport=True
-    for j,(x,y,z) in enumerate(((-4.27,20.80,.5075),(-4.27,20.80,.5425),(-4.27,21.34,.5075),(-4.27,21.34,1.0875),(-4.27,21.34,1.1225)),1):
+    book_centers=((-4.27,19.20,.5075),(-4.27,19.20,.5425),(-4.27,19.74,.5075),(-4.27,19.74,1.0875),(-4.27,19.74,1.1225))
+    linked_boxes('书封',[(x,y,z+.0185) for x,y,z in book_centers],(.35,.24,.002),M['edge'])
+    for j,(x,y,z) in enumerate(book_centers,1):
         o=bpy.data.objects.new(PREFIX+f'西岸书户_共享书册_{j}',book.data);c.objects.link(o);o.location=(x,y,z)
         # One restrained dark cover and two binding ties make horizontal books legible.
-        box(f'西岸书户_书封_{j}',(x,y,z+.0185),(.35,.24,.002),M['edge'],c)
         for dy in (-.075,.075):
             line(f'西岸书户_装订线_{j}',[(x+.17,y+dy,z-.015),(x+.177,y+dy,z+.020),(x+.12,y+dy,z+.021)],.0025,wood,c,res=1,bevel_res=0)
     # Detail only the already open house03 door leaf, never close the clear portal.
-    for x in (-.30,.39):box('西岸书户_门扇边挺',(x,20.572,1.36),(.045,.022,2.10),wood,c)
-    for z in (.62,1.82):box('西岸书户_门扇穿带',(.045,20.572,z),(.72,.022,.07),wood,c)
+    linked_boxes('门扇边挺',[(x,20.572,1.36) for x in (-.30,.39)],(.045,.022,2.10),wood)
+    linked_boxes('门扇穿带',[(.045,20.572,z) for z in (.62,1.82)],(.72,.022,.07),wood)
     box('西岸书户_门环座',(.02,20.571,1.12),(.09,.020,.11),M['bronze'],c)
     box('西岸书户_门环销',(.02,20.553,1.12),(.018,.034,.018),M['bronze'],c)
     line('西岸书户_门环',[(.02+.055*cos(2*pi*i/12),20.545,1.065+.055*sin(2*pi*i/12)) for i in range(13)],.008,M['bronze'],c,res=1,bevel_res=0)

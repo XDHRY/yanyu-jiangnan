@@ -10,8 +10,9 @@ five linked books. Existing table receives a restrained sheet/inkstone/brush
 set, apron and stretchers. Only the existing open leaf gains stiles, rails and
 a bronze ring with a physically connecting pin and mounting plate.
 
-Arrival stays on the existing east-to-west doorway axis; cupboard sits north
-of that axis. Keep house03's shared wall/roof/furniture datablocks unmodified,
+Arrival stays on the existing east-to-west doorway axis; cupboard sits at the
+rear south side to separate it from the north-side desk in the door camera.
+Keep house03's shared wall/roof/furniture datablocks unmodified,
 so the other seven houses do not receive accidental changes. Existing lamp
 energy is 65 W in preview, no unmotivated new fixture or material is added.
 
@@ -22,3 +23,7 @@ destination. 16 images at 1024×640; no 36-view rendering or paid asset creation
 Machine checks measure cabinet feet/floor contact, book/shelf contact, tabletop
 contact and ring-mount/door contact. Human Function/Form/Runtime remain pending;
 these checks do not stand in for production collision/navigation approval.
+
+Eight repeat families use shared Mesh data. Nominal aperture width is 1.144 m;
+the second build also measures a conservative hardware-inclusive width and
+requires at least 1.00 m, rather than presenting the aperture as runtime proof.
