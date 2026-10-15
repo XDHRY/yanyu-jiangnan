@@ -1046,6 +1046,10 @@ def town_phase2_market():
             o=bpy.data.objects.new(PREFIX+f'小镇石街_{route}_{i:02d}',course.data);c.objects.link(o)
             o.location=(x,(a+b)/2,.06);o.scale=(w,b-a-.012,1)
             o['JN_route']=route;street_count+=1
+    # The two original parallel lanes left a 0.43 m bare-foundation ribbon
+    # between x=2.16 and 2.59. Fill it below the existing approach tops, so
+    # those cross paths remain legible without an unintended 120 mm trench.
+    box('小镇双巷连接铺地',(2.375,21.70,.056),(.43,30.40,.112),stone,c)
     # A cross lane joins the door-side lane, waterfront street and bridge.
     box('小镇桥前横巷',(2.20,15.10,.06),(2.50,1.82,.12),stone,c)
     box('小镇北街茶集广场',(-.10,31.80,.06),(3.00,9.40,.12),stone,c)

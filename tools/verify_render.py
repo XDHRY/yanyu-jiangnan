@@ -138,6 +138,11 @@ for route,x,w,y0,y1 in [('西水街',3.50,1.82,7.0,36.9),('东水街',12.40,2.20
     assert all(lo[1]<y<hi[1] for y in seams)
     route_coverage[route]={'length_m':y1-y0,'width_m':w,'supported_joints':len(seams),'joint_recess_m':.008}
 report['village_paving_repair']={'legacy_lane_top_m':.105,'routes':route_coverage,'new_bitmap_bytes':0}
+connector=world_bounds(bpy.data.objects['JN_小镇双巷连接铺地'])
+assert abs(connector[0][0]-2.16)<.0001 and abs(connector[1][0]-2.59)<.0001
+assert abs(connector[0][1]-6.5)<.0001 and abs(connector[1][1]-36.9)<.0001
+assert abs(connector[0][2])<.0001 and abs(connector[1][2]-.112)<.0001
+report['village_paving_repair']['interlane_connector']={'width_m':.43,'length_m':30.4,'top_m':.112,'recess_below_existing_cross_paths_m':.008}
 for side in ('西','东'):
     steps=[bpy.data.objects[f'JN_小镇桥头踏步_{side}_{i}'] for i in range(1,4)]
     tops=[world_bounds(o)[1][2] for o in steps]

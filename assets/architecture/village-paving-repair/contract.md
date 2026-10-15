@@ -14,6 +14,11 @@ East street: x=12.40, width 2.20 m, y=7.0..36.9.
 Moon-gate lane: x=1.40, width 1.52 m, y=6.5..36.9.
 No mortar bed intersects the x=4.8..9.8 canal.
 
+The first real render exposed an additional bare-foundation ribbon between
+the two west-bank lanes. A 0.43 m wide, 30.4 m long stone connector fills
+x=2.16..2.59 to z=0.112 m, 8 mm below existing crossing paths. It neither
+raises those approaches nor introduces coplanar upper surfaces.
+
 Production evidence: unchanged cameras 01–14 and rotated paving views 15–16,
 1024×640 Eevee diagnostics. No 36-view render, new bitmap or paid generation.
 Bounds and each course-joint position are asserted after the deterministic

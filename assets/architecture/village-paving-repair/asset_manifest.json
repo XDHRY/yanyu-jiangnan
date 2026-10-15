@@ -4,7 +4,7 @@
   "source_baseline": "e5ae0b75f3b78c4b3ec9941f2deb03caa1169ece",
   "units": "metre",
   "purpose": "Remove raised legacy stepping ribs and deep open paving joints in the three original village streets",
-  "geometry": {"continuous_mortar_beds": 3, "retained_legacy_stones": 24, "bed_top_m": 0.112, "paving_top_m": 0.12, "legacy_top_m": 0.105},
+  "geometry": {"continuous_mortar_beds": 3, "interlane_connector": 1, "connector_width_m": 0.43, "retained_legacy_stones": 24, "bed_top_m": 0.112, "paving_top_m": 0.12, "legacy_top_m": 0.105},
   "materials": ["existing darkstone", "existing stone"],
   "textures": [],
   "new_bitmap_bytes": 0,
