@@ -599,7 +599,9 @@ def village_phase1_skeleton():
     lane=box('村落青石巷_原型',(0,0,0),(.72,.70,.16),stone,c)
     lane.hide_render=True; lane.hide_viewport=True
     for i in range(24):
-        o=bpy.data.objects.new(PREFIX+f'村落青石巷_{i+1:02d}',lane.data); c.objects.link(o); o.location=(1.4,7+i*.76,.10)
+        # Legacy narrow stepping lane is retained as buried editable substrate.
+        # The later full-width street is authoritative: no 60 mm raised ribs.
+        o=bpy.data.objects.new(PREFIX+f'村落青石巷_{i+1:02d}',lane.data); c.objects.link(o); o.location=(1.4,7+i*.76,.025)
     box('村落水巷',(7.3,20.5,.03),(5,25,.06),water,c)
     bank=box('村落驳岸_原型',(0,0,0),(.42,.82,.36),stone,c); bank.hide_render=True; bank.hide_viewport=True
     # Low-cost wet waterline: one shared mesh + one procedural material, no new image texture.
@@ -1035,6 +1037,10 @@ def town_phase2_market():
     course.hide_render=True;course.hide_viewport=True
     street_count=0
     for route,x,w,y0,y1 in [('西水街',3.50,1.82,7.0,36.9),('东水街',12.40,2.20,7.0,36.9),('月门北巷',1.40,1.52,6.5,36.9)]:
+        # Continuous mortar bed stops 8 mm below the stone tops. Joints remain
+        # visible but cannot expose a 120 mm slot down to the bank foundation.
+        bed=box('小镇铺路砂浆床_'+route,(x,(y0+y1)/2,.056),(w,y1-y0,.112),M['darkstone'],c)
+        bed['JN_route']=route;bed['JN_joint_recess_m']=.008
         for i in range(math.ceil((y1-y0)/.80)):
             a=y0+i*.80;b=min(y1,a+.80)
             o=bpy.data.objects.new(PREFIX+f'小镇石街_{route}_{i:02d}',course.data);c.objects.link(o)
