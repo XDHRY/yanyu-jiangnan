@@ -2773,6 +2773,47 @@ def town_phase19_quay_tea_porter():
     S['JN_quay_tea_shared_cups']=3
     S['JN_quay_tea_new_image_bytes']=0
 
+def refine_village_house03_study():
+    """Give the existing third west-bank house a restrained reading destination."""
+    c=C['water']; wood=M['wood']; paper=bpy.data.materials['JN_纸坊楮皮宣纸']
+    # Existing house03: hx=-2.2, hy=20.1, hs=1.04, interior floor top=.26.
+    # Keep its shared shell, opening and furniture prototypes unchanged.
+    tx,ty=-3.032,20.932
+    box('西岸书户_案下牙板',(tx,ty-.338,.74),(1.14,.045,.12),wood,c)
+    for yy in (ty-.239,ty+.239):
+        box('西岸书户_案腿横枨',(tx,yy,.43),(1.24,.06,.06),wood,c)
+    # Writing sheet, inkstone and brush rest have actual tabletop contact.
+    box('西岸书户_展纸',(tx+.33,ty-.035,.842),(.48,.36,.004),paper,c)
+    box('西岸书户_砚台',(tx-.40,ty-.035,.850),(.20,.14,.020),M['darkstone'],c)
+    box('西岸书户_墨条',(tx-.40,ty-.035,.867),(.12,.035,.014),M['edge'],c)
+    box('西岸书户_笔搁',(tx-.16,ty+.09,.852),(.045,.18,.024),wood,c)
+    line('西岸书户_毛笔杆',[(tx-.16,ty-.09,.865),(tx-.16,ty+.16,.865)],.007,wood,c,res=1,bevel_res=0)
+    line('西岸书户_毛笔毫',[(tx-.16,ty-.15,.850),(tx-.16,ty-.09,.865)],.010,M['edge'],c,res=1,bevel_res=0)
+    # A freestanding open book cabinet: four feet, back, sides and three shelves.
+    for x in (-4.48,-4.12):
+        for y in (20.57,21.63):box('西岸书户_书格足',(x,y,.345),(.08,.08,.17),wood,c)
+    for z in (.46,1.04,1.69):box('西岸书户_书格层板',(-4.30,21.10,z),(.50,1.30,.06),wood,c)
+    for y in (20.48,21.72):box('西岸书户_书格边框',(-4.30,y,1.075),(.50,.06,1.29),wood,c)
+    box('西岸书户_书格背板',(-4.56,21.10,1.075),(.04,1.30,1.29),wood,c)
+    book=box('西岸书户_书册原型',(0,0,0),(.34,.23,.035),paper,c)
+    book.hide_render=True;book.hide_viewport=True
+    for j,(x,y,z) in enumerate(((-4.27,20.80,.5075),(-4.27,20.80,.5425),(-4.27,21.34,.5075),(-4.27,21.34,1.0875),(-4.27,21.34,1.1225)),1):
+        o=bpy.data.objects.new(PREFIX+f'西岸书户_共享书册_{j}',book.data);c.objects.link(o);o.location=(x,y,z)
+        # One restrained dark cover and two binding ties make horizontal books legible.
+        box(f'西岸书户_书封_{j}',(x,y,z+.0185),(.35,.24,.002),M['edge'],c)
+        for dy in (-.075,.075):
+            line(f'西岸书户_装订线_{j}',[(x+.17,y+dy,z-.015),(x+.177,y+dy,z+.020),(x+.12,y+dy,z+.021)],.0025,wood,c,res=1,bevel_res=0)
+    # Detail only the already open house03 door leaf, never close the clear portal.
+    for x in (-.30,.39):box('西岸书户_门扇边挺',(x,20.572,1.36),(.045,.022,2.10),wood,c)
+    for z in (.62,1.82):box('西岸书户_门扇穿带',(.045,20.572,z),(.72,.022,.07),wood,c)
+    box('西岸书户_门环座',(.02,20.571,1.12),(.09,.020,.11),M['bronze'],c)
+    box('西岸书户_门环销',(.02,20.553,1.12),(.018,.034,.018),M['bronze'],c)
+    line('西岸书户_门环',[(.02+.055*cos(2*pi*i/12),20.545,1.065+.055*sin(2*pi*i/12)) for i in range(13)],.008,M['bronze'],c,res=1,bevel_res=0)
+    # Reuse the existing physical oil lamp instead of adding an unmotivated fixture.
+    bpy.data.lights['JN_村落民居_03_室内灯火'].energy=65
+    S['JN_house03_study']='writing_desk_open_book_cabinet_v1'
+    S['JN_house03_study_new_image_bytes']=0
+
 def batch_static_objects(name,objects,mat,col,bev=0):
     """Combine already-built static meshes after art generation so optimization cannot perturb procedural build order."""
     objects=[o for o in objects if o and o.type=='MESH']
@@ -2849,6 +2890,7 @@ def viewport():
     bpy.context.view_layer.update()
 def build(stage=None):
     start();courtyard();village_phase1_skeleton();town_phase2_market();town_phase3_east_wharf();town_phase4_east_residence();town_phase5_cloth_finish_yard();town_phase6_west_wine_court();town_phase7_north_granary();town_phase8_north_grain_wharf();town_phase9_north_silk_bend();town_phase10_silk_trade_finish();town_phase11_west_oar_workshop();town_phase12_north_umbrella_lane();town_phase13_north_paper_yard();town_phase14_east_bindery_shop();town_phase15_east_dyed_paper_court();town_phase16_west_dye_receiving_court();town_phase17_north_public_turning_quay();town_phase18_quay_boat_gear();town_phase19_quay_tea_porter()
+    refine_village_house03_study()
     level=P['stage'] if stage is None else stage
     if level>=2:vegetation()
     if level>=3:weather()

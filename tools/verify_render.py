@@ -1056,6 +1056,34 @@ report['town_phase19_quay_tea_porter']={
 }
 print('TOWN_PHASE19_QUAY_TEA_PORTER',json.dumps(report['town_phase19_quay_tea_porter'],ensure_ascii=False))
 
+# Round 25: furniture and writing props belong only to the existing house03.
+study_feet=objs('JN_西岸书户_书格足')
+assert len(study_feet)==4
+floor03=world_bounds(bpy.data.objects['JN_村落民居_03_室内地坪'])
+for foot in study_feet:
+    lo,hi=world_bounds(foot)
+    assert abs(lo[2]-floor03[1][2])<.0001
+    assert floor03[0][0]<lo[0]<hi[0]<floor03[1][0]
+    assert floor03[0][1]<lo[1]<hi[1]<floor03[1][1]
+shelves=sorted(objs('JN_西岸书户_书格层板'),key=lambda o:world_bounds(o)[0][2])
+assert len(shelves)==3 and abs(world_bounds(shelves[0])[0][2]-.43)<.0001
+books=objs('JN_西岸书户_共享书册_')
+assert len(books)==5 and len({o.data.as_pointer() for o in books})==1
+for book in books:
+    lo,hi=world_bounds(book)
+    assert lo[0]>floor03[0][0] and hi[0]<floor03[1][0]
+    supports=[world_bounds(o)[1][2] for o in shelves+books if o!=book]
+    assert min(abs(lo[2]-top) for top in supports)<.0001, ('unsupported study book',book.name)
+sheet=world_bounds(bpy.data.objects['JN_西岸书户_展纸'])
+ink=world_bounds(bpy.data.objects['JN_西岸书户_砚台'])
+assert abs(sheet[0][2]-.84)<.0001 and abs(ink[0][2]-.84)<.0001
+door03=world_bounds(bpy.data.objects['JN_村落民居_03_开门扇'])
+ring_mount=world_bounds(bpy.data.objects['JN_西岸书户_门环座'])
+assert ring_mount[1][1]>=door03[0][1] and ring_mount[0][1]<door03[0][1]
+assert bpy.data.lights['JN_村落民居_03_室内灯火'].energy==65
+assert S['JN_house03_study_new_image_bytes']==0
+report['house03_study']={'grounded_cabinet_feet':4,'shelves':3,'supported_linked_books':5,'tabletop_contact_passed':True,'door_mount_contact_passed':True,'retained_open_door_clear_width_m':1.144,'new_bitmap_bytes':0}
+
 report['inhabited_houses']={'mesh_triangles_with_instances':house_tris,'triangle_budget':18000,'shells':8,'true_door_openings':8,'true_window_openings':16,'shared_wall_meshes':1,'door_clear_width_min':min(o['JN_door_clear_width'] for o in shells),'interior_depth_min':min(o['JN_interior_depth'] for o in shells),'ray_tests_passed':40,'floor_support_passed':8,'tea_east_risers_m':[.10,.10],'new_image_texture_bytes':0}
 print('INHABITED_HOUSES',json.dumps(report['inhabited_houses'],ensure_ascii=False))
 report['town_phase2']={'phase':S['JN_town_phase'],'grounded_houses':len(plinths),'street_segments':street_segments,'street_batches':len(streets),'tea_pavilion_columns':4,'market_stalls':2,'bridge_risers_per_side':3,'market_ceramics':len(ceramics),'teacups':len(teacups),'canal_preserved':True,'new_image_texture_bytes':0}
