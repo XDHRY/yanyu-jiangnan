@@ -1,4 +1,4 @@
-import bpy, os, json, time
+import bpy, os, json, time, math
 from mathutils import Vector
 # 输出目录约定与 jiangnan.py 一致：仓库根目录；可用环境变量 JN_OUT 覆盖。
 OUT=os.environ.get('JN_OUT') or (os.path.dirname(bpy.data.filepath) if bpy.data.filepath else os.getcwd())
@@ -119,6 +119,30 @@ for o in plinths:
 streets=[o for o in S.objects if o.name.startswith('JN_小镇石街_') and not o.hide_render]
 street_segments=sum(int(o.get('JN_source_count',1)) for o in streets)
 assert len(streets)==3 and street_segments==S['JN_town_street_count'] and street_segments>100
+# Round 24: actual vertex heights, not object origins, prove continuous paving.
+# Legacy stepping stones must stay below the mortar bed and cannot create
+# alternating 60 mm obstacles in the later full-width street.
+for o in village_groups['lane']:
+    assert world_bounds(o)[1][2] <= .1051, ('raised legacy lane',o.name)
+route_coverage={}
+for route,x,w,y0,y1 in [('西水街',3.50,1.82,7.0,36.9),('东水街',12.40,2.20,7.0,36.9),('月门北巷',1.40,1.52,6.5,36.9)]:
+    bed=bpy.data.objects['JN_小镇铺路砂浆床_'+route]
+    lo,hi=world_bounds(bed)
+    assert abs(lo[2])<.0001 and abs(hi[2]-.112)<.0001
+    assert lo[1] <= y0+.0001 and hi[1] >= y1-.0001
+    assert abs(hi[0]-lo[0]-w)<.0001
+    street=bpy.data.objects['JN_小镇石街_'+route+'_批处理']
+    assert abs(world_bounds(street)[1][2]-.12)<.0001
+    # Test each full-width joint against the continuous evaluated support bed.
+    seams=[y0+i*.80 for i in range(1,math.ceil((y1-y0)/.80))]
+    assert all(lo[1]<y<hi[1] for y in seams)
+    route_coverage[route]={'length_m':y1-y0,'width_m':w,'supported_joints':len(seams),'joint_recess_m':.008}
+report['village_paving_repair']={'legacy_lane_top_m':.105,'routes':route_coverage,'new_bitmap_bytes':0}
+connector=world_bounds(bpy.data.objects['JN_小镇双巷连接铺地'])
+assert abs(connector[0][0]-2.16)<.0001 and abs(connector[1][0]-2.59)<.0001
+assert abs(connector[0][1]-6.5)<.0001 and abs(connector[1][1]-36.9)<.0001
+assert abs(connector[0][2])<.0001 and abs(connector[1][2]-.112)<.0001
+report['village_paving_repair']['interlane_connector']={'width_m':.43,'length_m':30.4,'top_m':.112,'recess_below_existing_cross_paths_m':.008}
 for side in ('西','东'):
     steps=[bpy.data.objects[f'JN_小镇桥头踏步_{side}_{i}'] for i in range(1,4)]
     tops=[world_bounds(o)[1][2] for o in steps]

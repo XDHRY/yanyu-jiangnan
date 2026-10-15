@@ -1,0 +1,16 @@
+{
+  "asset_id": "village-paving-repair",
+  "generator": "jiangnan.py::village_phase1_skeleton + town_phase2_market",
+  "source_baseline": "e5ae0b75f3b78c4b3ec9941f2deb03caa1169ece",
+  "units": "metre",
+  "purpose": "Remove raised legacy stepping ribs and deep open paving joints in the three original village streets",
+  "geometry": {"continuous_mortar_beds": 3, "interlane_connector": 1, "connector_width_m": 0.43, "retained_legacy_stones": 24, "bed_top_m": 0.112, "paving_top_m": 0.12, "legacy_top_m": 0.105},
+  "materials": ["existing darkstone", "existing stone"],
+  "textures": [],
+  "new_bitmap_bytes": 0,
+  "uv": "Existing project material mapping; no additional bitmap asset",
+  "normals": "Closed axis-aligned six-face boxes; measured world bounds in verify_render.py",
+  "lod": "12 triangles per mortar bed; no separate production LOD claimed",
+  "license": "Project-authored procedural geometry",
+  "human_gates": {"function": "pending", "form": "pending", "runtime": "pending"}
+}
