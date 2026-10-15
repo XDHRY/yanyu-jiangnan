@@ -2822,8 +2822,20 @@ def refine_village_house03_study():
 def refine_village_house05_rest():
     """A domestic resting room, not a second copy of house03's study."""
     c=C['water'];wood=M['wood']
+    def pad(label,center,size,mat,cut,rings):
+        # Closed chamfered footprint and sparse profile rings, no subdivision/modifier.
+        x,y,z=center;w,d,h=size;a=w/2;b=d/2
+        outline=[(-a+cut,-b),(a-cut,-b),(a,-b+cut),(a,b-cut),(a-cut,b),(-a+cut,b),(-a,b-cut),(-a,-b+cut)]
+        verts=[(x+px*scale,y+py*scale,z-h/2+h*t) for t,scale in rings for px,py in outline]
+        faces=[tuple(reversed(range(8))),tuple(range(8*(len(rings)-1),8*len(rings)))]
+        for k in range(len(rings)-1):
+            faces += [(8*k+i,8*k+(i+1)%8,8*(k+1)+(i+1)%8,8*(k+1)+i) for i in range(8)]
+        return mesh('东岸起居户_'+label,verts,faces,mat,c)
     def repeat(label,centers,size,mat):
-        p=box('东岸起居户_'+label+'原型',(0,0,0),size,mat,c);p.hide_render=True;p.hide_viewport=True
+        if label in ('榻足','围栏立柱'):
+            p=pad(label+'原型',(0,0,0),size,mat,min(size[:2])*.12,[(0,1),(1,1)])
+        else:p=box('东岸起居户_'+label+'原型',(0,0,0),size,mat,c)
+        p.hide_render=True;p.hide_viewport=True
         for i,xyz in enumerate(centers,1):
             o=bpy.data.objects.new(PREFIX+'东岸起居户_'+label+f'_{i}',p.data);c.objects.link(o);o.location=xyz
     # Move only these two instances; never edit the shared furniture meshes.
@@ -2846,13 +2858,9 @@ def refine_village_house05_rest():
     box('东岸起居户_后围下枋',(17.97,10.10,.84),(.045,2.08,.045),wood,c)
     repeat('端围上枋',[(17.55,y,1.075) for y in (9.08,11.12)],(.90,.065,.055),wood)
     repeat('端围下枋',[(17.55,y,.84) for y in (9.08,11.12)],(.84,.045,.045),wood)
-    box('东岸起居户_薄垫',(17.55,10.10,.715),(.79,1.93,.020),blue,c)
-    box('东岸起居户_叠毯',(17.55,9.57,.7425),(.75,.67,.035),linen,c)
-    # A closed bevel-like octagonal cushion, 16 vertices; no subdivision.
-    outline=[(-.26,-.13),(.26,-.13),(.31,-.08),(.31,.08),(.26,.13),(-.26,.13),(-.31,.08),(-.31,-.08)]
-    verts=[(17.55+x*s,10.78+y*s,z) for s,z in ((1,.725),(.90,.805)) for x,y in outline]
-    faces=[tuple(reversed(range(8))),tuple(range(8,16))]+[(i,(i+1)%8,(i+1)%8+8,i+8) for i in range(8)]
-    mesh('东岸起居户_麻布靠枕',verts,faces,linen,c)
+    pad('薄垫',(17.55,10.10,.715),(.79,1.93,.020),blue,.025,[(0,1),(1,1)])
+    pad('叠毯',(17.55,9.57,.7425),(.75,.67,.035),linen,.035,[(0,.99),(.65,1),(1,.96)])
+    pad('麻布靠枕',(17.55,10.78,.765),(.62,.26,.080),linen,.05,[(0,.96),(.44,1),(1,.78)])
     # A framed paper table lamp is the explicit source of the warm light.
     box('东岸起居户_案灯底座',(15.30,9.15,.8525),(.18,.18,.025),wood,c)
     repeat('案灯框柱',[(15.30+dx,9.15+dy,1.03) for dx in (-.07,.07) for dy in (-.07,.07)],(.018,.018,.33),wood)
@@ -2861,6 +2869,7 @@ def refine_village_house05_rest():
     light('东岸起居户_案灯光',(15.30,9.15,1.03),(1,.62,.32),45,.12,kind='POINT')
     S['JN_house05_rest']='ming_daybed_cushion_linen_table_lamp_v1'
     S['JN_house05_new_image_bytes']=0
+    S['JN_house05_profile']='chamfered_feet_posts_and_sparse_cloth_rings_v2'
 
 def batch_static_objects(name,objects,mat,col,bev=0):
     """Combine already-built static meshes after art generation so optimization cannot perturb procedural build order."""

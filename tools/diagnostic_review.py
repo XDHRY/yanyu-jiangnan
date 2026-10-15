@@ -1,5 +1,6 @@
 import bpy, os, json, time
 from mathutils import Vector
+from bpy_extras.object_utils import world_to_camera_view
 
 OUT=os.environ.get('JN_OUT') or (os.path.dirname(bpy.data.filepath) if bpy.data.filepath else os.getcwd())
 DIAG=os.path.join(OUT,'diagnostics')
@@ -27,7 +28,7 @@ VIEWS=[
     ('12_village_lane',(1.4,8.4,1.75),(1.4,31.5,1.35),42,0,'村巷人眼：月门北巷通往茶集的连续地面、民居侧廊、桥前横巷和远端茶亭'),
     ('13_canal_bridge',(13.2,11.2,8.6),(7.3,15.1,.9),46,0,'水巷木桥：高位斜俯视完整检查桥板、栏柱、双岸驳岸、桥头落地与临水民居尺度'),
     ('14_village_waterfront',(7.3,29.0,2.25),(7.3,16.0,1.35),40,0,'临水回望：检查八栋民居沿水巷的聚落节奏、河埠和木桥是否形成江南村落层次'),
-    ('15_house05_rest_front',(9.0,10.1,7.0),(15.9,10.1,2.0),28,11.5,'东岸起居户：水街正对立面的正交结构诊断，避开南侧庭院前墙，完整检查屋脊、檐口、门窗、台基和原入户通路'),
+    ('15_house05_rest_front',(11.8,9.0,5.2),(15.9,10.1,2.1),28,12,'东岸起居户：从竹林东侧按模型实际边界自动取景，机器校验屋面、门窗、台基完整入画及门口观察射线无遮挡'),
     ('16_house05_rest_door',(12.85,10.35,1.65),(16.9,9.9,.95),30,0,'入户看起居：向门洞北侧微移以避开开启门扇，坐卧榻、围栏、薄垫、叠毯、靠枕、案灯与原长凳需分离可辨，检查榻足落地与榻前通道'),
 ]
 
@@ -65,9 +66,37 @@ S.render.image_settings.file_format='PNG'
 S.render.film_transparent=False
 
 manifest={'mode':'low-cost spatial diagnostic','renderer':'Blender Eevee Next','resolution':[1024,640],'frame':80,'weather':0,'source_commit':os.environ.get('GITHUB_SHA'),'town_phase':S.get('JN_town_phase'),'views':[]}
+def fit_house05(cam):
+    bpy.context.view_layer.update();dg=bpy.context.evaluated_depsgraph_get()
+    selected=[o for o in S.objects if o.name.startswith('JN_村落民居_05_') and o.type in ('MESH','CURVE') and not o.hide_render]
+    pts=[o.evaluated_get(dg).matrix_world @ Vector(c) for o in selected for c in o.evaluated_get(dg).bound_box]
+    inv=cam.matrix_world.inverted();local=[inv@p for p in pts]
+    lo=[min(p[i] for p in local) for i in (0,1)];hi=[max(p[i] for p in local) for i in (0,1)]
+    cam.location += cam.rotation_euler.to_quaternion() @ Vector(((lo[0]+hi[0])/2,(lo[1]+hi[1])/2,0))
+    cam.data.ortho_scale=max(hi[0]-lo[0],(hi[1]-lo[1])*1024/640)*1.18
+    bpy.context.view_layer.update()
+    for _ in range(3):
+        projected=[world_to_camera_view(S,cam,p) for p in pts]
+        bounds=[min(p.x for p in projected),max(p.x for p in projected),min(p.y for p in projected),max(p.y for p in projected)]
+        factor=max(abs(v-.5) for v in bounds)/.44
+        if factor<=1:break
+        cam.data.ortho_scale*=factor*1.01;bpy.context.view_layer.update()
+    assert min(bounds[0],bounds[2])>.045 and max(bounds[1],bounds[3])<.955,bounds
+    # Orthographic door-centre rays start on the actual camera near plane.
+    inv=cam.matrix_world.inverted();direction=cam.rotation_euler.to_quaternion()@Vector((0,0,-1))
+    for y in (9.96,10.10,10.24):
+        point=Vector((13.35,y,1.30));q=inv@point
+        origin=cam.matrix_world@Vector((q.x,q.y,-cam.data.clip_start))
+        hit=S.ray_cast(dg,origin,direction,distance=(point-origin).length-.03)
+        assert not hit[0],('house05 diagnostic door occlusion',hit[4].name if hit[4] else None)
+    return {'objects':len(selected),'projected_bounds':bounds,'padding_fraction':.045,'clear_door_rays':3,'orthographic_width_m':cam.data.ortho_scale}
+# Reject bad framing before spending time on the fourteen fixed render views.
+probe=add_cam(*VIEWS[14][:5]);fit_house05(probe);created.remove(probe)
+probe_data=probe.data;bpy.data.objects.remove(probe,do_unlink=True);bpy.data.cameras.remove(probe_data)
 for name,loc,target,lens,ortho,question in VIEWS:
     cam=add_cam(name,loc,target,lens,ortho)
     S.camera=cam
+    framing=fit_house05(cam) if name=='15_house05_rest_front' else None
     S.render.filepath=os.path.join(DIAG,name+'.png')
     excluded=[]
     if name=='11_village_plan':
@@ -80,8 +109,8 @@ for name,loc,target,lens,ortho,question in VIEWS:
     finally:
         for o,state in excluded:o.hide_render=state
     manifest['views'].append({
-        'file':name+'.png','camera':list(loc),'target':list(target),'lens':lens,
-        'ortho_scale':ortho or None,'question':question,'seconds':round(time.time()-start,2),
+        'file':name+'.png','camera':list(cam.location),'target':list(target),'lens':lens,
+        'ortho_scale':cam.data.ortho_scale if ortho else None,'framing_evidence':framing,'question':question,'seconds':round(time.time()-start,2),
         'diagnostic_exclusions':[o.name for o,_ in excluded],
     })
 
