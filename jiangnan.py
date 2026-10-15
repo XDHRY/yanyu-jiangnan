@@ -2819,6 +2819,49 @@ def refine_village_house03_study():
     S['JN_house03_study']='writing_desk_open_book_cabinet_v1'
     S['JN_house03_study_new_image_bytes']=0
 
+def refine_village_house05_rest():
+    """A domestic resting room, not a second copy of house03's study."""
+    c=C['water'];wood=M['wood']
+    def repeat(label,centers,size,mat):
+        p=box('东岸起居户_'+label+'原型',(0,0,0),size,mat,c);p.hide_render=True;p.hide_viewport=True
+        for i,xyz in enumerate(centers,1):
+            o=bpy.data.objects.new(PREFIX+'东岸起居户_'+label+f'_{i}',p.data);c.objects.link(o);o.location=xyz
+    # Move only these two instances; never edit the shared furniture meshes.
+    table=bpy.data.objects[PREFIX+'村落民居_05_案几'];table.location.x-=1.368;table.location.y-=.182
+    bpy.data.objects[PREFIX+'村落民居_05_长凳'].location.y+=1.158
+    blue=material('起居榻青灰织物',(.13,.19,.20),.89)
+    linen=material('起居榻温白麻布',(.46,.43,.35),.92)
+    for mat in (blue,linen):
+        ns=mat.node_tree.nodes;ls=mat.node_tree.links;bs=next(n for n in ns if n.type=='BSDF_PRINCIPLED')
+        tc=ns.new('ShaderNodeTexCoord');noise=ns.new('ShaderNodeTexNoise');noise.inputs['Scale'].default_value=145;noise.inputs['Detail'].default_value=2
+        bump=ns.new('ShaderNodeBump');bump.inputs['Strength'].default_value=.055;bump.inputs['Distance'].default_value=.0005
+        ls.new(tc.outputs['Object'],noise.inputs['Vector']);ls.new(noise.outputs['Fac'],bump.inputs['Height']);ls.new(bump.outputs['Normal'],bs.inputs['Normal'])
+    # Bed floor top=.26; legs meet the solid platform underside at .605.
+    repeat('榻足',[(x,y,.4325) for x in (17.20,17.90) for y in (9.22,10.98)],(.10,.10,.345),wood)
+    box('东岸起居户_榻面',(17.55,10.10,.655),(.90,2.10,.10),wood,c)
+    repeat('榻牙板',[(x,10.10,.57) for x in (17.17,17.93)],(.07,1.86,.16),wood)
+    repeat('榻端枨',[(17.55,y,.57) for y in (9.17,11.03)],(.76,.07,.16),wood)
+    repeat('围栏立柱',[(17.97,y,.89) for y in (9.08,10.10,11.12)]+[(17.13,y,.89) for y in (9.08,11.12)],(.055,.055,.37),wood)
+    box('东岸起居户_后围上枋',(17.97,10.10,1.075),(.065,2.12,.055),wood,c)
+    box('东岸起居户_后围下枋',(17.97,10.10,.84),(.045,2.08,.045),wood,c)
+    repeat('端围上枋',[(17.55,y,1.075) for y in (9.08,11.12)],(.90,.065,.055),wood)
+    repeat('端围下枋',[(17.55,y,.84) for y in (9.08,11.12)],(.84,.045,.045),wood)
+    box('东岸起居户_薄垫',(17.55,10.10,.715),(.79,1.93,.020),blue,c)
+    box('东岸起居户_叠毯',(17.55,9.57,.7425),(.75,.67,.035),linen,c)
+    # A closed bevel-like octagonal cushion, 16 vertices; no subdivision.
+    outline=[(-.26,-.13),(.26,-.13),(.31,-.08),(.31,.08),(.26,.13),(-.26,.13),(-.31,.08),(-.31,-.08)]
+    verts=[(17.55+x*s,10.78+y*s,z) for s,z in ((1,.725),(.90,.805)) for x,y in outline]
+    faces=[tuple(reversed(range(8))),tuple(range(8,16))]+[(i,(i+1)%8,(i+1)%8+8,i+8) for i in range(8)]
+    mesh('东岸起居户_麻布靠枕',verts,faces,linen,c)
+    # A framed paper table lamp is the explicit source of the warm light.
+    box('东岸起居户_案灯底座',(15.30,9.15,.8525),(.18,.18,.025),wood,c)
+    repeat('案灯框柱',[(15.30+dx,9.15+dy,1.03) for dx in (-.07,.07) for dy in (-.07,.07)],(.018,.018,.33),wood)
+    box('东岸起居户_案灯纸罩',(15.30,9.15,1.03),(.13,.13,.28),M['paper'],c)
+    box('东岸起居户_案灯顶盖',(15.30,9.15,1.2075),(.20,.20,.025),wood,c)
+    light('东岸起居户_案灯光',(15.30,9.15,1.03),(1,.62,.32),45,.12,kind='POINT')
+    S['JN_house05_rest']='ming_daybed_cushion_linen_table_lamp_v1'
+    S['JN_house05_new_image_bytes']=0
+
 def batch_static_objects(name,objects,mat,col,bev=0):
     """Combine already-built static meshes after art generation so optimization cannot perturb procedural build order."""
     objects=[o for o in objects if o and o.type=='MESH']
@@ -2896,6 +2939,7 @@ def viewport():
 def build(stage=None):
     start();courtyard();village_phase1_skeleton();town_phase2_market();town_phase3_east_wharf();town_phase4_east_residence();town_phase5_cloth_finish_yard();town_phase6_west_wine_court();town_phase7_north_granary();town_phase8_north_grain_wharf();town_phase9_north_silk_bend();town_phase10_silk_trade_finish();town_phase11_west_oar_workshop();town_phase12_north_umbrella_lane();town_phase13_north_paper_yard();town_phase14_east_bindery_shop();town_phase15_east_dyed_paper_court();town_phase16_west_dye_receiving_court();town_phase17_north_public_turning_quay();town_phase18_quay_boat_gear();town_phase19_quay_tea_porter()
     refine_village_house03_study()
+    refine_village_house05_rest()
     level=P['stage'] if stage is None else stage
     if level>=2:vegetation()
     if level>=3:weather()
