@@ -1,0 +1,18 @@
+{
+  "asset_id": "east-house05-rest",
+  "generator": "jiangnan.py::refine_village_house05_rest",
+  "source_baseline": "67274e439051e24531d6fd917667978c48974b91",
+  "units": "metre",
+  "existing_house": 5,
+  "purpose": "Domestic resting destination, distinct from house03 study",
+  "dimensions": {"daybed_m": [0.90,2.10,0.8425], "floor_top_m": 0.26, "platform_top_m": 0.705, "interior_route_width_m": 1.0},
+  "geometry": {"grounded_bed_feet": 4, "shared_repeat_families": 7, "thin_mat": 1, "folded_blanket": 1, "closed_16_vertex_pillow": 1, "framed_paper_table_lamp": 1},
+  "materials": ["existing wood", "existing paper", "起居榻青灰织物", "起居榻温白麻布"],
+  "textures": [],
+  "new_bitmap_bytes": 0,
+  "mapping": "Object coordinates in metres; fiber Noise Scale145, Bump Distance0.0005m, no baked directional lighting",
+  "normals": "Closed boxes and closed 16-vertex pillow, no subdivision",
+  "lod": "Low-poly diagnostic source; production LOD and export audit pending",
+  "license": "Project-generated procedural geometry and shaders; no external paid generation",
+  "human_gates": {"function": "pending", "form": "pending", "runtime": "pending"}
+}
