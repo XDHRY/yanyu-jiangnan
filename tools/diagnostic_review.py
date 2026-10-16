@@ -138,6 +138,8 @@ for name,loc,target,lens,ortho,question in VIEWS:
     manifest['views'].append({
         'file':name+'.png','camera':list(cam.location),'target':list(target),'requested_target':list(target),
         'fitted_target':list(Vector(target)+(cam.location-Vector(loc))),'lens':cam.data.lens,'requested_lens':lens,
+        'rotation_quaternion':list(cam.rotation_euler.to_quaternion()),'camera_type':cam.data.type,
+        'sensor_width':cam.data.sensor_width,'clip_start':cam.data.clip_start,'clip_end':cam.data.clip_end,
         'ortho_scale':cam.data.ortho_scale if ortho else None,'framing_evidence':framing,'question':question,'seconds':round(time.time()-start,2),
         'diagnostic_exclusions':[o.name for o,_ in excluded],
     })

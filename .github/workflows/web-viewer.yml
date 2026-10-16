@@ -9,6 +9,10 @@ on:
       - 'tools/export_web.py'
       - 'tools/build_standalone_viewer.py'
       - 'tools/diagnostic_review.py'
+      - 'tools/camera_contract.py'
+      - 'tools/verify_web_cameras.py'
+      - 'tools/capture_viewer_audit.cjs'
+      - 'tests/**'
       - 'web/viewer/**'
       - '.github/workflows/web-viewer.yml'
   workflow_dispatch:
@@ -31,7 +35,7 @@ jobs:
       - name: Install packaging tools
         run: |
           python -m pip install Pillow --quiet --disable-pip-version-check
-          npm install --no-save three@0.180.0 esbuild@0.25.9
+          npm install --no-save three@0.180.0 esbuild@0.25.9 playwright@1.62.1
       - name: Install headless graphics runtime
         run: |
           set -euxo pipefail
@@ -91,6 +95,7 @@ jobs:
           cp "${JN_WEB_OUT}/viewer_manifest.json" "${RUNNER_TEMP}/package/"
           cp "${JN_OUT}/diagnostics/"*.png "${RUNNER_TEMP}/package/diagnostics/"
           cp "${JN_OUT}/diagnostics/manifest.json" "${RUNNER_TEMP}/package/diagnostics/"
+          python tools/verify_web_cameras.py "${RUNNER_TEMP}/package"
           ./node_modules/.bin/esbuild web/viewer/app.js --bundle --format=iife --platform=browser --minify --outfile="${RUNNER_TEMP}/package/app.bundle.js"
           python tools/build_standalone_viewer.py "${RUNNER_TEMP}/package"
           python - <<'PY'
@@ -102,6 +107,10 @@ jobs:
                   if p.is_file() and p.name!='jiangnan-town-standalone.html': z.write(p,p.relative_to(root))
           print(json.dumps({p.name:p.stat().st_size for p in root.iterdir() if p.is_file()},indent=2))
           PY
+      - name: Audit loaded desktop and mobile cameras
+        run: |
+          npx playwright install --with-deps chromium
+          node tools/capture_viewer_audit.cjs "${RUNNER_TEMP}/package" "${RUNNER_TEMP}/runtime-audit"
       - name: Publish viewer artifact
         uses: actions/upload-artifact@v4
         with:
@@ -110,6 +119,8 @@ jobs:
             ${{ runner.temp }}/package/jiangnan-town-standalone.html
             ${{ runner.temp }}/jiangnan-town-web-viewer.zip
             ${{ runner.temp }}/package/viewer_manifest.json
+            ${{ runner.temp }}/package/camera-parity.json
+            ${{ runner.temp }}/runtime-audit/
           if-no-files-found: error
           compression-level: 0
           retention-days: 30
