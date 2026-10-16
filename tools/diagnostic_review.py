@@ -29,7 +29,7 @@ VIEWS=[
     ('13_canal_bridge',(13.2,11.2,8.6),(7.3,15.1,.9),46,0,'水巷木桥：高位斜俯视完整检查桥板、栏柱、双岸驳岸、桥头落地与临水民居尺度'),
     ('14_village_waterfront',(7.3,29.0,2.25),(7.3,16.0,1.35),40,0,'临水回望：检查八栋民居沿水巷的聚落节奏、河埠和木桥是否形成江南村落层次'),
     ('15_house06_needlework_front',(11.8,13.9,5.2),(16.2,15.0,2.1),28,17,'东岸针线户：按实际边界完整检查屋面、门窗、台基及沿河入口，不隐藏建筑或植物'),
-    ('16_house06_needlework_door',(14.85,15.1,1.75),(17.2,14.8,1.0),32,0,'门后针线近景：相机越过原开启门扇，绣框、绷布、针脚、线轴、开口针盒与布架可辨，不隐藏门扇或墙体'),
+    ('16_house06_needlework_door',(14.4,15.1,1.8),(17.2,14.8,1.0),30,0,'门后针线近景：按实际边界适配视野，完整检查案几、绣框、线轴、开口针盒、布架及落地足，不隐藏门扇或墙体'),
 ]
 
 for o in list(bpy.data.objects):
@@ -90,13 +90,29 @@ def fit_house06(cam):
         hit=S.ray_cast(dg,origin,direction,distance=(point-origin).length-.03)
         assert not hit[0],('house06 diagnostic door occlusion',hit[4].name if hit[4] else None)
     return {'objects':len(selected),'projected_bounds':bounds,'padding_fraction':.045,'clear_door_rays':3,'orthographic_width_m':cam.data.ortho_scale}
+def fit_needlework(cam):
+    bpy.context.view_layer.update();dg=bpy.context.evaluated_depsgraph_get()
+    selected=[o for o in S.objects if (o.name.startswith('JN_东岸绣户_') or o.name in ('JN_村落民居_06_案几','JN_村落民居_06_长凳')) and o.type in ('MESH','CURVE') and not o.hide_render]
+    pts=[o.evaluated_get(dg).matrix_world@Vector(c) for o in selected for c in o.evaluated_get(dg).bound_box]
+    for _ in range(4):
+        projected=[world_to_camera_view(S,cam,p) for p in pts]
+        assert min(p.z for p in projected)>cam.data.clip_start
+        bounds=[min(p.x for p in projected),max(p.x for p in projected),min(p.y for p in projected),max(p.y for p in projected)]
+        factor=max(abs(v-.5) for v in bounds)/.445
+        if factor<=1:break
+        cam.data.lens/=factor*1.01;bpy.context.view_layer.update()
+    assert cam.data.lens>=22,('excessively wide needlework view',cam.data.lens)
+    assert min(bounds[0],bounds[2])>.045 and max(bounds[1],bounds[3])<.955,bounds
+    return {'objects':len(selected),'projected_bounds':bounds,'padding_fraction':.045,'fitted_lens_mm':cam.data.lens,'full_table_bench_rack_bounds':True}
 # Reject bad framing before spending time on the fourteen fixed render views.
 probe=add_cam(*VIEWS[14][:5]);fit_house06(probe);created.remove(probe)
+probe_data=probe.data;bpy.data.objects.remove(probe,do_unlink=True);bpy.data.cameras.remove(probe_data)
+probe=add_cam(*VIEWS[15][:5]);fit_needlework(probe);created.remove(probe)
 probe_data=probe.data;bpy.data.objects.remove(probe,do_unlink=True);bpy.data.cameras.remove(probe_data)
 for name,loc,target,lens,ortho,question in VIEWS:
     cam=add_cam(name,loc,target,lens,ortho)
     S.camera=cam
-    framing=fit_house06(cam) if name=='15_house06_needlework_front' else None
+    framing=fit_house06(cam) if name=='15_house06_needlework_front' else fit_needlework(cam) if name=='16_house06_needlework_door' else None
     S.render.filepath=os.path.join(DIAG,name+'.png')
     excluded=[]
     if name=='11_village_plan':
@@ -110,7 +126,7 @@ for name,loc,target,lens,ortho,question in VIEWS:
         for o,state in excluded:o.hide_render=state
     manifest['views'].append({
         'file':name+'.png','camera':list(cam.location),'target':list(target),'requested_target':list(target),
-        'fitted_target':list(Vector(target)+(cam.location-Vector(loc))),'lens':lens,
+        'fitted_target':list(Vector(target)+(cam.location-Vector(loc))),'lens':cam.data.lens,'requested_lens':lens,
         'ortho_scale':cam.data.ortho_scale if ortho else None,'framing_evidence':framing,'question':question,'seconds':round(time.time()-start,2),
         'diagnostic_exclusions':[o.name for o,_ in excluded],
     })
