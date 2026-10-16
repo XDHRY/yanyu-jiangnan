@@ -41,9 +41,11 @@ def prepare_web_materials(objects):
         rows.append({'source_material':original.name,'export_material':mat.name,
                      'source_images':sorted(set(images)),'object_coordinate_scale':scale,
                      'removed_bump_nodes':removed,'normal_policy':'geometric normals; true tangent bake pending'})
-    meshes={};converted=0;uv_faces=0;fallback_faces=0
+    meshes={};converted=0;uv_faces=0;fallback_faces=0;hidden=[]
     deps=bpy.context.evaluated_depsgraph_get()
     for obj in objects:
+        if obj.hide_render:
+            hidden.append(obj.name);continue
         if obj.type not in {'MESH','CURVE','SURFACE','FONT'}:continue
         source=obj.data
         if not any(m in adapted for m in source.materials):continue
@@ -78,6 +80,6 @@ def prepare_web_materials(objects):
             converted+=1
         else:obj.data=meshes[key]
     return {'materials':rows,'unique_export_meshes':len(meshes),'converted_curve_objects':converted,
-            'projected_faces':uv_faces,'normalized_fallback_faces':fallback_faces,'uv_name':UV_NAME,'source_scene_saved':False,
+            'projected_faces':uv_faces,'normalized_fallback_faces':fallback_faces,'hidden_render_objects_skipped':hidden,'uv_name':UV_NAME,'source_scene_saved':False,
             'mapping':'local Object scale preserved, dominant-face BOX approximation; blend seams pending',
             'new_images':0,'new_geometry_authored':0,'human_form_runtime_approval':'pending'}

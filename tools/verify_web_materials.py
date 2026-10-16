@@ -5,6 +5,8 @@ root=Path(sys.argv[1]);data=(root/'jiangnan-town.glb').read_bytes()
 n,kind=struct.unpack_from('<II',data,12);assert kind==0x4e4f534a
 g=json.loads(data[20:20+n]);report=json.loads((root/'material-audit.json').read_text())
 assert report['source_commit']==json.loads((root/'viewer_manifest.json').read_text())['source_commit']
+hidden=set(report.get('hidden_render_objects_skipped',[]))
+assert all(node.get('name','').removesuffix('__WEB_MESH') not in hidden for node in g.get('nodes',[])),'hidden source prototype exported'
 checked=0;normals=0
 for mesh in g['meshes']:
     for prim in mesh['primitives']:
