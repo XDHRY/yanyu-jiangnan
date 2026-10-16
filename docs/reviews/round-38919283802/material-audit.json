@@ -1,0 +1,503 @@
+{
+  "source_commit": "c3554cbdbc85a73b7af8cb9d1f173f0df3604763",
+  "materials": [
+    {
+      "source_material": "JN_bark",
+      "export_material": "JN_bark__WEB",
+      "source_images": [
+        "bark.png"
+      ],
+      "object_coordinate_scale": [
+        1.600000023841858,
+        1.600000023841858,
+        0.44999998807907104
+      ],
+      "removed_bump_nodes": 2,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    },
+    {
+      "source_material": "JN_bronze",
+      "export_material": "JN_bronze__WEB",
+      "source_images": [],
+      "object_coordinate_scale": null,
+      "removed_bump_nodes": 0,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    },
+    {
+      "source_material": "JN_darkstone",
+      "export_material": "JN_darkstone__WEB",
+      "source_images": [],
+      "object_coordinate_scale": null,
+      "removed_bump_nodes": 1,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    },
+    {
+      "source_material": "JN_dew",
+      "export_material": "JN_dew__WEB",
+      "source_images": [],
+      "object_coordinate_scale": null,
+      "removed_bump_nodes": 0,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    },
+    {
+      "source_material": "JN_edge",
+      "export_material": "JN_edge__WEB",
+      "source_images": [
+        "stone.png"
+      ],
+      "object_coordinate_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "removed_bump_nodes": 2,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    },
+    {
+      "source_material": "JN_gold",
+      "export_material": "JN_gold__WEB",
+      "source_images": [],
+      "object_coordinate_scale": null,
+      "removed_bump_nodes": 0,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    },
+    {
+      "source_material": "JN_ivory",
+      "export_material": "JN_ivory__WEB",
+      "source_images": [
+        "petal.png"
+      ],
+      "object_coordinate_scale": null,
+      "removed_bump_nodes": 1,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    },
+    {
+      "source_material": "JN_moss",
+      "export_material": "JN_moss__WEB",
+      "source_images": [],
+      "object_coordinate_scale": null,
+      "removed_bump_nodes": 1,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    },
+    {
+      "source_material": "JN_paper",
+      "export_material": "JN_paper__WEB",
+      "source_images": [],
+      "object_coordinate_scale": null,
+      "removed_bump_nodes": 0,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    },
+    {
+      "source_material": "JN_pink",
+      "export_material": "JN_pink__WEB",
+      "source_images": [
+        "petal.png"
+      ],
+      "object_coordinate_scale": null,
+      "removed_bump_nodes": 1,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    },
+    {
+      "source_material": "JN_plaster",
+      "export_material": "JN_plaster__WEB",
+      "source_images": [
+        "plaster.png"
+      ],
+      "object_coordinate_scale": [
+        0.3199999928474426,
+        0.3199999928474426,
+        0.3199999928474426
+      ],
+      "removed_bump_nodes": 2,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    },
+    {
+      "source_material": "JN_snow",
+      "export_material": "JN_snow__WEB",
+      "source_images": [],
+      "object_coordinate_scale": null,
+      "removed_bump_nodes": 1,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    },
+    {
+      "source_material": "JN_stone",
+      "export_material": "JN_stone__WEB",
+      "source_images": [
+        "stone.png"
+      ],
+      "object_coordinate_scale": [
+        0.699999988079071,
+        0.699999988079071,
+        0.699999988079071
+      ],
+      "removed_bump_nodes": 2,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    },
+    {
+      "source_material": "JN_tile",
+      "export_material": "JN_tile__WEB",
+      "source_images": [
+        "clay.png"
+      ],
+      "object_coordinate_scale": [
+        0.8500000238418579,
+        0.8500000238418579,
+        0.8500000238418579
+      ],
+      "removed_bump_nodes": 2,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    },
+    {
+      "source_material": "JN_water",
+      "export_material": "JN_water__WEB",
+      "source_images": [],
+      "object_coordinate_scale": null,
+      "removed_bump_nodes": 1,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    },
+    {
+      "source_material": "JN_wood",
+      "export_material": "JN_wood__WEB",
+      "source_images": [
+        "wood.png"
+      ],
+      "object_coordinate_scale": [
+        1.100000023841858,
+        1.100000023841858,
+        0.30000001192092896
+      ],
+      "removed_bump_nodes": 2,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    },
+    {
+      "source_material": "JN_丝行原麻绢包",
+      "export_material": "JN_丝行原麻绢包__WEB",
+      "source_images": [],
+      "object_coordinate_scale": null,
+      "removed_bump_nodes": 1,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    },
+    {
+      "source_material": "JN_丝行月白绢",
+      "export_material": "JN_丝行月白绢__WEB",
+      "source_images": [],
+      "object_coordinate_scale": null,
+      "removed_bump_nodes": 1,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    },
+    {
+      "source_material": "JN_丝行绛红绢",
+      "export_material": "JN_丝行绛红绢__WEB",
+      "source_images": [],
+      "object_coordinate_scale": null,
+      "removed_bump_nodes": 1,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    },
+    {
+      "source_material": "JN_丝行黛青绢",
+      "export_material": "JN_丝行黛青绢__WEB",
+      "source_images": [],
+      "object_coordinate_scale": null,
+      "removed_bump_nodes": 1,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    },
+    {
+      "source_material": "JN_北街茶集_灰麻布",
+      "export_material": "JN_北街茶集_灰麻布__WEB",
+      "source_images": [],
+      "object_coordinate_scale": null,
+      "removed_bump_nodes": 1,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    },
+    {
+      "source_material": "JN_北街茶集_青灰陶釉",
+      "export_material": "JN_北街茶集_青灰陶釉__WEB",
+      "source_images": [],
+      "object_coordinate_scale": null,
+      "removed_bump_nodes": 0,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    },
+    {
+      "source_material": "JN_庭外湿土",
+      "export_material": "JN_庭外湿土__WEB",
+      "source_images": [],
+      "object_coordinate_scale": null,
+      "removed_bump_nodes": 1,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    },
+    {
+      "source_material": "JN_染坊靛蓝染液",
+      "export_material": "JN_染坊靛蓝染液__WEB",
+      "source_images": [],
+      "object_coordinate_scale": null,
+      "removed_bump_nodes": 0,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    },
+    {
+      "source_material": "JN_染坊靛青布",
+      "export_material": "JN_染坊靛青布__WEB",
+      "source_images": [],
+      "object_coordinate_scale": null,
+      "removed_bump_nodes": 1,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    },
+    {
+      "source_material": "JN_染料赭黄",
+      "export_material": "JN_染料赭黄__WEB",
+      "source_images": [],
+      "object_coordinate_scale": null,
+      "removed_bump_nodes": 1,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    },
+    {
+      "source_material": "JN_染料麻袋",
+      "export_material": "JN_染料麻袋__WEB",
+      "source_images": [],
+      "object_coordinate_scale": null,
+      "removed_bump_nodes": 1,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    },
+    {
+      "source_material": "JN_染纸茜红",
+      "export_material": "JN_染纸茜红__WEB",
+      "source_images": [],
+      "object_coordinate_scale": null,
+      "removed_bump_nodes": 0,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    },
+    {
+      "source_material": "JN_染纸靛青",
+      "export_material": "JN_染纸靛青__WEB",
+      "source_images": [],
+      "object_coordinate_scale": null,
+      "removed_bump_nodes": 0,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    },
+    {
+      "source_material": "JN_湿润青石",
+      "export_material": "JN_湿润青石__WEB",
+      "source_images": [],
+      "object_coordinate_scale": null,
+      "removed_bump_nodes": 0,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    },
+    {
+      "source_material": "JN_生成远山_借景",
+      "export_material": "JN_生成远山_借景__WEB",
+      "source_images": [
+        "landscape.png"
+      ],
+      "object_coordinate_scale": null,
+      "removed_bump_nodes": 0,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    },
+    {
+      "source_material": "JN_米行旧木板",
+      "export_material": "JN_米行旧木板__WEB",
+      "source_images": [],
+      "object_coordinate_scale": null,
+      "removed_bump_nodes": 1,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    },
+    {
+      "source_material": "JN_米行麻布",
+      "export_material": "JN_米行麻布__WEB",
+      "source_images": [],
+      "object_coordinate_scale": null,
+      "removed_bump_nodes": 1,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    },
+    {
+      "source_material": "JN_米行麻绳",
+      "export_material": "JN_米行麻绳__WEB",
+      "source_images": [],
+      "object_coordinate_scale": null,
+      "removed_bump_nodes": 1,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    },
+    {
+      "source_material": "JN_纸坊楮皮宣纸",
+      "export_material": "JN_纸坊楮皮宣纸__WEB",
+      "source_images": [],
+      "object_coordinate_scale": null,
+      "removed_bump_nodes": 1,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    },
+    {
+      "source_material": "JN_起居榻温白麻布",
+      "export_material": "JN_起居榻温白麻布__WEB",
+      "source_images": [],
+      "object_coordinate_scale": null,
+      "removed_bump_nodes": 1,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    },
+    {
+      "source_material": "JN_起居榻青灰织物",
+      "export_material": "JN_起居榻青灰织物__WEB",
+      "source_images": [],
+      "object_coordinate_scale": null,
+      "removed_bump_nodes": 1,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    },
+    {
+      "source_material": "JN_转水埠旧船木",
+      "export_material": "JN_转水埠旧船木__WEB",
+      "source_images": [],
+      "object_coordinate_scale": null,
+      "removed_bump_nodes": 1,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    },
+    {
+      "source_material": "JN_转水埠桥面雨湿",
+      "export_material": "JN_转水埠桥面雨湿__WEB",
+      "source_images": [],
+      "object_coordinate_scale": null,
+      "removed_bump_nodes": 1,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    },
+    {
+      "source_material": "JN_转水埠茶担暖木",
+      "export_material": "JN_转水埠茶担暖木__WEB",
+      "source_images": [],
+      "object_coordinate_scale": null,
+      "removed_bump_nodes": 1,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    },
+    {
+      "source_material": "JN_转水埠茶盏青瓷",
+      "export_material": "JN_转水埠茶盏青瓷__WEB",
+      "source_images": [],
+      "object_coordinate_scale": null,
+      "removed_bump_nodes": 1,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    },
+    {
+      "source_material": "JN_酒坊粗陶",
+      "export_material": "JN_酒坊粗陶__WEB",
+      "source_images": [],
+      "object_coordinate_scale": null,
+      "removed_bump_nodes": 1,
+      "normal_policy": "geometric normals; true tangent bake pending"
+    }
+  ],
+  "unique_export_meshes": 2216,
+  "converted_curve_objects": 642,
+  "projected_faces": 164362,
+  "normalized_fallback_faces": 92,
+  "hidden_render_objects_skipped": [
+    "JN_村落青石巷_原型",
+    "JN_村落驳岸_原型",
+    "JN_村落湿润驳岸_原型",
+    "JN_村落桥板_原型",
+    "JN_村落桥栏柱_原型",
+    "JN_村落桥扶手_原型",
+    "JN_村落桥下横枋_原型",
+    "JN_村落河埠踏步_原型",
+    "JN_村落民居墙体_原型",
+    "JN_村落民居山墙_标准原型",
+    "JN_村落民居山墙_高脊原型",
+    "JN_村落民居台基_原型",
+    "JN_村落民居门框_原型",
+    "JN_村落民居窗框_原型",
+    "JN_村落民居室内地坪_原型",
+    "JN_村落民居开门扇_原型",
+    "JN_村落民居承檩_标准原型",
+    "JN_村落民居承檩_高脊原型",
+    "JN_村落民居案几_原型",
+    "JN_村落民居长凳_原型",
+    "JN_村落民居墙角木柱_原型",
+    "JN_村落民居墙脚木收边_原型",
+    "JN_村落民居檐下额枋_原型",
+    "JN_村落民居青石勒脚_原型",
+    "JN_村落民居格窗棂_原型",
+    "JN_村落民居黛瓦屋面_标准原型",
+    "JN_村落民居黛瓦屋面_高脊原型",
+    "JN_村落民居深檐_原型",
+    "JN_村落民居正脊_原型",
+    "JN_村落民居封火山墙收脊_原型",
+    "JN_村落民居檐椽列_原型",
+    "JN_村落民居瓦当列_原型",
+    "JN_村落民居封火山墙墙身_原型",
+    "JN_村落民居封火山墙压顶_原型",
+    "JN_村落东岸染坊_晾晒靛布_原型",
+    "JN_村落北纸坊_晒纸原型",
+    "JN_小镇石街_原型",
+    "JN_东岸码头仓屋_货箱原型",
+    "JN_东岸码头仓屋_竹筐原型",
+    "JN_东岸织户宅院_织布卷原型",
+    "JN_东岸晒布后园_晾布原型",
+    "JN_西岸酒坊院_发酵酒缸原型",
+    "JN_西岸酒坊院_北桥板原型",
+    "JN_北端米行粮栈_粮袋原型",
+    "JN_北端米行粮栈_粮斗原型",
+    "JN_北河丝行_第四桥板原型",
+    "JN_北河丝行_绢包原型",
+    "JN_北河修桨作坊_桨橹原型",
+    "JN_北河伞巷_第五桥板原型",
+    "JN_北河伞巷_油纸伞伞面原型",
+    "JN_北河纸坊_晒纸架原型",
+    "JN_北河纸坊_湿纸原型",
+    "JN_北河纸铺_纸张原型",
+    "JN_北河纸铺_线装书原型",
+    "JN_北河染纸坊_染缸原型",
+    "JN_北河染纸坊_染液原型",
+    "JN_北河染纸坊_靛纸原型",
+    "JN_北河染料行_纸包原型",
+    "JN_北河染料行_染料袋原型",
+    "JN_北河染料行_颜料罐原型",
+    "JN_北河染料行_手车轮原型",
+    "JN_北河转水埠_青石踏桥原型",
+    "JN_北河转水埠_石凳面原型",
+    "JN_北河转水埠_石凳足原型",
+    "JN_北河转水埠_系舟石原型",
+    "JN_北河转水埠_纸灯罩原型",
+    "JN_北河转水埠_舢板舷条原型",
+    "JN_北河转水埠_舢板坐板原型",
+    "JN_北河转水埠_舢板横肋原型",
+    "JN_北河转水埠_船桨原型",
+    "JN_北河转水埠_桥面湿痕原型",
+    "JN_北河转水埠_茶担提篮原型",
+    "JN_北河转水埠_茶担茶盏原型",
+    "JN_北河转水埠_茶担炭块原型",
+    "JN_西岸书户_案腿横枨原型",
+    "JN_西岸书户_书格足原型",
+    "JN_西岸书户_书格层板原型",
+    "JN_西岸书户_书格边框原型",
+    "JN_西岸书户_书册原型",
+    "JN_西岸书户_书封原型",
+    "JN_西岸书户_门扇边挺原型",
+    "JN_西岸书户_门扇穿带原型",
+    "JN_东岸起居户_榻足原型",
+    "JN_东岸起居户_榻牙板原型",
+    "JN_东岸起居户_榻端枨原型",
+    "JN_东岸起居户_围栏立柱原型",
+    "JN_东岸起居户_端围上枋原型",
+    "JN_东岸起居户_端围下枋原型",
+    "JN_东岸起居户_案灯框柱原型",
+    "JN_东岸绣户_绣框撑足原型",
+    "JN_东岸绣户_绣框长边原型",
+    "JN_东岸绣户_绣框端边原型",
+    "JN_东岸绣户_线轴原型",
+    "JN_东岸绣户_绕线原型",
+    "JN_东岸绣户_针盒长壁原型",
+    "JN_东岸绣户_针盒端壁原型",
+    "JN_东岸绣户_布架横足原型",
+    "JN_东岸绣户_布架立柱原型",
+    "JN_东岸绣户_案灯框柱原型",
+    "JN_花尖露珠_原型",
+    "JN_湖石残雪",
+    "JN_湖石残雪.001",
+    "JN_湖石残雪.002"
+  ],
+  "uv_name": "JN_WEB_MetreUV",
+  "source_scene_saved": false,
+  "mapping": "local Object scale preserved, dominant-face BOX approximation; blend seams pending",
+  "new_images": 0,
+  "new_geometry_authored": 0,
+  "human_form_runtime_approval": "pending",
+  "textured_primitives_checked": 1518,
+  "normal_primitives_checked": 0,
+  "glb_images": 7,
+  "color_normal_aliases": 0,
+  "missing_uvs": 0
+}

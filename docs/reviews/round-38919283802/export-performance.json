@@ -1,0 +1,27 @@
+{
+  "baseline_round": 29,
+  "baseline": {
+    "glb_bytes": 44489352,
+    "instance_triangles_evaluated": 626279,
+    "unique_position_accessor_vertices": 748060,
+    "attribute_index_bytes_estimate": 21649614,
+    "images": 7,
+    "rgba8_bytes": 44030496,
+    "material_count": 41
+  },
+  "current": {
+    "glb_bytes": 52897192,
+    "instance_triangles_evaluated": 626279,
+    "unique_position_accessor_vertices": 818438,
+    "attribute_index_bytes_estimate": 29777038,
+    "images": 7,
+    "rgba8_bytes": 44030496,
+    "material_count": 45
+  },
+  "triangle_budget_change": 0,
+  "texture_memory_change": 0,
+  "triangle_and_texture_parity": true,
+  "glb_bytes_change": 8407840,
+  "attribute_index_bytes_change": 8127424,
+  "note": "UV seam vertex splits and UV attributes add buffer cost; not zero total memory overhead or measured GPU residency."
+}
