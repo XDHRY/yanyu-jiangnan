@@ -2915,7 +2915,7 @@ def refine_village_house06_needlework():
     # Two broad cloth faces meet over the rail; thin solid low-poly drape.
     vv=[]
     for y,front_z,back_z,fold in ((15.76,1.04,1.18,0),(16.02,1.02,1.14,.018),(16.28,1.06,1.17,0)):
-        vv.extend([(18.02+fold,y,front_z),(18.12,y,1.615),(18.20,y,1.615),(18.29+fold,y,back_z)])
+        vv.extend([(18.02+fold,y,front_z),(18.12,y,1.610),(18.20,y,1.610),(18.29+fold,y,back_z)])
     cloth=mesh('东岸绣户_搭布',vv,[(j*4+k,j*4+k+1,(j+1)*4+k+1,(j+1)*4+k) for j in range(2) for k in range(3)],linen,c)
     mod=cloth.modifiers.new('薄布真实厚度','SOLIDIFY');mod.thickness=.003
     box('东岸绣户_案灯底座',(tx,ty-.28,.8525),(.14,.12,.025),wood,c)
