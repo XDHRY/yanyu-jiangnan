@@ -73,6 +73,18 @@ assert abs(floor_bsdf.inputs['Roughness'].default_value-.82)<1e-5
 floor_bump=next(n for n in floor_material.node_tree.nodes if n.type=='BUMP')
 assert abs(floor_bump.inputs['Distance'].default_value-.004)<1e-6
 report['residential_floor_material']={'users':8,'shared_meshes':1,'roughness':.82,'repeat_per_local_m':1.8,'bump_distance_m':.004,'new_images':0,'tangent_normal_bake':False}
+roof_pbr=bpy.data.materials['JN_绣户黛瓦PBR']
+roof_users=[o for o in S.objects if o.type=='MESH' and roof_pbr in list(o.data.materials) and not o.hide_render]
+assert [o.name for o in roof_users]==['JN_村落民居_06_屋面']
+assert len(roof_users[0].data.vertices)==15 and len(roof_users[0].data.polygons)==8
+assert roof_users[0].data.uv_layers.get('JN_ROOF_MetreUV')
+for name in ('roof06_normal','roof06_orm'):
+    image=bpy.data.images[name];assert tuple(image.size)==(256,256) and image.packed_file
+    assert image.colorspace_settings.name=='Non-Color'
+normal_image=bpy.data.images['roof06_normal'];rough_image=bpy.data.images['roof06_orm']
+assert normal_image!=rough_image
+assert normal_image.pixels[2]>.95 and .5<rough_image.pixels[1]<.85
+report['house06_roof_pbr']={'users':1,'source_vertices':15,'source_quads':8,'new_images':2,'map_size':[256,256],'added_rgba8_bytes':524288,'normal_source':'analytic derivative of periodic height field; not albedo or high-low mesh bake','uv_period_m':.6,'geometry_added':0}
 report['pierced_scholar_stones']=sum(o.name.startswith('JN_太湖石_瘦透漏皱') for o in S.objects)
 assert report['pierced_scholar_stones']==3
 report['spatial_connectors']={

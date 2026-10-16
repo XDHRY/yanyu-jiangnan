@@ -1,9 +1,9 @@
 {
   "schema":"jiangnan-web-budget-v1",
-  "baseline_round":31,
-  "baseline_source":"43fb8d9a659f93c40fa548201b794585c52613e4",
-  "baseline_run":38941563982,
-  "baseline":{"instance_triangles":627155,"glb_bytes":52911584,"attribute_index_bytes":29791366,"images":7,"rgba8_bytes":44030496},
-  "limits":{"exact_instance_triangles":627155,"glb_bytes":54000000,"attribute_index_bytes":30000000,"images":7,"rgba8_bytes":44030496},
-  "scope":"Round32 material-only: evaluated geometry must remain identical; geometry changes require a deliberate reviewed contract update. Bytes are estimates, not GPU residency."
+  "baseline_round":32,
+  "baseline_source":"c22b6db66afad6d88e02606d8639fc1c757dabdf",
+  "baseline_run":38965576491,
+  "baseline":{"instance_triangles":627155,"glb_bytes":52799744,"attribute_index_bytes":29792134,"images":7,"rgba8_bytes":44030496},
+  "limits":{"exact_instance_triangles":627155,"glb_bytes":54000000,"attribute_index_bytes":30000000,"images":9,"rgba8_bytes":44554784},
+  "scope":"Round33 one roof material: geometry unchanged; explicitly add two 256x256 packed Normal/ORM maps, 524288 RGBA8 bytes. Other budgets unchanged; estimates not GPU residency."
 }

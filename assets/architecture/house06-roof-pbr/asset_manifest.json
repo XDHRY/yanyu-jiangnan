@@ -1,0 +1,18 @@
+{
+  "asset_id":"house06-roof-pbr-sample",
+  "baseline":"0889e5b4c4730b15a1600bcb00d072e77a8fcb9c",
+  "generator":"jiangnan.py::roof_microtexel33 and refine_house06_roof_pbr",
+  "scope":"Only JN_村落民居_06_屋面; isolate one shared roof mesh datablock, all other roofs unchanged",
+  "geometry":{"source_vertices":15,"source_quads":8,"added_instance_triangles":0,"added_mesh_datablocks":1,"thickness_m":0.07},
+  "basecolor":{"source":"textures/clay.png","source_prompts":"textures/generation_prompts.json and docs/art-direction.md","linear_factor":[0.48,0.58,0.68,1],"new_albedo":false},
+  "maps":[
+    {"file":"textures/roof06_normal.png","size":[256,256],"space":"Non-Color, OpenGL tangent normal","source":"analytic derivatives of periodic metric height field, NOT albedo and NOT high-low mesh bake"},
+    {"file":"textures/roof06_orm.png","size":[256,256],"space":"Non-Color","channels":{"R":"neutral 1, no baked AO","G":"roughness 0.54-0.82","B":"metallic 0"},"source":"periodic analytic roughness field"}
+  ],
+  "mapping":"JN_ROOF_MetreUV; 0.6m period, x world scale and signed sloped-roof arc distance; corner lift interpolation approximate",
+  "license":"Project-authored mathematical maps; existing project-generated clay albedo, no external/paid assets",
+  "source_height_m":"0.00010*sin(2pi*13u)*sin(2pi*17v)+0.000035*sin(2pi*(39u+29v))+0.00002*cos(2pi*(61u-47v))",
+  "added_rgba8_bytes":524288,"source_materials_added":1,
+  "lod":"No subdivision or new geometry; formal runtime LOD pending",
+  "human_gates":{"function":"pending","form":"pending","runtime":"pending"}
+}

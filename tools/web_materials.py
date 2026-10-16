@@ -41,7 +41,7 @@ def prepare_web_materials(objects):
         rows.append({'source_material':original.name,'export_material':mat.name,
                      'base_color_factor':list(original['JN_web_base_color_factor']) if 'JN_web_base_color_factor' in original else None,
                      'source_images':sorted(set(images)),'object_coordinate_scale':scale,
-                     'removed_bump_nodes':removed,'normal_policy':'geometric normals; true tangent bake pending'})
+                     'removed_bump_nodes':removed,'normal_policy':'source tangent normal map preserved' if any(n.type=='NORMAL_MAP' for n in nodes) else 'geometric normals; true tangent bake pending'})
     meshes={};converted=0;uv_faces=0;fallback_faces=0;hidden=[]
     deps=bpy.context.evaluated_depsgraph_get()
     for obj in objects:
