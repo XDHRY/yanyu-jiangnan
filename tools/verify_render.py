@@ -1149,13 +1149,27 @@ for label in ('针盒底','针盒盖','案灯底座'):
     assert abs(world_bounds(bpy.data.objects['JN_东岸绣户_'+label])[0][2]-table06[1][2])<.0001
 for o in objs('JN_东岸绣户_布架横足_'):
     if not o.hide_render:assert abs(world_bounds(o)[0][2]-floor06[1][2])<.0001
+for o in objs('JN_东岸绣户_绣框撑足_'):
+    if not o.hide_render:assert abs(world_bounds(o)[1][2]-.91)<.0001
+for o in objs('JN_东岸绣户_布架立柱_'):
+    if not o.hide_render:assert abs(world_bounds(o)[0][2]-.32)<.0001
+rail06=world_bounds(bpy.data.objects['JN_东岸绣户_布架顶枋'])
+drape06=world_bounds(bpy.data.objects['JN_东岸绣户_搭布'])
+assert abs(drape06[1][2]-rail06[1][2])<.0001
+for label in ('线轴','绕线'):
+    for o in objs('JN_东岸绣户_'+label+'_'):
+        if o.hide_render:continue
+        edges={}
+        for poly in o.data.polygons:
+            for edge in poly.edge_keys:edges[edge]=edges.get(edge,0)+1
+        assert set(edges.values())=={2},('open spool',o.name)
 route06=((13.80,14.50),(16.00,15.50))
 for o in [o for o in objs('JN_东岸绣户_') if not o.hide_render and o.type in ('MESH','CURVE')]+[bpy.data.objects['JN_村落民居_06_案几'],bpy.data.objects['JN_村落民居_06_长凳']]:
     lo,hi=world_bounds(o)
     assert min(hi[0],route06[1][0])<=max(lo[0],route06[0][0]) or min(hi[1],route06[1][1])<=max(lo[1],route06[0][1]),('needlework route obstruction',o.name)
 assert S['JN_house06_new_image_bytes']==0
 assert expanded_tris-163834<=1600,('Round28 triangle increment',expanded_tris-163834)
-report['house06_needlework']={'shared_repeat_families':10,'spools':3,'open_needlebox':True,'tabletop_contact_passed':True,'rack_floor_contact_passed':True,'clear_interior_strip_m':[2.2,1.0],'new_bitmap_bytes':0,'triangle_delta_vs_round27':expanded_tris-163834,'delta_limit':1600}
+report['house06_needlework']={'shared_repeat_families':10,'spools':3,'closed_spool_profiles':True,'open_needlebox':True,'tabletop_contact_passed':True,'rack_floor_and_rail_contact_passed':True,'drape_fold_vertices':12,'clear_interior_strip_m':[2.2,1.0],'new_bitmap_bytes':0,'triangle_delta_vs_round27':expanded_tris-163834,'delta_limit':1600}
 
 report['inhabited_houses']={'mesh_triangles_with_instances':house_tris,'triangle_budget':18000,'shells':8,'true_door_openings':8,'true_window_openings':16,'shared_wall_meshes':1,'door_clear_width_min':min(o['JN_door_clear_width'] for o in shells),'interior_depth_min':min(o['JN_interior_depth'] for o in shells),'ray_tests_passed':40,'floor_support_passed':8,'tea_east_risers_m':[.10,.10],'new_image_texture_bytes':0}
 print('INHABITED_HOUSES',json.dumps(report['inhabited_houses'],ensure_ascii=False))

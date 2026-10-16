@@ -3,7 +3,7 @@
   "source_baseline":"1f8ebb9e0ce88a0052a696d4b4f000da81fdbd4b", "units":"metre", "existing_house":6,
   "purpose":"Domestic mending/needlework station, distinct from study and sleeping room",
   "dimensions":{"embroidery_frame_m":[0.68,0.415,0.10],"floor_top_m":0.26,"table_top_m":0.84,"interior_clear_strip_m":[2.2,1.0]},
-  "geometry":{"spools":3,"linked_repeat_families":10,"open_needlebox":true,"cloth_rack":1,"new_shells":0},
+  "geometry":{"spools":3,"linked_repeat_families":10,"open_needlebox":true,"cloth_rack":1,"drape_fold_vertices":12,"new_shells":0},
   "materials":["existing wood","existing bronze","existing paper","JN_起居榻温白麻布","JN_起居榻青灰织物"],
   "textures":[],"new_bitmap_bytes":0,
   "mapping":"Reuse existing metre-scale Object-space wood and fiber shaders; no directional light in basecolor",
