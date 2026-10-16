@@ -93,11 +93,22 @@ def fit_house06(cam):
 def fit_needlework(cam):
     bpy.context.view_layer.update();dg=bpy.context.evaluated_depsgraph_get()
     selected=[o for o in S.objects if (o.name.startswith('JN_东岸绣户_') or o.name in ('JN_村落民居_06_案几','JN_村落民居_06_长凳')) and o.type in ('MESH','CURVE') and not o.hide_render]
-    pts=[o.evaluated_get(dg).matrix_world@Vector(c) for o in selected for c in o.evaluated_get(dg).bound_box]
+    # Evaluate actual vertices, including curve bevel and cloth Solidify. A
+    # transformed enclosing box can overestimate this close perspective view.
+    pts=[];object_bounds=[]
+    for o in selected:
+        ev=o.evaluated_get(dg);data=ev.to_mesh()
+        try:world=[ev.matrix_world@v.co for v in data.vertices]
+        finally:ev.to_mesh_clear()
+        assert world,('empty needlework geometry',o.name)
+        lo=[min(p[i] for p in world) for i in range(3)];hi=[max(p[i] for p in world) for i in range(3)]
+        object_bounds.append({'name':o.name,'lo':lo,'hi':hi});pts.extend(world)
+    print('NEEDLEWORK_FRAME_GEOMETRY',json.dumps(object_bounds,ensure_ascii=False))
     for _ in range(4):
         projected=[world_to_camera_view(S,cam,p) for p in pts]
         assert min(p.z for p in projected)>cam.data.clip_start
         bounds=[min(p.x for p in projected),max(p.x for p in projected),min(p.y for p in projected),max(p.y for p in projected)]
+        print('NEEDLEWORK_FRAME_FIT',cam.data.lens,bounds)
         factor=max(abs(v-.5) for v in bounds)/.445
         if factor<=1:break
         cam.data.lens/=factor*1.01;bpy.context.view_layer.update()
