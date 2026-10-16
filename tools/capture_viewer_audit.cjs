@@ -14,7 +14,7 @@ async function main(){
   const rows=[];
   for(const [label,width,height,index] of [['desktop15',1024,640,14],['desktop16',1024,640,15],['mobile15',390,844,14],['mobile16',390,844,15]]){
    await page.setViewportSize({width,height});const before=await page.evaluate(i=>{const r=window.JIANGNAN_REVIEW;const f=r.snapshot().frame;r.goPreset(i);return f;},index);
-   await page.waitForFunction(({index,before})=>{const s=window.JIANGNAN_REVIEW.snapshot();return s.activePreset===s.presets[index].name&&s.frame>before+3&&s.poseError<1e-5&&s.rotationError<1e-5;},{index,before},{timeout:60000});
+   try{await page.waitForFunction(({index,before})=>{const s=window.JIANGNAN_REVIEW.snapshot();return s.activePreset===s.presets[index].name&&s.frame>before+3&&s.poseError<1e-5&&s.rotationError<1e-5;},{index,before},{timeout:60000});}catch(e){const failed=await page.evaluate(()=>window.JIANGNAN_REVIEW.snapshot());console.error('CAMERA_AUDIT_FAILED',label,JSON.stringify(failed));fs.writeFileSync(path.join(out,'failed-camera.json'),JSON.stringify({label,...failed},null,2));await page.screenshot({path:path.join(out,'failed-camera.png')});throw e;}
    const snapshot=await page.evaluate(()=>window.JIANGNAN_REVIEW.snapshot());
    if(snapshot.cameraType!==(index===14?'OrthographicCamera':'PerspectiveCamera'))throw Error('wrong projection type');
    await page.screenshot({path:path.join(out,label+'.png')});rows.push({label,viewport:[width,height],...snapshot});

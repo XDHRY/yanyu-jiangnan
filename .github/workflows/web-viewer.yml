@@ -112,6 +112,7 @@ jobs:
           npx playwright install --with-deps chromium
           node tools/capture_viewer_audit.cjs "${RUNNER_TEMP}/package" "${RUNNER_TEMP}/runtime-audit"
       - name: Publish viewer artifact
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: Jiangnan-Web-Viewer-${{ github.sha }}
