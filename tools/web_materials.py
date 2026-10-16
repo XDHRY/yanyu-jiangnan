@@ -10,7 +10,7 @@ UV_NAME='JN_WEB_MetreUV'
 
 def prepare_web_materials(objects):
     originals={m for o in objects for m in getattr(o.data,'materials',[]) if m}
-    adapted={};scales={};rows=[]
+    adapted={};scales={};textured=set();rows=[]
     for original in sorted(originals,key=lambda m:m.name):
         if not original.use_nodes:continue
         mat=original.copy();mat.name=original.name+'__WEB'
@@ -36,11 +36,12 @@ def prepare_web_materials(objects):
                     uv=nodes.new('ShaderNodeUVMap');uv.uv_map=UV_NAME
                     links.new(uv.outputs['UV'],node.inputs['Vector']);node.projection='FLAT'
         adapted[original]=mat
+        if images:textured.add(mat.name)
         if scale:scales[mat.name]=scale
         rows.append({'source_material':original.name,'export_material':mat.name,
                      'source_images':sorted(set(images)),'object_coordinate_scale':scale,
                      'removed_bump_nodes':removed,'normal_policy':'geometric normals; true tangent bake pending'})
-    meshes={};converted=0;uv_faces=0
+    meshes={};converted=0;uv_faces=0;fallback_faces=0
     deps=bpy.context.evaluated_depsgraph_get()
     for obj in objects:
         if obj.type not in {'MESH','CURVE','SURFACE','FONT'}:continue
@@ -52,17 +53,22 @@ def prepare_web_materials(objects):
             data=source.copy() if obj.type=='MESH' else bpy.data.meshes.new_from_object(obj.evaluated_get(deps),preserve_all_data_layers=True,depsgraph=deps)
             for i,m in enumerate(data.materials):
                 if m in adapted:data.materials[i]=adapted[m]
-            if any(m and m.name in scales for m in data.materials):
+            had_uv=bool(data.uv_layers)
+            if any(m and (m.name in scales or (m.name in textured and not had_uv)) for m in data.materials):
                 layer=data.uv_layers.get(UV_NAME) or data.uv_layers.new(name=UV_NAME)
+                lo=[min(v.co[i] for v in data.vertices) for i in range(3)]
+                span=[max(v.co[i] for v in data.vertices)-lo[i] for i in range(3)]
                 for poly in data.polygons:
                     mat=data.materials[poly.material_index] if poly.material_index<len(data.materials) else None
                     scale=scales.get(mat.name) if mat else None
-                    if not scale:continue
+                    fallback=not scale and not had_uv and mat and mat.name in textured
+                    if not scale and not fallback:continue
                     axis=max(range(3),key=lambda i:abs(poly.normal[i]));a,b=[i for i in range(3) if i!=axis]
                     for loop in poly.loop_indices:
                         co=data.vertices[data.loops[loop].vertex_index].co
-                        layer.data[loop].uv=(co[a]*scale[a],co[b]*scale[b])
+                        layer.data[loop].uv=(((co[a]-lo[a])/max(span[a],1e-8),(co[b]-lo[b])/max(span[b],1e-8)) if fallback else (co[a]*scale[a],co[b]*scale[b]))
                     uv_faces+=1
+                    if fallback:fallback_faces+=1
             meshes[key]=data
         if obj.type!='MESH':
             # Keep object transform/name/collection, replace its evaluated geometry only.
@@ -72,6 +78,6 @@ def prepare_web_materials(objects):
             converted+=1
         else:obj.data=meshes[key]
     return {'materials':rows,'unique_export_meshes':len(meshes),'converted_curve_objects':converted,
-            'projected_faces':uv_faces,'uv_name':UV_NAME,'source_scene_saved':False,
+            'projected_faces':uv_faces,'normalized_fallback_faces':fallback_faces,'uv_name':UV_NAME,'source_scene_saved':False,
             'mapping':'local Object scale preserved, dominant-face BOX approximation; blend seams pending',
             'new_images':0,'new_geometry_authored':0,'human_form_runtime_approval':'pending'}

@@ -130,3 +130,14 @@ jobs:
           if-no-files-found: error
           compression-level: 0
           retention-days: 30
+      - name: Preserve failed diagnostic evidence
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Jiangnan-Web-Failed-Evidence-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/jiangnan-web/diagnostics/
+            ${{ runner.temp }}/package/material-audit.json
+            ${{ runner.temp }}/runtime-audit/
+          if-no-files-found: warn
+          retention-days: 14
