@@ -1,0 +1,153 @@
+{
+  "source_commit": "43fb8d9a659f93c40fa548201b794585c52613e4",
+  "tested_merge_commit": "9003ae27879a72069adae518a7b5fc79b4b8a020",
+  "merge_commit": "0d4bc2929430348a792af63c6735851de2c8b7d4",
+  "handoff_commit": "ce6fcae5cb02b49fca2e8bce42ca55598dd476cb",
+  "runs": {
+    "CI": 38941563927,
+    "Smoke": 38941563954,
+    "Spatial": 38941563995,
+    "Web": 38941563982
+  },
+  "old_image_round": 30,
+  "old_image_run": 38919283802,
+  "human_gates": {
+    "Function": "pending",
+    "Form": "pending",
+    "Runtime": "pending"
+  },
+  "files": {
+    "README.md": {
+      "bytes": 3493,
+      "sha256": "5adec52af90cadaff8e62ff391804dc9edb0b7fa73b9ba5c0ba3b0b39b55c92f"
+    },
+    "round31-before-after.jpg": {
+      "bytes": 178975,
+      "sha256": "4a79bbd340f17340543c79a057fc1ba421305bbec4816bb4ad1a34c399304037"
+    },
+    "round31-contactsheet.jpg": {
+      "bytes": 257084,
+      "sha256": "133a555237a9920d9269ca44b88fe519a729a7ef48aea035726446cba0f8a3ae"
+    },
+    "export-performance.json": {
+      "bytes": 946,
+      "sha256": "24333059a70690c2e3f7c942bed5033e9bad79a6be11bb95d16b533decaf89cd"
+    },
+    "Jiangnan.blend": {
+      "bytes": 23366618,
+      "sha256": "20e2f752c0845a87706c33184b8bc32a574770f71600cafa189b10df7ec6a41e"
+    },
+    "scene_statistics.json": {
+      "bytes": 317,
+      "sha256": "b8476026953471c2fe8a69f008f65a3cd6436fa2fd9fad7c67b6c6e6c559e89f"
+    },
+    "baseline-round30/16_house06_needlework_door.png": {
+      "bytes": 1086745,
+      "sha256": "e03aa95f9c583d3580497c43a978e7a52123ab27da71b37b14f7567004aa92df"
+    },
+    "validation/validation.json": {
+      "bytes": 16156,
+      "sha256": "901b21231a2f621efd32dfdada0f1dc10124d55816076dd411320975ddf13b0b"
+    },
+    "validation/asset_budget.json": {
+      "bytes": 9698,
+      "sha256": "ce5a032f77f1b4320636d010d518d79a582239c00832bc1bc1df8e9d513ee6a3"
+    },
+    "validation/material-audit.json": {
+      "bytes": 16977,
+      "sha256": "fce83d6937e4d6ed04e1c2b52bf17aedcc933a5bb706baf52dfc5bae96a279f4"
+    },
+    "validation/camera-parity.json": {
+      "bytes": 3897,
+      "sha256": "08dc18989dd48c96a922211c5db987b8183fd56ba7b1a7a5953b578739ac63c8"
+    },
+    "diagnostics/09_pavilion_side.png": {
+      "bytes": 1129544,
+      "sha256": "d4bb1d08da44103492bb9efa8521c34cf999fbd3389d1f998228323762414be3"
+    },
+    "diagnostics/07_east_return.png": {
+      "bytes": 1119565,
+      "sha256": "2cc66c6c24784874099fa7d2842d2e5335c53449fe0a4ced114b7cbdc66ccb8f"
+    },
+    "diagnostics/02_front_gate.png": {
+      "bytes": 1061004,
+      "sha256": "7ba1ccb033113e2a662a6c2b17822e58dd1becbfb6736af9e6949d7d2473464d"
+    },
+    "diagnostics/03_pavilion_entry.png": {
+      "bytes": 1133471,
+      "sha256": "3626ae9b9deb7ab0962e29a84e04b9d800ba579ad811c4022c2f009055cb0ad9"
+    },
+    "diagnostics/01_plan.png": {
+      "bytes": 1023613,
+      "sha256": "45176b32a5e07de199a4f9b4b87954e763a3b544e1d6f9174e63a63b38fbdaca"
+    },
+    "diagnostics/12_village_lane.png": {
+      "bytes": 951520,
+      "sha256": "e6ae62ec01f8655984d3ac473926be070c366e8044d400da8e2ee60935066186"
+    },
+    "diagnostics/16_house06_needlework_door.png": {
+      "bytes": 1088667,
+      "sha256": "2a1936aa90b1797a2111f8cb6f3dff5962c482f81bd2b30329a4ca2aa3f0f625"
+    },
+    "diagnostics/10_eye_path.png": {
+      "bytes": 1120344,
+      "sha256": "8a45b26ec9b411e015c97a50da5e86ae6daddce6e0e555268441987c5086fbf8"
+    },
+    "diagnostics/05_water_to_pavilion.png": {
+      "bytes": 1076457,
+      "sha256": "d052927987a9ad9efd7a274b457ccb4bc242b75262b45da36c537c2fc8eeb2f2"
+    },
+    "diagnostics/11_village_plan.png": {
+      "bytes": 897874,
+      "sha256": "c9622b23c83b87f06b297be1da611454a21d978bceeaa16d41190a5557bf07d6"
+    },
+    "diagnostics/15_house06_needlework_front.png": {
+      "bytes": 930671,
+      "sha256": "086bdaae591339d558df58532c3e90634c3951d2162d83cd1d666576b0d07d4c"
+    },
+    "diagnostics/08_roofline.png": {
+      "bytes": 1176803,
+      "sha256": "478019e9430767bdc07ae47b84d7204aefd2b11cdb2902d43f3ae510e0ff4963"
+    },
+    "diagnostics/13_canal_bridge.png": {
+      "bytes": 945860,
+      "sha256": "36c2f0f9a019854fab74c9f79d440ebed0caaee02c0f38ee7e2c4b6067ac473b"
+    },
+    "diagnostics/04_pond_axis.png": {
+      "bytes": 1067279,
+      "sha256": "510e26ebc05241438d3f6848a5385b7f6a5446849636cab1676a0b7f4aa4de54"
+    },
+    "diagnostics/14_village_waterfront.png": {
+      "bytes": 968397,
+      "sha256": "3254701a2d294704cac2cdd02a140a99b3f86df9b5b43474f636a319dc9fa193"
+    },
+    "diagnostics/06_gate_reverse.png": {
+      "bytes": 912989,
+      "sha256": "abb6d15e627cf37a484ba2d010c20fdc34ca3d9ce2cb0168876f0d2c7a93e9b7"
+    },
+    "diagnostics/manifest.json": {
+      "bytes": 17996,
+      "sha256": "bbd04cd711e5a315ae2a36f51cea56bbacb5f7f8a7ce4d2c305af0933f79b1cb"
+    },
+    "runtime-audit/desktop15.png": {
+      "bytes": 721007,
+      "sha256": "6ce58d5a1c0fe515dd43690a246e1c9e29a4df33ebbb734f848ad1a56dce262c"
+    },
+    "runtime-audit/mobile15.png": {
+      "bytes": 135604,
+      "sha256": "3c1d39e21dd776b7ac15f4e8bed05d2529a2e37837bddfb7f233bf7707053598"
+    },
+    "runtime-audit/runtime-camera-audit.json": {
+      "bytes": 11425,
+      "sha256": "c22686981a8ace05672c33e4598f1c9b5c385c35a4042c43dbba12efee72addb"
+    },
+    "runtime-audit/mobile16.png": {
+      "bytes": 510729,
+      "sha256": "20802cc5acf743f2a90fc27c829304cd0f63266aec6fa73c082b411d730b88cc"
+    },
+    "runtime-audit/desktop16.png": {
+      "bytes": 1014902,
+      "sha256": "2e83a583c4834c388c71ce873cd18f9ed0c22c11354e3274d28a1e5ee5966de7"
+    }
+  }
+}

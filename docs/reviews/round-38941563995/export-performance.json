@@ -1,0 +1,29 @@
+{
+  "baseline_round": 30,
+  "baseline_run": 38919283802,
+  "current_round": 31,
+  "current_run": 38941563982,
+  "source_commit": "43fb8d9a659f93c40fa548201b794585c52613e4",
+  "baseline": {
+    "glb_bytes": 52897192,
+    "instance_triangles_evaluated": 626279,
+    "position_accessor_vertices": 818438,
+    "attribute_index_bytes_estimate": 29777038,
+    "images": 7,
+    "rgba8_bytes_estimate": 44030496,
+    "export_material_variants": 45
+  },
+  "current": {
+    "glb_bytes": 52911584,
+    "instance_triangles_evaluated": 627155,
+    "position_accessor_vertices": 818816,
+    "attribute_index_bytes_estimate": 29791366,
+    "images": 7,
+    "rgba8_bytes_estimate": 44030496,
+    "export_material_variants": 45
+  },
+  "evaluated_triangle_delta": 876,
+  "source_triangle_delta": 388,
+  "texture_delta_bytes": 0,
+  "note": "Solidify expanded export triangles are separate from source mesh budget. Memory estimates are not measured GPU residency."
+}
