@@ -15,24 +15,14 @@ EXCLUDE_PREFIXES = (
     'JN_云团', 'JN_轻岚', 'JN_明月', 'JN_DIAG_'
 )
 
-VIEWS = [
-    ('01_plan',(0,0,32),(0,0,0),50,28,'庭院总平面'),
-    ('02_front_gate',(1.4,-19,4.8),(1.4,4.5,2.0),42,0,'月门正轴'),
-    ('03_pavilion_entry',(-7,-6.2,1.8),(-7,-1.55,.45),42,0,'听雨轩入口'),
-    ('04_pond_axis',(0,-12,2.6),(0,-1.2,1.0),48,0,'曲水与汀步'),
-    ('05_water_to_pavilion',(6.8,-6.5,2.4),(-5.8,1.2,2.0),48,0,'水岸回看'),
-    ('06_gate_reverse',(1.4,6.55,1.32),(0.45,-0.35,.82),46,0,'月门背面'),
-    ('07_east_return',(6.0,-5.2,2.2),(9.8,1.5,1.6),46,0,'东墙转角'),
-    ('08_roofline',(14,-16,13),(0,2.0,3.0),52,0,'屋顶层次'),
-    ('09_pavilion_side',(-17.0,-8.5,4.4),(-7,.8,2.25),40,0,'听雨轩侧面'),
-    ('10_eye_path',(0,-3.2,1.65),(1.4,5.2,1.0),42,0,'人眼步行'),
-    ('11_village_plan',(6.0,22.0,48.0),(6.0,22.0,0),50,50,'小镇总平面'),
-    ('12_village_lane',(1.4,8.4,1.75),(1.4,31.5,1.35),42,0,'北巷通向茶集'),
-    ('13_canal_bridge',(13.2,11.2,8.6),(7.3,15.1,.9),46,0,'水巷木桥'),
-    ('14_village_waterfront',(7.3,29.0,2.25),(7.3,16.0,1.35),40,0,'临水街区回望'),
-    ('15_east_cloth_yard_overview',(10.8,49.5,6.8),(17.9,57.7,1.45),42,0,'东岸织造与晒布后园南向斜俯总览'),
-    ('16_cloth_finish_gate_axis',(14.45,53.25,1.92),(18.65,57.55,1.48),38,0,'晒布后园门楼南侧生产动线近景'),
-]
+# Diagnostic images and exported cameras must share the same fitted parameters.
+import sys, hashlib
+sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
+from camera_contract import presets_from_diagnostics
+manifest_path=os.path.join(OUT,'diagnostics','manifest.json')
+with open(manifest_path,'rb') as f:diagnostic_bytes=f.read()
+diagnostic=json.loads(diagnostic_bytes)
+preset_meta=presets_from_diagnostics(diagnostic,os.environ.get('GITHUB_SHA'))
 
 for o in list(bpy.data.objects):
     if o.name.startswith('JN_WEB_CAM_'):
@@ -42,21 +32,26 @@ if not cam_col:
     cam_col = bpy.data.collections.new('JN_WEB_巡游机位')
     S.collection.children.link(cam_col)
 
-preset_meta = []
-for name, loc, target, lens, ortho, title in VIEWS:
+S.render.resolution_x=diagnostic['resolution'][0];S.render.resolution_y=diagnostic['resolution'][1]
+for preset in preset_meta:
+    name,loc,target,lens,ortho,title=(preset[k] for k in ('name','location','target','lens','ortho','title'))
     d = bpy.data.cameras.new('JN_WEB_CAM_' + name)
     o = bpy.data.objects.new('JN_WEB_CAM_' + name, d)
     cam_col.objects.link(o)
     o.location = loc
-    o.rotation_euler = (Vector(target) - o.location).to_track_quat('-Z','Y').to_euler()
+    o.rotation_mode='QUATERNION';o.rotation_quaternion=preset['rotation_quaternion']
     d.lens = lens
+    d.sensor_width=preset['sensor_width'];d.sensor_fit='HORIZONTAL'
+    d.clip_start=preset['clip_start'];d.clip_end=preset['clip_end']
     if ortho:
         d.type = 'ORTHO'; d.ortho_scale = ortho
     o['jn_title'] = title
     o['jn_target_blender'] = list(target)
     o['jn_lens'] = lens
-    o['jn_ortho_scale'] = ortho
-    preset_meta.append({'name':name,'title':title,'location':list(loc),'target':list(target),'lens':lens,'ortho':ortho or None})
+    o['jn_ortho_scale'] = ortho or 0
+    o['jn_diagnostic_file']=preset['diagnostic_file'];o['jn_reference_aspect']=1024/640
+    frame=d.view_frame(scene=S)
+    preset['projection']=({'type':'orthographic','xmag':max(abs(v.x) for v in frame),'ymag':max(abs(v.y) for v in frame)} if ortho else {'type':'perspective','yfov':2*math.atan(max(abs(v.y/v.z) for v in frame)),'aspectRatio':1024/640})
 
 bpy.ops.object.select_all(action='DESELECT')
 selected = []
@@ -90,7 +85,8 @@ assert os.path.exists(path) and os.path.getsize(path) > 1024*1024, 'GLB export m
 with open(path,'rb') as f:
     assert f.read(4) == b'glTF', 'Not a binary glTF file'
 meta = {
-    'schema':'jiangnan-web-viewer-v1',
+    'schema':'jiangnan-web-viewer-v2',
+    'diagnostic_manifest_sha256':hashlib.sha256(diagnostic_bytes).hexdigest(),
     'source_commit':os.environ.get('GITHUB_SHA'),
     'scene':S.name,
     'selected_objects':len(selected),

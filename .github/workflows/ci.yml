@@ -21,6 +21,11 @@ jobs:
       - name: Compile Blender Python sources
         run: python -m py_compile jiangnan.py tools/verify_render.py tools/diagnostic_review.py tools/asset_budget.py
 
+      - name: Camera contract regressions
+        run: |
+          python -m unittest discover -s tests -p 'test_camera_contract.py'
+          node --test tests/camera_projection.test.mjs
+
       - name: Validate archived scene evidence
         shell: bash
         run: |

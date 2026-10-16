@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { projectionForPreset } from './camera_projection.mjs';
 
 const $ = (s)=>document.querySelector(s);
 const renderer = new THREE.WebGLRenderer({antialias:true, powerPreference:'high-performance'});
@@ -15,7 +16,8 @@ $('#viewport').appendChild(renderer.domElement);
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x0f1717);
 scene.fog = new THREE.FogExp2(0x152222, 0.0045);
-const camera = new THREE.PerspectiveCamera(52, innerWidth/innerHeight, 0.03, 1000);
+let camera = new THREE.PerspectiveCamera(52, innerWidth/innerHeight, 0.03, 1000);
+let projectionRef=null, transitionId=0, activePreset=null, presetPoseLocked=false;
 camera.position.set(20, 15, 28);
 
 const hemi = new THREE.HemisphereLight(0xdde7ee, 0x4c4030, 2.0); scene.add(hemi);
@@ -25,6 +27,8 @@ const fill = new THREE.DirectionalLight(0xb9d8ff, 1.2); fill.position.set(35,18,
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true; controls.dampingFactor=.075; controls.screenSpacePanning=true;
 controls.target.set(0,2,8); controls.minDistance=.3; controls.maxDistance=180;
+// Preserve exported roll/pose until the user actually starts navigating.
+controls.addEventListener('start',()=>{presetPoseLocked=false;activePreset=null;});
 
 const grid = new THREE.GridHelper(120, 120); grid.material.opacity=.16; grid.material.transparent=true; grid.visible=false; scene.add(grid);
 const axes = new THREE.AxesHelper(4); axes.visible=false; scene.add(axes);
@@ -61,6 +65,7 @@ async function loadModel(){
 }
 
 function fitAll(center,size){
+  transitionId++;activePreset=null;projectionRef=null;presetPoseLocked=false;usePerspective();
   const r=Math.max(size.x,size.y,size.z)*.72;
   controls.enabled=true; state.mode='orbit'; updateModeUI();
   camera.position.copy(center).add(new THREE.Vector3(r*.85,r*.72,r));
@@ -79,15 +84,19 @@ function buildPresetMenu(){
 function goPreset(i,animate=true,interruptTour=true){
   const c=state.presets[i]; if(!c)return;
   if(interruptTour){state.tour=false; $('#tour').classList.remove('active');}
+  state.mode='orbit';updateModeUI();
   controls.enabled=false;
-  const wp=new THREE.Vector3(), wq=new THREE.Quaternion(); c.getWorldPosition(wp); c.getWorldQuaternion(wq);
-  if(c.isOrthographicCamera){ camera.fov=35; } else { camera.fov = c.fov || 50; }
-  camera.updateProjectionMatrix();
+  const wp=new THREE.Vector3(), wq=new THREE.Quaternion(); c.getWorldPosition(wp); c.getWorldQuaternion(wq).normalize();
+  const previous=camera;camera=c.isOrthographicCamera?new THREE.OrthographicCamera():new THREE.PerspectiveCamera();
+  camera.position.copy(previous.position);camera.quaternion.copy(previous.quaternion);camera.near=c.near;camera.far=c.far;controls.object=camera;
+  projectionRef=c.isOrthographicCamera?{kind:'orthographic',width:c.right-c.left,height:c.top-c.bottom}:{kind:'perspective',fov:c.fov,aspect:c.userData?.jn_reference_aspect||c.aspect||1.6};
+  activePreset=c.name;presetPoseLocked=true;applyProjection();
   tweenCamera(wp,wq,animate?1100:0,()=>{ controls.target.copy(wp.clone().add(new THREE.Vector3(0,0,-1).applyQuaternion(wq).multiplyScalar(8))); if(state.mode==='orbit')controls.enabled=true; });
 }
 function tweenCamera(pos,quat,ms,onDone){
+  const id=++transitionId;
   const p0=camera.position.clone(), q0=camera.quaternion.clone(), t0=performance.now();
-  function tick(t){ const u=ms?Math.min(1,(t-t0)/ms):1; const s=u*u*(3-2*u); camera.position.lerpVectors(p0,pos,s); camera.quaternion.slerpQuaternions(q0,quat,s); if(u<1)requestAnimationFrame(tick); else onDone?.(); }
+  function tick(t){ if(id!==transitionId)return;const u=ms?Math.min(1,(t-t0)/ms):1; const s=u*u*(3-2*u); camera.position.lerpVectors(p0,pos,s); camera.quaternion.slerpQuaternions(q0,quat,s); if(u<1)requestAnimationFrame(tick); else onDone?.(); }
   requestAnimationFrame(tick);
 }
 
@@ -96,6 +105,7 @@ function updateModeUI(){
   $('#flypad').classList.toggle('show',state.mode==='fly');
   controls.enabled=state.mode==='orbit';
   if(state.mode==='fly'){
+    transitionId++;activePreset=null;projectionRef=null;presetPoseLocked=false;usePerspective();
     const e=new THREE.Euler().setFromQuaternion(camera.quaternion,'YXZ'); state.pitch=e.x; state.yaw=e.y;
     setStatus('自由巡游：桌面 WASD / QE + 拖动视角；手机使用方向键并拖动画面');
   }
@@ -125,8 +135,22 @@ $('#speed').oninput=e=>{state.speed=Number(e.target.value);$('#speedVal').textCo
 const ray=new THREE.Raycaster(), mouse=new THREE.Vector2();
 renderer.domElement.addEventListener('dblclick',e=>{if(!state.root)return; mouse.x=e.clientX/innerWidth*2-1;mouse.y=-(e.clientY/innerHeight)*2+1;ray.setFromCamera(mouse,camera);const hit=ray.intersectObject(state.root,true)[0];if(hit){state.selected=hit.object;$('#inspect').textContent=`${hit.object.name||'未命名构件'} · (${hit.point.x.toFixed(2)}, ${hit.point.y.toFixed(2)}, ${hit.point.z.toFixed(2)})`;}});
 
-function render(t){requestAnimationFrame(render);const dt=Math.min(.05,(t-state.last)/1000);state.last=t;controls.update();flyStep(dt);renderer.render(scene,camera);} requestAnimationFrame(render);
-addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
+function usePerspective(){
+ if(camera.isOrthographicCamera){const p=camera;camera=new THREE.PerspectiveCamera(52,innerWidth/innerHeight,p.near,p.far);camera.position.copy(p.position);camera.quaternion.copy(p.quaternion);controls.object=camera;}
+ applyProjection();
+}
+function applyProjection(){
+ if(projectionRef){const p=projectionForPreset(projectionRef,innerWidth/innerHeight);Object.assign(camera,p);}
+ else if(camera.isPerspectiveCamera){camera.aspect=innerWidth/innerHeight;camera.fov=52;}
+ camera.updateProjectionMatrix();
+}
+function render(t){requestAnimationFrame(render);const dt=Math.min(.05,(t-state.last)/1000);state.last=t;if(controls.enabled&&state.mode==='orbit'&&!presetPoseLocked)controls.update();flyStep(dt);renderer.render(scene,camera);} requestAnimationFrame(render);
+addEventListener('resize',()=>{applyProjection();renderer.setSize(innerWidth,innerHeight)});
+// Reproducible local/CI review hook, not an approval or a production telemetry endpoint.
+window.JIANGNAN_REVIEW={goPreset:(i)=>goPreset(i,false),snapshot:()=>{
+ const p=state.presets.find(c=>c.name===activePreset),wp=new THREE.Vector3(),wq=new THREE.Quaternion();if(p){p.getWorldPosition(wp);p.getWorldQuaternion(wq).normalize();}
+ return {ready:!!state.root,presets:state.presets.map(c=>({name:c.name,type:c.type})),activePreset,cameraType:camera.type,position:camera.position.toArray(),quaternion:camera.quaternion.toArray(),poseError:p?camera.position.distanceTo(wp):null,rotationError:p?camera.quaternion.angleTo(wq):null,projection:camera.projectionMatrix.toArray(),frame:renderer.info.render.frame,triangles:renderer.info.render.triangles,fov:camera.fov,reference:projectionRef};
+}};
 
 async function setupDiagnostics(){ let diag=window.JIANGNAN_DIAGNOSTICS||[]; if(!diag.length){ try{ const m=await fetch('./diagnostics/manifest.json').then(r=>r.json()); diag=m.views.map(v=>({title:v.file.replace('.png','')+' · '+(v.question||''),src:'./diagnostics/'+v.file})); }catch(e){} } if(diag.length){ $('#diagBtn').hidden=false; $('#diagBtn').onclick=()=>{const d=$('#diag');d.open?d.close():d.showModal();}; const g=$('#diagGrid'); g.innerHTML=''; diag.forEach(x=>{const a=document.createElement('button');a.innerHTML=`<img src="${x.src}"><span>${x.title}</span>`;a.onclick=()=>{ $('#diagLarge').src=x.src; $('#diagCaption').textContent=x.title; };g.appendChild(a);}); }}
 setupDiagnostics();
