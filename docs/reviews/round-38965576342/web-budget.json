@@ -1,0 +1,20 @@
+{
+  "source_commit": "a9df0a6946f15d0641e8aad34fdb595b7f51daf6",
+  "baseline_round": 31,
+  "metrics": {
+    "instance_triangles": 627155,
+    "glb_bytes": 52799744,
+    "attribute_index_bytes": 29792134,
+    "images": 7,
+    "rgba8_bytes": 44030496
+  },
+  "limits": {
+    "exact_instance_triangles": 627155,
+    "glb_bytes": 54000000,
+    "attribute_index_bytes": 30000000,
+    "images": 7,
+    "rgba8_bytes": 44030496
+  },
+  "passed": true,
+  "note": "Round32 material-only: evaluated geometry must remain identical; geometry changes require a deliberate reviewed contract update. Bytes are estimates, not GPU residency."
+}
