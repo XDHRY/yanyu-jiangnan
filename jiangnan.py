@@ -2912,12 +2912,25 @@ def refine_village_house06_needlework():
     repeat('布架横足',[(18.16,y,.29) for y in (15.65,16.39)],(.50,.10,.06),wood)
     repeat('布架立柱',[(18.16,y,.94) for y in (15.65,16.39)],(.055,.055,1.24),wood)
     box('东岸绣户_布架顶枋',(18.16,16.02,1.58),(.07,.92,.06),wood,c)
-    # Two broad cloth faces meet over the rail; thin solid low-poly drape.
-    vv=[]
-    for y,front_z,back_z,fold in ((15.76,1.04,1.18,0),(16.02,1.02,1.14,.018),(16.28,1.06,1.17,0)):
-        vv.extend([(18.02+fold,y,front_z),(18.12,y,1.610),(18.20,y,1.610),(18.29+fold,y,back_z)])
-    cloth=mesh('东岸绣户_搭布',vv,[(j*4+k,j*4+k+1,(j+1)*4+k+1,(j+1)*4+k) for j in range(2) for k in range(3)],linen,c)
+    # Three shallow gravity folds relax into the supported rail crown. No subdiv.
+    # (x,z,lateral amplitude,hem amplitude); crown stays exactly on z=1.610.
+    profile=((18.02,1.04,.025,.018),(18.04,1.16,.023,.010),
+             (18.06,1.33,.017,.004),(18.10,1.54,.004,0),
+             (18.12,1.610,0,0),(18.16,1.610,0,0),(18.20,1.610,0,0),
+             (18.23,1.54,.004,0),(18.26,1.36,.015,.004),
+             (18.28,1.23,.022,.010),(18.29,1.17,.024,.015))
+    vv=[];rows=21;cols=len(profile)
+    for j in range(rows):
+        t=j/(rows-1);y=15.76+.52*t
+        wave=sin(6*pi*t+.4)
+        for x,z,amp,hem in profile:
+            vv.append((x+amp*wave,y,z+hem*sin(6*pi*t+.8)))
+    cloth=mesh('东岸绣户_搭布',vv,
+               [(j*cols+k,j*cols+k+1,(j+1)*cols+k+1,(j+1)*cols+k)
+                for j in range(rows-1) for k in range(cols-1)],linen,c)
+    for p in cloth.data.polygons:p.use_smooth=True
     mod=cloth.modifiers.new('薄布真实厚度','SOLIDIFY');mod.thickness=.003
+    S['JN_house06_drape_profile']='supported_three_folds_21x11_v2'
     box('东岸绣户_案灯底座',(tx,ty-.28,.8525),(.14,.12,.025),wood,c)
     repeat('案灯框柱',[(tx+dx,ty-.28+dy,1.005) for dx in (-.05,.05) for dy in (-.04,.04)],(.014,.014,.28),wood)
     box('东岸绣户_案灯纸罩',(tx,ty-.28,1.005),(.085,.065,.23),M['paper'],c)

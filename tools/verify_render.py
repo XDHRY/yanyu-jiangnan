@@ -1156,6 +1156,25 @@ for o in objs('JN_东岸绣户_布架立柱_'):
 rail06=world_bounds(bpy.data.objects['JN_东岸绣户_布架顶枋'])
 drape06=world_bounds(bpy.data.objects['JN_东岸绣户_搭布'])
 assert abs(drape06[1][2]-rail06[1][2])<.0001
+cloth06=bpy.data.objects['JN_东岸绣户_搭布']
+assert S['JN_house06_drape_profile']=='supported_three_folds_21x11_v2'
+assert len(cloth06.data.vertices)==231 and len(cloth06.data.polygons)==200
+assert all(p.use_smooth for p in cloth06.data.polygons)
+assert all(m.type!='SUBSURF' for m in cloth06.modifiers)
+assert abs(cloth06.modifiers['薄布真实厚度'].thickness-.003)<1e-6
+for j in range(21):
+    row=[cloth06.data.vertices[j*11+k].co for k in range(11)]
+    assert all(row[k].x<row[k+1].x for k in range(10)),('crossed cloth fold',j)
+    assert max(abs(v.y-(15.76+.52*j/20)) for v in row)<1e-5
+    assert all(abs(row[k].z-rail06[1][2])<1e-5 for k in (4,5,6))
+    assert rail06[0][0]<row[5].x<rail06[1][0],('unsupported cloth crown',j)
+# Solidify must close the open sheet, including both hems and side selvages.
+evaluated06=cloth06.evaluated_get(bpy.context.evaluated_depsgraph_get())
+solid06=evaluated06.to_mesh();incidence06={}
+for poly in solid06.polygons:
+    for edge in poly.edge_keys:incidence06[edge]=incidence06.get(edge,0)+1
+assert set(incidence06.values())=={2},'open evaluated drape'
+evaluated06.to_mesh_clear()
 for label in ('线轴','绕线'):
     for o in objs('JN_东岸绣户_'+label+'_'):
         if o.hide_render:continue
@@ -1169,7 +1188,7 @@ for o in [o for o in objs('JN_东岸绣户_') if not o.hide_render and o.type in
     assert min(hi[0],route06[1][0])<=max(lo[0],route06[0][0]) or min(hi[1],route06[1][1])<=max(lo[1],route06[0][1]),('needlework route obstruction',o.name)
 assert S['JN_house06_new_image_bytes']==0
 assert expanded_tris-163834<=1600,('Round28 triangle increment',expanded_tris-163834)
-report['house06_needlework']={'shared_repeat_families':10,'spools':3,'closed_spool_profiles':True,'open_needlebox':True,'tabletop_contact_passed':True,'rack_floor_and_rail_contact_passed':True,'drape_fold_vertices':12,'clear_interior_strip_m':[2.2,1.0],'new_bitmap_bytes':0,'triangle_delta_vs_round27':expanded_tris-163834,'delta_limit':1600}
+report['house06_needlework']={'shared_repeat_families':10,'spools':3,'closed_spool_profiles':True,'open_needlebox':True,'tabletop_contact_passed':True,'rack_floor_and_rail_contact_passed':True,'drape_fold_vertices':len(cloth06.data.vertices),'drape_grid':[21,11],'supported_crown_rows':21,'closed_evaluated_drape':True,'subdivision':False,'clear_interior_strip_m':[2.2,1.0],'new_bitmap_bytes':0,'triangle_delta_vs_round27':expanded_tris-163834,'delta_limit':1600}
 
 report['inhabited_houses']={'mesh_triangles_with_instances':house_tris,'triangle_budget':18000,'shells':8,'true_door_openings':8,'true_window_openings':16,'shared_wall_meshes':1,'door_clear_width_min':min(o['JN_door_clear_width'] for o in shells),'interior_depth_min':min(o['JN_interior_depth'] for o in shells),'ray_tests_passed':40,'floor_support_passed':8,'tea_east_risers_m':[.10,.10],'new_image_texture_bytes':0}
 print('INHABITED_HOUSES',json.dumps(report['inhabited_houses'],ensure_ascii=False))
