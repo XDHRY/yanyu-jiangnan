@@ -22,3 +22,11 @@
 本轮依build-3d-game-rooms技能将实际证据、机器门禁与人工批准分开；审阅包已按library技能持久保存，仓库源码不重复打包。
 
 Function/Form/Runtime人工批准仍pending。浏览器导出不包含Blender灯光、雨雪效果；软件WebGL模拟桌面和竖屏视口不是用户真机验收。
+
+## 终版实际图
+
+![Blender16图拼图](round29-contactsheet.jpg)
+
+![实际网页桌面与竖屏截图](round29-browser-audit.jpg)
+
+![上轮与本轮Blender对照，几何不变](round28-29-blender-compare.jpg)
