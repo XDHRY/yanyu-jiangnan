@@ -64,6 +64,15 @@ for asset in expected_texture_assets:
     }
 print('TEXTURE_PACK_AUDIT',json.dumps(report['generated_texture_assets'],ensure_ascii=False))
 assert all(v['found'] and v['packed'] for v in report['generated_texture_assets'].values())
+floor_material=bpy.data.materials['JN_民居细磨青石']
+floor_users=[o for o in S.objects if o.type=='MESH' and floor_material in list(o.data.materials) and not o.hide_render]
+assert len(floor_users)==8 and all(o.name.endswith('_室内地坪') for o in floor_users)
+assert len({o.data.as_pointer() for o in floor_users})==1
+floor_bsdf=next(n for n in floor_material.node_tree.nodes if n.type=='BSDF_PRINCIPLED')
+assert abs(floor_bsdf.inputs['Roughness'].default_value-.82)<1e-5
+floor_bump=next(n for n in floor_material.node_tree.nodes if n.type=='BUMP')
+assert abs(floor_bump.inputs['Distance'].default_value-.004)<1e-6
+report['residential_floor_material']={'users':8,'shared_meshes':1,'roughness':.82,'repeat_per_local_m':1.8,'bump_distance_m':.004,'new_images':0,'tangent_normal_bake':False}
 report['pierced_scholar_stones']=sum(o.name.startswith('JN_太湖石_瘦透漏皱') for o in S.objects)
 assert report['pierced_scholar_stones']==3
 report['spatial_connectors']={

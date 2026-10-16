@@ -8,7 +8,10 @@ on:
       - 'textures/**'
       - 'tools/export_web.py'
       - 'tools/web_materials.py'
+      - 'tools/web_material_factors.py'
       - 'tools/verify_web_materials.py'
+      - 'tools/verify_web_budget.py'
+      - 'validation/web_budget_contract.json'
       - 'tools/build_standalone_viewer.py'
       - 'tools/diagnostic_review.py'
       - 'tools/camera_contract.py'
@@ -100,6 +103,7 @@ jobs:
           cp "${JN_OUT}/diagnostics/manifest.json" "${RUNNER_TEMP}/package/diagnostics/"
           python tools/verify_web_cameras.py "${RUNNER_TEMP}/package"
           python tools/verify_web_materials.py "${RUNNER_TEMP}/package"
+          python tools/verify_web_budget.py "${RUNNER_TEMP}/package" validation/web_budget_contract.json
           ./node_modules/.bin/esbuild web/viewer/app.js --bundle --format=iife --platform=browser --minify --outfile="${RUNNER_TEMP}/package/app.bundle.js"
           python tools/build_standalone_viewer.py "${RUNNER_TEMP}/package"
           python - <<'PY'
@@ -126,6 +130,7 @@ jobs:
             ${{ runner.temp }}/package/viewer_manifest.json
             ${{ runner.temp }}/package/camera-parity.json
             ${{ runner.temp }}/package/material-audit.json
+            ${{ runner.temp }}/package/web-budget.json
             ${{ runner.temp }}/runtime-audit/
           if-no-files-found: error
           compression-level: 0

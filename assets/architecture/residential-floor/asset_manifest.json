@@ -1,0 +1,14 @@
+{
+  "asset_id":"residential-fine-ground-stone",
+  "generator":"jiangnan.py::refine_residential_floor_material",
+  "baseline":"03fbf7685add717f29d6150a8534b638ae1fc6a8",
+  "purpose":"Quiet domestic floor, visually separate from rough garden rock and outdoor paving",
+  "users":"8 original village house interior floors; one shared mesh, dimensions and circulation unchanged",
+  "texture":{"source":"textures/stone.png","provenance":"textures/generation_prompts.json and docs/art-direction.md","license":"Existing project-generated asset; no external image or paid service","mapping":"Object-space BOX, 1.8 repeats/local metre, nominal repeat 0.556m; existing transforms retained","linear_basecolor_multiplier":[0.45,0.52,0.54,1],"new_image_bytes":0},
+  "roughness":0.82,"specular_ior_level":0.25,"source_bump_distance_m":0.004,
+  "geometry_added":0,"materials_added":1,"mesh_datablocks_added":1,
+  "scope_isolation":"Copy the existing floor mesh once for the selected eight users; later residence districts retain the original stone material and shared source mesh",
+  "export":"Existing dominant-face metre UV approximation; geometry normals fallback, not a tangent-normal bake; hard actual-GLB budget now required",
+  "lod":"Unchanged source mesh; formal runtime LOD pending",
+  "human_gates":{"function":"pending","form":"pending","runtime":"pending"}
+}

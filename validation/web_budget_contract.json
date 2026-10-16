@@ -1,0 +1,9 @@
+{
+  "schema":"jiangnan-web-budget-v1",
+  "baseline_round":31,
+  "baseline_source":"43fb8d9a659f93c40fa548201b794585c52613e4",
+  "baseline_run":38941563982,
+  "baseline":{"instance_triangles":627155,"glb_bytes":52911584,"attribute_index_bytes":29791366,"images":7,"rgba8_bytes":44030496},
+  "limits":{"exact_instance_triangles":627155,"glb_bytes":54000000,"attribute_index_bytes":30000000,"images":7,"rgba8_bytes":44030496},
+  "scope":"Round32 material-only: evaluated geometry must remain identical; geometry changes require a deliberate reviewed contract update. Bytes are estimates, not GPU residency."
+}

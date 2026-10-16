@@ -39,6 +39,7 @@ def prepare_web_materials(objects):
         if images:textured.add(mat.name)
         if scale:scales[mat.name]=scale
         rows.append({'source_material':original.name,'export_material':mat.name,
+                     'base_color_factor':list(original['JN_web_base_color_factor']) if 'JN_web_base_color_factor' in original else None,
                      'source_images':sorted(set(images)),'object_coordinate_scale':scale,
                      'removed_bump_nodes':removed,'normal_policy':'geometric normals; true tangent bake pending'})
     meshes={};converted=0;uv_faces=0;fallback_faces=0;hidden=[]
