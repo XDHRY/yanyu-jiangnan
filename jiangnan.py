@@ -2972,7 +2972,11 @@ def refine_residential_floor_material():
     l.new(tex.outputs['Color'],bump.inputs['Height']);l.new(bump.outputs[0],b.inputs['Normal'])
     floors=[o for o in S.objects if o.name.startswith(PREFIX+'村落民居_') and o.name.endswith('_室内地坪')]
     assert len(floors)==8
-    for data in {o.data for o in floors}:data.materials[0]=mat
+    # Later residence districts also instance this source floor. Isolate the
+    # selected eight users once, then retain shared geometry within this group.
+    assert len({o.data.as_pointer() for o in floors})==1
+    data=floors[0].data.copy();data.name='JN_民居细磨青石地坪共享';data.materials[0]=mat
+    for obj in floors:obj.data=data
     S['JN_residential_floor_material']='fine_ground_stone_1p8_per_m_v1'
 
 def optimize_static_batches():
