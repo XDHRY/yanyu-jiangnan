@@ -229,7 +229,14 @@ assert all(bpy.data.objects[f'JN_村落民居_{i:02d}_屋面'].modifiers.get('�
 # supported by their own gables/purlins; all rafter and tile-end rows are linked.
 roofs=[bpy.data.objects[f'JN_村落民居_{i:02d}_屋面'] for i in range(1,9)]
 standard=[roofs[i-1] for i in (1,2,5,6)];high=[roofs[i-1] for i in (3,4,7,8)]
-assert len({o.data.as_pointer() for o in standard})==1 and len({o.data.as_pointer() for o in high})==1
+standard_shared=[o for o in standard if o.name!='JN_村落民居_06_屋面']
+assert len(standard_shared)==3 and len({o.data.as_pointer() for o in standard_shared})==1
+assert len({o.data.as_pointer() for o in high})==1
+sample_roof=bpy.data.objects['JN_村落民居_06_屋面']
+assert sample_roof in standard and len(standard)==4
+reference_roof=standard_shared[0].data
+assert [tuple(v.co) for v in sample_roof.data.vertices]==[tuple(v.co) for v in reference_roof.vertices]
+assert [tuple(p.vertices) for p in sample_roof.data.polygons]==[tuple(p.vertices) for p in reference_roof.polygons]
 assert standard[0].data.as_pointer()!=high[0].data.as_pointer()
 assert all(abs(bpy.data.objects[f'JN_村落民居_{i:02d}_正脊'].location.z-(4.57 if i in (3,4,7,8) else 4.39))<.002 for i in range(1,9))
 fire_ridges=[bpy.data.objects[f'JN_村落民居_{i:02d}_正脊'] for i in (4,8)]
