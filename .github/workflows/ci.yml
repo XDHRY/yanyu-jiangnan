@@ -23,7 +23,7 @@ jobs:
 
       - name: Camera contract regressions
         run: |
-          python -m unittest discover -s tests -p 'test_camera_contract.py'
+          python -m unittest discover -s tests -p 'test*.py'
           node --test tests/camera_projection.test.mjs
 
       - name: Validate archived scene evidence

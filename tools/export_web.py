@@ -68,6 +68,11 @@ for o in S.objects:
         except Exception:
             pass
 
+from web_materials import prepare_web_materials
+material_report=prepare_web_materials(selected)
+with open(os.path.join(WEB,'material-audit.json'),'w',encoding='utf-8') as f:
+    json.dump({'source_commit':os.environ.get('GITHUB_SHA'),**material_report},f,ensure_ascii=False,indent=2)
+
 path = os.path.join(WEB, 'jiangnan-town.glb')
 kwargs = dict(
     filepath=path,
