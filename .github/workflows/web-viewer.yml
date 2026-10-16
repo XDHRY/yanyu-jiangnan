@@ -7,6 +7,8 @@ on:
       - 'jiangnan.py'
       - 'textures/**'
       - 'tools/export_web.py'
+      - 'tools/web_materials.py'
+      - 'tools/verify_web_materials.py'
       - 'tools/build_standalone_viewer.py'
       - 'tools/diagnostic_review.py'
       - 'tools/camera_contract.py'
@@ -93,9 +95,11 @@ jobs:
           cp web/viewer/index.html "${RUNNER_TEMP}/package/index.html"
           cp "${JN_WEB_OUT}/jiangnan-town.glb" "${RUNNER_TEMP}/package/"
           cp "${JN_WEB_OUT}/viewer_manifest.json" "${RUNNER_TEMP}/package/"
+          cp "${JN_WEB_OUT}/material-audit.json" "${RUNNER_TEMP}/package/"
           cp "${JN_OUT}/diagnostics/"*.png "${RUNNER_TEMP}/package/diagnostics/"
           cp "${JN_OUT}/diagnostics/manifest.json" "${RUNNER_TEMP}/package/diagnostics/"
           python tools/verify_web_cameras.py "${RUNNER_TEMP}/package"
+          python tools/verify_web_materials.py "${RUNNER_TEMP}/package"
           ./node_modules/.bin/esbuild web/viewer/app.js --bundle --format=iife --platform=browser --minify --outfile="${RUNNER_TEMP}/package/app.bundle.js"
           python tools/build_standalone_viewer.py "${RUNNER_TEMP}/package"
           python - <<'PY'
@@ -121,6 +125,7 @@ jobs:
             ${{ runner.temp }}/jiangnan-town-web-viewer.zip
             ${{ runner.temp }}/package/viewer_manifest.json
             ${{ runner.temp }}/package/camera-parity.json
+            ${{ runner.temp }}/package/material-audit.json
             ${{ runner.temp }}/runtime-audit/
           if-no-files-found: error
           compression-level: 0
