@@ -28,8 +28,8 @@ VIEWS=[
     ('12_village_lane',(1.4,8.4,1.75),(1.4,31.5,1.35),42,0,'村巷人眼：月门北巷通往茶集的连续地面、民居侧廊、桥前横巷和远端茶亭'),
     ('13_canal_bridge',(13.2,11.2,8.6),(7.3,15.1,.9),46,0,'水巷木桥：高位斜俯视完整检查桥板、栏柱、双岸驳岸、桥头落地与临水民居尺度'),
     ('14_village_waterfront',(7.3,29.0,2.25),(7.3,16.0,1.35),40,0,'临水回望：检查八栋民居沿水巷的聚落节奏、河埠和木桥是否形成江南村落层次'),
-    ('15_house05_rest_front',(11.8,9.0,5.2),(15.9,10.1,2.1),28,12,'东岸起居户：从竹林东侧按模型实际边界自动取景，机器校验屋面、门窗、台基完整入画及门口观察射线无遮挡'),
-    ('16_house05_rest_door',(12.85,10.35,1.65),(16.9,9.9,.95),30,0,'入户看起居：向门洞北侧微移以避开开启门扇，坐卧榻、围栏、薄垫、叠毯、靠枕、案灯与原长凳需分离可辨，检查榻足落地与榻前通道'),
+    ('15_house06_needlework_front',(11.8,13.9,5.2),(16.2,15.0,2.1),28,17,'东岸针线户：按实际边界完整检查屋面、门窗、台基及沿河入口，不隐藏建筑或植物'),
+    ('16_house06_needlework_door',(13.0,15.05,1.65),(17.0,14.2,.88),32,0,'入户看针线：绣框、绷布、针脚、线轴、开口针盒与布架，检查案上接触、支撑和室内抵达通道'),
 ]
 
 for o in list(bpy.data.objects):
@@ -66,9 +66,9 @@ S.render.image_settings.file_format='PNG'
 S.render.film_transparent=False
 
 manifest={'mode':'low-cost spatial diagnostic','renderer':'Blender Eevee Next','resolution':[1024,640],'frame':80,'weather':0,'source_commit':os.environ.get('GITHUB_SHA'),'town_phase':S.get('JN_town_phase'),'views':[]}
-def fit_house05(cam):
+def fit_house06(cam):
     bpy.context.view_layer.update();dg=bpy.context.evaluated_depsgraph_get()
-    selected=[o for o in S.objects if o.name.startswith('JN_村落民居_05_') and o.type in ('MESH','CURVE') and not o.hide_render]
+    selected=[o for o in S.objects if o.name.startswith('JN_村落民居_06_') and o.type in ('MESH','CURVE') and not o.hide_render]
     pts=[o.evaluated_get(dg).matrix_world @ Vector(c) for o in selected for c in o.evaluated_get(dg).bound_box]
     inv=cam.matrix_world.inverted();local=[inv@p for p in pts]
     lo=[min(p[i] for p in local) for i in (0,1)];hi=[max(p[i] for p in local) for i in (0,1)]
@@ -84,19 +84,19 @@ def fit_house05(cam):
     assert min(bounds[0],bounds[2])>.045 and max(bounds[1],bounds[3])<.955,bounds
     # Orthographic door-centre rays start on the actual camera near plane.
     inv=cam.matrix_world.inverted();direction=cam.rotation_euler.to_quaternion()@Vector((0,0,-1))
-    for y in (9.96,10.10,10.24):
-        point=Vector((13.35,y,1.30));q=inv@point
+    for y in (14.86,15.00,15.14):
+        point=Vector((13.60,y,1.30));q=inv@point
         origin=cam.matrix_world@Vector((q.x,q.y,-cam.data.clip_start))
         hit=S.ray_cast(dg,origin,direction,distance=(point-origin).length-.03)
-        assert not hit[0],('house05 diagnostic door occlusion',hit[4].name if hit[4] else None)
+        assert not hit[0],('house06 diagnostic door occlusion',hit[4].name if hit[4] else None)
     return {'objects':len(selected),'projected_bounds':bounds,'padding_fraction':.045,'clear_door_rays':3,'orthographic_width_m':cam.data.ortho_scale}
 # Reject bad framing before spending time on the fourteen fixed render views.
-probe=add_cam(*VIEWS[14][:5]);fit_house05(probe);created.remove(probe)
+probe=add_cam(*VIEWS[14][:5]);fit_house06(probe);created.remove(probe)
 probe_data=probe.data;bpy.data.objects.remove(probe,do_unlink=True);bpy.data.cameras.remove(probe_data)
 for name,loc,target,lens,ortho,question in VIEWS:
     cam=add_cam(name,loc,target,lens,ortho)
     S.camera=cam
-    framing=fit_house05(cam) if name=='15_house05_rest_front' else None
+    framing=fit_house06(cam) if name=='15_house06_needlework_front' else None
     S.render.filepath=os.path.join(DIAG,name+'.png')
     excluded=[]
     if name=='11_village_plan':
@@ -109,7 +109,8 @@ for name,loc,target,lens,ortho,question in VIEWS:
     finally:
         for o,state in excluded:o.hide_render=state
     manifest['views'].append({
-        'file':name+'.png','camera':list(cam.location),'target':list(target),'lens':lens,
+        'file':name+'.png','camera':list(cam.location),'target':list(target),'requested_target':list(target),
+        'fitted_target':list(Vector(target)+(cam.location-Vector(loc))),'lens':lens,
         'ortho_scale':cam.data.ortho_scale if ortho else None,'framing_evidence':framing,'question':question,'seconds':round(time.time()-start,2),
         'diagnostic_exclusions':[o.name for o,_ in excluded],
     })

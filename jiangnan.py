@@ -2871,6 +2871,59 @@ def refine_village_house05_rest():
     S['JN_house05_new_image_bytes']=0
     S['JN_house05_profile']='chamfered_feet_posts_and_sparse_cloth_rings_v2'
 
+def refine_village_house06_needlework():
+    """A household repair/needlework destination on the existing table; no new shell."""
+    c=C['water'];wood=M['wood'];tx,ty=17.016,14.184
+    def repeat(label,centers,size,mat):
+        p=box('东岸绣户_'+label+'原型',(0,0,0),size,mat,c);p.hide_render=True;p.hide_viewport=True
+        for i,xyz in enumerate(centers,1):
+            o=bpy.data.objects.new(PREFIX+'东岸绣户_'+label+f'_{i}',p.data);c.objects.link(o);o.location=xyz
+    # Original tabletop top=.84. Frame feet land directly on it.
+    repeat('绣框撑足',[(tx+dx,ty+dy,.875) for dx in (-.28,.28) for dy in (-.16,.16)],(.045,.045,.07),wood)
+    repeat('绣框长边',[(tx,ty+dy,.925) for dy in (-.19,.19)],(.68,.035,.03),wood)
+    repeat('绣框端边',[(tx+dx,ty,.925) for dx in (-.3225,.3225)],(.035,.345,.03),wood)
+    linen=bpy.data.materials['JN_起居榻温白麻布']
+    blue=bpy.data.materials['JN_起居榻青灰织物']
+    box('东岸绣户_绷布',(tx,ty,.923),(.61,.345,.006),linen,c)
+    # Flat six-petal stitched motif, source geometry not a baked image.
+    stitch=[]
+    for k in range(6):
+        a=2*pi*k/6
+        stitch.append([(tx+.025*cos(a-.3),ty+.025*sin(a-.3),.927),(tx+.105*cos(a),ty+.105*sin(a),.927),(tx+.025*cos(a+.3),ty+.025*sin(a+.3),.927)])
+    lines('东岸绣户_六瓣针脚',stitch,.0025,blue,c,res=1,bevel_res=0)
+    # One 8-sided lathed spool mesh reused three times, with closed end caps.
+    def lathe(label,profile,mat):
+        vv=[(r*cos(2*pi*k/8),r*sin(2*pi*k/8),z) for r,z in profile for k in range(8)]
+        ff=[tuple(reversed(range(8))),tuple(range(8*(len(profile)-1),8*len(profile)))]
+        ff += [(j*8+k,j*8+(k+1)%8,(j+1)*8+(k+1)%8,(j+1)*8+k) for j in range(len(profile)-1) for k in range(8)]
+        p=mesh('东岸绣户_'+label+'原型',vv,ff,mat,c);p.hide_render=True;p.hide_viewport=True
+        for i,y in enumerate((ty-.20,ty,ty+.20),1):
+            o=bpy.data.objects.new(PREFIX+'东岸绣户_'+label+f'_{i}',p.data);c.objects.link(o);o.location=(tx+.52,y,.84)
+    lathe('线轴',[(.045,0),(.045,.015),(.025,.015),(.025,.10),(.045,.10),(.045,.115)],wood)
+    lathe('绕线',[(.037,.02),(.037,.095)],blue)
+    # Open needle box: bottom + four walls, lid laid beside it, no sealed fake recess.
+    bx,by=tx-.49,ty
+    box('东岸绣户_针盒底',(bx,by,.85),(.22,.16,.02),wood,c)
+    repeat('针盒长壁',[(bx,by+d,.88) for d in (-.07,.07)],(.22,.02,.04),wood)
+    repeat('针盒端壁',[(bx+d,by,.88) for d in (-.10,.10)],(.02,.12,.04),wood)
+    box('东岸绣户_针盒盖',(bx,by+.21,.85),(.22,.16,.02),wood,c)
+    line('东岸绣户_绣针',[(bx-.07,by,.862),(bx+.07,by,.862)],.002,M['bronze'],c,res=1,bevel_res=0)
+    # Low towel rack stands against the rear wall, clear of the arrival strip.
+    repeat('布架横足',[(18.16,y,.29) for y in (15.65,16.39)],(.50,.10,.06),wood)
+    repeat('布架立柱',[(18.16,y,.94) for y in (15.65,16.39)],(.055,.055,1.24),wood)
+    box('东岸绣户_布架顶枋',(18.16,16.02,1.58),(.07,.92,.06),wood,c)
+    # Two broad cloth faces meet over the rail; thin solid low-poly drape.
+    vv=[(x,y,z) for y in (15.76,16.28) for x,z in ((18.02,1.04),(18.12,1.615),(18.20,1.615),(18.29,1.18))]
+    cloth=mesh('东岸绣户_搭布',vv,[(0,1,5,4),(1,2,6,5),(2,3,7,6)],linen,c)
+    mod=cloth.modifiers.new('薄布真实厚度','SOLIDIFY');mod.thickness=.003
+    box('东岸绣户_案灯底座',(tx,ty-.28,.8525),(.14,.12,.025),wood,c)
+    repeat('案灯框柱',[(tx+dx,ty-.28+dy,1.005) for dx in (-.05,.05) for dy in (-.04,.04)],(.014,.014,.28),wood)
+    box('东岸绣户_案灯纸罩',(tx,ty-.28,1.005),(.085,.065,.23),M['paper'],c)
+    box('东岸绣户_案灯顶盖',(tx,ty-.28,1.1575),(.16,.14,.025),wood,c)
+    light('东岸绣户_案灯光',(tx,ty-.28,1.005),(1,.62,.32),48,.10,kind='POINT')
+    S['JN_house06_needlework']='table_frame_spools_open_needlebox_cloth_rack_v1'
+    S['JN_house06_new_image_bytes']=0
+
 def batch_static_objects(name,objects,mat,col,bev=0):
     """Combine already-built static meshes after art generation so optimization cannot perturb procedural build order."""
     objects=[o for o in objects if o and o.type=='MESH']
@@ -2949,6 +3002,7 @@ def build(stage=None):
     start();courtyard();village_phase1_skeleton();town_phase2_market();town_phase3_east_wharf();town_phase4_east_residence();town_phase5_cloth_finish_yard();town_phase6_west_wine_court();town_phase7_north_granary();town_phase8_north_grain_wharf();town_phase9_north_silk_bend();town_phase10_silk_trade_finish();town_phase11_west_oar_workshop();town_phase12_north_umbrella_lane();town_phase13_north_paper_yard();town_phase14_east_bindery_shop();town_phase15_east_dyed_paper_court();town_phase16_west_dye_receiving_court();town_phase17_north_public_turning_quay();town_phase18_quay_boat_gear();town_phase19_quay_tea_porter()
     refine_village_house03_study()
     refine_village_house05_rest()
+    refine_village_house06_needlework()
     level=P['stage'] if stage is None else stage
     if level>=2:vegetation()
     if level>=3:weather()

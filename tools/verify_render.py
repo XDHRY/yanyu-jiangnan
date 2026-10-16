@@ -1117,7 +1117,11 @@ for label,n in [('榻牙板',2),('榻端枨',2),('围栏立柱',5),('端围上�
     assert len(repeated)==n and len({o.data.as_pointer() for o in repeated})==1
 assert S['JN_house05_new_image_bytes']==0
 assert S['JN_house05_profile']=='chamfered_feet_posts_and_sparse_cloth_rings_v2'
-assert expanded_tris-163594<=600,('Round27 profile triangle delta',expanded_tris-163594)
+# Scope the previous refinement cap to its objects, not every future town addition.
+profile_tris=0
+for o in objs('JN_东岸起居户_'):
+    if o.type=='MESH':o.data.calc_loop_triangles();profile_tris+=len(o.data.loop_triangles)
+assert profile_tris<=1000,('house05 profile asset triangles',profile_tris)
 for label,count in [('薄垫',16),('叠毯',24),('麻布靠枕',24)]:
     o=bpy.data.objects['JN_东岸起居户_'+label];assert len(o.data.vertices)==count
     incidence={}
@@ -1126,7 +1130,32 @@ for label,count in [('薄垫',16),('叠毯',24),('麻布靠枕',24)]:
     assert set(incidence.values())=={2},('open cloth profile',o.name)
 assert all(len(o.data.vertices)==16 for o in rest_feet)
 report['house05_rest']={'grounded_bed_feet':4,'mat_pillow_blanket_contact_passed':True,'table_lamp_contact_passed':True,'interior_route_width_m':1.0,'interior_route_length_m':3.2,'shared_repeat_families':7,'new_bitmap_bytes':0}
-report['house05_profile']={'chamfered_linked_feet':4,'chamfered_linked_railing_posts':5,'closed_cloth_profiles':3,'pillow_vertices':24,'blanket_vertices':24,'triangle_delta_vs_round26':expanded_tris-163594,'triangle_delta_limit':600,'subdivision':False,'new_bitmap_bytes':0}
+report['house05_profile']={'chamfered_linked_feet':4,'chamfered_linked_railing_posts':5,'closed_cloth_profiles':3,'pillow_vertices':24,'blanket_vertices':24,'asset_triangles':profile_tris,'asset_triangle_limit':1000,'subdivision':False,'new_bitmap_bytes':0}
+
+# Round28: source-defined needlework furniture contacts and domestic arrival strip.
+assert S['JN_house06_needlework']=='table_frame_spools_open_needlebox_cloth_rack_v1'
+table06=world_bounds(bpy.data.objects['JN_村落民居_06_案几'])
+floor06=world_bounds(bpy.data.objects['JN_村落民居_06_室内地坪'])
+for label,n in [('绣框撑足',4),('绣框长边',2),('绣框端边',2),('线轴',3),('绕线',3),('针盒长壁',2),('针盒端壁',2),('布架横足',2),('布架立柱',2),('案灯框柱',4)]:
+    group=[o for o in objs('JN_东岸绣户_'+label+'_') if not o.hide_render]
+    assert len(group)==n and len({o.data.as_pointer() for o in group})==1,(label,len(group))
+for label in ('绣框撑足','线轴'):
+    for o in objs('JN_东岸绣户_'+label+'_'):
+        if o.hide_render:continue
+        lo,hi=world_bounds(o)
+        assert abs(lo[2]-table06[1][2])<.0001
+        assert table06[0][0]<=lo[0]<hi[0]<=table06[1][0] and table06[0][1]<=lo[1]<hi[1]<=table06[1][1]
+for label in ('针盒底','针盒盖','案灯底座'):
+    assert abs(world_bounds(bpy.data.objects['JN_东岸绣户_'+label])[0][2]-table06[1][2])<.0001
+for o in objs('JN_东岸绣户_布架横足_'):
+    if not o.hide_render:assert abs(world_bounds(o)[0][2]-floor06[1][2])<.0001
+route06=((13.80,14.50),(16.00,15.50))
+for o in [o for o in objs('JN_东岸绣户_') if not o.hide_render and o.type in ('MESH','CURVE')]+[bpy.data.objects['JN_村落民居_06_案几'],bpy.data.objects['JN_村落民居_06_长凳']]:
+    lo,hi=world_bounds(o)
+    assert min(hi[0],route06[1][0])<=max(lo[0],route06[0][0]) or min(hi[1],route06[1][1])<=max(lo[1],route06[0][1]),('needlework route obstruction',o.name)
+assert S['JN_house06_new_image_bytes']==0
+assert expanded_tris-163834<=1600,('Round28 triangle increment',expanded_tris-163834)
+report['house06_needlework']={'shared_repeat_families':10,'spools':3,'open_needlebox':True,'tabletop_contact_passed':True,'rack_floor_contact_passed':True,'clear_interior_strip_m':[2.2,1.0],'new_bitmap_bytes':0,'triangle_delta_vs_round27':expanded_tris-163834,'delta_limit':1600}
 
 report['inhabited_houses']={'mesh_triangles_with_instances':house_tris,'triangle_budget':18000,'shells':8,'true_door_openings':8,'true_window_openings':16,'shared_wall_meshes':1,'door_clear_width_min':min(o['JN_door_clear_width'] for o in shells),'interior_depth_min':min(o['JN_interior_depth'] for o in shells),'ray_tests_passed':40,'floor_support_passed':8,'tea_east_risers_m':[.10,.10],'new_image_texture_bytes':0}
 print('INHABITED_HOUSES',json.dumps(report['inhabited_houses'],ensure_ascii=False))
