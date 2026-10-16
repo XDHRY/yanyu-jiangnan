@@ -21,6 +21,13 @@ for mesh in g['meshes']:
             normals+=1
             if color:assert g['textures'][color['index']]['source']!=g['textures'][normal['index']]['source'],(m['name'],'albedo used as tangent normal')
 assert checked>100 and report['projected_faces']>1000
+floor_materials=[m for m in g['materials'] if m['name'].startswith('JN_民居细磨青石')]
+if any(m.get('source_material')=='JN_民居细磨青石' for m in report.get('materials',[])):
+    assert floor_materials,'residential floor material lost'
+    for material in floor_materials:
+        pbr=material['pbrMetallicRoughness']
+        assert all(abs(a-b)<1e-5 for a,b in zip(pbr['baseColorFactor'],(.45,.52,.54,1)))
+        assert abs(pbr['roughnessFactor']-.82)<1e-5
 report.update({'textured_primitives_checked':checked,'normal_primitives_checked':normals,'glb_images':len(g.get('images',[])),'color_normal_aliases':0,'missing_uvs':0})
 (root/'material-audit.json').write_text(json.dumps(report,ensure_ascii=False,indent=2))
 print('MATERIAL_CONTRACT_OK',checked,normals)

@@ -2954,6 +2954,27 @@ def batch_static_objects(name,objects,mat,col,bev=0):
         mod=out.modifiers.new('静态批处理柔化','BEVEL');mod.width=bev;mod.segments=2
     return out
 
+def refine_residential_floor_material():
+    """Fine-ground domestic stone, separate from rough garden rocks/street paving."""
+    source=M['stone'];image=next(n.image for n in source.node_tree.nodes if n.type=='TEX_IMAGE' and n.image)
+    mat=bpy.data.materials.new('JN_民居细磨青石');mat.use_nodes=True
+    n=mat.node_tree.nodes;l=mat.node_tree.links;b=n.get('Principled BSDF')
+    tex=n.new('ShaderNodeTexImage');tex.image=image;tex.projection='BOX';tex.projection_blend=.25
+    tc=n.new('ShaderNodeTexCoord');mapping=n.new('ShaderNodeVectorMath');mapping.operation='MULTIPLY'
+    mapping.inputs[1].default_value=(1.8,1.8,1.8)
+    l.new(tc.outputs['Object'],mapping.inputs[0]);l.new(mapping.outputs[0],tex.inputs['Vector'])
+    tint=n.new('ShaderNodeMixRGB');tint.blend_type='MULTIPLY';tint.inputs[0].default_value=1
+    tint.inputs[2].default_value=(.45,.52,.54,1)
+    l.new(tex.outputs['Color'],tint.inputs[1]);l.new(tint.outputs[0],b.inputs['Base Color'])
+    b.inputs['Roughness'].default_value=.82;b.inputs['Specular IOR Level'].default_value=.25
+    bump=n.new('ShaderNodeBump');bump.label='细磨石微孔，非大尺度凹凸'
+    bump.inputs['Strength'].default_value=.16;bump.inputs['Distance'].default_value=.004
+    l.new(tex.outputs['Color'],bump.inputs['Height']);l.new(bump.outputs[0],b.inputs['Normal'])
+    floors=[o for o in S.objects if o.name.startswith(PREFIX+'村落民居_') and o.name.endswith('_室内地坪')]
+    assert len(floors)==8
+    for data in {o.data for o in floors}:data.materials[0]=mat
+    S['JN_residential_floor_material']='fine_ground_stone_1p8_per_m_v1'
+
 def optimize_static_batches():
     """Late, deterministic draw-call pass: preserve source build/boolean order, then batch purely static repeats."""
     paving=[o for o in list(C['water'].objects) if o.name.startswith(PREFIX+'庭院青石')]
@@ -3024,7 +3045,8 @@ def build(stage=None):
     if level>=4:sky()
     if level>=5:
         atmosphere();refine_clouds()
-        if P.get('art_upgrade',False):art_upgrade()
+        if P.get('art_upgrade',False):
+            art_upgrade();refine_residential_floor_material()
     optimize_static_batches()
     S.frame_set(80);viewport()
     print('STAGE',level,'OBJECTS',len(S.objects))
