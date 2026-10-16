@@ -8,6 +8,7 @@ on:
       - 'textures/**'
       - 'tools/export_web.py'
       - 'tools/web_materials.py'
+      - 'tools/web_material_factors.py'
       - 'tools/verify_web_materials.py'
       - 'tools/verify_web_budget.py'
       - 'validation/web_budget_contract.json'

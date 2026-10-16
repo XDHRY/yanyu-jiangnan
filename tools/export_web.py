@@ -85,6 +85,11 @@ kwargs = dict(
     export_apply=True,
 )
 bpy.ops.export_scene.gltf(**kwargs)
+from web_material_factors import apply_factors
+with open(path,'rb') as f:raw=f.read()
+raw,factor_materials=apply_factors(raw,material_report['materials'])
+with open(path,'wb') as f:f.write(raw)
+print('WEB_EXPLICIT_SOURCE_FACTORS',factor_materials)
 
 assert os.path.exists(path) and os.path.getsize(path) > 1024*1024, 'GLB export missing or too small'
 with open(path,'rb') as f:

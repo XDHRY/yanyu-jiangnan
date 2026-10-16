@@ -2965,6 +2965,7 @@ def refine_residential_floor_material():
     l.new(tc.outputs['Object'],mapping.inputs[0]);l.new(mapping.outputs[0],tex.inputs['Vector'])
     tint=n.new('ShaderNodeMixRGB');tint.blend_type='MULTIPLY';tint.inputs[0].default_value=1
     tint.inputs[2].default_value=(.45,.52,.54,1)
+    mat['JN_web_base_color_factor']=[.45,.52,.54,1]
     l.new(tex.outputs['Color'],tint.inputs[1]);l.new(tint.outputs[0],b.inputs['Base Color'])
     b.inputs['Roughness'].default_value=.82;b.inputs['Specular IOR Level'].default_value=.25
     bump=n.new('ShaderNodeBump');bump.label='细磨石微孔，非大尺度凹凸'
