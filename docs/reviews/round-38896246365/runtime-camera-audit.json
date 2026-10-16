@@ -1,0 +1,468 @@
+{
+  "source_commit": "269ca527f9c445dc9339db52ccd6c638a04cac27",
+  "diagnostic_sha256": "43d4e32da91c89e77c1c7bbaef8395aace0d1492a41724d2ff52851faee10e0b",
+  "renderer": "Chromium WebGL SwiftShader",
+  "captures": [
+    {
+      "label": "desktop15",
+      "viewport": [
+        1024,
+        640
+      ],
+      "ready": true,
+      "presets": [
+        {
+          "name": "JN_WEB_CAM_01_plan",
+          "type": "OrthographicCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_02_front_gate",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_03_pavilion_entry",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_04_pond_axis",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_05_water_to_pavilion",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_06_gate_reverse",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_07_east_return",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_08_roofline",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_09_pavilion_side",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_10_eye_path",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_11_village_plan",
+          "type": "OrthographicCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_12_village_lane",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_13_canal_bridge",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_14_village_waterfront",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_15_house06_needlework_front",
+          "type": "OrthographicCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_16_house06_needlework_door",
+          "type": "PerspectiveCamera"
+        }
+      ],
+      "activePreset": "JN_WEB_CAM_15_house06_needlework_front",
+      "cameraType": "OrthographicCamera",
+      "position": [
+        12.25583267211914,
+        5.887423992156982,
+        -14.013957023620605
+      ],
+      "quaternion": [
+        -0.232769578747536,
+        -0.5879645944449886,
+        -0.1817410738488275,
+        0.7530512206783212
+      ],
+      "poseError": 0,
+      "rotationError": 2.9802322387695312e-8,
+      "projection": [
+        0.11937426236094362,
+        0,
+        0,
+        0,
+        0,
+        0.1909988197775098,
+        0,
+        0,
+        0,
+        0,
+        -0.002000200020004981,
+        0,
+        0,
+        0,
+        -1.000200020004981,
+        1
+      ],
+      "frame": 36,
+      "triangles": 73816,
+      "reference": {
+        "kind": "orthographic",
+        "width": 16.754030227661133,
+        "height": 10.471268892288208
+      }
+    },
+    {
+      "label": "desktop16",
+      "viewport": [
+        1024,
+        640
+      ],
+      "ready": true,
+      "presets": [
+        {
+          "name": "JN_WEB_CAM_01_plan",
+          "type": "OrthographicCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_02_front_gate",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_03_pavilion_entry",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_04_pond_axis",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_05_water_to_pavilion",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_06_gate_reverse",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_07_east_return",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_08_roofline",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_09_pavilion_side",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_10_eye_path",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_11_village_plan",
+          "type": "OrthographicCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_12_village_lane",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_13_canal_bridge",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_14_village_waterfront",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_15_house06_needlework_front",
+          "type": "OrthographicCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_16_house06_needlework_door",
+          "type": "PerspectiveCamera"
+        }
+      ],
+      "activePreset": "JN_WEB_CAM_16_house06_needlework_door",
+      "cameraType": "PerspectiveCamera",
+      "position": [
+        14.399999618530273,
+        1.7999999523162842,
+        -15.100000381469727
+      ],
+      "quaternion": [
+        -0.09220740948566006,
+        -0.7367067337937085,
+        -0.10261463343867075,
+        0.661990346623874
+      ],
+      "poseError": 0,
+      "rotationError": 0,
+      "projection": [
+        1.4039942464904764,
+        0,
+        0,
+        0,
+        0,
+        2.2463907943847627,
+        0,
+        0,
+        0,
+        0,
+        -1.000200020004981,
+        -1,
+        0,
+        0,
+        -0.2000200049810284,
+        0
+      ],
+      "frame": 60,
+      "triangles": 10228,
+      "fov": 47.993289567849786,
+      "reference": {
+        "kind": "perspective",
+        "fov": 47.993289567849786,
+        "aspect": 1.6
+      }
+    },
+    {
+      "label": "mobile15",
+      "viewport": [
+        390,
+        844
+      ],
+      "ready": true,
+      "presets": [
+        {
+          "name": "JN_WEB_CAM_01_plan",
+          "type": "OrthographicCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_02_front_gate",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_03_pavilion_entry",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_04_pond_axis",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_05_water_to_pavilion",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_06_gate_reverse",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_07_east_return",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_08_roofline",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_09_pavilion_side",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_10_eye_path",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_11_village_plan",
+          "type": "OrthographicCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_12_village_lane",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_13_canal_bridge",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_14_village_waterfront",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_15_house06_needlework_front",
+          "type": "OrthographicCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_16_house06_needlework_door",
+          "type": "PerspectiveCamera"
+        }
+      ],
+      "activePreset": "JN_WEB_CAM_15_house06_needlework_front",
+      "cameraType": "OrthographicCamera",
+      "position": [
+        12.25583267211914,
+        5.887423992156982,
+        -14.013957023620605
+      ],
+      "quaternion": [
+        -0.232769578747536,
+        -0.5879645944449886,
+        -0.1817410738488275,
+        0.7530512206783212
+      ],
+      "poseError": 0,
+      "rotationError": 2.9802322387695312e-8,
+      "projection": [
+        0.11937426236094362,
+        0,
+        0,
+        0,
+        0,
+        0.0551610927971185,
+        0,
+        0,
+        0,
+        0,
+        -0.002000200020004981,
+        0,
+        0,
+        0,
+        -1.000200020004981,
+        1
+      ],
+      "frame": 90,
+      "triangles": 74116,
+      "reference": {
+        "kind": "orthographic",
+        "width": 16.754030227661133,
+        "height": 10.471268892288208
+      }
+    },
+    {
+      "label": "mobile16",
+      "viewport": [
+        390,
+        844
+      ],
+      "ready": true,
+      "presets": [
+        {
+          "name": "JN_WEB_CAM_01_plan",
+          "type": "OrthographicCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_02_front_gate",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_03_pavilion_entry",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_04_pond_axis",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_05_water_to_pavilion",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_06_gate_reverse",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_07_east_return",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_08_roofline",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_09_pavilion_side",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_10_eye_path",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_11_village_plan",
+          "type": "OrthographicCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_12_village_lane",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_13_canal_bridge",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_14_village_waterfront",
+          "type": "PerspectiveCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_15_house06_needlework_front",
+          "type": "OrthographicCamera"
+        },
+        {
+          "name": "JN_WEB_CAM_16_house06_needlework_door",
+          "type": "PerspectiveCamera"
+        }
+      ],
+      "activePreset": "JN_WEB_CAM_16_house06_needlework_door",
+      "cameraType": "PerspectiveCamera",
+      "position": [
+        14.399999618530273,
+        1.7999999523162842,
+        -15.100000381469727
+      ],
+      "quaternion": [
+        -0.09220740948566006,
+        -0.7367067337937085,
+        -0.10261463343867075,
+        0.661990346623874
+      ],
+      "poseError": 0,
+      "rotationError": 0,
+      "projection": [
+        1.4039942464904762,
+        0,
+        0,
+        0,
+        0,
+        0.6487651138996277,
+        0,
+        0,
+        0,
+        0,
+        -1.000200020004981,
+        -1,
+        0,
+        0,
+        -0.2000200049810284,
+        0
+      ],
+      "frame": 115,
+      "triangles": 10216,
+      "fov": 114.05179907580485,
+      "reference": {
+        "kind": "perspective",
+        "fov": 47.993289567849786,
+        "aspect": 1.6
+      }
+    }
+  ],
+  "page_errors": [],
+  "human_runtime_approval": "pending",
+  "note": "Browser export omits Blender lights/weather. Camera/loaded-model audit only; not final art approval."
+}

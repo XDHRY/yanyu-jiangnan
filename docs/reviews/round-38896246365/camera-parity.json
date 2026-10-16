@@ -1,0 +1,169 @@
+{
+  "source_commit": "269ca527f9c445dc9339db52ccd6c638a04cac27",
+  "diagnostic_sha256": "43d4e32da91c89e77c1c7bbaef8395aace0d1492a41724d2ff52851faee10e0b",
+  "presets": [
+    {
+      "name": "01_plan",
+      "type": "orthographic",
+      "projection": {
+        "xmag": 14,
+        "ymag": 8.75,
+        "zfar": 1000,
+        "znear": 0.10000000149011612
+      }
+    },
+    {
+      "name": "02_front_gate",
+      "type": "perspective",
+      "projection": {
+        "aspectRatio": 1.6,
+        "yfov": 0.5234270084945576,
+        "zfar": 1000,
+        "znear": 0.10000000149011612
+      }
+    },
+    {
+      "name": "03_pavilion_entry",
+      "type": "perspective",
+      "projection": {
+        "aspectRatio": 1.6,
+        "yfov": 0.5234270084945576,
+        "zfar": 1000,
+        "znear": 0.10000000149011612
+      }
+    },
+    {
+      "name": "04_pond_axis",
+      "type": "perspective",
+      "projection": {
+        "aspectRatio": 1.6,
+        "yfov": 0.46043917216964036,
+        "zfar": 1000,
+        "znear": 0.10000000149011612
+      }
+    },
+    {
+      "name": "05_water_to_pavilion",
+      "type": "perspective",
+      "projection": {
+        "aspectRatio": 1.6,
+        "yfov": 0.46043917216964036,
+        "zfar": 1000,
+        "znear": 0.10000000149011612
+      }
+    },
+    {
+      "name": "06_gate_reverse",
+      "type": "perspective",
+      "projection": {
+        "aspectRatio": 1.6,
+        "yfov": 0.4797141319700198,
+        "zfar": 1000,
+        "znear": 0.10000000149011612
+      }
+    },
+    {
+      "name": "07_east_return",
+      "type": "perspective",
+      "projection": {
+        "aspectRatio": 1.6,
+        "yfov": 0.4797141319700198,
+        "zfar": 1000,
+        "znear": 0.10000000149011612
+      }
+    },
+    {
+      "name": "08_roofline",
+      "type": "perspective",
+      "projection": {
+        "aspectRatio": 1.6,
+        "yfov": 0.4261249517166253,
+        "zfar": 1000,
+        "znear": 0.10000000149011612
+      }
+    },
+    {
+      "name": "09_pavilion_side",
+      "type": "perspective",
+      "projection": {
+        "aspectRatio": 1.6,
+        "yfov": 0.5483348893553471,
+        "zfar": 1000,
+        "znear": 0.10000000149011612
+      }
+    },
+    {
+      "name": "10_eye_path",
+      "type": "perspective",
+      "projection": {
+        "aspectRatio": 1.6,
+        "yfov": 0.5234270084945576,
+        "zfar": 1000,
+        "znear": 0.10000000149011612
+      }
+    },
+    {
+      "name": "11_village_plan",
+      "type": "orthographic",
+      "projection": {
+        "xmag": 25,
+        "ymag": 15.625,
+        "zfar": 1000,
+        "znear": 0.10000000149011612
+      }
+    },
+    {
+      "name": "12_village_lane",
+      "type": "perspective",
+      "projection": {
+        "aspectRatio": 1.6,
+        "yfov": 0.5234270084945576,
+        "zfar": 1000,
+        "znear": 0.10000000149011612
+      }
+    },
+    {
+      "name": "13_canal_bridge",
+      "type": "perspective",
+      "projection": {
+        "aspectRatio": 1.6,
+        "yfov": 0.4797141319700198,
+        "zfar": 1000,
+        "znear": 0.10000000149011612
+      }
+    },
+    {
+      "name": "14_village_waterfront",
+      "type": "perspective",
+      "projection": {
+        "aspectRatio": 1.6,
+        "yfov": 0.5483348893553471,
+        "zfar": 1000,
+        "znear": 0.10000000149011612
+      }
+    },
+    {
+      "name": "15_house06_needlework_front",
+      "type": "orthographic",
+      "projection": {
+        "xmag": 8.377015113830566,
+        "ymag": 5.235634446144104,
+        "zfar": 1000,
+        "znear": 0.10000000149011612
+      }
+    },
+    {
+      "name": "16_house06_needlework_door",
+      "type": "perspective",
+      "projection": {
+        "aspectRatio": 1.6,
+        "yfov": 0.8376409218220252,
+        "zfar": 1000,
+        "znear": 0.10000000149011612
+      }
+    }
+  ],
+  "camera_count": 16,
+  "projection_parity": true,
+  "human_runtime_approval": "pending"
+}
