@@ -1,0 +1,61 @@
+{
+  "baseline_round": 32,
+  "baseline_web_run": 38965576491,
+  "current_round": 33,
+  "source_commit": "7b0fed6c5f7a65984005eb196ae9c5deffb3cf21",
+  "baseline": {
+    "instance_triangles": 627155,
+    "glb_bytes": 52799744,
+    "attribute_index_bytes": 29792134,
+    "images": 7,
+    "rgba8_bytes": 44030496
+  },
+  "current": {
+    "instance_triangles": 627155,
+    "glb_bytes": 52922328,
+    "attribute_index_bytes": 29792134,
+    "images": 9,
+    "rgba8_bytes": 44554784
+  },
+  "geometry_delta": 0,
+  "new_maps": 2,
+  "rgba8_delta": 524288,
+  "original_7_image_hashes_preserved": true,
+  "actual_normal_and_roughness_images_validated": true,
+  "human_gates": "pending",
+  "source_statistics": {
+    "scene": "\u70df\u96e8\u6c5f\u5357 \u00b7 \u96ea\u6708\u6c5f\u5357",
+    "objects": 4521,
+    "mesh_objects": 3005,
+    "curve_objects": 1426,
+    "vertices": 169363,
+    "polygons": 98208,
+    "materials": 48,
+    "collections": 11,
+    "cameras": 3,
+    "lights": 45,
+    "object_drivers": 4444,
+    "frames": [
+      1,
+      240
+    ],
+    "fps": 24,
+    "weather": 0
+  },
+  "spatial_render_seconds": 310.77,
+  "web_blender_render_seconds": 152.08,
+  "gltf_materials": 47,
+  "tested_merge_commit": "bdc3cff156ef1d4a833072a087e96066fb1436ec",
+  "browser_audit": {
+    "loading_overlay_opacity": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "max_pose_error": 0,
+    "max_rotation_error": 2.9802322387695312e-08,
+    "page_errors": [],
+    "renderer": "Chromium WebGL SwiftShader"
+  }
+}

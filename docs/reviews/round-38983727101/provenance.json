@@ -1,0 +1,173 @@
+{
+  "source_commit": "7b0fed6c5f7a65984005eb196ae9c5deffb3cf21",
+  "merged_commit": "27e2043582f51d406e16c565d8b122cc894d8e21",
+  "tested_merge_commit": "bdc3cff156ef1d4a833072a087e96066fb1436ec",
+  "runs": {
+    "CI": 38983726889,
+    "Smoke": 38983726999,
+    "Spatial": 38983727101,
+    "Web": 38983726795
+  },
+  "artifacts": {
+    "Smoke": 12082028312,
+    "Spatial": 12082153678,
+    "Web": 12081723728
+  },
+  "old_round": 32,
+  "baseline_web_run": 38965576491,
+  "human_approval": "pending",
+  "files": {
+    "README.md": {
+      "bytes": 3868,
+      "sha256": "f10ada7af9358a4cc1110ef65afa43484705f719175e8f93131f2594994c8d4c"
+    },
+    "round33-before-after.jpg": {
+      "bytes": 303928,
+      "sha256": "3b6c3eb508dc132cf93faea44b48888574f3e2a73f8513da0a01af58c1375547"
+    },
+    "round33-contactsheet.jpg": {
+      "bytes": 255217,
+      "sha256": "fce6e9c59af348cbbdf8862595f36f8262fe4cdfb27183238f1d1f37bed645a0"
+    },
+    "performance.json": {
+      "bytes": 1491,
+      "sha256": "04d07a61cd5f5f6d70dccb0db301b0d5a4cc83693fb9af9b4a3fd1a33bad911c"
+    },
+    "Jiangnan.blend": {
+      "bytes": 23492937,
+      "sha256": "6c3431179f61c1e3790747f08b039ef6902ef8f98b47a4dc8f15821ee9e79724"
+    },
+    "scene_statistics.json": {
+      "bytes": 317,
+      "sha256": "20e57048536fa351b0690ffa507d80f4b90d4c63e107e0da8896099161925060"
+    },
+    "jiangnan-town-standalone.html": {
+      "bytes": 71928160,
+      "sha256": "7aad9ded98f129fa0a95f6b9cf90284ea3888fcaa7e5317dc153ecc2c048f18c"
+    },
+    "textures/roof06_normal.png": {
+      "bytes": 79794,
+      "sha256": "6b2a895dfd5f068afc37d49a7d9207daa63ed8d3739c343825c81efb990aaae8"
+    },
+    "textures/roof06_orm.png": {
+      "bytes": 42077,
+      "sha256": "1c8eaa7e714849df80ec86caf90b6bb44d2a2e6b99c074f17ddab1aa1d84ef2a"
+    },
+    "baseline-round32/desktop15.png": {
+      "bytes": 719686,
+      "sha256": "b3875022a49339adad9cc1698f3189e157b7afb9857cd590720673dbd36fea4f"
+    },
+    "baseline-round32/15_house06_needlework_front.png": {
+      "bytes": 925798,
+      "sha256": "eab20acf7a7e6d0514bb32044a4fa101fa68e03bb7cbec009fd6fd58e12dba90"
+    },
+    "validation/validation.json": {
+      "bytes": 16719,
+      "sha256": "8125ddd8b03b2416240fb26ba41e112f8e8bd8721e576fb5bfd2a2fa8c9c83e4"
+    },
+    "validation/asset_budget.json": {
+      "bytes": 10051,
+      "sha256": "f9ba2b09631fbb1ac0dcc3bf75d039f2a49ba7d17602a43c19953bcb18224940"
+    },
+    "validation/material-audit.json": {
+      "bytes": 19290,
+      "sha256": "d2a6b3ea2240facf54d95115b24addca7ce75a6a139c50b173fbc027052af257"
+    },
+    "validation/camera-parity.json": {
+      "bytes": 3897,
+      "sha256": "064a7bf4c93786f6d20a91fe5de8ab66a34d13f7609c798a3bce25dcd973f338"
+    },
+    "validation/web-budget.json": {
+      "bytes": 627,
+      "sha256": "ff409221c3530fdb8034ec89a9dc109319dd5ad0c85db654ab53d79cf638e78e"
+    },
+    "diagnostics/07_east_return.png": {
+      "bytes": 1119563,
+      "sha256": "3c96f7bd3b10b9038af4c804db9f3a1850f82bb1361d8a576fb442b656cfb1be"
+    },
+    "diagnostics/10_eye_path.png": {
+      "bytes": 1120401,
+      "sha256": "916114bf8a6e5eeaf795da5db88f1e428c4d1a0565a3e34823abcd1e5b802a47"
+    },
+    "diagnostics/08_roofline.png": {
+      "bytes": 1176793,
+      "sha256": "9230921a2b8c8bbaa34218a8a8a7d26c14a4d3eba128c33e71e106729975e352"
+    },
+    "diagnostics/12_village_lane.png": {
+      "bytes": 951488,
+      "sha256": "fdee3d565690bb04359363d419d7023acf46dc7a15c660c4111921f83b98db29"
+    },
+    "diagnostics/manifest.json": {
+      "bytes": 18007,
+      "sha256": "2b6804084cb5490029d5d054013f7be3b811395136ef87951e1c4401d19d8e21"
+    },
+    "diagnostics/13_canal_bridge.png": {
+      "bytes": 945941,
+      "sha256": "f07ebf85eae50e7299c0b5c23cd3c40404326fe7648a8c25efce5a51197d319a"
+    },
+    "diagnostics/02_front_gate.png": {
+      "bytes": 1060991,
+      "sha256": "aeb204cb4030f7082765589c525a7ad9a6c78ecab6626409ed46e35c622bbb9e"
+    },
+    "diagnostics/04_pond_axis.png": {
+      "bytes": 1067150,
+      "sha256": "142fdfe59c6e9a835fb6eee8642ac0da1a02085a75ea7c9b4e295c71548f065f"
+    },
+    "diagnostics/11_village_plan.png": {
+      "bytes": 896267,
+      "sha256": "8e7cf7312121bd978720b9fc19bb1fd16b4560ac87c304e9f26c09e193881256"
+    },
+    "diagnostics/09_pavilion_side.png": {
+      "bytes": 1129568,
+      "sha256": "1bee42c4b38ef11b1714a461708148926bfc270758672dedd7502d9b78d8d193"
+    },
+    "diagnostics/01_plan.png": {
+      "bytes": 1023705,
+      "sha256": "334be93a98223e66c29cd181c3eb8ddc427dfe3b208465dc4239daf6c8145be9"
+    },
+    "diagnostics/16_house06_needlework_door.png": {
+      "bytes": 1030986,
+      "sha256": "6abcda2ab0a4717306cf4052611883a758c309c616d9ee5f2f6cdf37876ca02f"
+    },
+    "diagnostics/15_house06_needlework_front.png": {
+      "bytes": 922350,
+      "sha256": "d772b20deb9cb236d7b0d79b67714e8e1cc8fd72ad03e7b5a824b29d360ed8ff"
+    },
+    "diagnostics/14_village_waterfront.png": {
+      "bytes": 968233,
+      "sha256": "a24ebb0447198d792a1388db670a984c75158860d37fd0a86c1cb1309b25cf27"
+    },
+    "diagnostics/06_gate_reverse.png": {
+      "bytes": 913004,
+      "sha256": "4304d4be10f91aa49d7c65cde01d02f08181859c091ebe971d742a57253686f3"
+    },
+    "diagnostics/05_water_to_pavilion.png": {
+      "bytes": 1076364,
+      "sha256": "b026f423b44976c659f0045eff096f3803bbc7b2b8b048cb7143f7952d4b9a27"
+    },
+    "diagnostics/03_pavilion_entry.png": {
+      "bytes": 1133462,
+      "sha256": "5772ec55c5c36935a196ce0c0dc866a1ed4729e2d2f24b5293055fc8ae0da654"
+    },
+    "runtime-audit/desktop15.png": {
+      "bytes": 723091,
+      "sha256": "b1b6ef982d045e0a233e51dc13c91f102618ffaa03aa7e5cdcdb393a81ba34c6"
+    },
+    "runtime-audit/mobile15.png": {
+      "bytes": 134607,
+      "sha256": "3bdf2604f0f643c5a4a52f7812679f4a10d7cb3cd6c48b49329030c6af03eb5d"
+    },
+    "runtime-audit/runtime-camera-audit.json": {
+      "bytes": 11561,
+      "sha256": "ae069f763470a3ae62aa3467aea2e235ffb9014c8f1e7c023ad95d1a4fee0ebf"
+    },
+    "runtime-audit/desktop16.png": {
+      "bytes": 979819,
+      "sha256": "0fc09eab982d1c9444b8ca88be6b9d8c9201d9c4d4a5d5569b979b0a031b9a90"
+    },
+    "runtime-audit/mobile16.png": {
+      "bytes": 469719,
+      "sha256": "19c5cd7eb322821fba168f855eed80616aa9d4df5641b70982d4cd5d1c39a851"
+    }
+  }
+}
