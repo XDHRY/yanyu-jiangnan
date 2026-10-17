@@ -73,6 +73,18 @@ assert abs(floor_bsdf.inputs['Roughness'].default_value-.82)<1e-5
 floor_bump=next(n for n in floor_material.node_tree.nodes if n.type=='BUMP')
 assert abs(floor_bump.inputs['Distance'].default_value-.004)<1e-6
 report['residential_floor_material']={'users':8,'shared_meshes':1,'roughness':.82,'repeat_per_local_m':1.8,'bump_distance_m':.004,'new_images':0,'tangent_normal_bake':False}
+roof_pbr=bpy.data.materials['JN_绣户黛瓦PBR']
+roof_users=[o for o in S.objects if o.type=='MESH' and roof_pbr in list(o.data.materials) and not o.hide_render]
+assert [o.name for o in roof_users]==['JN_村落民居_06_屋面']
+assert len(roof_users[0].data.vertices)==15 and len(roof_users[0].data.polygons)==8
+assert roof_users[0].data.uv_layers.get('JN_ROOF_MetreUV')
+for name in ('roof06_normal','roof06_orm'):
+    image=bpy.data.images[name];assert tuple(image.size)==(256,256) and image.packed_file
+    assert image.colorspace_settings.name=='Non-Color'
+normal_image=bpy.data.images['roof06_normal'];rough_image=bpy.data.images['roof06_orm']
+assert normal_image!=rough_image
+assert normal_image.pixels[2]>.95 and .5<rough_image.pixels[1]<.85
+report['house06_roof_pbr']={'users':1,'source_vertices':15,'source_quads':8,'new_images':2,'map_size':[256,256],'added_rgba8_bytes':524288,'normal_source':'analytic derivative of periodic height field; not albedo or high-low mesh bake','uv_period_m':.6,'geometry_added':0}
 report['pierced_scholar_stones']=sum(o.name.startswith('JN_太湖石_瘦透漏皱') for o in S.objects)
 assert report['pierced_scholar_stones']==3
 report['spatial_connectors']={
@@ -217,7 +229,14 @@ assert all(bpy.data.objects[f'JN_村落民居_{i:02d}_屋面'].modifiers.get('�
 # supported by their own gables/purlins; all rafter and tile-end rows are linked.
 roofs=[bpy.data.objects[f'JN_村落民居_{i:02d}_屋面'] for i in range(1,9)]
 standard=[roofs[i-1] for i in (1,2,5,6)];high=[roofs[i-1] for i in (3,4,7,8)]
-assert len({o.data.as_pointer() for o in standard})==1 and len({o.data.as_pointer() for o in high})==1
+standard_shared=[o for o in standard if o.name!='JN_村落民居_06_屋面']
+assert len(standard_shared)==3 and len({o.data.as_pointer() for o in standard_shared})==1
+assert len({o.data.as_pointer() for o in high})==1
+sample_roof=bpy.data.objects['JN_村落民居_06_屋面']
+assert sample_roof in standard and len(standard)==4
+reference_roof=standard_shared[0].data
+assert [tuple(v.co) for v in sample_roof.data.vertices]==[tuple(v.co) for v in reference_roof.vertices]
+assert [tuple(p.vertices) for p in sample_roof.data.polygons]==[tuple(p.vertices) for p in reference_roof.polygons]
 assert standard[0].data.as_pointer()!=high[0].data.as_pointer()
 assert all(abs(bpy.data.objects[f'JN_村落民居_{i:02d}_正脊'].location.z-(4.57 if i in (3,4,7,8) else 4.39))<.002 for i in range(1,9))
 fire_ridges=[bpy.data.objects[f'JN_村落民居_{i:02d}_正脊'] for i in (4,8)]

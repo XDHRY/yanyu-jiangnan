@@ -2980,6 +2980,52 @@ def refine_residential_floor_material():
     for obj in floors:obj.data=data
     S['JN_residential_floor_material']='fine_ground_stone_1p8_per_m_v1'
 
+def roof_microtexel33(u,v):
+    """Periodic 0.6m clay height field: analytic derivatives, never albedo-as-normal."""
+    k=2*math.pi
+    du=k*(.00010*13*math.cos(k*13*u)*math.sin(k*17*v)+.000035*39*math.cos(k*(39*u+29*v))-.00002*61*math.sin(k*(61*u-47*v)))
+    dv=k*(.00010*17*math.sin(k*13*u)*math.cos(k*17*v)+.000035*29*math.cos(k*(39*u+29*v))+.00002*47*math.sin(k*(61*u-47*v)))
+    x,y=-du/.6,-dv/.6;length=math.sqrt(1+x*x+y*y)
+    normal=(x/length,y/length,1/length)
+    rough=.68+.10*math.sin(k*5*u)*math.sin(k*7*v)+.04*math.cos(k*(11*u+3*v))
+    return normal,rough
+
+def refine_house06_roof_pbr():
+    obj=bpy.data.objects[PREFIX+'村落民居_06_屋面']
+    data=obj.data.copy();data.name='JN_绣户屋瓦PBR小样';obj.data=data
+    uv=data.uv_layers.new(name='JN_ROOF_MetreUV')
+    for loop in data.loops:
+        co=data.vertices[loop.vertex_index].co
+        arc=math.copysign(math.hypot(co.y*obj.scale.y,co.z-1.05),co.y) if abs(co.y)>1e-6 else 0
+        uv.data[loop.index].uv=(co.x*obj.scale.x/.6,arc/.6)
+    pixels_n=[];pixels_r=[];size=256
+    for j in range(size):
+        for i in range(size):
+            normal,rough=roof_microtexel33((i+.5)/size,(j+.5)/size)
+            pixels_n.extend([*(.5+.5*x for x in normal),1]);pixels_r.extend([1,rough,0,1])
+    images=[]
+    for name,values in [('roof06_normal',pixels_n),('roof06_orm',pixels_r)]:
+        image=bpy.data.images.new(name,width=size,height=size,alpha=True)
+        image.colorspace_settings.name='Non-Color';image.pixels.foreach_set(values);image.update()
+        image.filepath_raw=os.path.join(P['output_dir'],'textures',name+'.png');image.file_format='PNG';image.save();image.pack();images.append(image)
+    mat=bpy.data.materials.new('JN_绣户黛瓦PBR');mat.use_nodes=True
+    nodes=mat.node_tree.nodes;links=mat.node_tree.links;b=nodes.get('Principled BSDF')
+    uv_node=nodes.new('ShaderNodeUVMap');uv_node.uv_map=uv.name
+    textures=[]
+    clay=next(n.image for n in M['tile'].node_tree.nodes if n.type=='TEX_IMAGE' and n.image)
+    for image in [clay,*images]:
+        tex=nodes.new('ShaderNodeTexImage');tex.image=image;links.new(uv_node.outputs['UV'],tex.inputs['Vector']);textures.append(tex)
+    tint=nodes.new('ShaderNodeMixRGB');tint.blend_type='MULTIPLY';tint.inputs[0].default_value=1;tint.inputs[2].default_value=(.48,.58,.68,1)
+    links.new(textures[0].outputs['Color'],tint.inputs[1]);links.new(tint.outputs[0],b.inputs['Base Color'])
+    mat['JN_web_base_color_factor']=[.48,.58,.68,1]
+    normal=nodes.new('ShaderNodeNormalMap');normal.space='TANGENT';normal.uv_map=uv.name
+    links.new(textures[1].outputs['Color'],normal.inputs['Color']);links.new(normal.outputs['Normal'],b.inputs['Normal'])
+    channels=nodes.new('ShaderNodeSeparateRGB');links.new(textures[2].outputs['Color'],channels.inputs[0])
+    links.new(channels.outputs['G'],b.inputs['Roughness']);links.new(channels.outputs['B'],b.inputs['Metallic'])
+    b.inputs['Specular IOR Level'].default_value=.25
+    data.materials[0]=mat
+    S['JN_house06_roof_pbr']='analytic_height_derivative_256_normal_orm_v1'
+
 def optimize_static_batches():
     """Late, deterministic draw-call pass: preserve source build/boolean order, then batch purely static repeats."""
     paving=[o for o in list(C['water'].objects) if o.name.startswith(PREFIX+'庭院青石')]
@@ -3051,7 +3097,7 @@ def build(stage=None):
     if level>=5:
         atmosphere();refine_clouds()
         if P.get('art_upgrade',False):
-            art_upgrade();refine_residential_floor_material()
+            art_upgrade();refine_residential_floor_material();refine_house06_roof_pbr()
     optimize_static_batches()
     S.frame_set(80);viewport()
     print('STAGE',level,'OBJECTS',len(S.objects))

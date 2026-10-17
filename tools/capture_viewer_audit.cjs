@@ -10,12 +10,16 @@ async function main(){
   const page=await browser.newPage({viewport:{width:1024,height:640},deviceScaleFactor:1});const errors=[];page.on('pageerror',e=>errors.push(String(e)));
   await page.goto('http://127.0.0.1:'+server.address().port+'/',{waitUntil:'domcontentloaded'});
   await page.waitForFunction(()=>window.JIANGNAN_REVIEW?.snapshot().ready&&window.JIANGNAN_REVIEW.snapshot().triangles>0,null,{timeout:180000});
+  // Model readiness precedes the loading overlay's CSS fade. Never capture
+  // during that transition: it darkens the whole scene and invalidates B/A QA.
+  await page.waitForFunction(()=>{const e=document.querySelector('#loading');return e?.classList.contains('done')&&Number(getComputedStyle(e).opacity)<0.001;},null,{timeout:10000});
   await page.evaluate(()=>document.body.classList.add('ui-hidden'));await page.addStyleTag({content:'#restoreUI{display:none!important}'});
   const rows=[];
   for(const [label,width,height,index] of [['desktop15',1024,640,14],['desktop16',1024,640,15],['mobile15',390,844,14],['mobile16',390,844,15]]){
    await page.setViewportSize({width,height});const before=await page.evaluate(i=>{const r=window.JIANGNAN_REVIEW;const f=r.snapshot().frame;r.goPreset(i);return f;},index);
    try{await page.waitForFunction(({index,before})=>{const s=window.JIANGNAN_REVIEW.snapshot();return s.activePreset===s.presets[index].name&&s.frame>before+3&&s.poseError<1e-5&&s.rotationError<1e-5;},{index,before},{timeout:60000});}catch(e){const failed=await page.evaluate(()=>window.JIANGNAN_REVIEW.snapshot());console.error('CAMERA_AUDIT_FAILED',label,JSON.stringify(failed));fs.writeFileSync(path.join(out,'failed-camera.json'),JSON.stringify({label,...failed},null,2));await page.screenshot({path:path.join(out,'failed-camera.png')});throw e;}
-   const snapshot=await page.evaluate(()=>window.JIANGNAN_REVIEW.snapshot());
+   const snapshot=await page.evaluate(()=>({...window.JIANGNAN_REVIEW.snapshot(),loadingOverlayOpacity:Number(getComputedStyle(document.querySelector('#loading')).opacity)}));
+   if(snapshot.loadingOverlayOpacity>=0.001)throw Error('loading overlay contaminates screenshot');
    if(snapshot.cameraType!==(index===14?'OrthographicCamera':'PerspectiveCamera'))throw Error('wrong projection type');
    await page.screenshot({path:path.join(out,label+'.png')});rows.push({label,viewport:[width,height],...snapshot});
   }
