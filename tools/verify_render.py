@@ -1022,7 +1022,7 @@ for seat in seats:
     support=min(ribs,key=lambda r:abs(r.location.y-seat.location.y))
     assert abs(support.location.y-seat.location.y)<.001
     assert abs(world_bounds(seat)[0][2]-world_bounds(support)[1][2])<.001
-report['sampan_shell42']={'hull_vertices':40,'hull_quads':38,'hull_triangles':76,'added_source_triangles':120,'axis_inset_m':.035,'closed_positive_volume':True,'shared_tapered_ribs':3,'supported_seats':2,'rib_top_m':.455,'shared_contoured_rails':2,'rail_prototype_vertices':20,'rail_prototype_quads':18,'rail_width_m':.04,'rail_height_m':.04,'buoyancy_seaworthiness':'not validated','human_approval':'pending'}
+report['sampan_shell42']={'hull_vertices':40,'hull_quads':38,'hull_triangles':76,'added_source_triangles':184,'axis_inset_m':.035,'closed_positive_volume':True,'shared_tapered_ribs':3,'supported_seats':2,'rib_top_m':.455,'shared_contoured_rails':2,'rail_prototype_vertices':20,'rail_prototype_quads':18,'rail_width_m':.04,'rail_height_m':.04,'shared_oars':3,'oar_prototype_vertices':16,'oar_prototype_faces':10,'buoyancy_seaworthiness':'not validated','human_approval':'pending'}
 
 rack_posts=[bpy.data.objects[f'JN_北河转水埠_船具架立柱_{i}'] for i in range(1,3)]
 rack_shoes=[bpy.data.objects[f'JN_北河转水埠_船具架柱础_{i}'] for i in range(1,3)]
@@ -1037,6 +1037,27 @@ oar_proto=bpy.data.objects['JN_北河转水埠_船桨原型']
 wet_marks=[o for o in S.objects if o.name.startswith('JN_北河转水埠_共享桥面湿痕_')]
 wet_proto=bpy.data.objects['JN_北河转水埠_桥面湿痕原型']
 assert len(oars)==3 and all(o.data.as_pointer()==oar_proto.data.as_pointer() for o in oars)
+ob42=bmesh.new();ob42.from_mesh(oar_proto.data)
+assert all(e.is_manifold for e in ob42.edges) and ob42.calc_volume(signed=True)>0
+ob42.free()
+assert len(oar_proto.data.vertices)==16 and len(oar_proto.data.polygons)==10
+aboard42=bpy.data.objects['JN_北河转水埠_共享船桨_舢板']
+for seat in seats:
+    top=world_bounds(seat)[1][2]
+    assert abs(world_bounds(aboard42)[0][2]-top)<.001,'aboard oar floats over seats'
+    point=Vector((7.28+__import__('math').tan(.16)*(seat.location.y-102.65),seat.location.y,top+.003))
+    hit,where,normal,face=aboard42.ray_cast(aboard42.matrix_world.inverted()@point,Vector((0,0,-1)),distance=.008)
+    assert hit and abs((aboard42.matrix_world@where).z-top)<.001,'missing actual oar/seat contact'
+report['sampan_shell42']['oar_seat_contacts']=2
+report['sampan_shell42']['aboard_oar_lowered_m']=.06
+beam42=world_bounds(bpy.data.objects['JN_北河转水埠_船具架横梁'])
+for stored in [o for o in oars if '借用架' in o.name]:
+    assert abs(world_bounds(stored)[0][2]-.16)<.001,'stored oar penetrates quay floor'
+    origin=Vector((beam42[0][0]+.003,stored.location.y,(beam42[0][2]+beam42[1][2])/2))
+    inv=stored.matrix_world.inverted();direction=(inv.to_3x3()@Vector((-1,0,0))).normalized()
+    hit,where,normal,face=stored.ray_cast(inv@origin,direction,distance=.012)
+    assert hit and abs((stored.matrix_world@where).x-beam42[0][0])<.005,'stored oar misses actual rack support'
+report['sampan_shell42']['stored_oar_floor_and_rack_contacts']=2
 assert len(wet_marks)==4 and all(o.data.as_pointer()==wet_proto.data.as_pointer() for o in wet_marks)
 assert all(world_bounds(o)[0][2]>.58 for o in wet_marks)
 assert bpy.data.objects.get('JN_北河转水埠_借用架盘绳') and bpy.data.objects.get('JN_北河转水埠_舢板系缆')
@@ -1356,7 +1377,7 @@ new37=[o for o in S.objects if o.get('JN_asset_family')=='quay-cobbler37' and o.
 tris37=sum(len(o.data.loop_triangles) for o in new37)
 new40=[o for o in S.objects if o.get('JN_asset_family')=='east-rope-bench40' and o.type=='MESH']
 tris40=sum(len(o.data.loop_triangles) for o in new40)
-assert expanded_tris-tris37-tris40-120==166626,'pre-Round37 source triangle baseline changed'
+assert expanded_tris-tris37-tris40-184==166626,'pre-Round37 source triangle baseline changed'
 assert tris37<=500 and new37,'public repair stop source budget exceeded'
 visible37=[o for o in new37 if not o.hide_render]
 assert len(visible37)==25,len(visible37)
@@ -1403,7 +1424,7 @@ mapping39=next(n for n in mat39.node_tree.nodes if n.type=='VECT_MATH' and n.ope
 assert all(abs(v-2.4)<1e-5 for v in mapping39.inputs[1].default_value)
 bump39=next(n for n in mat39.node_tree.nodes if n.type=='BUMP')
 assert abs(bump39.inputs['Distance'].default_value-.003)<1e-6
-assert expanded_tris-tris40-120==167094
+assert expanded_tris-tris40-184==167094
 report['quay_stone39']={'visible_users':23,'hidden_prototypes':2,'source_triangles':expanded_tris,'new_geometry':0,'new_materials':1,'new_images':0,'repeat_per_local_m':2.4,'nominal_repeat_m':1/2.4,'roughness':.88,'bump_distance_m':.003,'human_approval':'pending'}
 visible40=[o for o in new40 if not o.hide_render]
 assert len(new40)==17 and len(visible40)==13 and tris40==888,(len(new40),len(visible40),tris40)

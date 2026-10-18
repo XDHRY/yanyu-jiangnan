@@ -2652,6 +2652,14 @@ def sampan_rail42():
     faces.extend(((0,1,2,3),(19,18,17,16)))
     return verts,faces
 
+def sampan_oar42():
+    """Simple non-self-intersecting shaft/blade silhouette, one shared solid."""
+    profile=[(-.035,-1.08),(.035,-1.08),(.035,.48),(.13,.78),(.13,1.02),(-.13,1.02),(-.13,.78),(-.035,.48)]
+    verts=[(x,y,z) for z in (-.025,.025) for x,y in profile]
+    faces=[tuple(range(7,-1,-1)),tuple(range(8,16))]
+    faces.extend((i,(i+1)%8,(i+1)%8+8,i+8) for i in range(8))
+    return verts,faces
+
 def sampan_rib42():
     """Closed tapered saddle: small floor face, broad seat-bearing top."""
     height=.455-(.19+.03*(.37/.72)+.035)
@@ -2676,7 +2684,7 @@ def town_phase18_quay_boat_gear():
     # A compact open sampan occupies the quiet water south of the foot crossing.
     # Its 2.36 m hull remains wholly inside the terminal basin and leaves a clear
     # water gap before the bridge, so the public crossing and turning space stay
-    # visually dominant.  Four longitudinal rings make a genuinely open hull.
+    # visually dominant. Five outer rings plus inset walls leave the cockpit open.
     hv,hf=sampan_shell42()
     hull=mesh('北河转水埠_停泊舢板船壳',hv,hf,boatwood,c)
     hull.location=(7.30,102.65,0)
@@ -2709,16 +2717,14 @@ def town_phase18_quay_boat_gear():
         box(f'北河转水埠_船具架立柱_{i}',(14.48,y,1.12),(.14,.14,1.64),wood,c,.006)
     box('北河转水埠_船具架横梁',(14.48,105.735,1.92),(.16,1.70,.14),wood,c,.006)
     box('北河转水埠_船具箱',(14.18,105.08,.45),(.52,.82,.44),wood,c,.014)
-    # Closed six-face oar prism: one mesh is used once aboard and twice on the
+    # Closed shaft-shoulder-blade solid: one mesh is used once aboard and twice on the
     # lending rack.  The broad blade remains geometric at this close range.
-    ov=[(-.035,-1.08,-.025),(.035,-1.08,-.025),(.035,.58,-.025),(.13,1.02,-.025),
-        (-.035,-1.08,.025),(.035,-1.08,.025),(.035,.58,.025),(.13,1.02,.025)]
-    of=[(0,1,2,3),(4,7,6,5),(0,4,5,1),(1,5,6,2),(2,6,7,3),(3,7,4,0)]
+    ov,of=sampan_oar42()
     oar=mesh('北河转水埠_船桨原型',ov,of,boatwood,c);oar.hide_render=True;oar.hide_viewport=True
-    o=bpy.data.objects.new(PREFIX+'北河转水埠_共享船桨_舢板',oar.data);c.objects.link(o);o.location=(7.28,102.65,.61);o.rotation_euler[2]=-.16
-    for i,(x,y,ang) in enumerate(((14.30,105.38,.04),(14.31,106.02,-.05)),1):
+    o=bpy.data.objects.new(PREFIX+'北河转水埠_共享船桨_舢板',oar.data);c.objects.link(o);o.location=(7.28,102.65,.55);o.rotation_euler[2]=-.16
+    for i,(x,y,ang) in enumerate(((14.30,105.38,.04),(14.30,106.02,-.05)),1):
         o=bpy.data.objects.new(PREFIX+f'北河转水埠_共享船桨_借用架_{i}',oar.data);c.objects.link(o)
-        o.location=(x,y,1.08);o.rotation_euler=(pi/2,0,ang)
+        o.location=(x,y,1.24);o.rotation_euler=(pi/2,0,ang)
 
     # Coiled rope and a taut mooring line visually connect rack, bollard and
     # boat. Curves stay at resolution 1 / bevel 0 to avoid repeated subdivision.
