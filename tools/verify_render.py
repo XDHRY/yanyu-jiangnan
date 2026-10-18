@@ -1217,7 +1217,7 @@ for o in [o for o in objs('JN_东岸绣户_') if not o.hide_render and o.type in
 assert S['JN_house06_new_image_bytes']==0
 needlework_tris=0
 for o in objs('JN_东岸绣户_'):
-    if o.type=='MESH' and not o.hide_render:o.data.calc_loop_triangles();needlework_tris+=len(o.data.loop_triangles)
+    if o.type=='MESH':o.data.calc_loop_triangles();needlework_tris+=len(o.data.loop_triangles)
 assert needlework_tris<=1600,('Round28 scoped asset triangles',needlework_tris)
 report['house06_needlework']={'shared_repeat_families':10,'spools':3,'closed_spool_profiles':True,'open_needlebox':True,'tabletop_contact_passed':True,'rack_floor_and_rail_contact_passed':True,'drape_fold_vertices':len(cloth06.data.vertices),'drape_grid':[21,11],'supported_crown_rows':21,'closed_evaluated_drape':True,'subdivision':False,'clear_interior_strip_m':[2.2,1.0],'new_bitmap_bytes':0,'triangle_delta_vs_round27':expanded_tris-163834,'delta_limit':1600}
 
@@ -1259,6 +1259,18 @@ prep_tris=0
 for o in prep07:
     if o.type=='MESH':o.data.calc_loop_triangles();prep_tris+=len(o.data.loop_triangles)
 assert prep_tris<=1200,prep_tris
+collar07=bpy.data.objects['JN_东岸备膳户_承锅圈'];pot07=bpy.data.objects['JN_东岸备膳户_敞口铁锅']
+assert len(collar07.data.vertices)==64 and len(collar07.data.polygons)==64
+assert abs(world_bounds(collar07)[0][2]-.97)<1e-5
+assert abs(world_bounds(pot07)[0][2]-world_bounds(collar07)[1][2])<1e-5
+pot_ray=S.ray_cast(dg07,Vector((17.25,20.65,1.40)),Vector((0,0,-1)),distance=.50)
+assert pot_ray[0] and pot_ray[4].name==pot07.name and pot_ray[1].z<1.05,'pot mouth must remain open'
+iron07=bpy.data.materials['JN_备膳户熟铁'];iron_bsdf=next(n for n in iron07.node_tree.nodes if n.type=='BSDF_PRINCIPLED')
+assert abs(iron_bsdf.inputs['Metallic'].default_value-.8)<1e-5 and abs(iron_bsdf.inputs['Roughness'].default_value-.68)<1e-5
+assert not any(n.type=='TEX_IMAGE' for n in iron07.node_tree.nodes),'iron must not inherit stone albedo'
+stove_mat07=bpy.data.materials['JN_备膳灶细磨青石']
+assert stove_mat07!=floor_material and all(o.name.startswith('JN_东岸备膳户_') for o in S.objects if o.type=='MESH' and stove_mat07 in list(o.data.materials))
+assert abs(world_bounds(bpy.data.objects['JN_东岸备膳户_菜刀刃'])[0][2]-world_bounds(bpy.data.objects['JN_东岸备膳户_砧板'])[1][2])<1e-5
 report['house07_prep']={'visible_objects':len(prep07),'mesh_instance_triangles':prep_tris,'triangle_limit':1200,'grounded_stove_bucket_step':3,'shared_families':6,'open_vessels_with_closed_surfaces':4,'stove_mouth_ray_clear':True,'arrival_strip_m':[2.75,1.0],'new_bitmap_bytes':0,'active_fire':False,'flue_complete':False,'functional_cooking_approval':'pending'}
 report['town_phase2']={'phase':S['JN_town_phase'],'grounded_houses':len(plinths),'street_segments':street_segments,'street_batches':len(streets),'tea_pavilion_columns':4,'market_stalls':2,'bridge_risers_per_side':3,'market_ceramics':len(ceramics),'teacups':len(teacups),'canal_preserved':True,'new_image_texture_bytes':0}
 print('TOWN_PHASE2',json.dumps(report['town_phase2'],ensure_ascii=False))
