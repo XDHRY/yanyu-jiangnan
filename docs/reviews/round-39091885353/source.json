@@ -1,0 +1,32 @@
+{
+  "source_commit": "9d2e5625b7d9cbd5e2034ac9502b6e4e45334778",
+  "merged_commit": "41def5fb6d9095b6bcd8d7c6b736e23a2330c7c9",
+  "base_main": "42fb163fddc5601f6c8612e70f7fb6168df4abcd",
+  "pr": 40,
+  "runs": {
+    "CI": 39091885335,
+    "Smoke": 39091885331,
+    "Spatial": 39091885353,
+    "Web": 39091885332
+  },
+  "first_rendered_source": "71020298a94c0b39995d73efa7e12ab8e88705da",
+  "first_rendered_runs": {
+    "Spatial": 39090749177,
+    "Web": 39090749187
+  },
+  "first_unrendered_source": "5ad9157b12a8d89606f41e27822e3142b7218b2c",
+  "first_unrendered_failure": "camera preflight would require14.85mm; retained22mm lower bound",
+  "refined_source": "326b395d274a4916d9adf38ba4d0f37f655e776c",
+  "refined_runs": {
+    "CI": 39091323085,
+    "Smoke": 39091323189,
+    "Spatial": 39091323147,
+    "Web": 39091323091
+  },
+  "tested_merge_commit": "65fc139ff613dd9fb69fabb819215b9735b6e0d7",
+  "artifacts": {
+    "Smoke": 12123057805,
+    "Spatial": 12122899048,
+    "Web": 12123570675
+  }
+}

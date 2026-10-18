@@ -1,0 +1,98 @@
+{
+  "baseline_round": 33,
+  "source_commit": "9d2e5625b7d9cbd5e2034ac9502b6e4e45334778",
+  "tested_merge_commit": "65fc139ff613dd9fb69fabb819215b9735b6e0d7",
+  "baseline_glb": {
+    "instance_triangles": 627155,
+    "glb_bytes": 52922328,
+    "attribute_index_bytes": 29792134,
+    "images": 9,
+    "rgba8_bytes": 44554784
+  },
+  "current_glb": {
+    "instance_triangles": 628311,
+    "glb_bytes": 52973096,
+    "attribute_index_bytes": 29827470,
+    "images": 9,
+    "rgba8_bytes": 44554784
+  },
+  "source_statistics": {
+    "scene": "烟雨江南 · 雪月江南",
+    "objects": 4550,
+    "mesh_objects": 3033,
+    "curve_objects": 1427,
+    "vertices": 170027,
+    "polygons": 98760,
+    "materials": 50,
+    "collections": 11,
+    "cameras": 3,
+    "lights": 45,
+    "object_drivers": 4444,
+    "frames": [
+      1,
+      240
+    ],
+    "fps": 24,
+    "weather": 0
+  },
+  "source_budget": {
+    "objects": 4550,
+    "mesh_objects": 3033,
+    "curve_objects": 1427,
+    "triangles_with_instances": 166342,
+    "faces_with_instances": 98760,
+    "vertices_with_instances": 170027,
+    "unique_mesh_datablocks": 1661,
+    "unique_mesh_triangles": 126520,
+    "unique_mesh_faces": 79823,
+    "unique_mesh_vertices": 143440,
+    "materials_used": 50,
+    "images_loaded": 9,
+    "estimated_texture_rgba8_bytes": 44554784,
+    "estimated_texture_rgba8_mib": 42.49,
+    "estimated_mesh_draw_calls": 3036,
+    "object_drivers": 4444,
+    "mesh_objects_using_reused_datablocks": 1474,
+    "instance_reuse_ratio": 0.486
+  },
+  "prep_checks": {
+    "visible_objects": 24,
+    "mesh_instance_triangles": 1148,
+    "triangle_limit": 1200,
+    "grounded_stove_bucket_step": 3,
+    "shared_families": 6,
+    "open_vessels_with_closed_surfaces": 4,
+    "stove_mouth_ray_clear": true,
+    "arrival_strip_m": [
+      2.0,
+      1.0
+    ],
+    "architectural_door_width_m": 1.0230000000000001,
+    "hardware_inclusive_conservative_door_width_m": 0.9392992248535172,
+    "entrance_rays_clear": 3,
+    "new_bitmap_bytes": 0,
+    "new_materials": 2,
+    "pot_collar_contact": true,
+    "active_fire": false,
+    "flue_complete": false,
+    "functional_cooking_approval": "pending"
+  },
+  "original_9_images_hashes_preserved": true,
+  "fixed14_camera_parity": true,
+  "spatial_render_seconds": 204.73,
+  "web_render_seconds": 312.18,
+  "browser_audit": {
+    "overlay_opacity": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "page_errors": []
+  },
+  "human_approval": "pending",
+  "flue_complete": false,
+  "exported_collar_closed_128_triangles": true,
+  "comparison_camera_identical": true,
+  "comparison_browser_pose_identical": true
+}

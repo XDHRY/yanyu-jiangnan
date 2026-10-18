@@ -1,0 +1,15 @@
+{
+  "scope": "diagnostic review only; not production acceptance",
+  "human_function_approval": "pending",
+  "human_form_approval": "pending",
+  "human_runtime_approval": "pending",
+  "generic_validator": {
+    "command": "validate_room.py assets/architecture/house07-prep --gate form",
+    "exit_code": 1,
+    "status": "failed",
+    "missing_files": ["room-brief.json", "plan-metadata.json", "props.json", "room-layout.json", "openings.json", "milestone-reviews.json", "final-report.json"]
+  },
+  "project_specific_checks": "reported separately; never substitute for generic or human gate",
+  "paid_generation": false,
+  "production_deployment": false
+}
