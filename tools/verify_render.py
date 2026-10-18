@@ -1409,6 +1409,20 @@ for name in ('割绳刀木柄','割绳刀铁刃'):
     assert all(top40[0][i]<lo[i]<hi[i]<top40[1][i] for i in (0,1))
 assert abs(world_bounds(bpy.data.objects['JN_东岸缆作_割绳刀木柄'])[1][1]-world_bounds(bpy.data.objects['JN_东岸缆作_割绳刀铁刃'])[0][1])<.001
 report['east_rope_bench40']={'visible_meshes':13,'hidden_prototypes':4,'source_triangles':tris40,'source_cap':1000,'all_closed_positive_volume':True,'grounded_legs':4,'shared_families':4,'rope_eyes':2,'rope_eye_segments':[20,6],'support_gap_m':0,'street_clearance_m':top40[0][0]-street40[1][0],'bench_clearance_m':world_bounds(bpy.data.objects['JN_北河转水埠_共享石凳面_2'])[0][1]-top40[1][1],'new_materials':0,'new_images':0,'rope_physics':'not simulated','human_approval':'pending'}
+rows41=[]
+for name,factor,rough,visible_count,total_count in [('JN_转水埠旧船木',(.24,.105,.038,1),.55,8,11),('JN_转水埠桥面雨湿',(.19,.25,.22,1),.28,4,5)]:
+    mat=bpy.data.materials[name]
+    assert all(abs(a-b)<1e-5 for a,b in zip(mat['JN_web_base_color_factor'],factor)),name
+    assert all(abs(a-b)<1e-5 for a,b in zip(mat.diffuse_color,factor)),name
+    bsdf=next(n for n in mat.node_tree.nodes if n.type=='BSDF_PRINCIPLED')
+    assert abs(bsdf.inputs['Roughness'].default_value-rough)<1e-5
+    assert any(n.type=='TEX_NOISE' for n in mat.node_tree.nodes)
+    assert not any(n.type=='TEX_IMAGE' for n in mat.node_tree.nodes)
+    users=[o for o in S.objects if o.type=='MESH' and any(m==mat for m in o.data.materials)]
+    assert len(users)==total_count and sum(not o.hide_render for o in users)==visible_count,(name,len(users))
+    assert all(o.name.startswith('JN_北河转水埠_') for o in users)
+    rows41.append({'material':name,'base_color_factor':list(factor),'visible_users':visible_count,'hidden_prototypes':total_count-visible_count})
+report['quay_procedural_fallback41']={'materials':rows41,'new_geometry':0,'new_images':0,'new_materials':0,'source_shader_unchanged':True,'web_procedural_noise_bake':'pending','human_approval':'pending'}
 report['town_phase2']={'phase':S['JN_town_phase'],'grounded_houses':len(plinths),'street_segments':street_segments,'street_batches':len(streets),'tea_pavilion_columns':4,'market_stalls':2,'bridge_risers_per_side':3,'market_ceramics':len(ceramics),'teacups':len(teacups),'canal_preserved':True,'new_image_texture_bytes':0}
 print('TOWN_PHASE2',json.dumps(report['town_phase2'],ensure_ascii=False))
 
