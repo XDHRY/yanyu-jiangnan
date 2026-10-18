@@ -27,5 +27,11 @@
   "normals": "Simple closed low-poly props plus one-sided raised wet-mark cards; evaluated by Blender smoke and web export.",
   "lod": "Hero diagnostic source; repeated rails, seats, ribs, oars and wet marks use linked mesh datablocks; no separate runtime LOD chain yet.",
   "license": "Project-generated procedural geometry; no paid or external generated asset.",
+  "web_fallback_round41": {
+    "source_baseline": "7e212ea1192e668567c8a8adfd2c62321fe03c86",
+    "scope": "Two existing procedural materials; 8 visible timber users plus 4 bridge wet-mark cards. No geometry/source shader/bitmap change.",
+    "factors": {"JN_转水埠旧船木": [0.24,0.105,0.038,1], "JN_转水埠桥面雨湿": [0.19,0.25,0.22,1]},
+    "limitation": "Declared solid source colour fallback only, not procedural Noise/Bump baking or full PBR; no new image or licence claim. All16 cameras unchanged."
+  },
   "human_gates": {"function": "pending", "form": "pending", "runtime": "pending"}
 }

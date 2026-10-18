@@ -80,3 +80,19 @@ if any(row.get('source_material')=='JN_转水埠细磨青石' for row in report.
     assert len(users)==23
     assert all(node['name'].startswith('JN_北河转水埠_') or node['name']=='JN_桥西补履_接路石坪' for node in users)
     print('QUAY39_SCOPED_STONE_OK',len(users))
+fallback41=[]
+for name,factor,rough,count in [('JN_转水埠旧船木',(.24,.105,.038,1),.55,8),('JN_转水埠桥面雨湿',(.19,.25,.22,1),.28,4)]:
+    rows=[r for r in report.get('materials',[]) if r.get('source_material')==name]
+    if not rows:continue  # Generic synthetic fixtures do not contain quay assets.
+    assert len(rows)==1 and rows[0].get('base_color_factor') is not None,('quay41 declared fallback missing',name)
+    mats=[(i,m) for i,m in enumerate(g['materials']) if m['name']==name+'__WEB'];assert len(mats)==1
+    idx,m=mats[0];p=m['pbrMetallicRoughness']
+    assert all(abs(a-b)<1e-5 for a,b in zip(p.get('baseColorFactor',[]),factor)) and len(p.get('baseColorFactor',[]))==4,name
+    assert abs(p['roughnessFactor']-rough)<1e-5 and p.get('metallicFactor',1)==0
+    assert 'baseColorTexture' not in p and 'normalTexture' not in m
+    users=[n['name'] for n in g['nodes'] if 'mesh' in n and any(q.get('material')==idx for q in g['meshes'][n['mesh']]['primitives'])]
+    assert len(users)==count and all(n.startswith('JN_北河转水埠_') for n in users),(name,users)
+    fallback41.append({'material':name,'base_color_factor':list(factor),'visible_users':users})
+report['quay41_procedural_fallback']=fallback41
+(root/'material-audit.json').write_text(json.dumps(report,ensure_ascii=False,indent=2))
+print('QUAY41_PROCEDURAL_FALLBACK_OK',len(fallback41))

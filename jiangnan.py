@@ -2625,10 +2625,14 @@ def town_phase18_quay_boat_gear():
     """Inhabit the terminal quay with one low sampan, boat gear and rain marks."""
     c=C['water'];stone=M['stone'];wetstone=M['darkstone'];wood=M['wood'];jute=M['bark']
     boatwood=material('转水埠旧船木',(.24,.105,.038),.55,4)
+    # Preserve the declared source colour when procedural Noise/ColorRamp nodes
+    # cannot be represented by glTF. Do not globally alter unrelated materials.
+    boatwood['JN_web_base_color_factor']=list(boatwood.diffuse_color)
     # Wet stone should catch lantern highlights without reading as four holes
     # cut through the bridge.  A lifted green-grey base and broader roughness
     # keep the patches subordinate to the sampan and public crossing.
     rainwet=material('转水埠桥面雨湿',(.19,.25,.22),.28,3)
+    rainwet['JN_web_base_color_factor']=list(rainwet.diffuse_color)
 
     # A compact open sampan occupies the quiet water south of the foot crossing.
     # Its 2.36 m hull remains wholly inside the terminal basin and leaves a clear
