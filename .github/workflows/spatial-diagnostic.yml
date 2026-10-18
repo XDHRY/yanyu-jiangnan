@@ -8,6 +8,8 @@ on:
       - 'tools/diagnostic_review.py'
       - 'tools/verify_render.py'
       - 'tools/asset_budget.py'
+      - 'tools/export_web.py'
+      - 'tools/web_topology.py'
       - 'textures/**'
       - '.github/workflows/spatial-diagnostic.yml'
   workflow_dispatch:

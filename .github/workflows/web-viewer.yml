@@ -9,6 +9,7 @@ on:
       - 'tools/export_web.py'
       - 'tools/web_materials.py'
       - 'tools/web_material_factors.py'
+      - 'tools/web_topology.py'
       - 'tools/verify_web_materials.py'
       - 'tools/verify_web_budget.py'
       - 'validation/web_budget_contract.json'
@@ -99,6 +100,7 @@ jobs:
           cp "${JN_WEB_OUT}/jiangnan-town.glb" "${RUNNER_TEMP}/package/"
           cp "${JN_WEB_OUT}/viewer_manifest.json" "${RUNNER_TEMP}/package/"
           cp "${JN_WEB_OUT}/material-audit.json" "${RUNNER_TEMP}/package/"
+          cp "${JN_WEB_OUT}/topology-audit.json" "${RUNNER_TEMP}/package/"
           cp "${JN_OUT}/diagnostics/"*.png "${RUNNER_TEMP}/package/diagnostics/"
           cp "${JN_OUT}/diagnostics/manifest.json" "${RUNNER_TEMP}/package/diagnostics/"
           python tools/verify_web_cameras.py "${RUNNER_TEMP}/package"
@@ -131,6 +133,7 @@ jobs:
             ${{ runner.temp }}/package/camera-parity.json
             ${{ runner.temp }}/package/material-audit.json
             ${{ runner.temp }}/package/web-budget.json
+            ${{ runner.temp }}/package/topology-audit.json
             ${{ runner.temp }}/runtime-audit/
           if-no-files-found: error
           compression-level: 0
