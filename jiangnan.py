@@ -2773,6 +2773,59 @@ def town_phase19_quay_tea_porter():
     S['JN_quay_tea_shared_cups']=3
     S['JN_quay_tea_new_image_bytes']=0
 
+def town_quay_cobbler37():
+    """One roofless public repair stop, west of the tea load, not in the route."""
+    c=C['water'];wood=M['wood'];edge=M['edge'];stone=M['stone'];made=[]
+    def solid(label,loc,size,mat):
+        o=box('桥西补履_'+label,loc,size,mat,c)
+        # The legacy box helper is inward: reverse only these new closed meshes.
+        for p in o.data.polygons:p.flip()
+        o.data.update();made.append(o);return o
+    def repeat(label,loc,size,mat,positions):
+        proto=solid(label+'原型',(0,0,0),size,mat)
+        proto.hide_render=True;proto.hide_viewport=True
+        for i,p in enumerate(positions,1):
+            o=bpy.data.objects.new(PREFIX+'桥西补履_'+label+f'_{i}',proto.data)
+            c.objects.link(o);o.location=p;made.append(o)
+    # Existing bank foundation is already here. A 12 cm overlap joins the old
+    # turning paving without covering the tea baskets or narrowing the street.
+    solid('接路石坪',(-1.25,105.72,.08),(2.12,2.05,.16),stone)
+    solid('案面',(-1.25,106.08,.88),(1.36,.66,.08),wood)
+    repeat('案足',(0,0,0),(.075,.075,.68),wood,
+           [(x,y,.50) for x in (-1.80,-.70) for y in (105.83,106.33)])
+    repeat('案牙板',(0,0,0),(1.18,.045,.14),wood,
+           [(-1.25,105.83,.77),(-1.25,106.33,.77)])
+    repeat('案横枨',(0,0,0),(.065,.56,.065),edge,
+           [(-1.80,106.08,.36),(-.70,106.08,.36)])
+    solid('坐凳面',(-1.25,104.96,.52),(.54,.42,.08),wood)
+    repeat('坐凳足',(0,0,0),(.065,.065,.32),wood,
+           [(x,y,.32) for x in (-1.45,-1.05) for y in (104.82,105.10)])
+    solid('工作垫板',(-1.25,106.08,.932),(1.05,.48,.024),edge)
+    # Low-poly wooden lasts: eight-point sole and shaped upper surface, closed
+    # by real faces. Two workpieces use one datablock, no subdivided shoe mesh.
+    outline=[(-.15,-.055),(-.15,.055),(-.06,.065),(.10,.07),(.17,.035),(.18,0),(.17,-.035),(.10,-.07)]
+    verts=[(x,y,z) for z in (0,1) for x,y in outline]
+    verts=[(x,y,(.135 if x<-.05 else .085)*z) for x,y,z in verts]
+    faces=[tuple(range(7,-1,-1)),tuple(range(8,16))]+[(i,(i+1)%8,8+(i+1)%8,8+i) for i in range(8)]
+    last=mesh('桥西补履_木楦原型',verts,faces,wood,c);last.hide_render=True;last.hide_viewport=True;made.append(last)
+    # Winding is normalized on this new asset only, independent of the boxes.
+    import bmesh
+    bm=bmesh.new();bm.from_mesh(last.data);bmesh.ops.recalc_face_normals(bm,faces=list(bm.faces));bm.to_mesh(last.data);bm.free()
+    for i,y in enumerate((105.97,106.20),1):
+        o=bpy.data.objects.new(PREFIX+f'桥西补履_共享木楦_{i}',last.data);c.objects.link(o);o.location=(-1.40,y,.944);made.append(o)
+    solid('修锤柄',(-.92,106.08,.959),(.28,.025,.03),wood)
+    solid('修锤头',(-.81,106.08,.974),(.045,.115,.06),M['bronze'])
+    solid('锥柄',(-1.62,106.08,.969),(.11,.032,.05),wood)
+    solid('锥针',(-1.53,106.08,.949),(.07,.008,.01),M['bronze'])
+    # A small physically located paper task lamp; global lighting is untouched.
+    solid('案灯纸罩',(-.85,106.20,1.084),(.17,.17,.24),M['paper'])
+    repeat('案灯木口',(0,0,0),(.20,.20,.02),wood,
+           [(-.85,106.20,.954),(-.85,106.20,1.214)])
+    light('桥西补履_案灯灯芯',(-.85,106.20,1.084),(1,.48,.24),28,.18,kind='POINT')
+    for o in made:o['JN_asset_family']='quay-cobbler37'
+    S['JN_quay_cobbler37']='roofless_public_last_repair_stop_v1'
+    S['JN_quay_cobbler37_credit_budget']=0
+
 def refine_village_house03_study():
     """Give the existing third west-bank house a restrained reading destination."""
     c=C['water']; wood=M['wood']; paper=bpy.data.materials['JN_纸坊楮皮宣纸']
@@ -3281,6 +3334,7 @@ def build(stage=None):
     refine_village_house07_prep()
     refine_house07_flue35()
     audit_house07_box_normals36()
+    town_quay_cobbler37()
     level=P['stage'] if stage is None else stage
     if level>=2:vegetation()
     if level>=3:weather()

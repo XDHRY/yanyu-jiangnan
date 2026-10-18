@@ -28,8 +28,8 @@ VIEWS=[
     ('12_village_lane',(1.4,8.4,1.75),(1.4,31.5,1.35),42,0,'村巷人眼：月门北巷通往茶集的连续地面、民居侧廊、桥前横巷和远端茶亭'),
     ('13_canal_bridge',(13.2,11.2,8.6),(7.3,15.1,.9),46,0,'水巷木桥：高位斜俯视完整检查桥板、栏柱、双岸驳岸、桥头落地与临水民居尺度'),
     ('14_village_waterfront',(7.3,29.0,2.25),(7.3,16.0,1.35),40,0,'临水回望：检查八栋民居沿水巷的聚落节奏、河埠和木桥是否形成江南村落层次'),
-    ('15_house07_prep_front',(11.4,18.9,5.2),(15.8,20.0,2.1),28,17,'东岸备膳户：完整检查既有屋面、檐柱、门窗、台基与入户，不隐藏建筑或植物'),
-    ('16_house07_prep_door',(13.3,20.05,1.8),(17.1,20.0,1.0),30,0,'冷灶备膳近景：真实敞口锅、灶口、砧板、碗、桶与落地支撑；烟道未完成，不表现燃火'),
+    ('15_quay_cobbler_context',(-7.0,98.0,8.0),(6.0,104.8,.7),40,23,'北河公共转水埠：桥西修履歇脚点、石坪接路、茶担、踏桥与东岸船具架；不隐藏任何资产'),
+    ('16_quay_cobbler_detail',(-3.6,102.7,2.8),(-1.25,105.72,.64),42,0,'桥西补履近景：案足坐凳接地、案牙与横枨、木楦工具和纸灯支撑；不占茶担与主街'),
 ]
 
 for o in list(bpy.data.objects):
@@ -115,15 +115,26 @@ def fit_prep(cam):
     assert cam.data.lens>=22,('excessively wide preparation view',cam.data.lens)
     assert min(bounds[0],bounds[2])>.045 and max(bounds[1],bounds[3])<.955,bounds
     return {'objects':len(selected),'projected_bounds':bounds,'padding_fraction':.045,'fitted_lens_mm':cam.data.lens,'full_table_bench_stove_bounds':True}
+def fit_cobbler37(cam):
+    bpy.context.view_layer.update()
+    selected=[o for o in S.objects if o.get('JN_asset_family')=='quay-cobbler37' and not o.hide_render]
+    pts=[o.matrix_world@Vector(p) for o in selected for p in o.bound_box]
+    for _ in range(6):
+        projected=[world_to_camera_view(S,cam,p) for p in pts]
+        assert min(p.z for p in projected)>cam.data.clip_start
+        bounds=[min(p.x for p in projected),max(p.x for p in projected),min(p.y for p in projected),max(p.y for p in projected)]
+        factor=max(abs(v-.5) for v in bounds)/.445
+        if factor<=1:break
+        cam.data.lens/=factor*1.01;bpy.context.view_layer.update()
+    assert cam.data.lens>=22 and min(bounds[0],bounds[2])>.045 and max(bounds[1],bounds[3])<.955,bounds
+    return {'objects':len(selected),'projected_bounds':bounds,'padding_fraction':.045,'fitted_lens_mm':cam.data.lens,'full_repair_stop_bounds':True}
 # Reject bad framing before spending time on the fourteen fixed render views.
-probe=add_cam(*VIEWS[14][:5]);fit_house07(probe);created.remove(probe)
-probe_data=probe.data;bpy.data.objects.remove(probe,do_unlink=True);bpy.data.cameras.remove(probe_data)
-probe=add_cam(*VIEWS[15][:5]);fit_prep(probe);created.remove(probe)
+probe=add_cam(*VIEWS[15][:5]);fit_cobbler37(probe);created.remove(probe)
 probe_data=probe.data;bpy.data.objects.remove(probe,do_unlink=True);bpy.data.cameras.remove(probe_data)
 for name,loc,target,lens,ortho,question in VIEWS:
     cam=add_cam(name,loc,target,lens,ortho)
     S.camera=cam
-    framing=fit_house07(cam) if name=='15_house07_prep_front' else fit_prep(cam) if name=='16_house07_prep_door' else None
+    framing=fit_cobbler37(cam) if name=='16_quay_cobbler_detail' else None
     S.render.filepath=os.path.join(DIAG,name+'.png')
     excluded=[]
     if name=='11_village_plan':
