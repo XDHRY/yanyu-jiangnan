@@ -1,0 +1,12 @@
+{
+  "asset_id":"east-rope-bench40","generator":"jiangnan.py::town_east_rope_bench40","base_main":"58321db814060b9415caaef3abb075826dab84ac","units":"metre",
+  "placement":{"center":[12.88,104.97],"table_size_m":[0.90,0.40,0.08],"top_m":0.82,"leg_base_m":0.16,"support":"existing east public turning pocket","street_clearance_min_m":0.4,"bench_clearance_min_m":0.5,"gearbox_clearance_min_m":0.5},
+  "geometry":{"visible_meshes":13,"hidden_prototypes":4,"shared_families":4,"source_triangles":888,"source_cap":1000,"rope_major_segments":20,"rope_profile_sides":6,"rope_eye_count":2,"closed_solids":true,"rope_physics":"not simulated"},
+  "materials":["existing wood","edge","bark/rope","JN_备膳户熟铁"],"new_materials":0,"new_images":0,"new_roofs":0,"paid_credits":0,
+  "texture_provenance":"Existing project wood/bark images and current Object metre mapping; textures/generation_prompts.json is a prompt archive, not standalone redistribution licence. No new external image or licence claim.",
+  "normals":"New boxes reverse local legacy inward winding; rope eye closed analytic quad torus, positive signed volume. Existing non-target meshes untouched.",
+  "uv":"Existing Web dominant-face metre projection; no new tangent bake/AO. Full authored UV pending.",
+  "lod":"Shared legs/aprons/stretchers/rope eyes, no subdivision or formal LOD chain",
+  "camera":"Preserve14 core+public15; rotate only16 from west cobbler to east rope bench. No same-camera old16 close-up exists.",
+  "human_gates":{"function":"pending","form":"pending","runtime":"pending"}
+}

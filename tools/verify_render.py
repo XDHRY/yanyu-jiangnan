@@ -1327,7 +1327,9 @@ assert abs(gb36.inputs['Coat Roughness'].default_value-.18)<1e-5
 assert all(abs(a-b)<1e-5 for a,b in zip(grey36['JN_web_base_color_factor'],(.56,.57,.53,1)))
 new37=[o for o in S.objects if o.get('JN_asset_family')=='quay-cobbler37' and o.type=='MESH']
 tris37=sum(len(o.data.loop_triangles) for o in new37)
-assert expanded_tris-tris37==166626,'pre-Round37 source triangle baseline changed'
+new40=[o for o in S.objects if o.get('JN_asset_family')=='east-rope-bench40' and o.type=='MESH']
+tris40=sum(len(o.data.loop_triangles) for o in new40)
+assert expanded_tris-tris37-tris40==166626,'pre-Round37 source triangle baseline changed'
 assert tris37<=500 and new37,'public repair stop source budget exceeded'
 visible37=[o for o in new37 if not o.hide_render]
 assert len(visible37)==25,len(visible37)
@@ -1374,8 +1376,39 @@ mapping39=next(n for n in mat39.node_tree.nodes if n.type=='VECT_MATH' and n.ope
 assert all(abs(v-2.4)<1e-5 for v in mapping39.inputs[1].default_value)
 bump39=next(n for n in mat39.node_tree.nodes if n.type=='BUMP')
 assert abs(bump39.inputs['Distance'].default_value-.003)<1e-6
-assert expanded_tris==167094
+assert expanded_tris-tris40==167094
 report['quay_stone39']={'visible_users':23,'hidden_prototypes':2,'source_triangles':expanded_tris,'new_geometry':0,'new_materials':1,'new_images':0,'repeat_per_local_m':2.4,'nominal_repeat_m':1/2.4,'roughness':.88,'bump_distance_m':.003,'human_approval':'pending'}
+visible40=[o for o in new40 if not o.hide_render]
+assert len(new40)==17 and len(visible40)==13 and tris40==888,(len(new40),len(visible40),tris40)
+import bmesh
+for o in new40:
+    bm=bmesh.new();bm.from_mesh(o.data)
+    assert all(e.is_manifold for e in bm.edges),o.name
+    assert bm.calc_volume(signed=True)>0,o.name
+    bm.free()
+top40=world_bounds(bpy.data.objects['JN_东岸缆作_整备案面'])
+legs40=[o for o in visible40 if o.name.startswith('JN_东岸缆作_案足_')]
+assert len(legs40)==4 and len({o.data.as_pointer() for o in legs40})==1
+for o in legs40:
+    lo,hi=world_bounds(o);assert abs(lo[2]-.16)<.001 and abs(hi[2]-top40[0][2])<.001
+eyes40=[o for o in visible40 if o.name.startswith('JN_东岸缆作_共享待接绳环_')]
+assert len(eyes40)==2 and eyes40[0].data==eyes40[1].data
+for o in eyes40:
+    lo,hi=world_bounds(o);assert abs(lo[2]-top40[1][2])<.001
+    assert all(top40[0][i]<lo[i]<hi[i]<top40[1][i] for i in (0,1))
+assert world_bounds(eyes40[1])[0][0]-world_bounds(eyes40[0])[1][0]>.05
+pocket40=world_bounds(bpy.data.objects['JN_北河转水埠_东岸转身石坪'])
+assert all(pocket40[0][i]<=top40[0][i]<top40[1][i]<=pocket40[1][i] for i in (0,1))
+street40=world_bounds(bpy.data.objects['JN_北河转水埠_东岸石街'])
+assert top40[0][0]-street40[1][0]>.4
+assert world_bounds(bpy.data.objects['JN_北河转水埠_共享石凳面_2'])[0][1]-top40[1][1]>.5
+assert world_bounds(bpy.data.objects['JN_北河转水埠_船具箱'])[0][0]-top40[1][0]>.5
+for name in ('割绳刀木柄','割绳刀铁刃'):
+    assert abs(world_bounds(bpy.data.objects['JN_东岸缆作_'+name])[0][2]-top40[1][2])<.001
+    lo,hi=world_bounds(bpy.data.objects['JN_东岸缆作_'+name])
+    assert all(top40[0][i]<lo[i]<hi[i]<top40[1][i] for i in (0,1))
+assert abs(world_bounds(bpy.data.objects['JN_东岸缆作_割绳刀木柄'])[1][1]-world_bounds(bpy.data.objects['JN_东岸缆作_割绳刀铁刃'])[0][1])<.001
+report['east_rope_bench40']={'visible_meshes':13,'hidden_prototypes':4,'source_triangles':tris40,'source_cap':1000,'all_closed_positive_volume':True,'grounded_legs':4,'shared_families':4,'rope_eyes':2,'rope_eye_segments':[20,6],'support_gap_m':0,'street_clearance_m':top40[0][0]-street40[1][0],'bench_clearance_m':world_bounds(bpy.data.objects['JN_北河转水埠_共享石凳面_2'])[0][1]-top40[1][1],'new_materials':0,'new_images':0,'rope_physics':'not simulated','human_approval':'pending'}
 report['town_phase2']={'phase':S['JN_town_phase'],'grounded_houses':len(plinths),'street_segments':street_segments,'street_batches':len(streets),'tea_pavilion_columns':4,'market_stalls':2,'bridge_risers_per_side':3,'market_ceramics':len(ceramics),'teacups':len(teacups),'canal_preserved':True,'new_image_texture_bytes':0}
 print('TOWN_PHASE2',json.dumps(report['town_phase2'],ensure_ascii=False))
 
