@@ -28,8 +28,8 @@ VIEWS=[
     ('12_village_lane',(1.4,8.4,1.75),(1.4,31.5,1.35),42,0,'村巷人眼：月门北巷通往茶集的连续地面、民居侧廊、桥前横巷和远端茶亭'),
     ('13_canal_bridge',(13.2,11.2,8.6),(7.3,15.1,.9),46,0,'水巷木桥：高位斜俯视完整检查桥板、栏柱、双岸驳岸、桥头落地与临水民居尺度'),
     ('14_village_waterfront',(7.3,29.0,2.25),(7.3,16.0,1.35),40,0,'临水回望：检查八栋民居沿水巷的聚落节奏、河埠和木桥是否形成江南村落层次'),
-    ('15_house06_needlework_front',(11.8,13.9,5.2),(16.2,15.0,2.1),28,17,'东岸针线户：按实际边界完整检查屋面、门窗、台基及沿河入口，不隐藏建筑或植物'),
-    ('16_house06_needlework_door',(14.4,15.1,1.8),(17.2,14.8,1.0),30,0,'门后针线近景：按实际边界适配视野，完整检查案几、绣框、线轴、开口针盒、布架及落地足，不隐藏门扇或墙体'),
+    ('15_house07_prep_front',(11.4,18.9,5.2),(15.8,20.0,2.1),28,17,'东岸备膳户：完整检查既有屋面、檐柱、门窗、台基与入户，不隐藏建筑或植物'),
+    ('16_house07_prep_door',(13.3,20.05,1.8),(17.1,20.0,1.0),30,0,'冷灶备膳近景：真实敞口锅、灶口、砧板、碗、桶与落地支撑；烟道未完成，不表现燃火'),
 ]
 
 for o in list(bpy.data.objects):
@@ -66,9 +66,9 @@ S.render.image_settings.file_format='PNG'
 S.render.film_transparent=False
 
 manifest={'mode':'low-cost spatial diagnostic','renderer':'Blender Eevee Next','resolution':[1024,640],'frame':80,'weather':0,'source_commit':os.environ.get('GITHUB_SHA'),'town_phase':S.get('JN_town_phase'),'views':[]}
-def fit_house06(cam):
+def fit_house07(cam):
     bpy.context.view_layer.update();dg=bpy.context.evaluated_depsgraph_get()
-    selected=[o for o in S.objects if o.name.startswith('JN_村落民居_06_') and o.type in ('MESH','CURVE') and not o.hide_render]
+    selected=[o for o in S.objects if o.name.startswith('JN_村落民居_07_') and o.type in ('MESH','CURVE') and not o.hide_render]
     pts=[o.evaluated_get(dg).matrix_world @ Vector(c) for o in selected for c in o.evaluated_get(dg).bound_box]
     inv=cam.matrix_world.inverted();local=[inv@p for p in pts]
     lo=[min(p[i] for p in local) for i in (0,1)];hi=[max(p[i] for p in local) for i in (0,1)]
@@ -84,15 +84,15 @@ def fit_house06(cam):
     assert min(bounds[0],bounds[2])>.045 and max(bounds[1],bounds[3])<.955,bounds
     # Orthographic door-centre rays start on the actual camera near plane.
     inv=cam.matrix_world.inverted();direction=cam.rotation_euler.to_quaternion()@Vector((0,0,-1))
-    for y in (14.86,15.00,15.14):
-        point=Vector((13.60,y,1.30));q=inv@point
+    for y in (19.86,20.00,20.14):
+        point=Vector((13.65,y,1.30));q=inv@point
         origin=cam.matrix_world@Vector((q.x,q.y,-cam.data.clip_start))
         hit=S.ray_cast(dg,origin,direction,distance=(point-origin).length-.03)
-        assert not hit[0],('house06 diagnostic door occlusion',hit[4].name if hit[4] else None)
+        assert not hit[0],('house07 diagnostic door occlusion',hit[4].name if hit[4] else None)
     return {'objects':len(selected),'projected_bounds':bounds,'padding_fraction':.045,'clear_door_rays':3,'orthographic_width_m':cam.data.ortho_scale}
-def fit_needlework(cam):
+def fit_prep(cam):
     bpy.context.view_layer.update();dg=bpy.context.evaluated_depsgraph_get()
-    selected=[o for o in S.objects if (o.name.startswith('JN_东岸绣户_') or o.name in ('JN_村落民居_06_案几','JN_村落民居_06_长凳')) and o.type in ('MESH','CURVE') and not o.hide_render]
+    selected=[o for o in S.objects if (o.name.startswith('JN_东岸备膳户_') or o.name in ('JN_村落民居_07_案几','JN_村落民居_07_长凳')) and o.type in ('MESH','CURVE') and not o.hide_render]
     # Evaluate actual vertices, including curve bevel and cloth Solidify. A
     # transformed enclosing box can overestimate this close perspective view.
     pts=[];object_bounds=[]
@@ -100,30 +100,30 @@ def fit_needlework(cam):
         ev=o.evaluated_get(dg);data=ev.to_mesh()
         try:world=[ev.matrix_world@v.co for v in data.vertices]
         finally:ev.to_mesh_clear()
-        assert world,('empty needlework geometry',o.name)
+        assert world,('empty preparation geometry',o.name)
         lo=[min(p[i] for p in world) for i in range(3)];hi=[max(p[i] for p in world) for i in range(3)]
         object_bounds.append({'name':o.name,'lo':lo,'hi':hi});pts.extend(world)
-    print('NEEDLEWORK_FRAME_GEOMETRY',json.dumps(object_bounds,ensure_ascii=False))
+    print('PREP_FRAME_GEOMETRY',json.dumps(object_bounds,ensure_ascii=False))
     for _ in range(4):
         projected=[world_to_camera_view(S,cam,p) for p in pts]
         assert min(p.z for p in projected)>cam.data.clip_start
         bounds=[min(p.x for p in projected),max(p.x for p in projected),min(p.y for p in projected),max(p.y for p in projected)]
-        print('NEEDLEWORK_FRAME_FIT',cam.data.lens,bounds)
+        print('PREP_FRAME_FIT',cam.data.lens,bounds)
         factor=max(abs(v-.5) for v in bounds)/.445
         if factor<=1:break
         cam.data.lens/=factor*1.01;bpy.context.view_layer.update()
-    assert cam.data.lens>=22,('excessively wide needlework view',cam.data.lens)
+    assert cam.data.lens>=22,('excessively wide preparation view',cam.data.lens)
     assert min(bounds[0],bounds[2])>.045 and max(bounds[1],bounds[3])<.955,bounds
-    return {'objects':len(selected),'projected_bounds':bounds,'padding_fraction':.045,'fitted_lens_mm':cam.data.lens,'full_table_bench_rack_bounds':True}
+    return {'objects':len(selected),'projected_bounds':bounds,'padding_fraction':.045,'fitted_lens_mm':cam.data.lens,'full_table_bench_stove_bounds':True}
 # Reject bad framing before spending time on the fourteen fixed render views.
-probe=add_cam(*VIEWS[14][:5]);fit_house06(probe);created.remove(probe)
+probe=add_cam(*VIEWS[14][:5]);fit_house07(probe);created.remove(probe)
 probe_data=probe.data;bpy.data.objects.remove(probe,do_unlink=True);bpy.data.cameras.remove(probe_data)
-probe=add_cam(*VIEWS[15][:5]);fit_needlework(probe);created.remove(probe)
+probe=add_cam(*VIEWS[15][:5]);fit_prep(probe);created.remove(probe)
 probe_data=probe.data;bpy.data.objects.remove(probe,do_unlink=True);bpy.data.cameras.remove(probe_data)
 for name,loc,target,lens,ortho,question in VIEWS:
     cam=add_cam(name,loc,target,lens,ortho)
     S.camera=cam
-    framing=fit_house06(cam) if name=='15_house06_needlework_front' else fit_needlework(cam) if name=='16_house06_needlework_door' else None
+    framing=fit_house07(cam) if name=='15_house07_prep_front' else fit_prep(cam) if name=='16_house07_prep_door' else None
     S.render.filepath=os.path.join(DIAG,name+'.png')
     excluded=[]
     if name=='11_village_plan':

@@ -39,4 +39,15 @@ if any(m.get('source_material')=='JN_绣户黛瓦PBR' for m in report.get('mater
         assert g['textures'][material['normalTexture']['index']]['source']!=g['textures'][pbr['metallicRoughnessTexture']['index']]['source']
     assert normals>=1
 (root/'material-audit.json').write_text(json.dumps(report,ensure_ascii=False,indent=2))
+required_prep_materials={'JN_备膳户熟铁','JN_备膳灶细磨青石'}
+if any(m.get('source_material') in required_prep_materials for m in report.get('materials',[])):
+    assert all(any(m['name'].startswith(name) for m in g['materials']) for name in required_prep_materials),'preparation material lost'
+for m in g['materials']:
+    if m['name'].startswith('JN_备膳户熟铁'):
+        p=m['pbrMetallicRoughness'];assert 'baseColorTexture' not in p
+        assert abs(p['metallicFactor']-.8)<1e-5 and abs(p['roughnessFactor']-.68)<1e-5
+        assert all(abs(a-b)<1e-5 for a,b in zip(p['baseColorFactor'],(.085,.095,.10,1)))
+    if m['name'].startswith('JN_备膳灶细磨青石'):
+        p=m['pbrMetallicRoughness'];assert 'baseColorTexture' in p
+        assert all(abs(a-b)<1e-5 for a,b in zip(p['baseColorFactor'],(.45,.52,.54,1)))
 print('MATERIAL_CONTRACT_OK',checked,normals)
