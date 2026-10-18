@@ -1,0 +1,63 @@
+{
+  "baseline_round": 37,
+  "source_commit": "fe3b96da3e0056e125866de16ece78478def0343",
+  "nondegenerate_triangles_preserved_in_original_order": true,
+  "node_material_image_camera_descriptors_identical": true,
+  "all9_image_hashes_identical": true,
+  "position_normal_other_nonUV_streams_identical": true,
+  "position_streams_checked": 2266,
+  "changed_primitives": 180,
+  "removed_unique_primitive_triangles": 3136,
+  "uv_max_absolute_drift": 3.0517578125e-05,
+  "uv_changed_accessors": 736,
+  "previous_round_uv_review_tolerance": 3e-05,
+  "cross_round_uv_above_previous_review_tolerance": true,
+  "within_run_precleanup_sha_reconstructed": true,
+  "within_run_cleanup_result_byte_identical_to_reproduction": true,
+  "within_run_UV_and_all_nonindex_payloads_identical": true,
+  "all16_camera_fields_preserved": true,
+  "real_browser_errors": [],
+  "human_approval": "pending",
+  "screenshot_differences": {
+    "desktop15": {
+      "mean_absolute_rgb": 0.00010884602864583333,
+      "rms_rgb": 0.010421817079574236,
+      "bbox": [
+        361,
+        168,
+        1021,
+        640
+      ]
+    },
+    "desktop16": {
+      "mean_absolute_rgb": 0.00028076171875000003,
+      "rms_rgb": 0.01664975555379826,
+      "bbox": [
+        797,
+        41,
+        1024,
+        372
+      ]
+    },
+    "mobile15": {
+      "mean_absolute_rgb": 1.5190181066958317e-05,
+      "rms_rgb": 0.0037819851731474585,
+      "bbox": [
+        197,
+        386,
+        373,
+        559
+      ]
+    },
+    "mobile16": {
+      "mean_absolute_rgb": 3.746911329849718e-05,
+      "rms_rgb": 0.006088229511575848,
+      "bbox": [
+        314,
+        315,
+        390,
+        414
+      ]
+    }
+  }
+}

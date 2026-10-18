@@ -1,0 +1,22 @@
+{
+  "repository":"XDHRY/yanyu-jiangnan",
+  "round":38,
+  "date":"2026-10-18",
+  "baseline_main":"2c4e2c92e1291f12fb4fed44f0f3af2dac348fd7",
+  "implementation_source_commit":"8bfa97e81031374d52c61b36f0a0c427bef08917",
+  "tested_merge_commit":"fe3b96da3e0056e125866de16ece78478def0343",
+  "actual_merge_commit":"c920a3a822e8b8ed810ff782f0fe9ba043c36c09",
+  "tested_and_merged_tree":"22ab115c5b72335162cb63be58f4851170a6a16c",
+  "pull_request":"https://github.com/XDHRY/yanyu-jiangnan/pull/44",
+  "successful_runs":{"CI":39136620309,"Smoke":39136620334,"Spatial":39136620307,"Web":39136620220},
+  "artifacts":{"Smoke":12140341348,"Spatial":12139727624,"Web":12139354654},
+  "baseline37":{"Web_run":39113502028,"Web_artifact":12131796636,"instance_triangles":628919},
+  "actual_metrics":{"objects":4595,"materials":52,"source_mesh_triangles":167094,"source_limit":170000,"instance_triangles":624203,"instance_limit":629155,"instance_remaining":4952,"removed_instance_triangles":4716,"glb_bytes":53015892,"attribute_index_bytes":29846158,"images":9,"rgba8_bytes":44554784,"spatial16_seconds":204.26,"web16_seconds":221.70},
+  "new_buildings":0,
+  "new_images":0,
+  "new_materials":0,
+  "paid_generation":0,
+  "formal_human_approvals":"pending",
+  "separate_inn_repository":"unchanged",
+  "uv_cross_run_exception":"736 accessors maximum3.0517578125e-5 > previous review3e-5; recorded, not claimed passed. Same-run pre-cleanup source SHA reconstructed and cleaned output reproduced byte-for-byte; no cleanup-induced UV change."
+}
