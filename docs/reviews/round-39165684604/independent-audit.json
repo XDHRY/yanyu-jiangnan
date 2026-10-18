@@ -1,0 +1,101 @@
+{
+  "tested": "86fe79582f320d99ded8f23e6972e09ae7af639c",
+  "non_target_geometry_nodes_preserved": 3096,
+  "only9_geometry_nodes_changed": {
+    "JN_北河转水埠_停泊舢板船壳": {
+      "triangles": 76,
+      "positive_local_volume": 0.09300723956781141
+    },
+    "JN_北河转水埠_共享舢板横肋_1": {
+      "triangles": 12,
+      "positive_local_volume": 0.0070812500224138285
+    },
+    "JN_北河转水埠_共享舢板横肋_2": {
+      "triangles": 12,
+      "positive_local_volume": 0.0070812500224138285
+    },
+    "JN_北河转水埠_共享舢板横肋_3": {
+      "triangles": 12,
+      "positive_local_volume": 0.0070812500224138285
+    },
+    "JN_北河转水埠_共享舢板舷条_1": {
+      "triangles": 36,
+      "positive_local_volume": 0.003775999490499358
+    },
+    "JN_北河转水埠_共享舢板舷条_2": {
+      "triangles": 36,
+      "positive_local_volume": 0.003775999490499358
+    },
+    "JN_北河转水埠_共享船桨_借用架_1": {
+      "triangles": 28,
+      "positive_local_volume": 0.011055000093355775
+    },
+    "JN_北河转水埠_共享船桨_借用架_2": {
+      "triangles": 28,
+      "positive_local_volume": 0.011055000093355775
+    },
+    "JN_北河转水埠_共享船桨_舢板": {
+      "triangles": 28,
+      "positive_local_volume": 0.011055000093355775
+    }
+  },
+  "outer14_hull_surface_triangles_preserved": true,
+  "all_export_material_definitions_and9_image_hashes_preserved": true,
+  "all14_core_and16_camera_fields_preserved": true,
+  "camera15": "new vs old41; unchanged between first/final Round42",
+  "non_target_max_UV_float_drift": 6.103515625e-05,
+  "UV_determinism": "pending",
+  "statistics": {
+    "scene": "烟雨江南 · 雪月江南",
+    "objects": 4612,
+    "mesh_objects": 3094,
+    "curve_objects": 1427,
+    "vertices": 171038,
+    "polygons": 99630,
+    "materials": 53,
+    "collections": 11,
+    "cameras": 3,
+    "lights": 46,
+    "object_drivers": 4444,
+    "frames": [
+      1,
+      240
+    ],
+    "fps": 24,
+    "weather": 0
+  },
+  "actual_glb": {
+    "instance_triangles": 624959,
+    "glb_bytes": 53047472,
+    "attribute_index_bytes": 29869518,
+    "images": 9,
+    "rgba8_bytes": 44554784
+  },
+  "support": {
+    "hull_vertices": 40,
+    "hull_quads": 38,
+    "hull_triangles": 76,
+    "added_source_triangles": 184,
+    "axis_inset_m": 0.035,
+    "closed_positive_volume": true,
+    "shared_tapered_ribs": 3,
+    "supported_seats": 2,
+    "rib_top_m": 0.455,
+    "shared_contoured_rails": 2,
+    "rail_prototype_vertices": 20,
+    "rail_prototype_quads": 18,
+    "rail_width_m": 0.04,
+    "rail_height_m": 0.04,
+    "shared_oars": 3,
+    "oar_prototype_vertices": 16,
+    "oar_prototype_faces": 10,
+    "buoyancy_seaworthiness": "not validated",
+    "human_approval": "pending",
+    "oar_seat_contacts": 2,
+    "aboard_oar_lowered_m": 0.06,
+    "stored_oar_floor_and_rack_contacts": 2
+  },
+  "spatial_seconds": 300.97,
+  "web_seconds": 305.73,
+  "human_approval": "pending"
+}

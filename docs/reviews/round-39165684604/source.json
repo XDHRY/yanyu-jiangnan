@@ -1,0 +1,232 @@
+{
+  "source": "af09069cea57d1d5368410d9e965e3a077f8e86c",
+  "tested": "86fe79582f320d99ded8f23e6972e09ae7af639c",
+  "merge": "66e30acb8327e482ae9a10fb44c85422e239d8bd",
+  "tree": "993569b39c4ad5833a1a29d6b312c5f7378f1470",
+  "base": "dc9ac87ba5420109ea01a656fc0bb03476ac9b54",
+  "runs": [
+    {
+      "id": 39165684642,
+      "name": "CI",
+      "conclusion": "success",
+      "url": "https://github.com/XDHRY/yanyu-jiangnan/actions/runs/39165684642"
+    },
+    {
+      "id": 39165684600,
+      "name": "Blender 4.5 Scene Smoke",
+      "conclusion": "success",
+      "url": "https://github.com/XDHRY/yanyu-jiangnan/actions/runs/39165684600"
+    },
+    {
+      "id": 39165684604,
+      "name": "Jiangnan Spatial Diagnostic",
+      "conclusion": "success",
+      "url": "https://github.com/XDHRY/yanyu-jiangnan/actions/runs/39165684604"
+    },
+    {
+      "id": 39165684602,
+      "name": "Jiangnan Web 3D Viewer",
+      "conclusion": "success",
+      "url": "https://github.com/XDHRY/yanyu-jiangnan/actions/runs/39165684602"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 12150462780,
+      "name": "Jiangnan-Blender-4.5-86fe79582f320d99ded8f23e6972e09ae7af639c",
+      "size_in_bytes": 23671424,
+      "url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12150462780",
+      "archive_download_url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12150462780/zip",
+      "expired": false,
+      "created_at": "2026-10-18T20:59:56Z",
+      "expires_at": "2026-10-25T20:59:55Z",
+      "updated_at": "2026-10-18T20:59:56Z",
+      "digest": "sha256:2eefe9288d6ef82fd5db13ef383e293b662639b6591f788f68460c9c87ecbb0b",
+      "workflow_run": {
+        "id": 39165684600,
+        "repository_id": 1374819141,
+        "head_repository_id": 1374819141,
+        "head_branch": "codex/round42-sampan-shell",
+        "head_sha": "af09069cea57d1d5368410d9e965e3a077f8e86c"
+      }
+    },
+    {
+      "id": 12150487214,
+      "name": "Jiangnan-Spatial-Diagnostics-86fe79582f320d99ded8f23e6972e09ae7af639c",
+      "size_in_bytes": 16237981,
+      "url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12150487214",
+      "archive_download_url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12150487214/zip",
+      "expired": false,
+      "created_at": "2026-10-18T21:04:56Z",
+      "expires_at": "2026-11-01T21:04:54Z",
+      "updated_at": "2026-10-18T21:04:56Z",
+      "digest": "sha256:b1fa53768f1cc96069cb9b809e24451d9094ad15a373e03c546823c8e7a41967",
+      "workflow_run": {
+        "id": 39165684604,
+        "repository_id": 1374819141,
+        "head_repository_id": 1374819141,
+        "head_branch": "codex/round42-sampan-shell",
+        "head_sha": "af09069cea57d1d5368410d9e965e3a077f8e86c"
+      }
+    },
+    {
+      "id": 12149784900,
+      "name": "Jiangnan-Web-Viewer-86fe79582f320d99ded8f23e6972e09ae7af639c",
+      "size_in_bytes": 120135992,
+      "url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12149784900",
+      "archive_download_url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12149784900/zip",
+      "expired": false,
+      "created_at": "2026-10-18T21:06:24Z",
+      "expires_at": "2026-11-17T21:06:23Z",
+      "updated_at": "2026-10-18T21:06:24Z",
+      "digest": "sha256:434dbe696cb6565f879e040fbc0f27ef2be1ee3c09d9fc0420064b630b6b919d",
+      "workflow_run": {
+        "id": 39165684602,
+        "repository_id": 1374819141,
+        "head_repository_id": 1374819141,
+        "head_branch": "codex/round42-sampan-shell",
+        "head_sha": "af09069cea57d1d5368410d9e965e3a077f8e86c"
+      }
+    }
+  ],
+  "iterations": [
+    {
+      "source": "2aa34f28720bc51a0bd5699515a6caf34fa1789b",
+      "tested": "4ee19772086f0ee2692417d0452b1bdecef22e00",
+      "tree": "851de039b57c02a7ff4b612d5dd7601756c224c3",
+      "note": "Web failure; no valid runtime capture; Blender15 before only"
+    },
+    {
+      "source": "e97c79eac60b04d59031eecec2a8857ca804ffb3",
+      "tested": "1e2f02c2e6a4fc9326ecee691a4c9a5704cc6893",
+      "tree": "f1721a200c614ea32f8be1fdb478a3081a4856c4",
+      "note": "four gates success; supported rails, old oar remains; second-pass images retained"
+    },
+    {
+      "source": "af09069cea57d1d5368410d9e965e3a077f8e86c",
+      "tested": "86fe79582f320d99ded8f23e6972e09ae7af639c",
+      "note": "final, nine visible target nodes repaired"
+    }
+  ],
+  "audit": {
+    "tested": "86fe79582f320d99ded8f23e6972e09ae7af639c",
+    "non_target_geometry_nodes_preserved": 3096,
+    "only9_geometry_nodes_changed": {
+      "JN_北河转水埠_停泊舢板船壳": {
+        "triangles": 76,
+        "positive_local_volume": 0.09300723956781141
+      },
+      "JN_北河转水埠_共享舢板横肋_1": {
+        "triangles": 12,
+        "positive_local_volume": 0.0070812500224138285
+      },
+      "JN_北河转水埠_共享舢板横肋_2": {
+        "triangles": 12,
+        "positive_local_volume": 0.0070812500224138285
+      },
+      "JN_北河转水埠_共享舢板横肋_3": {
+        "triangles": 12,
+        "positive_local_volume": 0.0070812500224138285
+      },
+      "JN_北河转水埠_共享舢板舷条_1": {
+        "triangles": 36,
+        "positive_local_volume": 0.003775999490499358
+      },
+      "JN_北河转水埠_共享舢板舷条_2": {
+        "triangles": 36,
+        "positive_local_volume": 0.003775999490499358
+      },
+      "JN_北河转水埠_共享船桨_借用架_1": {
+        "triangles": 28,
+        "positive_local_volume": 0.011055000093355775
+      },
+      "JN_北河转水埠_共享船桨_借用架_2": {
+        "triangles": 28,
+        "positive_local_volume": 0.011055000093355775
+      },
+      "JN_北河转水埠_共享船桨_舢板": {
+        "triangles": 28,
+        "positive_local_volume": 0.011055000093355775
+      }
+    },
+    "outer14_hull_surface_triangles_preserved": true,
+    "all_export_material_definitions_and9_image_hashes_preserved": true,
+    "all14_core_and16_camera_fields_preserved": true,
+    "camera15": "new vs old41; unchanged between first/final Round42",
+    "non_target_max_UV_float_drift": 6.103515625e-05,
+    "UV_determinism": "pending",
+    "statistics": {
+      "scene": "烟雨江南 · 雪月江南",
+      "objects": 4612,
+      "mesh_objects": 3094,
+      "curve_objects": 1427,
+      "vertices": 171038,
+      "polygons": 99630,
+      "materials": 53,
+      "collections": 11,
+      "cameras": 3,
+      "lights": 46,
+      "object_drivers": 4444,
+      "frames": [
+        1,
+        240
+      ],
+      "fps": 24,
+      "weather": 0
+    },
+    "actual_glb": {
+      "instance_triangles": 624959,
+      "glb_bytes": 53047472,
+      "attribute_index_bytes": 29869518,
+      "images": 9,
+      "rgba8_bytes": 44554784
+    },
+    "support": {
+      "hull_vertices": 40,
+      "hull_quads": 38,
+      "hull_triangles": 76,
+      "added_source_triangles": 184,
+      "axis_inset_m": 0.035,
+      "closed_positive_volume": true,
+      "shared_tapered_ribs": 3,
+      "supported_seats": 2,
+      "rib_top_m": 0.455,
+      "shared_contoured_rails": 2,
+      "rail_prototype_vertices": 20,
+      "rail_prototype_quads": 18,
+      "rail_width_m": 0.04,
+      "rail_height_m": 0.04,
+      "shared_oars": 3,
+      "oar_prototype_vertices": 16,
+      "oar_prototype_faces": 10,
+      "buoyancy_seaworthiness": "not validated",
+      "human_approval": "pending",
+      "oar_seat_contacts": 2,
+      "aboard_oar_lowered_m": 0.06,
+      "stored_oar_floor_and_rack_contacts": 2
+    },
+    "spatial_seconds": 300.97,
+    "web_seconds": 305.73,
+    "human_approval": "pending"
+  },
+  "totals": {
+    "objects": 4612,
+    "mesh_objects": 3094,
+    "curve_objects": 1427,
+    "triangles_with_instances": 168166,
+    "faces_with_instances": 99630,
+    "vertices_with_instances": 171038,
+    "unique_mesh_datablocks": 1693,
+    "unique_mesh_triangles": 127384,
+    "unique_mesh_faces": 80233,
+    "unique_mesh_vertices": 143922,
+    "materials_used": 53,
+    "images_loaded": 9,
+    "estimated_texture_rgba8_bytes": 44554784,
+    "estimated_texture_rgba8_mib": 42.49,
+    "estimated_mesh_draw_calls": 3097,
+    "object_drivers": 4444,
+    "mesh_objects_using_reused_datablocks": 1515,
+    "instance_reuse_ratio": 0.4897
+  }
+}

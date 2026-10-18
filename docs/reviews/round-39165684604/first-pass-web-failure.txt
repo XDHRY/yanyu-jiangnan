@@ -1,0 +1,8 @@
+Source2aa34f28720bc51a0bd5699515a6caf34fa1789b; tested4ee19772086f0ee2692417d0452b1bdecef22e00.
+Web run39164178811 / job117783549326: failure at Audit loaded desktop and mobile cameras; previous model rebuild,16renders, GLB export and bundle steps success.
+2026-10-18T20:46:30.7561236Z Error: wrong projection type
+2026-10-18T20:46:30.7562611Z at main (.../tools/capture_viewer_audit.cjs:23:89)
+2026-10-18T20:46:30.7685001Z Process completed with exit code1.
+Cause: index14 (camera15) hardcoded OrthographicCamera even after legitimate focus rotation to perspective.
+Fix: require declared projection from viewer_manifest.presets[index]; perspective/orthographic supported, unknown/missing rejected; regression added. The audit was not disabled or its pose/rotation thresholds relaxed.
+First viewer artifact12150336219, failed-evidence12150400799, Spatial12150400641, Smoke12150306158. First runtime captures not approved or presented as a valid baseline.

@@ -1,0 +1,3 @@
+Command: python3 validate_room.py yanyu-round42/assets/architecture/quay-boat-gear --gate form
+Exit1: missing standard evidence files room-brief.json, plan-metadata.json, props.json, room-layout.json, openings.json, milestone-reviews.json, final-report.json.
+The generic Form gate failed. Existing user-authorized low-cost diagnostics do not constitute human Function/Form/Runtime approval, production release, buoyancy/load/seaworthiness acceptance or paid-service authorization.
