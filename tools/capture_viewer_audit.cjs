@@ -1,8 +1,10 @@
 // Local static server + headless Chromium. Screenshots are browser evidence, not Blender images.
 const fs=require('node:fs'),path=require('node:path'),http=require('node:http');
 const {chromium}=require('playwright');
+const {expectedCameraType}=require('./runtime_camera_type.cjs');
 async function main(){
  const root=path.resolve(process.argv[2]),out=path.resolve(process.argv[3]);fs.mkdirSync(out,{recursive:true});
+ const manifest=JSON.parse(fs.readFileSync(path.join(root,'viewer_manifest.json')));
  const server=http.createServer((req,res)=>{const file=path.resolve(root,'.'+decodeURIComponent(req.url.split('?')[0]==='/'?'/index.html':req.url.split('?')[0]));if(!file.startsWith(root+path.sep)){res.writeHead(403).end();return;}fs.readFile(file,(err,bytes)=>{if(err){res.writeHead(404).end();return;}res.setHeader('Content-Type',file.endsWith('.js')?'text/javascript':file.endsWith('.html')?'text/html':file.endsWith('.json')?'application/json':'application/octet-stream');res.end(bytes);});});
  await new Promise(r=>server.listen(0,'127.0.0.1',r));let browser;
  try{
@@ -20,13 +22,12 @@ async function main(){
    try{await page.waitForFunction(({index,before})=>{const s=window.JIANGNAN_REVIEW.snapshot();return s.activePreset===s.presets[index].name&&s.frame>before+3&&s.poseError<1e-5&&s.rotationError<1e-5;},{index,before},{timeout:60000});}catch(e){const failed=await page.evaluate(()=>window.JIANGNAN_REVIEW.snapshot());console.error('CAMERA_AUDIT_FAILED',label,JSON.stringify(failed));fs.writeFileSync(path.join(out,'failed-camera.json'),JSON.stringify({label,...failed},null,2));await page.screenshot({path:path.join(out,'failed-camera.png')});throw e;}
    const snapshot=await page.evaluate(()=>({...window.JIANGNAN_REVIEW.snapshot(),loadingOverlayOpacity:Number(getComputedStyle(document.querySelector('#loading')).opacity)}));
    if(snapshot.loadingOverlayOpacity>=0.001)throw Error('loading overlay contaminates screenshot');
-   if(snapshot.cameraType!==(index===14?'OrthographicCamera':'PerspectiveCamera'))throw Error('wrong projection type');
+   if(snapshot.cameraType!==expectedCameraType(manifest.presets[index]))throw Error('wrong projection type');
    await page.screenshot({path:path.join(out,label+'.png')});rows.push({label,viewport:[width,height],...snapshot});
   }
   await page.locator('#fly').evaluate(b=>b.click());if((await page.evaluate(()=>window.JIANGNAN_REVIEW.snapshot())).cameraType!=='PerspectiveCamera')throw Error('fly must be perspective');
   await page.locator('#fit').evaluate(b=>b.click());if((await page.evaluate(()=>window.JIANGNAN_REVIEW.snapshot())).activePreset!==null)throw Error('fit must reset preset');
   if(errors.length)throw Error(errors.join('\n'));
-  const manifest=JSON.parse(fs.readFileSync(path.join(root,'viewer_manifest.json')));
   fs.writeFileSync(path.join(out,'runtime-camera-audit.json'),JSON.stringify({source_commit:manifest.source_commit,diagnostic_sha256:manifest.diagnostic_manifest_sha256,renderer:'Chromium WebGL SwiftShader',captures:rows,page_errors:errors,human_runtime_approval:'pending',note:'Browser export omits Blender lights/weather. Camera/loaded-model audit only; not final art approval.'},null,2));
  }finally{if(browser)await browser.close();await new Promise(r=>server.close(r));}
 }

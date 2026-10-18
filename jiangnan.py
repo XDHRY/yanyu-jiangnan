@@ -2640,6 +2640,18 @@ def sampan_shell42():
     faces.extend(((0,3,23,20),(19,16,36,39)))
     return outer+inner,faces
 
+def sampan_rail42():
+    """One shared closed rail follows the rim; rotate180 degrees for port."""
+    verts=[];faces=[]
+    for y,x,z in ((-1.18,.10,.51),(-.72,.38,.50),(0,.44,.49),(.72,.38,.50),(1.18,.10,.51)):
+        x-=.0175
+        verts.extend(((x-.02,y,z),(x+.02,y,z),(x+.02,y,z+.04),(x-.02,y,z+.04)))
+    for k in range(4):
+        a=4*k;b=4*(k+1)
+        for j in range(4):faces.append((a+j,b+j,b+(j+1)%4,a+(j+1)%4))
+    faces.extend(((0,1,2,3),(19,18,17,16)))
+    return verts,faces
+
 def sampan_rib42():
     """Closed tapered saddle: small floor face, broad seat-bearing top."""
     height=.455-(.19+.03*(.37/.72)+.035)
@@ -2671,10 +2683,12 @@ def town_phase18_quay_boat_gear():
     hull['JN_function']='open_mooring_sampan';hull['JN_length_m']=2.36;hull['JN_beam_m']=.88
     # Gunwales, ribs and seats explain construction at eye height.  The paired
     # members are linked rather than repeatedly tessellated.
-    rail=box('北河转水埠_舢板舷条原型',(0,0,0),(.075,2.10,.075),boatwood,c,.012)
+    rlv,rlf=sampan_rail42()
+    rail=mesh('北河转水埠_舢板舷条原型',rlv,rlf,boatwood,c)
     rail.hide_render=True;rail.hide_viewport=True
-    for i,x in enumerate((6.90,7.70),1):
-        o=bpy.data.objects.new(PREFIX+f'北河转水埠_共享舢板舷条_{i}',rail.data);c.objects.link(o);o.location=(x,102.65,.51)
+    for i in (1,2):
+        o=bpy.data.objects.new(PREFIX+f'北河转水埠_共享舢板舷条_{i}',rail.data);c.objects.link(o);o.location=(7.30,102.65,0)
+        o.rotation_euler[2]=pi if i==1 else 0
     seat=box('北河转水埠_舢板坐板原型',(0,0,0),(.70,.24,.07),boatwood,c,.010)
     seat.hide_render=True;seat.hide_viewport=True
     for i,y in enumerate((102.28,103.02),1):

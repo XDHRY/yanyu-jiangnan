@@ -1000,6 +1000,14 @@ assert len(rails)==2 and len(seats)==2 and len(ribs)==3
 assert len({o.data.as_pointer() for o in rails})==1
 assert len({o.data.as_pointer() for o in seats})==1
 assert len({o.data.as_pointer() for o in ribs})==1
+for rail in rails:
+    rb=bmesh.new();rb.from_mesh(rail.data)
+    assert all(e.is_manifold for e in rb.edges) and rb.calc_volume(signed=True)>0
+    rb.free()
+    assert len(rail.data.vertices)==20 and len(rail.data.polygons)==18
+    for k,(y,z) in enumerate(((-1.18,.51),(-.72,.50),(0,.49),(.72,.50),(1.18,.51))):
+        assert abs(rail.data.vertices[4*k].co.z-z)<1e-5
+        assert abs(rail.data.vertices[4*k].co.y-y)<1e-5
 for rib in ribs:
     bottom=.19+.03*(abs(rib.location.y-102.65)/.72)+.035
     lo,hi=world_bounds(rib)
@@ -1014,7 +1022,7 @@ for seat in seats:
     support=min(ribs,key=lambda r:abs(r.location.y-seat.location.y))
     assert abs(support.location.y-seat.location.y)<.001
     assert abs(world_bounds(seat)[0][2]-world_bounds(support)[1][2])<.001
-report['sampan_shell42']={'hull_vertices':40,'hull_quads':38,'hull_triangles':76,'added_source_triangles':48,'axis_inset_m':.035,'closed_positive_volume':True,'shared_tapered_ribs':3,'supported_seats':2,'rib_top_m':.455,'buoyancy_seaworthiness':'not validated','human_approval':'pending'}
+report['sampan_shell42']={'hull_vertices':40,'hull_quads':38,'hull_triangles':76,'added_source_triangles':120,'axis_inset_m':.035,'closed_positive_volume':True,'shared_tapered_ribs':3,'supported_seats':2,'rib_top_m':.455,'shared_contoured_rails':2,'rail_prototype_vertices':20,'rail_prototype_quads':18,'rail_width_m':.04,'rail_height_m':.04,'buoyancy_seaworthiness':'not validated','human_approval':'pending'}
 
 rack_posts=[bpy.data.objects[f'JN_北河转水埠_船具架立柱_{i}'] for i in range(1,3)]
 rack_shoes=[bpy.data.objects[f'JN_北河转水埠_船具架柱础_{i}'] for i in range(1,3)]
@@ -1348,7 +1356,7 @@ new37=[o for o in S.objects if o.get('JN_asset_family')=='quay-cobbler37' and o.
 tris37=sum(len(o.data.loop_triangles) for o in new37)
 new40=[o for o in S.objects if o.get('JN_asset_family')=='east-rope-bench40' and o.type=='MESH']
 tris40=sum(len(o.data.loop_triangles) for o in new40)
-assert expanded_tris-tris37-tris40-48==166626,'pre-Round37 source triangle baseline changed'
+assert expanded_tris-tris37-tris40-120==166626,'pre-Round37 source triangle baseline changed'
 assert tris37<=500 and new37,'public repair stop source budget exceeded'
 visible37=[o for o in new37 if not o.hide_render]
 assert len(visible37)==25,len(visible37)
@@ -1395,7 +1403,7 @@ mapping39=next(n for n in mat39.node_tree.nodes if n.type=='VECT_MATH' and n.ope
 assert all(abs(v-2.4)<1e-5 for v in mapping39.inputs[1].default_value)
 bump39=next(n for n in mat39.node_tree.nodes if n.type=='BUMP')
 assert abs(bump39.inputs['Distance'].default_value-.003)<1e-6
-assert expanded_tris-tris40-48==167094
+assert expanded_tris-tris40-120==167094
 report['quay_stone39']={'visible_users':23,'hidden_prototypes':2,'source_triangles':expanded_tris,'new_geometry':0,'new_materials':1,'new_images':0,'repeat_per_local_m':2.4,'nominal_repeat_m':1/2.4,'roughness':.88,'bump_distance_m':.003,'human_approval':'pending'}
 visible40=[o for o in new40 if not o.hide_render]
 assert len(new40)==17 and len(visible40)==13 and tris40==888,(len(new40),len(visible40),tris40)
