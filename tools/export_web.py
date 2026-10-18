@@ -88,8 +88,14 @@ bpy.ops.export_scene.gltf(**kwargs)
 from web_material_factors import apply_factors
 with open(path,'rb') as f:raw=f.read()
 raw,factor_materials=apply_factors(raw,material_report['materials'])
+from web_topology import remove_coincident_triangles
+raw,topology_report=remove_coincident_triangles(raw)
+topology_report['source_commit']=os.environ.get('GITHUB_SHA')
+with open(os.path.join(WEB,'topology-audit.json'),'w',encoding='utf-8') as f:
+    json.dump(topology_report,f,ensure_ascii=False,indent=2)
 with open(path,'wb') as f:f.write(raw)
 print('WEB_EXPLICIT_SOURCE_FACTORS',factor_materials)
+print('WEB_COINCIDENT_TOPOLOGY',topology_report['removed_instance_triangles'])
 
 assert os.path.exists(path) and os.path.getsize(path) > 1024*1024, 'GLB export missing or too small'
 with open(path,'rb') as f:
