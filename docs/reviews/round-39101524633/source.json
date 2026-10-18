@@ -1,0 +1,23 @@
+{
+  "source_commit": "9fc4d0448c537fc873b24ff4548789771d35431b",
+  "merged_commit":"7c48b118978bea4140865184e1754d4c1b80c774",
+  "base_main": "4256f1e567212ec56111714dbb61021a14806845",
+  "pr": 41,
+  "tested_merge_commit": "290dc9f6c097aae2d1d14d51c4ad0ca2b6a38f6b",
+  "first_failed_source": "03136777a14e6a60bb4414dff740ad3fc09e54e8",
+  "first_runs": {
+    "CI": 39101356310,
+    "Smoke": 39101356317,
+    "Spatial": 39101356316,
+    "Web": 39101356309
+  },
+  "runs": {
+    "CI": 39101524560,
+    "Smoke": 39101524602,
+    "Spatial": 39101524633,
+    "Web": 39101524539
+  },
+  "artifacts": {"Smoke":12126602042,"Spatial":12127400448,"Web":12126539369},
+  "human_approval": "pending",
+  "active_fire": false
+}

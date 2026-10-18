@@ -1,0 +1,121 @@
+{
+  "source_commit": "9fc4d0448c537fc873b24ff4548789771d35431b",
+  "tested_merge_commit": "290dc9f6c097aae2d1d14d51c4ad0ca2b6a38f6b",
+  "baseline_source": "9d2e5625b7d9cbd5e2034ac9502b6e4e45334778",
+  "baseline_glb": {
+    "instance_triangles": 628311,
+    "glb_bytes": 52973096,
+    "attribute_index_bytes": 29827470,
+    "images": 9,
+    "rgba8_bytes": 44554784
+  },
+  "current_glb": {
+    "instance_triangles": 628555,
+    "glb_bytes": 52993188,
+    "attribute_index_bytes": 29839822,
+    "images": 9,
+    "rgba8_bytes": 44554784
+  },
+  "source_statistics": {
+    "scene": "烟雨江南 · 雪月江南",
+    "objects": 4563,
+    "mesh_objects": 3046,
+    "curve_objects": 1427,
+    "vertices": 170182,
+    "polygons": 98888,
+    "materials": 50,
+    "collections": 11,
+    "cameras": 3,
+    "lights": 45,
+    "object_drivers": 4444,
+    "frames": [
+      1,
+      240
+    ],
+    "fps": 24,
+    "weather": 0
+  },
+  "source_budget": {
+    "objects": 4563,
+    "mesh_objects": 3046,
+    "curve_objects": 1427,
+    "triangles_with_instances": 166626,
+    "faces_with_instances": 98888,
+    "vertices_with_instances": 170182,
+    "unique_mesh_datablocks": 1671,
+    "unique_mesh_triangles": 126772,
+    "unique_mesh_faces": 79935,
+    "unique_mesh_vertices": 143578,
+    "materials_used": 50,
+    "images_loaded": 9,
+    "estimated_texture_rgba8_bytes": 44554784,
+    "estimated_texture_rgba8_mib": 42.49,
+    "estimated_mesh_draw_calls": 3049,
+    "object_drivers": 4444,
+    "mesh_objects_using_reused_datablocks": 1479,
+    "instance_reuse_ratio": 0.4856
+  },
+  "flue_checks": {
+    "visible_parts": 13,
+    "source_triangles": 196,
+    "triangle_limit": 260,
+    "shared_families": 2,
+    "firebox_outlet_m": [
+      0.18,
+      0.22
+    ],
+    "shaft_bore_m": [
+      0.18,
+      0.18
+    ],
+    "roof_aperture_m": [
+      0.38,
+      0.38
+    ],
+    "flashing_outer_m": [
+      0.56,
+      0.56
+    ],
+    "roof_aperture_rays": 9,
+    "passage_rays": 6,
+    "closed_solid_surfaces": true,
+    "other_high_roofs_shared": 3,
+    "active_fire": false,
+    "thermal_draught_fire_safety": "not validated",
+    "human_approval": "pending"
+  },
+  "prep_checks": {
+    "visible_objects": 24,
+    "mesh_instance_triangles": 1168,
+    "triangle_limit": 1200,
+    "grounded_stove_bucket_step": 3,
+    "shared_families": 6,
+    "open_vessels_with_closed_surfaces": 4,
+    "stove_mouth_ray_clear": true,
+    "arrival_strip_m": [
+      2.0,
+      1.0
+    ],
+    "architectural_door_width_m": 1.0230000000000001,
+    "hardware_inclusive_conservative_door_width_m": 0.9392992248535172,
+    "entrance_rays_clear": 3,
+    "new_bitmap_bytes": 0,
+    "new_materials": 2,
+    "pot_collar_contact": true,
+    "active_fire": false,
+    "flue_complete": false,
+    "functional_cooking_approval": "pending"
+  },
+  "original_9_image_hashes_preserved": true,
+  "fixed14_camera_identical": true,
+  "interior16_camera_identical": true,
+  "exterior15_camera_identical": true,
+  "exterior15_refit_for_chimney": true,
+  "spatial_seconds": 313.31,
+  "web_seconds": 312.17,
+  "browser_errors": [],
+  "human_approval": "pending",
+  "active_fire": false,
+  "thermal_fire_safety_validated": false,
+  "old_roof_pixel_rays_hit_solid": 48
+}
