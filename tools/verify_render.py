@@ -224,14 +224,16 @@ house_tris=0
 for o in house_meshes:
     o.data.calc_loop_triangles();house_tris+=len(o.data.loop_triangles)
 assert house_tris<=S['JN_village_phase1_tris_budget'], house_tris
-assert all(bpy.data.objects[f'JN_村落民居_{i:02d}_屋面'].modifiers.get('黛瓦屋面厚度') for i in range(1,9))
+assert all(bpy.data.objects[f'JN_村落民居_{i:02d}_屋面'].modifiers.get('黛瓦屋面厚度') or (i==7 and abs(bpy.data.objects[f'JN_村落民居_{i:02d}_屋面'].get('JN_roof_solidify_applied_m',0)-.07)<1e-6) for i in range(1,9))
 # Roof hierarchy and eave structure: two shared roof meshes, with high roofs
 # supported by their own gables/purlins; all rafter and tile-end rows are linked.
 roofs=[bpy.data.objects[f'JN_村落民居_{i:02d}_屋面'] for i in range(1,9)]
 standard=[roofs[i-1] for i in (1,2,5,6)];high=[roofs[i-1] for i in (3,4,7,8)]
 standard_shared=[o for o in standard if o.name!='JN_村落民居_06_屋面']
 assert len(standard_shared)==3 and len({o.data.as_pointer() for o in standard_shared})==1
-assert len({o.data.as_pointer() for o in high})==1
+high_shared=[o for o in high if o.name!='JN_村落民居_07_屋面']
+assert len(high_shared)==3 and len({o.data.as_pointer() for o in high_shared})==1
+assert bpy.data.objects['JN_村落民居_07_屋面'].data.as_pointer()!=high_shared[0].data.as_pointer()
 sample_roof=bpy.data.objects['JN_村落民居_06_屋面']
 assert sample_roof in standard and len(standard)==4
 reference_roof=standard_shared[0].data
@@ -250,7 +252,7 @@ firewall_caps=[bpy.data.objects[f'JN_村落民居_{i:02d}_封火山墙压顶'] f
 assert len({o.data.as_pointer() for o in firewalls})==1 and len({o.data.as_pointer() for o in firewall_caps})==1
 assert all(world_bounds(o)[0][2]<3.5 and world_bounds(o)[1][2]>4.65 for o in firewalls)
 assert all(world_bounds(o)[0][2]>4.0 and world_bounds(o)[1][2]>4.70 for o in firewall_caps)
-report['roof_hierarchy']={'standard_roofs':4,'high_ridge_roofs':4,'ridge_delta_m':.18,'shared_rafter_rows':8,'shared_tile_end_rows':8,'firewall_houses':2,'firewall_ridges_terminated':2,'roof_mesh_variants':2,'new_image_texture_bytes':0}
+report['roof_hierarchy']={'standard_roofs':4,'high_ridge_roofs':4,'ridge_delta_m':.18,'shared_rafter_rows':8,'shared_tile_end_rows':8,'firewall_houses':2,'firewall_ridges_terminated':2,'roof_mesh_variants':3,'house07_isolated_real_flue_aperture':True,'new_image_texture_bytes':0}
 print('ROOF_HIERARCHY',json.dumps(report['roof_hierarchy'],ensure_ascii=False))
 # North-west bamboo workshop: verify supports, attachment, circulation and
 # that its canopy stops before the existing west water street.
@@ -1281,6 +1283,35 @@ stove_mat07=bpy.data.materials['JN_备膳灶细磨青石']
 assert stove_mat07!=floor_material and all(o.name.startswith('JN_东岸备膳户_') for o in S.objects if o.type=='MESH' and stove_mat07 in list(o.data.materials))
 assert abs(world_bounds(bpy.data.objects['JN_东岸备膳户_菜刀刃'])[0][2]-world_bounds(bpy.data.objects['JN_东岸备膳户_砧板'])[1][2])<1e-5
 report['house07_prep']={'visible_objects':len(prep07),'mesh_instance_triangles':prep_tris,'triangle_limit':1200,'grounded_stove_bucket_step':3,'shared_families':6,'open_vessels_with_closed_surfaces':4,'stove_mouth_ray_clear':True,'arrival_strip_m':[2.0,1.0],'architectural_door_width_m':opening07,'hardware_inclusive_conservative_door_width_m':conservative07,'entrance_rays_clear':3,'new_bitmap_bytes':0,'new_materials':2,'pot_collar_contact':True,'active_fire':False,'flue_complete':False,'functional_cooking_approval':'pending'}
+assert S['JN_house07_flue_geometry']=='rear_port_18x22_shaft18_roof38_flashing56_v1'
+flue35=[o for o in objs('JN_第7户排烟_') if not o.hide_render]
+assert len(flue35)==13,len(flue35)
+assert abs(world_bounds(bpy.data.objects['JN_第7户排烟_落地承台'])[0][2]-.26)<1e-5
+for labels in [('侧壁_1','侧壁_2'),('帽撑_1','帽撑_2','帽撑_3','帽撑_4')]:
+    assert len({bpy.data.objects['JN_第7户排烟_'+label].data.as_pointer() for label in labels})==1
+flue_tris35=0
+for o in flue35+[bpy.data.objects['JN_村落民居_07_屋面'],bpy.data.objects['JN_东岸备膳户_灶背壁']]:
+    edges={}
+    for poly in o.data.polygons:
+        for edge in poly.edge_keys:edges[edge]=edges.get(edge,0)+1
+    assert set(edges.values())=={2},('flue solid surface open',o.name)
+    o.data.calc_loop_triangles()
+    if o in flue35:flue_tris35+=len(o.data.loop_triangles)
+assert flue_tris35<=260,flue_tris35
+# Each ray is short enough to test a declared segment of the real passage;
+# vertical shaft stops below the rain cap, outlet rays leave laterally beneath it.
+for origin,direction,length in [((17.30,20.65,.63),(1,0,0),.56),((17.82,20.65,.64),(0,0,1),4.45),((17.82,20.65,5.07),(1,0,0),.28),((17.82,20.65,5.07),(-1,0,0),.28),((17.82,20.65,5.07),(0,1,0),.28),((17.82,20.65,5.07),(0,-1,0),.28)]:
+    hit=S.ray_cast(dg07,Vector(origin),Vector(direction),distance=length)
+    assert not hit[0],('flue passage blocked',origin,hit[4].name if hit[4] else None)
+roof35=bpy.data.objects['JN_村落民居_07_屋面'];inv35=roof35.matrix_world.inverted()
+for dx in (-.08,0,.08):
+    for dy in (-.08,0,.08):
+        hit=roof35.ray_cast(inv35@Vector((17.82+dx,20.65+dy,3.60)),Vector((0,0,1)))
+        assert not hit[0],('roof aperture blocked',dx,dy)
+for dx,dy in ((.24,0),(-.24,0),(0,.24),(0,-.24)):
+    hit=roof35.ray_cast(inv35@Vector((17.82+dx,20.65+dy,5)),Vector((0,0,-1)))
+    assert hit[0],'roof substrate outside opening missing'
+report['house07_flue']={'visible_parts':len(flue35),'source_triangles':flue_tris35,'triangle_limit':260,'shared_families':2,'firebox_outlet_m':[.18,.22],'shaft_bore_m':[.18,.18],'roof_aperture_m':[.38,.38],'flashing_outer_m':[.56,.56],'roof_aperture_rays':9,'passage_rays':6,'closed_solid_surfaces':True,'other_high_roofs_shared':3,'active_fire':False,'thermal_draught_fire_safety':'not validated','human_approval':'pending'}
 report['town_phase2']={'phase':S['JN_town_phase'],'grounded_houses':len(plinths),'street_segments':street_segments,'street_batches':len(streets),'tea_pavilion_columns':4,'market_stalls':2,'bridge_risers_per_side':3,'market_ceramics':len(ceramics),'teacups':len(teacups),'canal_preserved':True,'new_image_texture_bytes':0}
 print('TOWN_PHASE2',json.dumps(report['town_phase2'],ensure_ascii=False))
 
