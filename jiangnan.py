@@ -2963,6 +2963,9 @@ def refine_village_house07_prep():
         ff=[tuple(reversed(range(segments))),tuple(range((len(profile)-1)*segments,len(profile)*segments))]
         ff += [(j*segments+k,j*segments+(k+1)%segments,(j+1)*segments+(k+1)%segments,(j+1)*segments+k) for j in range(len(profile)-1) for k in range(segments)]
         o=mesh('东岸备膳户_'+label,vv,ff,mat,c);o.location=xyz
+        if label!='开口水桶':
+            for face in o.data.polygons:
+                if face.index>=2:face.use_smooth=True
         return o
     # Closed annular collar covers square-aperture corners and visibly supports
     # the round vessel. Inner radius .24 leaves a true opening, not a black disc.
@@ -2972,14 +2975,14 @@ def refine_village_house07_prep():
         j=(i+1)%16
         ff.extend([(i,j,16+j,16+i),(32+i,48+i,48+j,32+j),(16+i,16+j,48+j,48+i),(i,32+i,32+j,j)])
     mesh('东岸备膳户_承锅圈',vv,ff,iron,c)
-    vessel('敞口铁锅',[(.26,0),(.33,.12),(.34,.21),(.315,.21),(.305,.12),(.235,.025)],iron,(x,y,.995))
+    vessel('敞口铁锅',[(.26,0),(.33,.12),(.34,.21),(.315,.21),(.305,.12),(.235,.025)],iron,(x,y,.995),24)
     repeat('锅耳',[(x,y+d,1.155) for d in (-.37,.37)],(.17,.10,.045),iron)
     part('灶前石踏',(16.55,20.65,.29),(.28,.92,.06),stone)
     tx,ty=16.544,19.256
     part('砧板',(tx+.35,ty-.10,.8575),(.50,.28,.035),wood)
     part('菜刀柄',(tx+.48,ty-.17,.888),(.18,.045,.026),wood)
     part('菜刀刃',(tx+.28,ty-.17,.879),(.22,.11,.008),iron)
-    bowl=vessel('小碗_1',[(.09,0),(.14,.065),(.15,.10),(.135,.10),(.125,.065),(.075,.018)],clay,(tx-.43,ty-.14,.84),10)
+    bowl=vessel('小碗_1',[(.09,0),(.14,.065),(.15,.10),(.135,.10),(.125,.065),(.075,.018)],clay,(tx-.43,ty-.14,.84),16)
     other=bpy.data.objects.new(PREFIX+'东岸备膳户_小碗_2',bowl.data);c.objects.link(other);other.location=(tx-.43,ty+.15,.84)
     vessel('开口水桶',[(.17,0),(.21,.39),(.19,.39),(.15,.035)],wood,(17.55,19.75,.26),12)
     line('东岸备膳户_木勺',[(17.52,19.75,.315),(17.52,19.75,.85)],.018,wood,c,res=1,bevel_res=0)

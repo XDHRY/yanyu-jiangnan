@@ -1251,7 +1251,16 @@ for label in ('敞口铁锅','小碗_1','小碗_2','开口水桶'):
 dg07=bpy.context.evaluated_depsgraph_get()
 hit07=S.ray_cast(dg07,Vector((16.35,20.65,.60)),Vector((1,0,0)),distance=.80)
 assert not hit07[0],('stove mouth blocked',hit07[4].name if hit07[4] else None)
-route07=((13.45,19.60),(16.20,20.60))
+door07=world_bounds(bpy.data.objects['JN_村落民居_07_开门扇'])
+opening07=bpy.data.objects['JN_村落民居_07_墙体']['JN_door_clear_width']
+conservative07=20.0+opening07/2-door07[1][1]
+assert .93<=conservative07<opening07,('prep domestic door clearance',conservative07)
+for yy in (19.65,20.0,20.35):
+    ray=S.ray_cast(dg07,Vector((13.0,yy,1.30)),Vector((1,0,0)),distance=1.15)
+    assert not ray[0],('prep entrance ray blocked',ray[4].name if ray[4] else None)
+# This full 1m strip begins AFTER the parked leaf, not inside the wall/door.
+route07=((14.20,19.60),(16.20,20.60))
+assert route07[0][0]>door07[1][0]
 for o in prep07+[bpy.data.objects['JN_村落民居_07_案几'],bpy.data.objects['JN_村落民居_07_长凳']]:
     lo,hi=world_bounds(o)
     assert min(hi[0],route07[1][0])<=max(lo[0],route07[0][0]) or min(hi[1],route07[1][1])<=max(lo[1],route07[0][1]),('prep arrival obstruction',o.name)
@@ -1271,7 +1280,7 @@ assert not any(n.type=='TEX_IMAGE' for n in iron07.node_tree.nodes),'iron must n
 stove_mat07=bpy.data.materials['JN_备膳灶细磨青石']
 assert stove_mat07!=floor_material and all(o.name.startswith('JN_东岸备膳户_') for o in S.objects if o.type=='MESH' and stove_mat07 in list(o.data.materials))
 assert abs(world_bounds(bpy.data.objects['JN_东岸备膳户_菜刀刃'])[0][2]-world_bounds(bpy.data.objects['JN_东岸备膳户_砧板'])[1][2])<1e-5
-report['house07_prep']={'visible_objects':len(prep07),'mesh_instance_triangles':prep_tris,'triangle_limit':1200,'grounded_stove_bucket_step':3,'shared_families':6,'open_vessels_with_closed_surfaces':4,'stove_mouth_ray_clear':True,'arrival_strip_m':[2.75,1.0],'new_bitmap_bytes':0,'active_fire':False,'flue_complete':False,'functional_cooking_approval':'pending'}
+report['house07_prep']={'visible_objects':len(prep07),'mesh_instance_triangles':prep_tris,'triangle_limit':1200,'grounded_stove_bucket_step':3,'shared_families':6,'open_vessels_with_closed_surfaces':4,'stove_mouth_ray_clear':True,'arrival_strip_m':[2.0,1.0],'architectural_door_width_m':opening07,'hardware_inclusive_conservative_door_width_m':conservative07,'entrance_rays_clear':3,'new_bitmap_bytes':0,'new_materials':2,'pot_collar_contact':True,'active_fire':False,'flue_complete':False,'functional_cooking_approval':'pending'}
 report['town_phase2']={'phase':S['JN_town_phase'],'grounded_houses':len(plinths),'street_segments':street_segments,'street_batches':len(streets),'tea_pavilion_columns':4,'market_stalls':2,'bridge_risers_per_side':3,'market_ceramics':len(ceramics),'teacups':len(teacups),'canal_preserved':True,'new_image_texture_bytes':0}
 print('TOWN_PHASE2',json.dumps(report['town_phase2'],ensure_ascii=False))
 
