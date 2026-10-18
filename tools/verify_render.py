@@ -252,7 +252,7 @@ firewall_caps=[bpy.data.objects[f'JN_村落民居_{i:02d}_封火山墙压顶'] f
 assert len({o.data.as_pointer() for o in firewalls})==1 and len({o.data.as_pointer() for o in firewall_caps})==1
 assert all(world_bounds(o)[0][2]<3.5 and world_bounds(o)[1][2]>4.65 for o in firewalls)
 assert all(world_bounds(o)[0][2]>4.0 and world_bounds(o)[1][2]>4.70 for o in firewall_caps)
-report['roof_hierarchy']={'standard_roofs':4,'high_ridge_roofs':4,'ridge_delta_m':.18,'shared_rafter_rows':8,'shared_tile_end_rows':8,'firewall_houses':2,'firewall_ridges_terminated':2,'roof_mesh_variants':2,'new_image_texture_bytes':0}
+report['roof_hierarchy']={'standard_roofs':4,'high_ridge_roofs':4,'ridge_delta_m':.18,'shared_rafter_rows':8,'shared_tile_end_rows':8,'firewall_houses':2,'firewall_ridges_terminated':2,'roof_mesh_variants':3,'house07_isolated_real_flue_aperture':True,'new_image_texture_bytes':0}
 print('ROOF_HIERARCHY',json.dumps(report['roof_hierarchy'],ensure_ascii=False))
 # North-west bamboo workshop: verify supports, attachment, circulation and
 # that its canopy stops before the existing west water street.

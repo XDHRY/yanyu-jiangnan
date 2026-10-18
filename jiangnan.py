@@ -2994,7 +2994,12 @@ def refine_village_house07_prep():
 
 def refine_house07_flue35():
     """Unlit geometric flue: real firebox outlet and roof aperture, not a fake pipe."""
+    import bmesh
     c=C['water'];x,y=17.82,20.65
+    def outward(obj):
+        bm=bmesh.new();bm.from_mesh(obj.data)
+        bmesh.ops.recalc_face_normals(bm,faces=list(bm.faces))
+        bm.to_mesh(obj.data);bm.free();obj.data.update()
     roof07=bpy.data.objects[PREFIX+'村落民居_07_屋面']
     roof07.data=roof07.data.copy();roof07.data.name=PREFIX+'第7户独立开洞屋面'
     bpy.context.view_layer.update()
@@ -3020,6 +3025,9 @@ def refine_house07_flue35():
     roof07['JN_roof_solidify_applied_m']=.07
     def cut(obj,label,center,size):
         cutter=box('排烟施工刀具_'+label,center,size,None,c)
+        # Legacy box() winding is inward. Exact Boolean needs positive closed
+        # operand volumes; repair only these operands, never all shared assets.
+        outward(cutter);outward(obj)
         bpy.context.view_layer.update()
         mod=obj.modifiers.new(label,'BOOLEAN');mod.operation='DIFFERENCE';mod.solver='EXACT';mod.object=cutter
         apply(obj,mod);data=cutter.data;bpy.data.objects.remove(cutter,do_unlink=True)
@@ -3052,6 +3060,8 @@ def refine_house07_flue35():
     for i,(dx,dy) in enumerate(((.26,0),(0,.26),(.26,.26)),2):
         o=bpy.data.objects.new(PREFIX+f'第7户排烟_帽撑_{i}',post.data);c.objects.link(o);o.location=(dx,dy,0)
     part('防雨帽',(x,y,5.15),(.46,.46,.04),tile)
+    for obj in c.objects:
+        if obj.name.startswith(PREFIX+'第7户排烟_') and obj.type=='MESH':outward(obj)
     S['JN_house07_flue_geometry']='rear_port_18x22_shaft18_roof38_flashing56_v1'
     S['JN_house07_flue_thermal_fire_approval']='pending'
     # A geometric passage is not a thermal/draught or fire-safety acceptance.
