@@ -1354,6 +1354,11 @@ for o in visible37:
 lasts37=[o for o in visible37 if '共享木楦_' in o.name]
 assert len(lasts37)==2 and lasts37[0].data==lasts37[1].data
 assert all(abs(world_bounds(o)[0][2]-.944)<.001 for o in lasts37)
+assert len(lasts37[0].data.vertices)==24 and tris37==468
+hammer37=world_bounds(bpy.data.objects['JN_桥西补履_修锤头'])
+lamp37=world_bounds(bpy.data.objects['JN_桥西补履_案灯木口_1'])
+assert lamp37[0][1]-hammer37[1][1]>.12,'hammer overlaps lamp foot'
+assert abs(world_bounds(bpy.data.objects['JN_桥西补履_案灯纸罩'])[0][2]-.964)<.001
 report['quay_cobbler37']={'visible_meshes':len(visible37),'source_triangles_including_prototypes':tris37,'prior_source_triangles':166626,'shared_families':6,'paving_overlap_m':round(ab37[1][0]-old_paving37[0][0],3),'street_clearance_m':round(west_route[0][0]-ab37[1][0],3),'all_closed_positive_volume':True,'new_images':0,'new_materials':0,'new_roofs':0,'human_approval':'pending'}
 report['house07_finish36']={'audited_closed_meshes':11,'repaired_inward_meshes':10,'audit':audit36,'geometry_coordinates_unchanged':True,'source_triangles':expanded_tris,'glaze_users':2,'grey_lime_users':5,'new_materials':2,'new_images':0,'new_objects':0,'new_triangles':0,'active_fire':False}
 report['town_phase2']={'phase':S['JN_town_phase'],'grounded_houses':len(plinths),'street_segments':street_segments,'street_batches':len(streets),'tea_pavilion_columns':4,'market_stalls':2,'bridge_risers_per_side':3,'market_ceramics':len(ceramics),'teacups':len(teacups),'canal_preserved':True,'new_image_texture_bytes':0}

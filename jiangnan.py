@@ -2803,25 +2803,26 @@ def town_quay_cobbler37():
     solid('工作垫板',(-1.25,106.08,.932),(1.05,.48,.024),edge)
     # Low-poly wooden lasts: eight-point sole and shaped upper surface, closed
     # by real faces. Two workpieces use one datablock, no subdivided shoe mesh.
-    outline=[(-.15,-.055),(-.15,.055),(-.06,.065),(.10,.07),(.17,.035),(.18,0),(.17,-.035),(.10,-.07)]
-    verts=[(x,y,z) for z in (0,1) for x,y in outline]
-    verts=[(x,y,(.135 if x<-.05 else .085)*z) for x,y,z in verts]
-    faces=[tuple(range(7,-1,-1)),tuple(range(8,16))]+[(i,(i+1)%8,8+(i+1)%8,8+i) for i in range(8)]
-    last=mesh('桥西补履_木楦原型',verts,faces,wood,c);last.hide_render=True;last.hide_viewport=True;made.append(last)
+    outline=[(-.145,-.038),(-.16,0),(-.145,.038),(-.035,.052),(.11,.065),(.18,.02),(.16,-.045),(-.035,-.052)]
+    verts=[(x,y,0) for x,y in outline]+[(x,y,.045) for x,y in outline]
+    verts += [(x*.88-.008,y*.55,.135 if x<.0 else .075) for x,y in outline]
+    faces=[tuple(range(7,-1,-1)),tuple(range(16,24))]
+    faces += [(8*r+i,8*r+(i+1)%8,8*(r+1)+(i+1)%8,8*(r+1)+i) for r in (0,1) for i in range(8)]
+    last=mesh('桥西补履_木楦原型',verts,faces,bpy.data.materials[PREFIX+'转水埠茶担暖木'],c);last.hide_render=True;last.hide_viewport=True;made.append(last)
     # Winding is normalized on this new asset only, independent of the boxes.
     import bmesh
     bm=bmesh.new();bm.from_mesh(last.data);bmesh.ops.recalc_face_normals(bm,faces=list(bm.faces));bm.to_mesh(last.data);bm.free()
     for i,y in enumerate((105.97,106.20),1):
         o=bpy.data.objects.new(PREFIX+f'桥西补履_共享木楦_{i}',last.data);c.objects.link(o);o.location=(-1.40,y,.944);made.append(o)
-    solid('修锤柄',(-.92,106.08,.959),(.28,.025,.03),wood)
-    solid('修锤头',(-.81,106.08,.974),(.045,.115,.06),M['bronze'])
+    solid('修锤柄',(-.92,105.92,.959),(.28,.025,.03),wood)
+    solid('修锤头',(-.81,105.92,.974),(.045,.115,.06),M['bronze'])
     solid('锥柄',(-1.62,106.08,.969),(.11,.032,.05),wood)
     solid('锥针',(-1.53,106.08,.949),(.07,.008,.01),M['bronze'])
     # A small physically located paper task lamp; global lighting is untouched.
-    solid('案灯纸罩',(-.85,106.20,1.084),(.17,.17,.24),M['paper'])
+    solid('案灯纸罩',(-.85,106.20,1.054),(.17,.17,.18),M['paper'])
     repeat('案灯木口',(0,0,0),(.20,.20,.02),wood,
-           [(-.85,106.20,.954),(-.85,106.20,1.214)])
-    light('桥西补履_案灯灯芯',(-.85,106.20,1.084),(1,.48,.24),28,.18,kind='POINT')
+           [(-.85,106.20,.954),(-.85,106.20,1.154)])
+    light('桥西补履_案灯灯芯',(-.85,106.20,1.054),(1,.48,.24),18,.18,kind='POINT')
     for o in made:o['JN_asset_family']='quay-cobbler37'
     S['JN_quay_cobbler37']='roofless_public_last_repair_stop_v1'
     S['JN_quay_cobbler37_credit_budget']=0
