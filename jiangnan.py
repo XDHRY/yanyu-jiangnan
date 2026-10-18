@@ -2621,6 +2621,33 @@ def town_phase17_north_public_turning_quay():
     S['JN_turning_quay_shared_bollards']=2
     S['JN_turning_quay_new_image_bytes']=0
 
+def sampan_shell42():
+    """Preserve the20 outer vertices; add a35mm inset and sealed rim, not a lid."""
+    sections=((-1.18,.10,.31,.51),(-.72,.38,.22,.50),(0,.44,.19,.49),(.72,.38,.22,.50),(1.18,.10,.31,.51))
+    outer=[];faces=[];inner=[]
+    for yy,half,bottom,top in sections:
+        outer.extend([(-half,yy,top),(-half*.72,yy,bottom),(half*.72,yy,bottom),(half,yy,top)])
+        iy=yy+.035 if yy==-1.18 else yy-.035 if yy==1.18 else yy
+        inner.extend([(-half+.035,iy,top),(-half*.72+.035,iy,bottom+.035),(half*.72-.035,iy,bottom+.035),(half-.035,iy,top)])
+    for k in range(4):
+        a=4*k;b=4*(k+1)
+        faces.extend(((a,b,b+1,a+1),(a+1,b+1,b+2,a+2),(a+2,b+2,b+3,a+3)))
+    faces.extend(((0,1,2,3),(16,19,18,17)))
+    faces+= [tuple(i+20 for i in reversed(f)) for f in list(faces)]
+    for k in range(4):
+        a=4*k;b=4*(k+1)
+        faces.extend(((b,a,a+20,b+20),(a+3,b+3,b+23,a+23)))
+    faces.extend(((0,3,23,20),(19,16,36,39)))
+    return outer+inner,faces
+
+def sampan_rib42():
+    """Closed tapered saddle: small floor face, broad seat-bearing top."""
+    height=.455-(.19+.03*(.37/.72)+.035)
+    verts=[(x,y,z) for y in (-.0275,.0275) for x,z in ((-.25,0),(.25,0),(.35,height),(-.35,height))]
+    faces=[(0,3,2,1),(4,5,6,7),(0,1,5,4),(1,2,6,5),(2,3,7,6),(3,0,4,7)]
+    # Front face points-Y, back+Y; reverse the original profile winding.
+    return verts,[tuple(reversed(f)) for f in faces]
+
 def town_phase18_quay_boat_gear():
     """Inhabit the terminal quay with one low sampan, boat gear and rain marks."""
     c=C['water'];stone=M['stone'];wetstone=M['darkstone'];wood=M['wood'];jute=M['bark']
@@ -2638,14 +2665,7 @@ def town_phase18_quay_boat_gear():
     # Its 2.36 m hull remains wholly inside the terminal basin and leaves a clear
     # water gap before the bridge, so the public crossing and turning space stay
     # visually dominant.  Four longitudinal rings make a genuinely open hull.
-    sections=((-1.18,.10,.31,.51),(-.72,.38,.22,.50),(0,.44,.19,.49),(.72,.38,.22,.50),(1.18,.10,.31,.51))
-    hv=[];hf=[]
-    for yy,half,bottom,top in sections:
-        hv.extend([(-half,yy,top),(-half*.72,yy,bottom),(half*.72,yy,bottom),(half,yy,top)])
-    for k in range(len(sections)-1):
-        a=4*k;b=4*(k+1)
-        hf.extend(((a,b,b+1,a+1),(a+1,b+1,b+2,a+2),(a+2,b+2,b+3,a+3)))
-    hf.extend(((0,1,2,3),(16,19,18,17)))
+    hv,hf=sampan_shell42()
     hull=mesh('北河转水埠_停泊舢板船壳',hv,hf,boatwood,c)
     hull.location=(7.30,102.65,0)
     hull['JN_function']='open_mooring_sampan';hull['JN_length_m']=2.36;hull['JN_beam_m']=.88
@@ -2659,10 +2679,13 @@ def town_phase18_quay_boat_gear():
     seat.hide_render=True;seat.hide_viewport=True
     for i,y in enumerate((102.28,103.02),1):
         o=bpy.data.objects.new(PREFIX+f'北河转水埠_共享舢板坐板_{i}',seat.data);c.objects.link(o);o.location=(7.30,y,.49)
-    rib=box('北河转水埠_舢板横肋原型',(0,0,0),(.66,.055,.18),wetstone,c,.006)
+    rv,rf=sampan_rib42()
+    rib=mesh('北河转水埠_舢板横肋原型',rv,rf,boatwood,c)
     rib.hide_render=True;rib.hide_viewport=True
-    for i,y in enumerate((102.05,102.65,103.25),1):
-        o=bpy.data.objects.new(PREFIX+f'北河转水埠_共享舢板横肋_{i}',rib.data);c.objects.link(o);o.location=(7.30,y,.32)
+    for i,y in enumerate((102.28,102.65,103.02),1):
+        bottom=.19+.03*(abs(y-102.65)/.72)+.035
+        o=bpy.data.objects.new(PREFIX+f'北河转水埠_共享舢板横肋_{i}',rib.data);c.objects.link(o);o.location=(7.30,y,bottom)
+        o.scale.z=(.455-bottom)/max(v[2] for v in rv)
 
     # One low east-edge lending rack makes the quay use readable without adding
     # another roof.  Stone shoes carry two posts; their crossbeam hangs two

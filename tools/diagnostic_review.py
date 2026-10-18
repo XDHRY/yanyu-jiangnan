@@ -28,7 +28,7 @@ VIEWS=[
     ('12_village_lane',(1.4,8.4,1.75),(1.4,31.5,1.35),42,0,'村巷人眼：月门北巷通往茶集的连续地面、民居侧廊、桥前横巷和远端茶亭'),
     ('13_canal_bridge',(13.2,11.2,8.6),(7.3,15.1,.9),46,0,'水巷木桥：高位斜俯视完整检查桥板、栏柱、双岸驳岸、桥头落地与临水民居尺度'),
     ('14_village_waterfront',(7.3,29.0,2.25),(7.3,16.0,1.35),40,0,'临水回望：检查八栋民居沿水巷的聚落节奏、河埠和木桥是否形成江南村落层次'),
-    ('15_quay_cobbler_context',(-7.0,98.0,8.0),(6.0,104.8,.7),40,23,'北河公共转水埠：桥西修履歇脚点、石坪接路、茶担、踏桥与东岸船具架；不隐藏任何资产'),
+    ('15_sampan_shell',(9.5,99.8,2.0),(7.3,102.65,.35),42,0,'舢板结构：开放内舱、35毫米轴向内缩壳体与封边、两坐板和共享木横肋真实接触；不隐藏资产'),
     ('16_east_rope_bench',(15.8,108.4,3.0),(12.88,105.12,.62),42,0,'东岸缆作近景：整备案四足与横枨、共享绳环落案、割绳刀和船具架/石凳/主街净距；不隐藏资产'),
 ]
 
@@ -115,6 +115,19 @@ def fit_prep(cam):
     assert cam.data.lens>=22,('excessively wide preparation view',cam.data.lens)
     assert min(bounds[0],bounds[2])>.045 and max(bounds[1],bounds[3])<.955,bounds
     return {'objects':len(selected),'projected_bounds':bounds,'padding_fraction':.045,'fitted_lens_mm':cam.data.lens,'full_table_bench_stove_bounds':True}
+def fit_sampan42(cam):
+    bpy.context.view_layer.update()
+    obs=[o for o in S.objects if '舢板' in o.name and o.name.startswith('JN_北河转水埠_') and o.type=='MESH' and not o.hide_render]
+    pts=[o.matrix_world@Vector(c) for o in obs for c in o.bound_box]
+    for _ in range(4):
+        q=[world_to_camera_view(S,cam,p) for p in pts]
+        bounds=[min(p.x for p in q),max(p.x for p in q),min(p.y for p in q),max(p.y for p in q)]
+        factor=max(abs(v-.5) for v in bounds)/.445
+        if factor<=1:break
+        cam.data.lens/=factor*1.01;bpy.context.view_layer.update()
+    assert min(bounds[0],bounds[2])>.045 and max(bounds[1],bounds[3])<.955,bounds
+    return {'objects':len(obs),'projected_bounds':bounds,'all_sampan_bounds':True,'fitted_lens_mm':cam.data.lens}
+
 def fit_cobbler37(cam):
     bpy.context.view_layer.update()
     selected=[o for o in S.objects if o.get('JN_asset_family')=='east-rope-bench40' and not o.hide_render]
@@ -134,7 +147,7 @@ probe_data=probe.data;bpy.data.objects.remove(probe,do_unlink=True);bpy.data.cam
 for name,loc,target,lens,ortho,question in VIEWS:
     cam=add_cam(name,loc,target,lens,ortho)
     S.camera=cam
-    framing=fit_cobbler37(cam) if name=='16_east_rope_bench' else None
+    framing=fit_sampan42(cam) if name=='15_sampan_shell' else fit_cobbler37(cam) if name=='16_east_rope_bench' else None
     S.render.filepath=os.path.join(DIAG,name+'.png')
     excluded=[]
     if name=='11_village_plan':
