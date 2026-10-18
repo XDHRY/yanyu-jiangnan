@@ -2856,17 +2856,17 @@ def town_east_rope_bench40():
         proto=solid(label+'原型',(0,0,0),size,mat);proto.hide_render=True;proto.hide_viewport=True
         for i,loc in enumerate(centers,1):
             o=bpy.data.objects.new(PREFIX+'东岸缆作_'+label+f'_{i}',proto.data);c.objects.link(o);o.location=loc;made.append(o)
-    solid('整备案面',(12.88,105.12,.78),(.90,.56,.08),M['wood'])
-    linked('案足',(.075,.075,.58),[(x,y,.45) for x in (12.52,13.24) for y in (104.91,105.33)],M['wood'])
-    linked('案牙',(.80,.045,.12),[(12.88,y,.68) for y in (104.91,105.33)],M['wood'])
-    linked('案横枨',(.06,.42,.06),[(x,105.12,.34) for x in (12.52,13.24)],M['edge'])
+    solid('整备案面',(12.88,104.97,.78),(.90,.40,.08),M['wood'])
+    linked('案足',(.075,.075,.58),[(x,y,.45) for x in (12.52,13.24) for y in (104.82,105.12)],M['wood'])
+    linked('案牙',(.80,.045,.12),[(12.88,y,.68) for y in (104.82,105.12)],M['wood'])
+    linked('案横枨',(.06,.30,.06),[(x,104.97,.34) for x in (12.52,13.24)],M['edge'])
     verts,faces=rope_eye40_mesh()
     rope=mesh('东岸缆作_绳环原型',verts,faces,M['bark'],c);rope.hide_render=True;rope.hide_viewport=True;made.append(rope)
     bottom=min(p[2] for p in verts)
     for i,x in enumerate((12.67,13.09),1):
-        o=bpy.data.objects.new(PREFIX+f'东岸缆作_共享待接绳环_{i}',rope.data);c.objects.link(o);o.location=(x,105.12,.82-bottom);made.append(o)
-    solid('割绳刀木柄',(12.79,104.90,.84),(.13,.032,.04),M['wood'])
-    solid('割绳刀铁刃',(12.91,104.90,.8325),(.11,.018,.025),bpy.data.materials.get('JN_备膳户熟铁') or M['bronze'])
+        o=bpy.data.objects.new(PREFIX+f'东岸缆作_共享待接绳环_{i}',rope.data);c.objects.link(o);o.location=(x,104.97,.82-bottom);made.append(o)
+    solid('割绳刀木柄',(12.46,104.89,.84),(.032,.13,.04),M['wood'])
+    solid('割绳刀铁刃',(12.46,105.01,.8325),(.018,.11,.025),bpy.data.materials.get('JN_备膳户熟铁') or M['bronze'])
     for o in made:o['JN_asset_family']='east-rope-bench40'
     S['JN_east_rope_bench40']='static_rope_eye_preparation_bench_no_rope_physics'
 

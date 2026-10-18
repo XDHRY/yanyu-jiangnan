@@ -1401,10 +1401,13 @@ pocket40=world_bounds(bpy.data.objects['JN_北河转水埠_东岸转身石坪'])
 assert all(pocket40[0][i]<=top40[0][i]<top40[1][i]<=pocket40[1][i] for i in (0,1))
 street40=world_bounds(bpy.data.objects['JN_北河转水埠_东岸石街'])
 assert top40[0][0]-street40[1][0]>.4
-assert world_bounds(bpy.data.objects['JN_北河转水埠_共享石凳面_2'])[0][1]-top40[1][1]>.3
+assert world_bounds(bpy.data.objects['JN_北河转水埠_共享石凳面_2'])[0][1]-top40[1][1]>.5
 assert world_bounds(bpy.data.objects['JN_北河转水埠_船具箱'])[0][0]-top40[1][0]>.5
 for name in ('割绳刀木柄','割绳刀铁刃'):
     assert abs(world_bounds(bpy.data.objects['JN_东岸缆作_'+name])[0][2]-top40[1][2])<.001
+    lo,hi=world_bounds(bpy.data.objects['JN_东岸缆作_'+name])
+    assert all(top40[0][i]<lo[i]<hi[i]<top40[1][i] for i in (0,1))
+assert abs(world_bounds(bpy.data.objects['JN_东岸缆作_割绳刀木柄'])[1][1]-world_bounds(bpy.data.objects['JN_东岸缆作_割绳刀铁刃'])[0][1])<.001
 report['east_rope_bench40']={'visible_meshes':13,'hidden_prototypes':4,'source_triangles':tris40,'source_cap':1000,'all_closed_positive_volume':True,'grounded_legs':4,'shared_families':4,'rope_eyes':2,'rope_eye_segments':[20,6],'support_gap_m':0,'street_clearance_m':top40[0][0]-street40[1][0],'bench_clearance_m':world_bounds(bpy.data.objects['JN_北河转水埠_共享石凳面_2'])[0][1]-top40[1][1],'new_materials':0,'new_images':0,'rope_physics':'not simulated','human_approval':'pending'}
 report['town_phase2']={'phase':S['JN_town_phase'],'grounded_houses':len(plinths),'street_segments':street_segments,'street_batches':len(streets),'tea_pavilion_columns':4,'market_stalls':2,'bridge_risers_per_side':3,'market_ceramics':len(ceramics),'teacups':len(teacups),'canal_preserved':True,'new_image_texture_bytes':0}
 print('TOWN_PHASE2',json.dumps(report['town_phase2'],ensure_ascii=False))
