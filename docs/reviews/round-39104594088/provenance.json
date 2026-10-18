@@ -1,0 +1,192 @@
+{
+  "source_commit": "150d39eed91542960a741f909451de147ae1df9a",
+  "tested_merge_commit": "173ada9e3be0f8ebbd26d46083877ac22e8b5418",
+  "base_main": "013d2883b4d5015cedee9b02315349eba7d1f4ac",
+  "pr": 42,
+  "baseline_source": "9fc4d0448c537fc873b24ff4548789771d35431b",
+  "baseline_runs": {
+    "Spatial": 39101524633,
+    "Web": 39101524539
+  },
+  "runs": {
+    "CI": 39104593989,
+    "Smoke": 39104593990,
+    "Spatial": 39104594088,
+    "Web": 39104594062
+  },
+  "artifacts": {
+    "Smoke": 12127747867,
+    "Spatial": 12127134419,
+    "Web": 12128176596
+  },
+  "merged_commit": "ea58984f65e8646af76b77baa48b8dc03ce64233",
+  "tested_and_merged_tree": "c20376043a361b22b8466084c0ce56f3567e6d75",
+  "human_approval": "pending",
+  "active_fire": false,
+  "files": {
+    "README.md": {
+      "bytes": 4157,
+      "sha256": "6fba6a3ec1b264f6d1242a053a307d8540dcd104a210180b7b0842774547a4fe"
+    },
+    "performance.json": {
+      "bytes": 6543,
+      "sha256": "1912de92a251a1793732fff72e5f9b0c6e4602f762ceb163b28c3671303e0ccf"
+    },
+    "round36-contactsheet.jpg": {
+      "bytes": 265005,
+      "sha256": "e627af1ab8c1b70a804337799279ffc02660743ba61c95dfdb3575086661f676"
+    },
+    "source.json": {
+      "bytes": 754,
+      "sha256": "ba2c64a2c27b5679b5fbeca912ee0caac50647210951aedcfad357b510cbfba8"
+    },
+    "generic-form-validation.txt": {
+      "bytes": 4700,
+      "sha256": "31d8a37e7ce3e385cf20c0f57896aabbd193cb8c7c64ed8c5420294b1de9aacb"
+    },
+    "round36-focus.jpg": {
+      "bytes": 174623,
+      "sha256": "2832a0d2394b97eafa136c0f77797704d9a95fe7e2695ea333f295f2496c742f"
+    },
+    "round36-before-after.jpg": {
+      "bytes": 348644,
+      "sha256": "1fb3c47dc8da757cf1d31d1e798d8abd6a83e4f6a51d8b57801deba0a719f706"
+    },
+    "diagnostics/11_village_plan.png": {
+      "bytes": 896140,
+      "sha256": "a5c3f88d4b9a6ac96689a785191ffc2c88af53656c1ee381e3c444d26c1c10eb"
+    },
+    "diagnostics/06_gate_reverse.png": {
+      "bytes": 913004,
+      "sha256": "30a6e111c42cd4346791fc35306044da6e36d2dc734d497d9ee0abc5f530d75d"
+    },
+    "diagnostics/07_east_return.png": {
+      "bytes": 1119538,
+      "sha256": "46a99e2b1cd05a09f4e6141953406ee89b9d38b4877105fb19cc1bd8a2630db5"
+    },
+    "diagnostics/03_pavilion_entry.png": {
+      "bytes": 1133462,
+      "sha256": "7fe305ec73b185eafd342fdbc9be31ddd9777c14b349eda07edb9dcf16d16d9e"
+    },
+    "diagnostics/04_pond_axis.png": {
+      "bytes": 1067150,
+      "sha256": "c8c0216d61ed2967c5f0fc566b29f6b90f64f663c5ee5e6414fe6095caa7e37f"
+    },
+    "diagnostics/manifest.json": {
+      "bytes": 17940,
+      "sha256": "ea43e1b811c6dbea790f0319a904b33198251102a91e4516b10652ba7b7015ce"
+    },
+    "diagnostics/05_water_to_pavilion.png": {
+      "bytes": 1076364,
+      "sha256": "45aa95887ad34c12dd3bbaec16c47e7bdf4bb9b658644cc96ee4328361a9dfa4"
+    },
+    "diagnostics/01_plan.png": {
+      "bytes": 1023705,
+      "sha256": "0b46a0c431e953d38b10dd8065bd8f689562f3748f837db2a3d71819b92ac98e"
+    },
+    "diagnostics/14_village_waterfront.png": {
+      "bytes": 968452,
+      "sha256": "3aad96567f3df31e2e49aa317364319bb4469f47c86e6a3c9dd65b8b30991e63"
+    },
+    "diagnostics/16_house07_prep_door.png": {
+      "bytes": 1050046,
+      "sha256": "62d73b4f08f54553a0b73251602c716c5dedd3c296876033912b1465e0c72f56"
+    },
+    "diagnostics/12_village_lane.png": {
+      "bytes": 951488,
+      "sha256": "b5346f5097a4079e5160b44bc9fe747d6d0135d2c4ae26f2fd68dd8c53124c23"
+    },
+    "diagnostics/09_pavilion_side.png": {
+      "bytes": 1129570,
+      "sha256": "cdcb78d0163028ed2b8312c6c595b9dd64a6c830482b77a6b9adfed797a45a48"
+    },
+    "diagnostics/15_house07_prep_front.png": {
+      "bytes": 951807,
+      "sha256": "0007ea14c1a11d59f1c2bf9158f9861cb0425cae5d34204a333d3b76ed1734c3"
+    },
+    "diagnostics/10_eye_path.png": {
+      "bytes": 1120373,
+      "sha256": "48940b46acea36e2bf463c00a23108b72bbfc131ee60664c84b4e68503b104fd"
+    },
+    "diagnostics/02_front_gate.png": {
+      "bytes": 1060889,
+      "sha256": "5fe2a3fbcab0ba9ca6ea91635efb372ad557d013836f543fc4d23745ed4b6f5b"
+    },
+    "diagnostics/08_roofline.png": {
+      "bytes": 1176793,
+      "sha256": "874aac764d696c01cfc718ebb823054bad5b9fd9dfce6b652a82cf266c61415c"
+    },
+    "diagnostics/13_canal_bridge.png": {
+      "bytes": 946212,
+      "sha256": "d439c017d8789766cb5d0fef5a17efb601fafb506e90f4e810ea04cb50b9e071"
+    },
+    "runtime-audit/desktop15.png": {
+      "bytes": 793582,
+      "sha256": "6abdab78d5264d03821049e6fc6d44a852650f38eb86239262a99c43178b0a59"
+    },
+    "runtime-audit/runtime-camera-audit.json": {
+      "bytes": 11490,
+      "sha256": "23ac92b89b1da240a5cad93ff4de0bb24abbae3fcd9ecee7f0b3c307dcd262b1"
+    },
+    "runtime-audit/desktop16.png": {
+      "bytes": 945638,
+      "sha256": "01cf398d2c99eff4d9cdadd5211da1bd6b59e2c7b98aeaf0d8426e125ee25fdf"
+    },
+    "runtime-audit/mobile15.png": {
+      "bytes": 145192,
+      "sha256": "0bd4e918887128d9d3868fccb6c9832d0ba3622f5cd16967253ff723610f62d3"
+    },
+    "runtime-audit/mobile16.png": {
+      "bytes": 475301,
+      "sha256": "5ed3af4cd6914a0fbf4decd645df26123ee97eed5a89fa6a912da7a2e274de2c"
+    },
+    "validation/asset_budget.json": {
+      "bytes": 10051,
+      "sha256": "7b8caf435f6369df311c9fd43e97c55f60dfb94d2e149852896f17bce371cf35"
+    },
+    "validation/validation.json": {
+      "bytes": 20716,
+      "sha256": "4b5590aef9e0c39639bdc41b6c28ac8b5672ee7a48b9e45581dae69f997d7036"
+    },
+    "validation/material-audit.json": {
+      "bytes": 21122,
+      "sha256": "1b0dba2424ff783695cf60360520f064dfbd91dc5e14d77e86f2776b3aa7711f"
+    },
+    "validation/camera-parity.json": {
+      "bytes": 3885,
+      "sha256": "9ec7e7a5c5372f829530f5325854ac8de0c5ab792d934c18aaddf5a362a9cfd5"
+    },
+    "validation/web-budget.json": {
+      "bytes": 797,
+      "sha256": "065bf2bbd6e5d5f2330dc0e731fda0fdd5fc35133b0b7d0d4eaa91ee5059c140"
+    },
+    "Jiangnan.blend": {
+      "bytes": 23518481,
+      "sha256": "312b9dbf42d9e15e9f24908a20c0c128c7220d74b4de05fdb9aa97a430feb08e"
+    },
+    "scene_statistics.json": {
+      "bytes": 317,
+      "sha256": "c248acb228cae307b760e3db0a913a9c55b448a22cf55d842b7de7d9cb059eab"
+    },
+    "jiangnan-town-standalone.html": {
+      "bytes": 72027385,
+      "sha256": "d5423c0fe1d86bddbbd1d4cb02ce6220d998c5e6ac30445fd50b7f189e9d32f6"
+    },
+    "baseline-round35/desktop16.png": {
+      "bytes": 946591,
+      "sha256": "33e8754dfb13063705ea8d36ce0f2b80120d3e8b28b4437fd862af7797408f05"
+    },
+    "baseline-round35/16_house07_prep_door.png": {
+      "bytes": 1051370,
+      "sha256": "5b64e5147d87dcb495688731c398b67f0451d60c45d508d774ff88804ef6df98"
+    },
+    "baseline-round35/runtime-camera-audit.json": {
+      "bytes": 11490,
+      "sha256": "29b3515a5d97b7e4a80690a4cd2dd2ae03f263d354b3560865f964575dbf88d6"
+    },
+    "baseline-round35/diagnostic-manifest.json": {
+      "bytes": 17942,
+      "sha256": "4e31f34e774317a9cbbbd25babb362182535524f2ec4ef6dfea70cc32c0aa7cd"
+    }
+  }
+}

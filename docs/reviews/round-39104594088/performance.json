@@ -1,0 +1,193 @@
+{
+  "source_commit": "150d39eed91542960a741f909451de147ae1df9a",
+  "tested_merge_commit": "173ada9e3be0f8ebbd26d46083877ac22e8b5418",
+  "baseline_source": "9fc4d0448c537fc873b24ff4548789771d35431b",
+  "source_statistics": {
+    "scene": "烟雨江南 · 雪月江南",
+    "objects": 4563,
+    "mesh_objects": 3046,
+    "curve_objects": 1427,
+    "vertices": 170182,
+    "polygons": 98888,
+    "materials": 52,
+    "collections": 11,
+    "cameras": 3,
+    "lights": 45,
+    "object_drivers": 4444,
+    "frames": [
+      1,
+      240
+    ],
+    "fps": 24,
+    "weather": 0
+  },
+  "source_budget": {
+    "objects": 4563,
+    "mesh_objects": 3046,
+    "curve_objects": 1427,
+    "triangles_with_instances": 166626,
+    "faces_with_instances": 98888,
+    "vertices_with_instances": 170182,
+    "unique_mesh_datablocks": 1671,
+    "unique_mesh_triangles": 126772,
+    "unique_mesh_faces": 79935,
+    "unique_mesh_vertices": 143578,
+    "materials_used": 52,
+    "images_loaded": 9,
+    "estimated_texture_rgba8_bytes": 44554784,
+    "estimated_texture_rgba8_mib": 42.49,
+    "estimated_mesh_draw_calls": 3049,
+    "object_drivers": 4444,
+    "mesh_objects_using_reused_datablocks": 1479,
+    "instance_reuse_ratio": 0.4856
+  },
+  "baseline_glb": {
+    "instance_triangles": 628555,
+    "glb_bytes": 52993188,
+    "attribute_index_bytes": 29839822,
+    "images": 9,
+    "rgba8_bytes": 44554784
+  },
+  "current_glb": {
+    "instance_triangles": 628555,
+    "glb_bytes": 52992872,
+    "attribute_index_bytes": 29836942,
+    "images": 9,
+    "rgba8_bytes": 44554784
+  },
+  "normal_material_checks": {
+    "audited_closed_meshes": 11,
+    "repaired_inward_meshes": 10,
+    "audit": [
+      {
+        "mesh": "JN_东岸备膳户_冷灶底座",
+        "before_m3": -0.09791997820138931,
+        "after_m3": 0.09791997820138931,
+        "flipped": true,
+        "vertices_unchanged": true
+      },
+      {
+        "mesh": "JN_东岸备膳户_灶侧壁原型",
+        "before_m3": -0.08649598807096481,
+        "after_m3": 0.08649598807096481,
+        "flipped": true,
+        "vertices_unchanged": true
+      },
+      {
+        "mesh": "JN_东岸备膳户_灶背壁",
+        "before_m3": 0.04793588760852193,
+        "after_m3": 0.04793588760852193,
+        "flipped": false,
+        "vertices_unchanged": true
+      },
+      {
+        "mesh": "JN_东岸备膳户_灶口边墩原型",
+        "before_m3": -0.020351997887094814,
+        "after_m3": 0.020351997887094814,
+        "flipped": true,
+        "vertices_unchanged": true
+      },
+      {
+        "mesh": "JN_东岸备膳户_灶口过梁",
+        "before_m3": -0.005631989799439907,
+        "after_m3": 0.005631989799439907,
+        "flipped": true,
+        "vertices_unchanged": true
+      },
+      {
+        "mesh": "JN_东岸备膳户_灶面长边原型",
+        "before_m3": -0.023760000243782997,
+        "after_m3": 0.023760000243782997,
+        "flipped": true,
+        "vertices_unchanged": true
+      },
+      {
+        "mesh": "JN_东岸备膳户_灶面端边原型",
+        "before_m3": -0.011776000261306763,
+        "after_m3": 0.011776000261306763,
+        "flipped": true,
+        "vertices_unchanged": true
+      },
+      {
+        "mesh": "JN_东岸备膳户_灶前石踏",
+        "before_m3": -0.015456039846564332,
+        "after_m3": 0.015456039846564332,
+        "flipped": true,
+        "vertices_unchanged": true
+      },
+      {
+        "mesh": "JN_东岸备膳户_砧板",
+        "before_m3": -0.004899982362985611,
+        "after_m3": 0.004899982362985611,
+        "flipped": true,
+        "vertices_unchanged": true
+      },
+      {
+        "mesh": "JN_东岸备膳户_菜刀柄",
+        "before_m3": -0.00021060089723808537,
+        "after_m3": 0.00021060089723808537,
+        "flipped": true,
+        "vertices_unchanged": true
+      },
+      {
+        "mesh": "JN_东岸备膳户_菜刀刃",
+        "before_m3": -0.00019360086722978545,
+        "after_m3": 0.00019360086722978545,
+        "flipped": true,
+        "vertices_unchanged": true
+      }
+    ],
+    "geometry_coordinates_unchanged": true,
+    "source_triangles": 166626,
+    "glaze_users": 2,
+    "grey_lime_users": 5,
+    "new_materials": 2,
+    "new_images": 0,
+    "new_objects": 0,
+    "new_triangles": 0,
+    "active_fire": false
+  },
+  "export_all_geometry_positions_and_triangle_counts_identical": true,
+  "export_visible_box_volumes_before": {
+    "JN_东岸备膳户_冷灶底座": -0.09791997390741701,
+    "JN_东岸备膳户_灶侧壁_1": -0.08649599178004287,
+    "JN_东岸备膳户_灶侧壁_2": -0.08649599178004287,
+    "JN_东岸备膳户_灶背壁": 0.04793588803107044,
+    "JN_东岸备膳户_灶口边墩_1": -0.02035199799156195,
+    "JN_东岸备膳户_灶口边墩_2": -0.02035199799156195,
+    "JN_东岸备膳户_灶口过梁": -0.005631989990238101,
+    "JN_东岸备膳户_灶面长边_1": -0.023760000928044308,
+    "JN_东岸备膳户_灶面长边_2": -0.023760000928044308,
+    "JN_东岸备膳户_灶面端边_1": -0.011775999687194819,
+    "JN_东岸备膳户_灶面端边_2": -0.011775999687194819,
+    "JN_东岸备膳户_灶前石踏": -0.015456039798741272,
+    "JN_东岸备膳户_砧板": -0.0048999823093254236,
+    "JN_东岸备膳户_菜刀柄": -0.00021060089950684924,
+    "JN_东岸备膳户_菜刀刃": -0.00019360086230991655
+  },
+  "export_visible_box_volumes_after": {
+    "JN_东岸备膳户_冷灶底座": 0.09791997390741701,
+    "JN_东岸备膳户_灶侧壁_1": 0.08649599178004287,
+    "JN_东岸备膳户_灶侧壁_2": 0.08649599178004287,
+    "JN_东岸备膳户_灶背壁": 0.04793588803107044,
+    "JN_东岸备膳户_灶口边墩_1": 0.02035199799156195,
+    "JN_东岸备膳户_灶口边墩_2": 0.02035199799156195,
+    "JN_东岸备膳户_灶口过梁": 0.005631989990238101,
+    "JN_东岸备膳户_灶面长边_1": 0.023760000928044308,
+    "JN_东岸备膳户_灶面长边_2": 0.023760000928044308,
+    "JN_东岸备膳户_灶面端边_1": 0.011775999687194819,
+    "JN_东岸备膳户_灶面端边_2": 0.011775999687194819,
+    "JN_东岸备膳户_灶前石踏": 0.015456039798741272,
+    "JN_东岸备膳户_砧板": 0.0048999823093254236,
+    "JN_东岸备膳户_菜刀柄": 0.00021060089950684924,
+    "JN_东岸备膳户_菜刀刃": 0.00019360086230991655
+  },
+  "all16_cameras_identical": true,
+  "all4_browser_camera_poses_identical": true,
+  "original9_image_hashes_preserved": true,
+  "browser_page_errors": [],
+  "spatial_seconds": 314.46,
+  "web_seconds": 200.32,
+  "human_approval": "pending",
+  "active_fire": false
+}

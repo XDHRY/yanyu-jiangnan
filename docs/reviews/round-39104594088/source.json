@@ -1,0 +1,26 @@
+{
+  "source_commit": "150d39eed91542960a741f909451de147ae1df9a",
+  "tested_merge_commit": "173ada9e3be0f8ebbd26d46083877ac22e8b5418",
+  "base_main": "013d2883b4d5015cedee9b02315349eba7d1f4ac",
+  "pr": 42,
+  "baseline_source": "9fc4d0448c537fc873b24ff4548789771d35431b",
+  "baseline_runs": {
+    "Spatial": 39101524633,
+    "Web": 39101524539
+  },
+  "runs": {
+    "CI": 39104593989,
+    "Smoke": 39104593990,
+    "Spatial": 39104594088,
+    "Web": 39104594062
+  },
+  "artifacts": {
+    "Smoke": 12127747867,
+    "Spatial": 12127134419,
+    "Web": 12128176596
+  },
+  "merged_commit": "ea58984f65e8646af76b77baa48b8dc03ce64233",
+  "tested_and_merged_tree": "c20376043a361b22b8466084c0ce56f3567e6d75",
+  "human_approval": "pending",
+  "active_fire": false
+}
