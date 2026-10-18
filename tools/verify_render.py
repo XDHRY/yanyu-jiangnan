@@ -1325,7 +1325,43 @@ assert not any(n.type=='TEX_IMAGE' for n in glaze36.node_tree.nodes)
 assert abs(gb36.inputs['Roughness'].default_value-.27)<1e-5 and abs(gb36.inputs['Coat Weight'].default_value-.30)<1e-5
 assert abs(gb36.inputs['Coat Roughness'].default_value-.18)<1e-5
 assert all(abs(a-b)<1e-5 for a,b in zip(grey36['JN_web_base_color_factor'],(.56,.57,.53,1)))
-assert expanded_tris==166626,'normal/material-only round changed source triangle count'
+new37=[o for o in S.objects if o.get('JN_asset_family')=='quay-cobbler37' and o.type=='MESH']
+tris37=sum(len(o.data.loop_triangles) for o in new37)
+assert expanded_tris-tris37==166626,'pre-Round37 source triangle baseline changed'
+assert tris37<=500 and new37,'public repair stop source budget exceeded'
+visible37=[o for o in new37 if not o.hide_render]
+assert len(visible37)==25,len(visible37)
+apron37=bpy.data.objects['JN_桥西补履_接路石坪'];ab37=world_bounds(apron37)
+old_paving37=world_bounds(bpy.data.objects['JN_北河转水埠_西岸转身石坪'])
+assert ab37[1][0]-old_paving37[0][0]>=.11,'new paving disconnected'
+assert abs(ab37[0][2])<.001 and abs(ab37[1][2]-.16)<.001
+assert tea_min_x-max(world_bounds(o)[1][0] for o in visible37 if o!=apron37)>.80
+assert west_route[0][0]-ab37[1][0]>2.7,'public through route narrowed'
+for stem,count in (('案足',4),('案牙板',2),('案横枨',2),('坐凳足',4),('案灯木口',2)):
+    obs=[o for o in visible37 if o.name.startswith('JN_桥西补履_'+stem+'_')]
+    assert len(obs)==count and len({o.data.as_pointer() for o in obs})==1
+for stem in ('案足_','坐凳足_'):
+    assert all(abs(world_bounds(o)[0][2]-.16)<.001 for o in visible37 if stem in o.name)
+assert abs(world_bounds(bpy.data.objects['JN_桥西补履_案面'])[0][2]-.84)<.001
+assert abs(world_bounds(bpy.data.objects['JN_桥西补履_工作垫板'])[0][2]-.92)<.001
+for o in visible37:
+    o.data.calc_loop_triangles()
+    import bmesh
+    bm=bmesh.new();bm.from_mesh(o.data)
+    assert all(e.is_manifold for e in bm.edges),o.name
+    assert bm.calc_volume(signed=True)>0,o.name
+    bm.free()
+lasts37=[o for o in visible37 if '共享木楦_' in o.name]
+assert len(lasts37)==2 and lasts37[0].data==lasts37[1].data
+assert all(abs(world_bounds(o)[0][2]-.944)<.001 for o in lasts37)
+assert len(lasts37[0].data.vertices)==24 and tris37==468
+hammer37=world_bounds(bpy.data.objects['JN_桥西补履_修锤头'])
+lamp37=world_bounds(bpy.data.objects['JN_桥西补履_案灯木口_1'])
+assert lamp37[0][1]-hammer37[1][1]>.12,'hammer overlaps lamp foot'
+assert abs(world_bounds(bpy.data.objects['JN_桥西补履_案灯纸罩'])[0][2]-.964)<.001
+for name,factor in [('JN_darkstone',(.07,.105,.10,1)),('JN_转水埠茶担暖木',(.22,.105,.045,1))]:
+    assert all(abs(a-b)<1e-5 for a,b in zip(bpy.data.materials[name]['JN_web_base_color_factor'],factor)),name
+report['quay_cobbler37']={'visible_meshes':len(visible37),'source_triangles_including_prototypes':tris37,'prior_source_triangles':166626,'shared_families':6,'paving_overlap_m':round(ab37[1][0]-old_paving37[0][0],3),'street_clearance_m':round(west_route[0][0]-ab37[1][0],3),'all_closed_positive_volume':True,'new_images':0,'new_materials':0,'new_roofs':0,'human_approval':'pending'}
 report['house07_finish36']={'audited_closed_meshes':11,'repaired_inward_meshes':10,'audit':audit36,'geometry_coordinates_unchanged':True,'source_triangles':expanded_tris,'glaze_users':2,'grey_lime_users':5,'new_materials':2,'new_images':0,'new_objects':0,'new_triangles':0,'active_fire':False}
 report['town_phase2']={'phase':S['JN_town_phase'],'grounded_houses':len(plinths),'street_segments':street_segments,'street_batches':len(streets),'tea_pavilion_columns':4,'market_stalls':2,'bridge_risers_per_side':3,'market_ceramics':len(ceramics),'teacups':len(teacups),'canal_preserved':True,'new_image_texture_bytes':0}
 print('TOWN_PHASE2',json.dumps(report['town_phase2'],ensure_ascii=False))

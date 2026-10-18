@@ -1,0 +1,15 @@
+{
+  "asset_id":"quay-cobbler37","generator":"jiangnan.py::town_quay_cobbler37","units":"metre",
+  "base_main":"abbf4c2faf48656afb87473b563918138dde15c5",
+  "placement":{"new_paving_center":[-1.25,105.72,0.08],"new_paving_dimensions":[2.12,2.05,0.16],"overlap_old_paving_m":0.12,"existing_bank_support":true,"work_table_top_m":0.92,"seat_top_m":0.56},
+  "geometry":{"expected_visible_meshes":25,"expected_shared_mesh_families":6,"new_roofs":0,"new_buildings":0,"new_light_sources":1},
+  "budget":{"source_new_triangles_max":500,"source_scene_max":170000,"evaluated_scene_max":629155,"new_image_bytes":0,"new_materials":0,"paid_credits":0},
+  "materials":["existing wood","existing edge wood","stone","bronze","paper"],
+  "textures":{"new":[],"reused":"existing project wood/stone image mapping applied by art_upgrade; textures/generation_prompts.json records source/usage/licence; no directional light baked into new image"},
+  "normals":"Local new boxes reverse legacy inward winding; 24-vertex three-ring last profile recalculated only on new private mesh. Closedness and signed volume checked at build and independently on GLB.",
+  "web_fallbacks":{"JN_darkstone":[0.07,0.105,0.10,1],"JN_转水埠茶担暖木":[0.22,0.105,0.045,1],"reason":"unsupported procedural colour nodes exported white; explicit existing source linear colour, not baked noise/PBR"},
+  "uv":"Existing source Object coordinates; Web dominant-face UV approximation. Full authored UV and baked tangent normals still pending.",
+  "lod":"Single diagnostic tier, shared meshes for table legs/aprons/stretchers, stool legs, lamp caps and wooden lasts. No formal runtime LOD chain.",
+  "license":"Original project procedural geometry, existing project textures, no paid or external generated mesh.",
+  "human_gates":{"function":"pending","form":"pending","runtime":"pending"}
+}

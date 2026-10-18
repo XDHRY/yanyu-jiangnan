@@ -108,6 +108,9 @@ def start():
       'gold':((.7,.39,.12),.45,0),'paper':((1,.42,.10),.6,0,0,2.4),'snow':((.8,.87,.91),.7,25),
       'water':((.055,.13,.145),.14,0,.35),'dew':((.66,.84,.85),.07,0),
       'rain':((.22,.34,.39),.22,0,0,.025)}.items()}
+    # Explicit flat fallback for the noise-node colour unsupported by glTF.
+    # Keep the Blender shader unchanged, and never bake albedo into normals.
+    M['darkstone']['JN_web_base_color_factor']=list(M['darkstone'].diffuse_color)
     for n in M['plaster'].node_tree.nodes:
         if n.type=='VALTORGB':n.color_ramp.elements[0].color=(.51,.55,.51,1)
         if n.type=='BUMP':n.inputs['Strength'].default_value=.12;n.inputs['Distance'].default_value=.018
@@ -2773,6 +2776,62 @@ def town_phase19_quay_tea_porter():
     S['JN_quay_tea_shared_cups']=3
     S['JN_quay_tea_new_image_bytes']=0
 
+def town_quay_cobbler37():
+    """One roofless public repair stop, west of the tea load, not in the route."""
+    c=C['water'];wood=M['wood'];edge=M['edge'];stone=M['stone'];made=[]
+    def solid(label,loc,size,mat):
+        o=box('桥西补履_'+label,loc,size,mat,c)
+        # The legacy box helper is inward: reverse only these new closed meshes.
+        for p in o.data.polygons:p.flip()
+        o.data.update();made.append(o);return o
+    def repeat(label,loc,size,mat,positions):
+        proto=solid(label+'原型',(0,0,0),size,mat)
+        proto.hide_render=True;proto.hide_viewport=True
+        for i,p in enumerate(positions,1):
+            o=bpy.data.objects.new(PREFIX+'桥西补履_'+label+f'_{i}',proto.data)
+            c.objects.link(o);o.location=p;made.append(o)
+    # Existing bank foundation is already here. A 12 cm overlap joins the old
+    # turning paving without covering the tea baskets or narrowing the street.
+    solid('接路石坪',(-1.25,105.72,.08),(2.12,2.05,.16),stone)
+    solid('案面',(-1.25,106.08,.88),(1.36,.66,.08),wood)
+    repeat('案足',(0,0,0),(.075,.075,.68),wood,
+           [(x,y,.50) for x in (-1.80,-.70) for y in (105.83,106.33)])
+    repeat('案牙板',(0,0,0),(1.18,.045,.14),wood,
+           [(-1.25,105.83,.77),(-1.25,106.33,.77)])
+    repeat('案横枨',(0,0,0),(.065,.56,.065),edge,
+           [(-1.80,106.08,.36),(-.70,106.08,.36)])
+    solid('坐凳面',(-1.25,104.96,.52),(.54,.42,.08),wood)
+    repeat('坐凳足',(0,0,0),(.065,.065,.32),wood,
+           [(x,y,.32) for x in (-1.45,-1.05) for y in (104.82,105.10)])
+    solid('工作垫板',(-1.25,106.08,.932),(1.05,.48,.024),edge)
+    # Low-poly wooden lasts: eight-point sole and shaped upper surface, closed
+    # by real faces. Two workpieces use one datablock, no subdivided shoe mesh.
+    outline=[(-.145,-.038),(-.16,0),(-.145,.038),(-.035,.052),(.11,.065),(.18,.02),(.16,-.045),(-.035,-.052)]
+    verts=[(x,y,0) for x,y in outline]+[(x,y,.045) for x,y in outline]
+    verts += [(x*.88-.008,y*.55,.135 if x<.0 else .075) for x,y in outline]
+    faces=[tuple(range(7,-1,-1)),tuple(range(16,24))]
+    faces += [(8*r+i,8*r+(i+1)%8,8*(r+1)+(i+1)%8,8*(r+1)+i) for r in (0,1) for i in range(8)]
+    lastmat=bpy.data.materials[PREFIX+'转水埠茶担暖木']
+    lastmat['JN_web_base_color_factor']=list(lastmat.diffuse_color)
+    last=mesh('桥西补履_木楦原型',verts,faces,lastmat,c);last.hide_render=True;last.hide_viewport=True;made.append(last)
+    # Winding is normalized on this new asset only, independent of the boxes.
+    import bmesh
+    bm=bmesh.new();bm.from_mesh(last.data);bmesh.ops.recalc_face_normals(bm,faces=list(bm.faces));bm.to_mesh(last.data);bm.free()
+    for i,y in enumerate((105.97,106.20),1):
+        o=bpy.data.objects.new(PREFIX+f'桥西补履_共享木楦_{i}',last.data);c.objects.link(o);o.location=(-1.40,y,.944);made.append(o)
+    solid('修锤柄',(-.92,105.92,.959),(.28,.025,.03),wood)
+    solid('修锤头',(-.81,105.92,.974),(.045,.115,.06),M['bronze'])
+    solid('锥柄',(-1.62,106.08,.969),(.11,.032,.05),wood)
+    solid('锥针',(-1.53,106.08,.949),(.07,.008,.01),M['bronze'])
+    # A small physically located paper task lamp; global lighting is untouched.
+    solid('案灯纸罩',(-.85,106.20,1.054),(.17,.17,.18),M['paper'])
+    repeat('案灯木口',(0,0,0),(.20,.20,.02),wood,
+           [(-.85,106.20,.954),(-.85,106.20,1.154)])
+    light('桥西补履_案灯灯芯',(-.85,106.20,1.054),(1,.48,.24),18,.18,kind='POINT')
+    for o in made:o['JN_asset_family']='quay-cobbler37'
+    S['JN_quay_cobbler37']='roofless_public_last_repair_stop_v1'
+    S['JN_quay_cobbler37_credit_budget']=0
+
 def refine_village_house03_study():
     """Give the existing third west-bank house a restrained reading destination."""
     c=C['water']; wood=M['wood']; paper=bpy.data.materials['JN_纸坊楮皮宣纸']
@@ -3281,6 +3340,7 @@ def build(stage=None):
     refine_village_house07_prep()
     refine_house07_flue35()
     audit_house07_box_normals36()
+    town_quay_cobbler37()
     level=P['stage'] if stage is None else stage
     if level>=2:vegetation()
     if level>=3:weather()
