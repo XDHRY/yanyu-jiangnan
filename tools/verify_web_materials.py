@@ -81,7 +81,7 @@ if any(row.get('source_material')=='JN_转水埠细磨青石' for row in report.
     assert all(node['name'].startswith('JN_北河转水埠_') or node['name']=='JN_桥西补履_接路石坪' for node in users)
     print('QUAY39_SCOPED_STONE_OK',len(users))
 fallback41=[]
-for name,factor,rough,count in [('JN_转水埠旧船木',(.24,.105,.038,1),.55,8),('JN_转水埠桥面雨湿',(.19,.25,.22,1),.28,4)]:
+for name,factor,rough,count in [('JN_转水埠旧船木',(.24,.105,.038,1),.55,11),('JN_转水埠桥面雨湿',(.19,.25,.22,1),.28,4)]:
     rows=[r for r in report.get('materials',[]) if r.get('source_material')==name]
     if not rows:continue  # Generic synthetic fixtures do not contain quay assets.
     assert len(rows)==1 and rows[0].get('base_color_factor') is not None,('quay41 declared fallback missing',name)
