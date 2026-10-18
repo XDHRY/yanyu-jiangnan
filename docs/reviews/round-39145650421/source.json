@@ -1,0 +1,45 @@
+{
+  "repository": "XDHRY/yanyu-jiangnan",
+  "round": 39,
+  "date": "2026-10-19",
+  "base_main": "8080e5022c1563b79fb90a23aaa227934cc84f49",
+  "source_commit": "b10725c0b2a7280f899a7404f876811f5758e8a7",
+  "tested_merge_commit": "7cf0be4bacd44808ef821f6f02ececd50128dfb8",
+  "actual_merge_commit": "7c5a1d44b8ba767a178f0816711cac8f15b4a0f2",
+  "tested_and_merged_tree": "9bf9941a708020bffa2498bbfc355d9c40683767",
+  "pr": 45,
+  "successful_runs": {
+    "CI": 39145650466,
+    "Smoke": 39145650356,
+    "Spatial": 39145650421,
+    "Web": 39145650395
+  },
+  "artifacts": {
+    "Smoke": 12143620532,
+    "Spatial": 12143497113,
+    "Web": 12142823848
+  },
+  "baseline38": {
+    "Web_run": 39136620220,
+    "artifact": 12139354654
+  },
+  "actual": {
+    "objects": 4595,
+    "materials": 53,
+    "source_triangles": 167094,
+    "glb_triangles": 624203,
+    "glb_limit": 629155,
+    "glb_bytes": 53016464,
+    "attribute_index_bytes": 29846158,
+    "images": 9,
+    "rgba8_bytes": 44554784,
+    "spatial_seconds": 227.79,
+    "web_seconds": 305.64
+  },
+  "changed_visible_material_users": 23,
+  "new_materials": 1,
+  "new_images": 0,
+  "new_geometry": 0,
+  "human_approval": "pending",
+  "separate_inn_repository": "unchanged"
+}

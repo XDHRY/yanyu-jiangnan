@@ -1,0 +1,186 @@
+{
+  "README.md": {
+    "bytes": 4240,
+    "sha256": "4a66f86b460017f9e9bd4d89dccfe150f2465b29ab119533b1e502ab708a4a9c"
+  },
+  "before-after.jpg": {
+    "bytes": 237214,
+    "sha256": "e04db043c5f437c8e265dcbd7a91aa868266e4d8edf110e71a768e13ecab07ba"
+  },
+  "contact-sheet.jpg": {
+    "bytes": 343943,
+    "sha256": "42c0180d95d5f24284b6978ddfa55bccf33b8072c2e47afff1c4c9afff83e3e6"
+  },
+  "focus.jpg": {
+    "bytes": 238991,
+    "sha256": "41582515ea786f40782e0d8608e44ca688c7c007c7d0d8bee5f3e3979e25f9d7"
+  },
+  "generic-form-validation.txt": {
+    "bytes": 4099,
+    "sha256": "6f81545af5b1d00c21e9f4927917cbfb82c9ebf394d08f916cf376c09e97253e"
+  },
+  "independent-audit.json": {
+    "bytes": 2154,
+    "sha256": "8e537782bf54774fc7fa5d815329eef19e3479408e01f97fee9d4502b23b19f0"
+  },
+  "source.json": {
+    "bytes": 1223,
+    "sha256": "3cb8c79e69b990cea6581d80626d035a74e16a28f7baf970630fc13848cf55ad"
+  },
+  "blender-diagnostics/01_plan.png": {
+    "bytes": 1023397,
+    "sha256": "7135eceef679423d4ca466ab693d026b1915aa22a96ff1db05d0e25f40ed5268"
+  },
+  "blender-diagnostics/02_front_gate.png": {
+    "bytes": 1061120,
+    "sha256": "9a7b11338c2451215be12df2808e86bd980d809e1083cdc327152149da6a5b08"
+  },
+  "blender-diagnostics/03_pavilion_entry.png": {
+    "bytes": 1133337,
+    "sha256": "4502d1b0a8872131b84ec8ae1a643ad9698487b4dc2b5c5177cc0b97780f2e55"
+  },
+  "blender-diagnostics/04_pond_axis.png": {
+    "bytes": 1067220,
+    "sha256": "2d29794388c11bc477e77a1f9578aaa3d31ba3c14a38e4b87e8e06b0fc73b4d1"
+  },
+  "blender-diagnostics/05_water_to_pavilion.png": {
+    "bytes": 1075700,
+    "sha256": "672d4b7bf146f0f0f2bf4c4cb2a3d36b04ce70e4b19ea8014a46a25045947644"
+  },
+  "blender-diagnostics/06_gate_reverse.png": {
+    "bytes": 912864,
+    "sha256": "e2ad7c65408d438a3bba0ed63567232ea6a1c851092258b56e5f2db5a5b07edc"
+  },
+  "blender-diagnostics/07_east_return.png": {
+    "bytes": 1119563,
+    "sha256": "eb7ca55da8555b0faf8b7411468bfa03b8e7452a4eb132fa383d086bcc0a3941"
+  },
+  "blender-diagnostics/08_roofline.png": {
+    "bytes": 1177033,
+    "sha256": "4212c5a88ecbb8d486f3e4ecc04e8f47ed54a5ed1552694f22e3fc60fd38a9e7"
+  },
+  "blender-diagnostics/09_pavilion_side.png": {
+    "bytes": 1129919,
+    "sha256": "18849c803f8541760d41f427bdb44c4dd822880086bed2534576038f68041c9d"
+  },
+  "blender-diagnostics/10_eye_path.png": {
+    "bytes": 1120377,
+    "sha256": "11ed88378f34c05b33365f11a5929ce85f4dcf1918ec097b3ee3de8d70073ccd"
+  },
+  "blender-diagnostics/11_village_plan.png": {
+    "bytes": 895923,
+    "sha256": "93491b6eedff8f6170bf3cae1d61498ac6de6fb5682c2aa64d4213d5c2669f25"
+  },
+  "blender-diagnostics/12_village_lane.png": {
+    "bytes": 951848,
+    "sha256": "b3e23789a13277427f90d22d84b4083195510dde3b4854250269ef726314fe5f"
+  },
+  "blender-diagnostics/13_canal_bridge.png": {
+    "bytes": 946045,
+    "sha256": "e590aeb77d5cb7fb28f6b5dfb6eeb10167e44ba7fb56e0c8c932c8b31ac87c5c"
+  },
+  "blender-diagnostics/14_village_waterfront.png": {
+    "bytes": 968278,
+    "sha256": "dc6107f30ed1a647c021a00dd5d02c9c983cfdd2261aa816d25adab8fc03b11b"
+  },
+  "blender-diagnostics/15_quay_cobbler_context.png": {
+    "bytes": 830381,
+    "sha256": "ba0c0e2f9955cd578c987e94c4d0e4085fbd1f62a89d08d064fea9e644b515a9"
+  },
+  "blender-diagnostics/16_quay_cobbler_detail.png": {
+    "bytes": 796881,
+    "sha256": "1594cdaa70224f6806e786f3ee856ac7afb02df149a418637080ac1a9591639c"
+  },
+  "blender-diagnostics/manifest.json": {
+    "bytes": 17591,
+    "sha256": "db1eec92210716bb55c22695cac2bf9a7ab822e12d4491782cc99ac3ace7de55"
+  },
+  "validation/asset_budget.json": {
+    "bytes": 10051,
+    "sha256": "e4441d79ec84d91779d24393f5ec6f37aab012cd1613c451a580c74a509226d5"
+  },
+  "validation/validation.json": {
+    "bytes": 21420,
+    "sha256": "fe9cef4694870dc9c016ec918e48f074f1fd950a96baf5ecaeb5340a3ab2227d"
+  },
+  "web/runtime-audit/desktop15.png": {
+    "bytes": 598588,
+    "sha256": "0f6f8c772be2f4720d172540644fb4ce132d42545e881d8e5fe19cd5568b6651"
+  },
+  "web/runtime-audit/desktop16.png": {
+    "bytes": 514299,
+    "sha256": "d8bc883abed46b921436c5ebe55dd034c18becf7a058105678d81414c422d207"
+  },
+  "web/runtime-audit/mobile15.png": {
+    "bytes": 239681,
+    "sha256": "28d4acdb387a448303c5bf03acf1e1659612252061ad837218164975c1cd77fc"
+  },
+  "web/runtime-audit/mobile16.png": {
+    "bytes": 215278,
+    "sha256": "a1c4de3bcd5cccb82b5a6160f29d8d029955e792c24368895f6b564f9ab2d1c2"
+  },
+  "web/runtime-audit/runtime-camera-audit.json": {
+    "bytes": 11329,
+    "sha256": "cea802ed3287e9ffa16136317beadfcdcb8ca53eca69ebb2c3145962ab44d41c"
+  },
+  "editable/Jiangnan.blend": {
+    "bytes": 23528145,
+    "sha256": "1c411b72c07167d3631979379d1250e5984cf4ba9660ebea782fa3b5ebb9a449"
+  },
+  "editable/scene_statistics.json": {
+    "bytes": 317,
+    "sha256": "a991b433ed1249001e53f6fe7b9bd7fa79db16ab41de33d7dedea2f38932614c"
+  },
+  "web/jiangnan-town-standalone.html": {
+    "bytes": 72025690,
+    "sha256": "7a91ace3d9a147f67744e8b18228ac1db9d78dc290673b962acd9514083f5977"
+  },
+  "web/viewer_manifest.json": {
+    "bytes": 13054,
+    "sha256": "e2859c1a75f44cd282f2600a17f4cc5b25aec3cb3f8672f9950705e869d5b354"
+  },
+  "web/material-audit.json": {
+    "bytes": 22058,
+    "sha256": "7de18cdda97159523a36ab225d7f1872040add79486e08c5ee74c7baf179b1ac"
+  },
+  "web/camera-parity.json": {
+    "bytes": 3865,
+    "sha256": "79c22ebdffb5869eb5f944d85b814c98c5ed401dc2fda0f66efaf074481c7eec"
+  },
+  "web/web-budget.json": {
+    "bytes": 797,
+    "sha256": "dc0ae1cb531a83ec809a9ed5b82f9c6d864822857b2a5484259a9168b9a06f98"
+  },
+  "web/topology-audit.json": {
+    "bytes": 34176,
+    "sha256": "49150f689b428f68e114558b9b610f7e5810d9e372b39c2513051e33486f428b"
+  },
+  "baseline38/desktop15.png": {
+    "bytes": 599502,
+    "sha256": "b42126a4a237dfde74615fddfc75ceeb73ecb4226e0e2bf62fde930bb08a1388"
+  },
+  "baseline38/desktop16.png": {
+    "bytes": 529683,
+    "sha256": "a11e220b919c6e25f6656ec6f72a97164094e8061653aa6f8ef9557107229238"
+  },
+  "baseline38/runtime-camera-audit.json": {
+    "bytes": 11329,
+    "sha256": "1762ebca1d5de0ef7e8fc294f5ae4feb9b60708e1fb69f13e59cd06cf359b3a2"
+  },
+  "baseline38/blender16.png": {
+    "bytes": 848303,
+    "sha256": "ab253c5241101e6d6535467805dfa10e4f15412e94dc232e6b459823a7f64d90"
+  },
+  "verification/audit39.py": {
+    "bytes": 7068,
+    "sha256": "881d6e4d4dbc4eb48b06459b3722c4de9141fde5c5bd95775fd375dbe6060780"
+  },
+  "verification/package39.py": {
+    "bytes": 1869,
+    "sha256": "fa1e2d522962f9f1ca03188419cb7e2561b0f760b8425c12efa2662cd55bd062"
+  },
+  "asset-manifest.json": {
+    "bytes": 1367,
+    "sha256": "0d27a070b55719b1bdbd524ca8820134b1847229cd469559ad6a3daea909179a"
+  }
+}
