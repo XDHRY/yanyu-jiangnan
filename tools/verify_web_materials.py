@@ -64,3 +64,10 @@ for name,factor,rough in [('JN_备膳青白釉',(.48,.57,.50,1),.27),('JN_备膳
         assert abs(coat['clearcoatFactor']-.30)<1e-5 and abs(coat['clearcoatRoughnessFactor']-.18)<1e-5
     else:assert 'baseColorTexture' in p
 print('FINISH36_PBR_OK')
+for name,factor in [('JN_darkstone',(.07,.105,.10,1)),('JN_转水埠茶担暖木',(.22,.105,.045,1))]:
+    if not any(row.get('source_material')==name and row.get('base_color_factor') is not None for row in report.get('materials',[])):continue
+    mats=[m for m in g['materials'] if m['name']==name+'__WEB']
+    assert len(mats)==1,('explicit procedural fallback missing',name)
+    p=mats[0]['pbrMetallicRoughness'];assert 'baseColorTexture' not in p
+    assert all(abs(a-b)<1e-5 for a,b in zip(p['baseColorFactor'],factor)),name
+print('QUAY37_PROCEDURAL_FALLBACK_OK')

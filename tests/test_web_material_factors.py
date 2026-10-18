@@ -18,3 +18,10 @@ class ExplicitFactors(unittest.TestCase):
         self.assertEqual(data[-12:],original[-12:]);self.assertEqual(names,['floor__WEB'])
     def test_missing_declared_material_rejected(self):
         with self.assertRaises(AssertionError):m.apply_factors(self.fixture(),[{'export_material':'missing','base_color_factor':[1,1,1,1]}])
+    def test_two_explicit_procedural_factors_preserve_binary(self):
+        original=self.fixture();rows=[{'export_material':'floor__WEB','base_color_factor':[.07,.105,.10,1]},{'export_material':'other','base_color_factor':[.22,.105,.045,1]}]
+        result,names=m.apply_factors(original,rows)
+        n=struct.unpack_from('<I',result,12)[0];g=json.loads(result[20:20+n])
+        self.assertEqual(len(names),2)
+        self.assertEqual([mat['pbrMetallicRoughness']['baseColorFactor'] for mat in g['materials']],[r['base_color_factor'] for r in rows])
+        self.assertEqual(result[-12:],original[-12:])

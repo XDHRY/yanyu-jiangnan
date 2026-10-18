@@ -108,6 +108,9 @@ def start():
       'gold':((.7,.39,.12),.45,0),'paper':((1,.42,.10),.6,0,0,2.4),'snow':((.8,.87,.91),.7,25),
       'water':((.055,.13,.145),.14,0,.35),'dew':((.66,.84,.85),.07,0),
       'rain':((.22,.34,.39),.22,0,0,.025)}.items()}
+    # Explicit flat fallback for the noise-node colour unsupported by glTF.
+    # Keep the Blender shader unchanged, and never bake albedo into normals.
+    M['darkstone']['JN_web_base_color_factor']=list(M['darkstone'].diffuse_color)
     for n in M['plaster'].node_tree.nodes:
         if n.type=='VALTORGB':n.color_ramp.elements[0].color=(.51,.55,.51,1)
         if n.type=='BUMP':n.inputs['Strength'].default_value=.12;n.inputs['Distance'].default_value=.018
@@ -2808,7 +2811,9 @@ def town_quay_cobbler37():
     verts += [(x*.88-.008,y*.55,.135 if x<.0 else .075) for x,y in outline]
     faces=[tuple(range(7,-1,-1)),tuple(range(16,24))]
     faces += [(8*r+i,8*r+(i+1)%8,8*(r+1)+(i+1)%8,8*(r+1)+i) for r in (0,1) for i in range(8)]
-    last=mesh('桥西补履_木楦原型',verts,faces,bpy.data.materials[PREFIX+'转水埠茶担暖木'],c);last.hide_render=True;last.hide_viewport=True;made.append(last)
+    lastmat=bpy.data.materials[PREFIX+'转水埠茶担暖木']
+    lastmat['JN_web_base_color_factor']=list(lastmat.diffuse_color)
+    last=mesh('桥西补履_木楦原型',verts,faces,lastmat,c);last.hide_render=True;last.hide_viewport=True;made.append(last)
     # Winding is normalized on this new asset only, independent of the boxes.
     import bmesh
     bm=bmesh.new();bm.from_mesh(last.data);bmesh.ops.recalc_face_normals(bm,faces=list(bm.faces));bm.to_mesh(last.data);bm.free()
