@@ -1312,6 +1312,21 @@ for dx,dy in ((.24,0),(-.24,0),(0,.24),(0,-.24)):
     hit=roof35.ray_cast(inv35@Vector((17.82+dx,20.65+dy,5)),Vector((0,0,-1)))
     assert hit[0],'roof substrate outside opening missing'
 report['house07_flue']={'visible_parts':len(flue35),'source_triangles':flue_tris35,'triangle_limit':260,'shared_families':2,'firebox_outlet_m':[.18,.22],'shaft_bore_m':[.18,.18],'roof_aperture_m':[.38,.38],'flashing_outer_m':[.56,.56],'roof_aperture_rays':9,'passage_rays':6,'closed_solid_surfaces':True,'other_high_roofs_shared':3,'active_fire':False,'thermal_draught_fire_safety':'not validated','human_approval':'pending'}
+audit36=json.loads(S['JN_house07_normal_audit36'])
+assert len(audit36)==11 and sum(row['flipped'] for row in audit36)==10
+assert all(row['vertices_unchanged'] and row['after_m3']>0 for row in audit36)
+glaze36=bpy.data.materials['JN_备膳青白釉'];grey36=bpy.data.materials['JN_备膳烟道灰面']
+glaze_users=[o for o in S.objects if o.type=='MESH' and glaze36 in list(o.data.materials)]
+grey_users=[o for o in S.objects if o.type=='MESH' and grey36 in list(o.data.materials)]
+assert {o.name for o in glaze_users}=={'JN_东岸备膳户_小碗_1','JN_东岸备膳户_小碗_2'}
+assert len(grey_users)==5 and all(o.name.startswith('JN_第7户排烟_') for o in grey_users)
+gb36=next(n for n in glaze36.node_tree.nodes if n.type=='BSDF_PRINCIPLED')
+assert not any(n.type=='TEX_IMAGE' for n in glaze36.node_tree.nodes)
+assert abs(gb36.inputs['Roughness'].default_value-.27)<1e-5 and abs(gb36.inputs['Coat Weight'].default_value-.30)<1e-5
+assert abs(gb36.inputs['Coat Roughness'].default_value-.18)<1e-5
+assert all(abs(a-b)<1e-5 for a,b in zip(grey36['JN_web_base_color_factor'],(.56,.57,.53,1)))
+assert expanded_tris==166626,'normal/material-only round changed source triangle count'
+report['house07_finish36']={'audited_closed_meshes':11,'repaired_inward_meshes':10,'audit':audit36,'geometry_coordinates_unchanged':True,'source_triangles':expanded_tris,'glaze_users':2,'grey_lime_users':5,'new_materials':2,'new_images':0,'new_objects':0,'new_triangles':0,'active_fire':False}
 report['town_phase2']={'phase':S['JN_town_phase'],'grounded_houses':len(plinths),'street_segments':street_segments,'street_batches':len(streets),'tea_pavilion_columns':4,'market_stalls':2,'bridge_risers_per_side':3,'market_ceramics':len(ceramics),'teacups':len(teacups),'canal_preserved':True,'new_image_texture_bytes':0}
 print('TOWN_PHASE2',json.dumps(report['town_phase2'],ensure_ascii=False))
 

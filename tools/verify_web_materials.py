@@ -51,3 +51,16 @@ for m in g['materials']:
         p=m['pbrMetallicRoughness'];assert 'baseColorTexture' in p
         assert all(abs(a-b)<1e-5 for a,b in zip(p['baseColorFactor'],(.45,.52,.54,1)))
 print('MATERIAL_CONTRACT_OK',checked,normals)
+for name,factor,rough in [('JN_备膳青白釉',(.48,.57,.50,1),.27),('JN_备膳烟道灰面',(.56,.57,.53,1),.88)]:
+    if not any(row.get('source_material')==name for row in report.get('materials',[])):continue
+    mats=[m for m in g['materials'] if m['name'].startswith(name)]
+    assert len(mats)==1,('finish36 material missing',name)
+    m=mats[0];p=m['pbrMetallicRoughness']
+    assert all(abs(a-b)<1e-5 for a,b in zip(p['baseColorFactor'],factor))
+    assert abs(p['roughnessFactor']-rough)<1e-5
+    if name=='JN_备膳青白釉':
+        assert 'baseColorTexture' not in p and p.get('metallicFactor',1)==0
+        coat=m['extensions']['KHR_materials_clearcoat']
+        assert abs(coat['clearcoatFactor']-.30)<1e-5 and abs(coat['clearcoatRoughnessFactor']-.18)<1e-5
+    else:assert 'baseColorTexture' in p
+print('FINISH36_PBR_OK')
