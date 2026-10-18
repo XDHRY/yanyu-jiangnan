@@ -3067,6 +3067,33 @@ def refine_house07_flue35():
     # A geometric passage is not a thermal/draught or fire-safety acceptance.
     S['JN_house07_fire_active']=False;S['JN_house07_flue_complete']=False
 
+def audit_house07_box_normals36():
+    """Repair only closed domestic box datablocks; preserve coordinates/sharing."""
+    import bmesh
+    labels=('冷灶底座','灶侧壁','灶背壁','灶口边墩','灶口过梁','灶面长边','灶面端边','灶前石踏','砧板','菜刀柄','菜刀刃')
+    prefix=tuple(PREFIX+'东岸备膳户_'+label for label in labels)
+    targets=[o for o in S.objects if o.type=='MESH' and o.name.startswith(prefix)]
+    seen=set();rows=[]
+    def volume(data):
+        data.calc_loop_triangles();center=sum((v.co for v in data.vertices),Vector())/len(data.vertices)
+        return sum((data.vertices[t.vertices[0]].co-center).dot((data.vertices[t.vertices[1]].co-center).cross(data.vertices[t.vertices[2]].co-center)) for t in data.loop_triangles)/6
+    for obj in targets:
+        data=obj.data
+        if data.as_pointer() in seen:continue
+        seen.add(data.as_pointer())
+        assert all(o.name.startswith(prefix) for o in S.objects if getattr(o,'data',None)==data),'normal scope escapes house07'
+        coords=[tuple(v.co) for v in data.vertices];counts=(len(coords),len(data.polygons));edges={tuple(sorted(e.vertices)) for e in data.edges}
+        before=volume(data)
+        if before<0:
+            bm=bmesh.new();bm.from_mesh(data);bmesh.ops.reverse_faces(bm,faces=list(bm.faces));bm.to_mesh(data);bm.free();data.update()
+        after=volume(data)
+        assert after>0 and abs(abs(before)-after)<1e-5,(obj.name,before,after)
+        assert coords==[tuple(v.co) for v in data.vertices] and counts==(len(data.vertices),len(data.polygons))
+        assert edges=={tuple(sorted(e.vertices)) for e in data.edges}
+        rows.append({'mesh':data.name,'before_m3':before,'after_m3':after,'flipped':before<0,'vertices_unchanged':True})
+    assert len(rows)==11,len(rows)
+    S['JN_house07_normal_audit36']=json.dumps(rows,ensure_ascii=False)
+
 def batch_static_objects(name,objects,mat,col,bev=0):
     """Combine already-built static meshes after art generation so optimization cannot perturb procedural build order."""
     objects=[o for o in objects if o and o.type=='MESH']
@@ -3164,6 +3191,29 @@ def refine_house07_prep_materials():
         if o.type=='MESH' and o.name.startswith(tuple(PREFIX+'东岸备膳户_'+n for n in labels)):
             o.data.materials[0]=mat
 
+def refine_house07_finish36():
+    # Explicit dielectric PBR, no coarse roof-clay texture on domestic bowls.
+    glaze=material('备膳青白釉',(.48,.57,.50),.27)
+    bs=next(n for n in glaze.node_tree.nodes if n.type=='BSDF_PRINCIPLED')
+    bs.inputs['Coat Weight'].default_value=.30;bs.inputs['Coat Roughness'].default_value=.18
+    bowl=bpy.data.objects[PREFIX+'东岸备膳户_小碗_1']
+    assert bowl.data==bpy.data.objects[PREFIX+'东岸备膳户_小碗_2'].data
+    bowl.data.materials[0]=glaze
+    # Isolate a fine lime copy, reusing the existing packed plaster image.
+    grey=bpy.data.materials['JN_民居细磨青石'].copy();grey.name=PREFIX+'备膳烟道灰面'
+    nodes=grey.node_tree.nodes
+    tex=next(n for n in nodes if n.type=='TEX_IMAGE');tex.image=next(n.image for n in M['plaster'].node_tree.nodes if n.type=='TEX_IMAGE' and n.image)
+    tint=next(n for n in nodes if n.type=='MIX_RGB' and n.blend_type=='MULTIPLY');tint.inputs[2].default_value=(.56,.57,.53,1)
+    mapping=next(n for n in nodes if n.type=='VECT_MATH' and n.operation=='MULTIPLY');mapping.inputs[1].default_value=(.60,.60,.60)
+    b=next(n for n in nodes if n.type=='BSDF_PRINCIPLED');b.inputs['Roughness'].default_value=.88
+    bump=next(n for n in nodes if n.type=='BUMP');bump.inputs['Distance'].default_value=.002;bump.inputs['Strength'].default_value=.08
+    grey['JN_web_base_color_factor']=[.56,.57,.53,1]
+    names=tuple(PREFIX+'第7户排烟_'+label for label in ('后壁','侧壁','前壁'))
+    shaft=[o for o in S.objects if o.type=='MESH' and o.name.startswith(names)]
+    assert len(shaft)==5
+    for obj in shaft:obj.data.materials[0]=grey
+    S['JN_house07_finish36']='shared_celadon_bowls_and_isolated_warm_grey_lime_v1'
+
 def optimize_static_batches():
     """Late, deterministic draw-call pass: preserve source build/boolean order, then batch purely static repeats."""
     paving=[o for o in list(C['water'].objects) if o.name.startswith(PREFIX+'庭院青石')]
@@ -3230,6 +3280,7 @@ def build(stage=None):
     refine_village_house06_needlework()
     refine_village_house07_prep()
     refine_house07_flue35()
+    audit_house07_box_normals36()
     level=P['stage'] if stage is None else stage
     if level>=2:vegetation()
     if level>=3:weather()
@@ -3237,7 +3288,7 @@ def build(stage=None):
     if level>=5:
         atmosphere();refine_clouds()
         if P.get('art_upgrade',False):
-            art_upgrade();refine_residential_floor_material();refine_house06_roof_pbr();refine_house07_prep_materials()
+            art_upgrade();refine_residential_floor_material();refine_house06_roof_pbr();refine_house07_prep_materials();refine_house07_finish36()
     optimize_static_batches()
     S.frame_set(80);viewport()
     print('STAGE',level,'OBJECTS',len(S.objects))
