@@ -1,0 +1,23 @@
+{
+  "repository": "XDHRY/yanyu-jiangnan",
+  "round": 37,
+  "date": "2026-10-18",
+  "base_main": "abbf4c2faf48656afb87473b563918138dde15c5",
+  "source_commit": "2abdc89c41d063696b6aafde1f704a13bf00e597",
+  "tested_merge_commit": "9f67df0219f2d8966c06243b65db2e92542386f3",
+  "actual_merge_commit": "8b977674e9fe8296cb7aad72945527235a9d2ff3",
+  "tested_and_merged_tree": "eceee829b6875a5cfa1f86953de70518fc0923b1",
+  "pull_request": "https://github.com/XDHRY/yanyu-jiangnan/pull/43",
+  "final_runs": {"CI":39113501999,"Smoke":39113501997,"Spatial":39113502019,"Web":39113502028},
+  "final_artifacts": {"Smoke":12131097352,"Spatial":12132065444,"Web":12131796636},
+  "postmerge_success_runs": {"CI":39128199975,"Smoke":39128200093},
+  "comparison_source": "9c3a2d0ef37a94ff3848cefd98e3a38ab15b66de",
+  "comparison_web_run":39112947542,
+  "comparison_web_artifact":12131022271,
+  "baseline36_web_artifact":12128176596,
+  "paid_generation":0,
+  "new_images":0,
+  "new_materials":0,
+  "human_approval":"pending",
+  "separate_inn_repository":"XDHRY/yanyu-jiangnan-ming-inn unchanged"
+}

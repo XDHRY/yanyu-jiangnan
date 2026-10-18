@@ -1,0 +1,83 @@
+{
+  "source_commit": "2abdc89c41d063696b6aafde1f704a13bf00e597",
+  "tested_merge_commit": "9f67df0219f2d8966c06243b65db2e92542386f3",
+  "source_statistics": {
+    "scene": "烟雨江南 · 雪月江南",
+    "objects": 4595,
+    "mesh_objects": 3077,
+    "curve_objects": 1427,
+    "vertices": 170478,
+    "polygons": 99110,
+    "materials": 52,
+    "collections": 11,
+    "cameras": 3,
+    "lights": 46,
+    "object_drivers": 4444,
+    "frames": [
+      1,
+      240
+    ],
+    "fps": 24,
+    "weather": 0
+  },
+  "source_budget": {
+    "objects": 4595,
+    "mesh_objects": 3077,
+    "curve_objects": 1427,
+    "triangles_with_instances": 167094,
+    "faces_with_instances": 99110,
+    "vertices_with_instances": 170478,
+    "unique_mesh_datablocks": 1686,
+    "unique_mesh_triangles": 126984,
+    "unique_mesh_faces": 80037,
+    "unique_mesh_vertices": 143714,
+    "materials_used": 52,
+    "images_loaded": 9,
+    "estimated_texture_rgba8_bytes": 44554784,
+    "estimated_texture_rgba8_mib": 42.49,
+    "estimated_mesh_draw_calls": 3080,
+    "object_drivers": 4444,
+    "mesh_objects_using_reused_datablocks": 1501,
+    "instance_reuse_ratio": 0.4878
+  },
+  "baseline_glb": {
+    "instance_triangles": 628555,
+    "glb_bytes": 52992872,
+    "attribute_index_bytes": 29836942,
+    "images": 9,
+    "rgba8_bytes": 44554784
+  },
+  "current_glb": {
+    "instance_triangles": 628919,
+    "glb_bytes": 53019040,
+    "attribute_index_bytes": 29849302,
+    "images": 9,
+    "rgba8_bytes": 44554784
+  },
+  "new_source_triangles_including_prototypes": 468,
+  "new_exported_triangles": 364,
+  "new_visible_meshes": 25,
+  "independent_closed_positive_export_solids": 25,
+  "independent_grounded_and_supported_legs": 8,
+  "hammer_lamp_clearance_m": 0.12249603122472763,
+  "old_mesh_geometry_and_transforms_preserved": true,
+  "original9_image_hashes_preserved": true,
+  "fixed14_cameras_preserved": true,
+  "second_final_all16_cameras_identical": true,
+  "only_changed_materials": [
+    "JN_darkstone__WEB",
+    "JN_转水埠茶担暖木__WEB"
+  ],
+  "non_uv_buffers_byte_identical_between_second_and_final": true,
+  "whole_bin_byte_identical": false,
+  "uv_float_drift": {
+    "changed_views": 724,
+    "maximum_absolute_component_delta": 2.288818359375e-05,
+    "review_tolerance": 3e-05,
+    "cause": "not attributed; do not claim whole BIN identity"
+  },
+  "spatial_seconds": 160.68,
+  "web_seconds": 154.06,
+  "browser_errors": [],
+  "human_approval": "pending"
+}
