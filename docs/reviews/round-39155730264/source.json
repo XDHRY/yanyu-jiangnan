@@ -1,0 +1,84 @@
+{
+  "source": "b6662718fc267e3d4da04a6793dfea3264c472f4",
+  "tested": "b375b41b8ab88893923d8a68eaf65015a6253bf3",
+  "merge": "a90d1634c467ee80c5da08588ff641aac9d76c86",
+  "tree": "bee0443faa6e506cd5b17cc6ea65436235067cbf",
+  "base": "58321db814060b9415caaef3abb075826dab84ac",
+  "first": {
+    "source": "f01932582832394231d0189d28d6ef032ed99fc6",
+    "tested": "7222ea8605356eb78136d21da4793c0892988cf5",
+    "runs": {
+      "CI": 39154945133,
+      "Smoke": 39154945123,
+      "Spatial": 39154945125,
+      "Web": 39154945143
+    },
+    "artifacts": {
+      "Smoke": 12146497912,
+      "Spatial": 12146304547,
+      "Web": 12146643339
+    }
+  },
+  "runs": {
+    "CI": 39155730308,
+    "Smoke": 39155730311,
+    "Spatial": 39155730264,
+    "Web": 39155730346
+  },
+  "artifacts": {
+    "Smoke": 12146898060,
+    "Spatial": 12146722672,
+    "Web": 12146948497
+  },
+  "actual": {
+    "objects": 4612,
+    "mesh_objects": 3094,
+    "curve_objects": 1427,
+    "triangles_with_instances": 167982,
+    "faces_with_instances": 99554,
+    "vertices_with_instances": 170950,
+    "unique_mesh_datablocks": 1693,
+    "unique_mesh_triangles": 127296,
+    "unique_mesh_faces": 80193,
+    "unique_mesh_vertices": 143882,
+    "materials_used": 53,
+    "images_loaded": 9,
+    "estimated_texture_rgba8_bytes": 44554784,
+    "estimated_texture_rgba8_mib": 42.49,
+    "estimated_mesh_draw_calls": 3097,
+    "object_drivers": 4444,
+    "mesh_objects_using_reused_datablocks": 1515,
+    "instance_reuse_ratio": 0.4897
+  },
+  "glb": {
+    "instance_triangles": 624815,
+    "glb_bytes": 53042104,
+    "attribute_index_bytes": 29864814,
+    "images": 9,
+    "rgba8_bytes": 44554784
+  },
+  "support": {
+    "visible_meshes": 13,
+    "hidden_prototypes": 4,
+    "source_triangles": 888,
+    "source_cap": 1000,
+    "all_closed_positive_volume": true,
+    "grounded_legs": 4,
+    "shared_families": 4,
+    "rope_eyes": 2,
+    "rope_eye_segments": [
+      20,
+      6
+    ],
+    "support_gap_m": 0,
+    "street_clearance_m": 0.4200000762939453,
+    "bench_clearance_m": 0.5400009155273438,
+    "new_materials": 0,
+    "new_images": 0,
+    "rope_physics": "not simulated",
+    "human_approval": "pending"
+  },
+  "spatial_seconds": 302.96,
+  "web_seconds": 303.86,
+  "human_approval": "pending"
+}
