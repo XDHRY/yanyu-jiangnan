@@ -68,7 +68,7 @@ S.render.film_transparent=False
 manifest={'mode':'low-cost spatial diagnostic','renderer':'Blender Eevee Next','resolution':[1024,640],'frame':80,'weather':0,'source_commit':os.environ.get('GITHUB_SHA'),'town_phase':S.get('JN_town_phase'),'views':[]}
 def fit_house07(cam):
     bpy.context.view_layer.update();dg=bpy.context.evaluated_depsgraph_get()
-    selected=[o for o in S.objects if o.name.startswith('JN_村落民居_07_') and o.type in ('MESH','CURVE') and not o.hide_render]
+    selected=[o for o in S.objects if o.name.startswith(('JN_村落民居_07_','JN_第7户排烟_')) and o.type in ('MESH','CURVE') and not o.hide_render]
     pts=[o.evaluated_get(dg).matrix_world @ Vector(c) for o in selected for c in o.evaluated_get(dg).bound_box]
     inv=cam.matrix_world.inverted();local=[inv@p for p in pts]
     lo=[min(p[i] for p in local) for i in (0,1)];hi=[max(p[i] for p in local) for i in (0,1)]

@@ -1,0 +1,21 @@
+{
+  "asset_id":"house07-unlit-geometric-flue",
+  "baseline":"4256f1e567212ec56111714dbb61021a14806845",
+  "generator":"jiangnan.py::refine_house07_flue35",
+  "purpose":"Cold geometric review of continuous stove-back-to-roof flue; no thermal or usable-kitchen acceptance",
+  "dimensions_m":{"center_xy":[17.82,20.65],"outer_shaft":[0.34,0.34],"bore":[0.18,0.18],"stove_back_port":[0.18,0.22],"roof_aperture":[0.38,0.38],"flashing_outer":[0.56,0.56],"floor_top":0.26,"shaft_top":5.02,"cap_bottom":5.13,"cap_top":5.17},
+  "assets":["floor-supported masonry shaft with genuine front inlet","four-corner-supported rain cap with four lateral outlets","slope-sampled closed flashing base and upstand"],
+  "existing_assets_modified":["only house07 roof mesh isolated,7cm Solidify applied then Exact Boolean aperture","only stove back wall Exact Boolean port"],
+  "shared_families":2,
+  "new_materials":0,
+  "new_images":0,
+  "texture_provenance":"Existing project plaster/stone/clay, textures/generation_prompts.json; no external or paid asset",
+  "mapping":"Existing local Object/BOX and dominant-face web UV adapter; roughness/bump retained, formal unwrap/normal bake pending",
+  "lod":"Sparse structural boxes/rings, no subdivision; formal runtime LOD pending",
+  "budget":{"new_visible_parts":13,"flue_source_triangles_max":260,"scene_source_triangles_max":170000,"web_triangles_max":629155,"web_images_max":9,"texture_rgba8_bytes_max":44554784},
+  "collision_navigation":"pending; domestic portal and2x1m interior strip unchanged",
+  "symmetry":"Paired side walls and four cap supports; asymmetric inlet follows existing stove use",
+  "cameras":"14fixed;15existing exterior refit including chimney,16existing prep closeup preserved",
+  "excluded":"No flames, smoke, paid generation or production deployment. No claim of functional draught, heat clearance or fire-safety engineering",
+  "human_gates":{"function":"pending","form":"pending","runtime":"pending"}
+}

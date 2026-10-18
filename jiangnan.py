@@ -2992,6 +2992,71 @@ def refine_village_house07_prep():
     S['JN_house07_prep']='unlit_open_masonry_stove_pot_board_bowls_bucket_v1'
     S['JN_house07_fire_active']=False;S['JN_house07_flue_complete']=False
 
+def refine_house07_flue35():
+    """Unlit geometric flue: real firebox outlet and roof aperture, not a fake pipe."""
+    c=C['water'];x,y=17.82,20.65
+    roof07=bpy.data.objects[PREFIX+'村落民居_07_屋面']
+    roof07.data=roof07.data.copy();roof07.data.name=PREFIX+'第7户独立开洞屋面'
+    bpy.context.view_layer.update()
+    ev=roof07.evaluated_get(bpy.context.evaluated_depsgraph_get())
+    inv=ev.matrix_world.inverted()
+    def roof_height(wx,wy):
+        hit,p,_,_=ev.ray_cast(inv@Vector((wx,wy,6)),Vector((0,0,-1)))
+        assert hit,('flashing support ray',wx,wy)
+        return (ev.matrix_world@p).z
+    # Sample the evaluated sloping substrate BEFORE cutting it; no analytic
+    # roof approximation or flat plate floating above a pitched surface.
+    flash_heights={}
+    for r in (.165,.19,.28):
+        for dx,dy in ((-r,-r),(r,-r),(r,r),(-r,r)):
+            flash_heights[(dx,dy)]=roof_height(x+dx,y+dy)
+    def apply(obj,mod):
+        bpy.ops.object.select_all(action='DESELECT');obj.select_set(True)
+        bpy.context.view_layer.objects.active=obj
+        bpy.ops.object.modifier_apply(modifier=mod.name)
+    # Apply 7cm shell thickness before Exact difference, so the aperture has
+    # real reveal faces and the other three high roofs retain their shared mesh.
+    apply(roof07,roof07.modifiers['黛瓦屋面厚度'])
+    roof07['JN_roof_solidify_applied_m']=.07
+    def cut(obj,label,center,size):
+        cutter=box('排烟施工刀具_'+label,center,size,None,c)
+        bpy.context.view_layer.update()
+        mod=obj.modifiers.new(label,'BOOLEAN');mod.operation='DIFFERENCE';mod.solver='EXACT';mod.object=cutter
+        apply(obj,mod);data=cutter.data;bpy.data.objects.remove(cutter,do_unlink=True)
+        if data.users==0:bpy.data.meshes.remove(data)
+    cut(roof07,'真实排烟屋面开洞',(x,y,4.30),(.38,.38,1.20))
+    cut(bpy.data.objects[PREFIX+'东岸备膳户_灶背壁'],'灶后真实烟口',(17.68,y,.63),(.60,.18,.22))
+    stone=M['plaster'];tile=M['tile']
+    def part(label,center,size,mat=stone):return box('第7户排烟_'+label,center,size,mat,c)
+    part('落地承台',(x,y,.31),(.46,.46,.10),M['stone'])
+    # Shaft outer34cm, bore18cm, base36cm; front inlet52..74cm connects
+    # directly through the cut stove back. The remaining walls are continuous.
+    part('后壁',(x+.13,y,2.69),(.08,.34,4.66))
+    side=part('侧壁_1',(x,y-.13,2.69),(.18,.08,4.66))
+    other=bpy.data.objects.new(PREFIX+'第7户排烟_侧壁_2',side.data);c.objects.link(other);other.location.y=.26
+    part('前壁下座',(x-.13,y,.44),(.08,.18,.16))
+    part('前壁上段',(x-.13,y,2.88),(.08,.18,4.28))
+    def flashing(label,outer,inner,bottom,top):
+        vv=[]
+        for dz in (bottom,top):
+            for r in (outer,inner):
+                vv += [(x+dx,y+dy,flash_heights[(dx,dy)]+dz) for dx,dy in ((-r,-r),(r,-r),(r,r),(-r,r))]
+        ff=[]
+        for i in range(4):
+            j=(i+1)%4
+            ff += [(i,4+i,4+j,j),(8+i,8+j,12+j,12+i),(i,j,8+j,8+i),(4+i,12+i,12+j,4+j)]
+        return mesh('第7户排烟_'+label,vv,ff,tile,c)
+    flashing('顺坡泛水座',.28,.165,-.005,.025)
+    flashing('烟根上翻收口',.19,.165,.005,.12)
+    post=part('帽撑_1',(x-.13,y-.13,5.075),(.045,.045,.11),tile)
+    for i,(dx,dy) in enumerate(((.26,0),(0,.26),(.26,.26)),2):
+        o=bpy.data.objects.new(PREFIX+f'第7户排烟_帽撑_{i}',post.data);c.objects.link(o);o.location=(dx,dy,0)
+    part('防雨帽',(x,y,5.15),(.46,.46,.04),tile)
+    S['JN_house07_flue_geometry']='rear_port_18x22_shaft18_roof38_flashing56_v1'
+    S['JN_house07_flue_thermal_fire_approval']='pending'
+    # A geometric passage is not a thermal/draught or fire-safety acceptance.
+    S['JN_house07_fire_active']=False;S['JN_house07_flue_complete']=False
+
 def batch_static_objects(name,objects,mat,col,bev=0):
     """Combine already-built static meshes after art generation so optimization cannot perturb procedural build order."""
     objects=[o for o in objects if o and o.type=='MESH']
@@ -3154,6 +3219,7 @@ def build(stage=None):
     refine_village_house05_rest()
     refine_village_house06_needlework()
     refine_village_house07_prep()
+    refine_house07_flue35()
     level=P['stage'] if stage is None else stage
     if level>=2:vegetation()
     if level>=3:weather()
