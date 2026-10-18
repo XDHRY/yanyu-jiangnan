@@ -2832,6 +2832,44 @@ def town_quay_cobbler37():
     S['JN_quay_cobbler37']='roofless_public_last_repair_stop_v1'
     S['JN_quay_cobbler37_credit_budget']=0
 
+def rope_eye40_mesh():
+    """Closed, low-segment laid rope eye: 20 major rings x 6 sides."""
+    v=[];f=[];major=20;sides=6;r=.022
+    for i in range(major):
+        a=2*pi*i/major
+        for j in range(sides):
+            b=2*pi*j/sides
+            v.append(((.16+r*cos(b))*cos(a),(.15+r*cos(b))*sin(a),r*sin(b)))
+    for i in range(major):
+        for j in range(sides):
+            f.append((i*sides+j,((i+1)%major)*sides+j,((i+1)%major)*sides+(j+1)%sides,i*sides+(j+1)%sides))
+    return v,f
+
+def town_east_rope_bench40():
+    """A small rope-eye preparation bench on the existing east public pocket."""
+    c=C['water'];made=[]
+    def solid(label,center,size,mat):
+        o=box('东岸缆作_'+label,center,size,mat,c)
+        for p in o.data.polygons:p.flip()
+        o.data.update();made.append(o);return o
+    def linked(label,size,centers,mat):
+        proto=solid(label+'原型',(0,0,0),size,mat);proto.hide_render=True;proto.hide_viewport=True
+        for i,loc in enumerate(centers,1):
+            o=bpy.data.objects.new(PREFIX+'东岸缆作_'+label+f'_{i}',proto.data);c.objects.link(o);o.location=loc;made.append(o)
+    solid('整备案面',(12.88,105.12,.78),(.90,.56,.08),M['wood'])
+    linked('案足',(.075,.075,.58),[(x,y,.45) for x in (12.52,13.24) for y in (104.91,105.33)],M['wood'])
+    linked('案牙',(.80,.045,.12),[(12.88,y,.68) for y in (104.91,105.33)],M['wood'])
+    linked('案横枨',(.06,.42,.06),[(x,105.12,.34) for x in (12.52,13.24)],M['edge'])
+    verts,faces=rope_eye40_mesh()
+    rope=mesh('东岸缆作_绳环原型',verts,faces,M['bark'],c);rope.hide_render=True;rope.hide_viewport=True;made.append(rope)
+    bottom=min(p[2] for p in verts)
+    for i,x in enumerate((12.67,13.09),1):
+        o=bpy.data.objects.new(PREFIX+f'东岸缆作_共享待接绳环_{i}',rope.data);c.objects.link(o);o.location=(x,105.12,.82-bottom);made.append(o)
+    solid('割绳刀木柄',(12.79,104.90,.84),(.13,.032,.04),M['wood'])
+    solid('割绳刀铁刃',(12.91,104.90,.8325),(.11,.018,.025),bpy.data.materials.get('JN_备膳户熟铁') or M['bronze'])
+    for o in made:o['JN_asset_family']='east-rope-bench40'
+    S['JN_east_rope_bench40']='static_rope_eye_preparation_bench_no_rope_physics'
+
 def refine_village_house03_study():
     """Give the existing third west-bank house a restrained reading destination."""
     c=C['water']; wood=M['wood']; paper=bpy.data.materials['JN_纸坊楮皮宣纸']
@@ -3382,6 +3420,8 @@ def build(stage=None):
         if P.get('art_upgrade',False):
             art_upgrade();refine_residential_floor_material();refine_house06_roof_pbr();refine_house07_prep_materials();refine_house07_finish36();refine_quay_stone39()
     optimize_static_batches()
+    # Reuse the finished source wood/rope/iron materials without mutating them.
+    town_east_rope_bench40()
     S.frame_set(80);viewport()
     print('STAGE',level,'OBJECTS',len(S.objects))
 if __name__=='__main__':
