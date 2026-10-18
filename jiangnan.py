@@ -2939,6 +2939,47 @@ def refine_village_house06_needlework():
     S['JN_house06_needlework']='table_frame_spools_open_needlebox_cloth_rack_v1'
     S['JN_house06_new_image_bytes']=0
 
+def refine_village_house07_prep():
+    """An unlit masonry stove and food-preparation destination, no new shell."""
+    c=C['water'];stone=M['darkstone'];wood=M['wood'];clay=M['tile']
+    def part(label,xyz,size,mat):return box('东岸备膳户_'+label,xyz,size,mat,c)
+    def repeat(label,centers,size,mat):
+        p=part(label+'原型',(0,0,0),size,mat);p.hide_render=True;p.hide_viewport=True
+        for i,xyz in enumerate(centers,1):
+            o=bpy.data.objects.new(PREFIX+'东岸备膳户_'+label+f'_{i}',p.data);c.objects.link(o);o.location=xyz
+    # Floor top .26; real open firebox mouth faces the doorway (-X).
+    x,y=17.25,20.65
+    part('冷灶底座',(x,y,.31),(1.02,.96,.10),stone)
+    repeat('灶侧壁',[(x,y+d,.625) for d in (-.40,.40)],(1.02,.16,.53),stone)
+    part('灶背壁',(x+.43,y,.625),(.16,.64,.53),stone)
+    repeat('灶口边墩',[(x-.43,y+d,.625) for d in (-.28,.28)],(.16,.24,.53),stone)
+    part('灶口过梁',(x-.43,y,.835),(.16,.32,.11),stone)
+    # Four beams leave a genuine top aperture beneath the open pot.
+    repeat('灶面长边',[(x,y+d,.93) for d in (-.365,.365)],(1.10,.27,.08),stone)
+    repeat('灶面端边',[(x+d,y,.93) for d in (-.39,.39)],(.32,.46,.08),stone)
+    def vessel(label,profile,mat,xyz,segments=12):
+        vv=[(r*cos(2*pi*k/segments),r*sin(2*pi*k/segments),z) for r,z in profile for k in range(segments)]
+        ff=[tuple(reversed(range(segments))),tuple(range((len(profile)-1)*segments,len(profile)*segments))]
+        ff += [(j*segments+k,j*segments+(k+1)%segments,(j+1)*segments+(k+1)%segments,(j+1)*segments+k) for j in range(len(profile)-1) for k in range(segments)]
+        o=mesh('东岸备膳户_'+label,vv,ff,mat,c);o.location=xyz
+        return o
+    vessel('敞口铁锅',[(.26,0),(.33,.12),(.34,.21),(.315,.21),(.305,.12),(.235,.025)],M['edge'],(x,y,.97))
+    repeat('锅耳',[(x,y+d,1.13) for d in (-.37,.37)],(.17,.10,.045),M['edge'])
+    part('灶前石踏',(16.55,20.65,.29),(.28,.92,.06),stone)
+    tx,ty=16.544,19.256
+    part('砧板',(tx+.35,ty-.10,.8575),(.50,.28,.035),wood)
+    part('菜刀柄',(tx+.48,ty-.17,.888),(.18,.045,.026),wood)
+    part('菜刀刃',(tx+.28,ty-.17,.888),(.22,.018,.026),M['bronze'])
+    bowl=vessel('小碗_1',[(.09,0),(.14,.065),(.15,.10),(.135,.10),(.125,.065),(.075,.018)],clay,(tx-.43,ty-.14,.84),10)
+    other=bpy.data.objects.new(PREFIX+'东岸备膳户_小碗_2',bowl.data);c.objects.link(other);other.location=(tx-.43,ty+.15,.84)
+    vessel('开口水桶',[(.17,0),(.21,.39),(.19,.39),(.15,.035)],wood,(17.55,19.75,.26),12)
+    line('东岸备膳户_木勺',[(17.52,19.75,.315),(17.52,19.75,.85)],.018,wood,c,res=1,bevel_res=0)
+    uv('东岸备膳户_勺头',(17.52,19.75,.315),(.055,.038,.02),wood,c,8,4)
+    bench=bpy.data.objects[PREFIX+'村落民居_07_长凳'];bench.location.x-=1.244;bench.location.y-=1.336
+    bpy.data.lights['JN_村落民居_07_室内灯火'].energy=65
+    S['JN_house07_prep']='unlit_open_masonry_stove_pot_board_bowls_bucket_v1'
+    S['JN_house07_fire_active']=False;S['JN_house07_flue_complete']=False
+
 def batch_static_objects(name,objects,mat,col,bev=0):
     """Combine already-built static meshes after art generation so optimization cannot perturb procedural build order."""
     objects=[o for o in objects if o and o.type=='MESH']
@@ -3090,6 +3131,7 @@ def build(stage=None):
     refine_village_house03_study()
     refine_village_house05_rest()
     refine_village_house06_needlework()
+    refine_village_house07_prep()
     level=P['stage'] if stage is None else stage
     if level>=2:vegetation()
     if level>=3:weather()

@@ -1,9 +1,9 @@
 {
   "schema":"jiangnan-web-budget-v1",
-  "baseline_round":32,
-  "baseline_source":"c22b6db66afad6d88e02606d8639fc1c757dabdf",
-  "baseline_run":38965576491,
-  "baseline":{"instance_triangles":627155,"glb_bytes":52799744,"attribute_index_bytes":29792134,"images":7,"rgba8_bytes":44030496},
-  "limits":{"exact_instance_triangles":627155,"glb_bytes":54000000,"attribute_index_bytes":30000000,"images":9,"rgba8_bytes":44554784},
-  "scope":"Round33 one roof material: geometry unchanged; explicitly add two 256x256 packed Normal/ORM maps, 524288 RGBA8 bytes. Other budgets unchanged; estimates not GPU residency."
+  "baseline_round":33,
+  "baseline_source":"7b0fed6c5f7a65984005eb196ae9c5deffb3cf21",
+  "baseline_run":38983726795,
+  "baseline":{"instance_triangles":627155,"glb_bytes":52922328,"attribute_index_bytes":29792134,"images":9,"rgba8_bytes":44554784},
+  "limits":{"instance_triangles":629155,"glb_bytes":54000000,"attribute_index_bytes":30000000,"images":9,"rgba8_bytes":44554784},
+  "scope":"Round34 explicitly reserve at most 2000 evaluated instance triangles for existing house07 cold-stove preparation props. No shell or roof addition, no new images; file/buffer/texture limits unchanged. Source mesh cap170000 and scoped prep cap1200 remain enforced. Record actual result; no GPU performance claim."
 }
