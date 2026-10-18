@@ -2975,7 +2975,7 @@ def refine_village_house07_prep():
     vessel('开口水桶',[(.17,0),(.21,.39),(.19,.39),(.15,.035)],wood,(17.55,19.75,.26),12)
     line('东岸备膳户_木勺',[(17.52,19.75,.315),(17.52,19.75,.85)],.018,wood,c,res=1,bevel_res=0)
     uv('东岸备膳户_勺头',(17.52,19.75,.315),(.055,.038,.02),wood,c,8,4)
-    bench=bpy.data.objects[PREFIX+'村落民居_07_长凳'];bench.location.x-=1.244;bench.location.y-=1.336
+    bench=bpy.data.objects[PREFIX+'村落民居_07_长凳'];bench.location.x-=.144;bench.location.y-=1.436
     bpy.data.lights['JN_村落民居_07_室内灯火'].energy=65
     S['JN_house07_prep']='unlit_open_masonry_stove_pot_board_bowls_bucket_v1'
     S['JN_house07_fire_active']=False;S['JN_house07_flue_complete']=False
