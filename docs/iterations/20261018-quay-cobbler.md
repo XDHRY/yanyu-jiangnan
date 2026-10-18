@@ -37,3 +37,22 @@ Smoke实测4595对象、3077Mesh、1427Curve、170454顶点、99086面、52材�
 独立首批GLB检查：JN_darkstone__WEB与JN_转水埠茶担暖木__WEB均无底图或baseColorFactor，程序Noise节点未被glTF颜色链支持，落到默认白色；首批木楦用有图木作尚未暴露，第二批换用原暖木后直接显现。准备的P1补丁通过git apply --check及纯GLB codec测试，仅修改目标材质因子、保留二进制/图片、几何/相机与其他材质；此时尚未经过完整Blender导出/实图，明确待验证。
 
 第三批计划把已有源线性底色声明给现有导出适配器：darkstone(.07,.105,.10,1)、茶担暖木(.22,.105,.045,1)，不改Blender节点、曝光、贴图、粗糙度或几何。新增两材质显式导出断言和一个双因子/二进制保留单测，本地20Python+3Node通过。只为这两种未贴图程序材质提供平色降级，绝不声称Noise/Bump已烘焙或全镇PBR完成；最终构建和实图仍待追加。
+
+## 最终验证及合并｜2026-10-18
+
+以上为构建过程中的历史状态；以下终版结果取代“仍在构建/待验证”状态，不删改历史证据。
+
+- 实现源2abdc89c41d063696b6aafde1f704a13bf00e597；测试合并9f67df0219f2d8966c06243b65db2e92542386f3；[PR43](https://github.com/XDHRY/yanyu-jiangnan/pull/43)实际合并8b977674e9fe8296cb7aad72945527235a9d2ff3。测试与实际合并树均eceee829b6875a5cfa1f86953de70518fc0923b1。
+- 终批[CI39113501999](https://github.com/XDHRY/yanyu-jiangnan/actions/runs/39113501999)、[Smoke39113501997](https://github.com/XDHRY/yanyu-jiangnan/actions/runs/39113501997)、[Spatial39113502019](https://github.com/XDHRY/yanyu-jiangnan/actions/runs/39113502019)、[Web39113502028](https://github.com/XDHRY/yanyu-jiangnan/actions/runs/39113502028)均success。对应Smoke artifact12131097352、Spatial12132065444、Web12131796636；下载ZIP及Web内包CRC通过。合并后CI39128199975、Smoke39128200093也success。未重复dispatch，未更改工作流。
+- 实际4595对象、3077Mesh、1427Curve、170478顶点、99110面、52材质、46灯。源实例Mesh167094/170000三角面，新增468含隐藏原型；GLB628919/629155三角面，新增364，**仅余236**；GLB53019040字节，attribute/index29849302字节。9图RGBA8估算44554784字节/42.49MiB不变；不是实测显存或帧率。共享Mesh对象1501/3077，复用比.4878，估算drawcall3080。
+- Spatial16图160.68秒，Web16图154.06秒。14固定机位全部字段保留；15/16为本轮环境与近景，第二/终批16机位相同；长边1024，不恢复36机位。运行耗时受runner影响，不宣称材质修复带来性能加速。
+- 独立实际GLB审计：25新可见Mesh闭合且正体积，8条案凳足接触石坪和座面，锤灯净距.122496米；所有旧网格局部坐标集合、三角面数、变换保持，9原图SHA保持；仅darkstone、茶担暖木两种既有材质因子改变。非UV buffer逐字节相同；**整个BIN不相同**：724个UV bufferView浮点漂移，最大2.288818359375e-5，小于审阅阈值3e-5，原因未归属，不能声称全二进制不变。
+- 4个真实桌面/移动视口捕获无浏览器错误、加载层消失、姿态误差<1e-5；不是实体手机验证。web camera/material/budget独立工具复跑通过，1552贴图primitive有UV、1张Normal贴图；不等于全镇PBR完成。
+
+真实图已复看：收分木楦、锤锥和案灯分离可读，案足/凳足落地，公共留白与主街1.82米通道不变。第二批Web白色木楦/地基已恢复暖木与暗石平色；Blender节点、曝光未变，无新图片/材质，不把平色降级称为完整Noise/Bump烘焙。木楦仍略显低面、夜间细节偏暗、粗石纹和Web程序材质仍有美术债务。全镇远未达到“极致精美”验收。
+
+持久审阅索引：[review/round-39113502019](https://github.com/XDHRY/yanyu-jiangnan/blob/review/round-39113502019/docs/reviews/round-39113502019/README.md)。独立审阅包yanyu_round37_quay_cobbler_review.zip：44文件、75308598字节，SHA256 `562733ebd171bc6066374e9c3ef855f9eeb90c242f0073487637bec4a84b840b`，含16原图、Blend、独立Web HTML、4个浏览器捕获、第二批对照、逐文件哈希和统计验证；代码以Git为准。
+
+通用Form实际失败日志随审阅包保留；工程投影/正式UV、LOD、碰撞导航及Function/Form/Runtime人工批准仍pending。没有人工批准，不生产发布、不启付费生成；专项断言不替代正式门禁。纹理复用既有9图，textures/generation_prompts.json仅提示词来源档案，不是独立再分发许可；未发现独立LICENSE，未增加第三方素材或额外许可承诺。独立客栈库未修改。
+
+下一轮优先：GLB预算优化，先选可减少的重复/曲线细分并保持轮廓、支撑、UV与14固定机位，再考虑新增几何；预算不放宽。然后修复局部粗石尺度/材质映射与程序材质降级，推进全镇UV/Normal/AO、LOD/碰撞导航、实体手机和人工审阅。保留Round36屋脊细线及灶房热工未验收记录；不再连续堆第7户，不退回缺村落旧main。
