@@ -3194,6 +3194,38 @@ def refine_residential_floor_material():
     for obj in floors:obj.data=data
     S['JN_residential_floor_material']='fine_ground_stone_1p8_per_m_v1'
 
+def quay_stone39_target(name):
+    if name=='JN_桥西补履_接路石坪':return True
+    return name.startswith('JN_北河转水埠_') and name[len('JN_北河转水埠_'):].startswith((
+        '西岸石街','东岸石街','西岸转身石坪','东岸转身石坪','青石踏桥原型',
+        '共享青石桥板_','西桥槛','东桥槛','亲水踏步_','石凳面原型','共享石凳面_'))
+
+def refine_quay_stone39():
+    """Scope one quieter outdoor finish to the public quay; preserve all meshes."""
+    source=bpy.data.materials['JN_民居细磨青石']
+    mat=source.copy();mat.name='JN_转水埠细磨青石'
+    nodes=mat.node_tree.nodes;b=next(n for n in nodes if n.type=='BSDF_PRINCIPLED')
+    tint=next(n for n in nodes if n.type=='MIX_RGB' and n.blend_type=='MULTIPLY')
+    tint.inputs[2].default_value=(.36,.43,.45,1)
+    mat['JN_web_base_color_factor']=[.36,.43,.45,1]
+    mapping=next(n for n in nodes if n.type=='VECT_MATH' and n.operation=='MULTIPLY')
+    mapping.inputs[1].default_value=(2.4,2.4,2.4)
+    b.inputs['Roughness'].default_value=.88;b.inputs['Specular IOR Level'].default_value=.20
+    bump=next(n for n in nodes if n.type=='BUMP')
+    bump.inputs['Strength'].default_value=.12;bump.inputs['Distance'].default_value=.003
+    targets=[o for o in S.objects if o.type=='MESH' and quay_stone39_target(o.name)]
+    assert len(targets)==25 and sum(not o.hide_render for o in targets)==23
+    # Include bridge/bench hidden prototypes so linked repetition remains intact.
+    # Copy only targeted datablocks; unrelated stone users retain their material.
+    copies={}
+    for o in targets:
+        key=o.data.as_pointer()
+        if key not in copies:
+            data=o.data.copy();data.name=o.data.name+'__Quay39';data.materials[0]=mat;copies[key]=data
+        o.data=copies[key]
+    S['JN_quay_stone39_visible_users']=23
+    S['JN_quay_stone39_repeat_per_m']=2.4
+
 def roof_microtexel33(u,v):
     """Periodic 0.6m clay height field: analytic derivatives, never albedo-as-normal."""
     k=2*math.pi
@@ -3348,7 +3380,7 @@ def build(stage=None):
     if level>=5:
         atmosphere();refine_clouds()
         if P.get('art_upgrade',False):
-            art_upgrade();refine_residential_floor_material();refine_house06_roof_pbr();refine_house07_prep_materials();refine_house07_finish36()
+            art_upgrade();refine_residential_floor_material();refine_house06_roof_pbr();refine_house07_prep_materials();refine_house07_finish36();refine_quay_stone39()
     optimize_static_batches()
     S.frame_set(80);viewport()
     print('STAGE',level,'OBJECTS',len(S.objects))

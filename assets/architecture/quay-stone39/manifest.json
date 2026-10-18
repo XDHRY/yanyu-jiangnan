@@ -1,0 +1,12 @@
+{
+  "asset_id":"quay-stone39","generator":"jiangnan.py::refine_quay_stone39","base_main":"8080e5022c1563b79fb90a23aaa227934cc84f49",
+  "scope":"23 visible existing public quay stone users, plus2 hidden bridge/bench prototypes; no foundation, pier, bench-leg or other region material change",
+  "geometry_added":0,"materials_added":1,"new_images":0,
+  "material":"JN_转水埠细磨青石","source_material":"JN_民居细磨青石 copy, original unchanged",
+  "texture":{"source":"textures/stone.png","provenance":"textures/generation_prompts.json; docs/art-direction.md","mapping":"Object BOX local metre, 2.4 repeats/m, nominal .416667m repeat; existing object scale unchanged; Web dominant-face UV approximation","basecolor_factor":[0.36,0.43,0.45,1],"new_light_baking":false,"license":"Existing project image reused; prompt archive is not standalone redistribution licence; no new external asset or paid generation"},
+  "roughness":0.88,"specular_ior_level":0.20,"source_bump_strength":0.12,"source_bump_distance_m":0.003,
+  "web_normal_policy":"geometry normals; procedural scalar bump not baked, no new normal/AO map",
+  "lod":"Existing linked bridge/bench geometry retained, no formal LOD chain",
+  "budgets":{"source_triangles":167094,"evaluated_triangle_limit":629155,"images":9},
+  "human_gates":{"function":"pending","form":"pending","runtime":"pending"}
+}

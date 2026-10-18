@@ -71,3 +71,12 @@ for name,factor in [('JN_darkstone',(.07,.105,.10,1)),('JN_转水埠茶担暖木
     p=mats[0]['pbrMetallicRoughness'];assert 'baseColorTexture' not in p
     assert all(abs(a-b)<1e-5 for a,b in zip(p['baseColorFactor'],factor)),name
 print('QUAY37_PROCEDURAL_FALLBACK_OK')
+if any(row.get('source_material')=='JN_转水埠细磨青石' for row in report.get('materials',[])):
+    mats=[m for m in g['materials'] if m['name']=='JN_转水埠细磨青石__WEB'];assert len(mats)==1
+    p=mats[0]['pbrMetallicRoughness'];assert 'baseColorTexture' in p
+    assert all(abs(a-b)<1e-5 for a,b in zip(p['baseColorFactor'],(.36,.43,.45,1)))
+    assert abs(p['roughnessFactor']-.88)<1e-5
+    users=[node for node in g['nodes'] if 'mesh' in node and any(prim.get('material')==g['materials'].index(mats[0]) for prim in g['meshes'][node['mesh']]['primitives'])]
+    assert len(users)==23
+    assert all(node['name'].startswith('JN_北河转水埠_') or node['name']=='JN_桥西补履_接路石坪' for node in users)
+    print('QUAY39_SCOPED_STONE_OK',len(users))

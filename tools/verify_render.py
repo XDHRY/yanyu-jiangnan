@@ -1363,6 +1363,19 @@ for name,factor in [('JN_darkstone',(.07,.105,.10,1)),('JN_转水埠茶担暖木
     assert all(abs(a-b)<1e-5 for a,b in zip(bpy.data.materials[name]['JN_web_base_color_factor'],factor)),name
 report['quay_cobbler37']={'visible_meshes':len(visible37),'source_triangles_including_prototypes':tris37,'prior_source_triangles':166626,'shared_families':6,'paving_overlap_m':round(ab37[1][0]-old_paving37[0][0],3),'street_clearance_m':round(west_route[0][0]-ab37[1][0],3),'all_closed_positive_volume':True,'new_images':0,'new_materials':0,'new_roofs':0,'human_approval':'pending'}
 report['house07_finish36']={'audited_closed_meshes':11,'repaired_inward_meshes':10,'audit':audit36,'geometry_coordinates_unchanged':True,'source_triangles':expanded_tris,'glaze_users':2,'grey_lime_users':5,'new_materials':2,'new_images':0,'new_objects':0,'new_triangles':0,'active_fire':False}
+mat39=bpy.data.materials['JN_转水埠细磨青石']
+users39=[o for o in S.objects if o.type=='MESH' and any(m==mat39 for m in o.data.materials)]
+assert len(users39)==25 and sum(not o.hide_render for o in users39)==23
+assert all(o.name.startswith('JN_北河转水埠_') or o.name=='JN_桥西补履_接路石坪' for o in users39)
+assert all(abs(a-b)<1e-5 for a,b in zip(mat39['JN_web_base_color_factor'],(.36,.43,.45,1)))
+b39=next(n for n in mat39.node_tree.nodes if n.type=='BSDF_PRINCIPLED')
+assert abs(b39.inputs['Roughness'].default_value-.88)<1e-5
+mapping39=next(n for n in mat39.node_tree.nodes if n.type=='VECT_MATH' and n.operation=='MULTIPLY')
+assert all(abs(v-2.4)<1e-5 for v in mapping39.inputs[1].default_value)
+bump39=next(n for n in mat39.node_tree.nodes if n.type=='BUMP')
+assert abs(bump39.inputs['Distance'].default_value-.003)<1e-6
+assert expanded_tris==167094
+report['quay_stone39']={'visible_users':23,'hidden_prototypes':2,'source_triangles':expanded_tris,'new_geometry':0,'new_materials':1,'new_images':0,'repeat_per_local_m':2.4,'nominal_repeat_m':1/2.4,'roughness':.88,'bump_distance_m':.003,'human_approval':'pending'}
 report['town_phase2']={'phase':S['JN_town_phase'],'grounded_houses':len(plinths),'street_segments':street_segments,'street_batches':len(streets),'tea_pavilion_columns':4,'market_stalls':2,'bridge_risers_per_side':3,'market_ceramics':len(ceramics),'teacups':len(teacups),'canal_preserved':True,'new_image_texture_bytes':0}
 print('TOWN_PHASE2',json.dumps(report['town_phase2'],ensure_ascii=False))
 
