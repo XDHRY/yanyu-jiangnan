@@ -1,0 +1,69 @@
+{
+  "tested": "069dea9849cb236445380d1561efd36b8a69f4c0",
+  "old_geometry_nodes_checked": 3105,
+  "all_geometry_positions_oriented_triangles_normals_transforms_preserved": true,
+  "new_geometry_nodes": 0,
+  "only_two_material_base_color_factors_changed": true,
+  "material_users": {
+    "JN_转水埠旧船木__WEB": [
+      "JN_北河转水埠_停泊舢板船壳",
+      "JN_北河转水埠_共享舢板舷条_1",
+      "JN_北河转水埠_共享舢板舷条_2",
+      "JN_北河转水埠_共享舢板坐板_1",
+      "JN_北河转水埠_共享舢板坐板_2",
+      "JN_北河转水埠_共享船桨_舢板",
+      "JN_北河转水埠_共享船桨_借用架_1",
+      "JN_北河转水埠_共享船桨_借用架_2"
+    ],
+    "JN_转水埠桥面雨湿__WEB": [
+      "JN_北河转水埠_共享桥面湿痕_1",
+      "JN_北河转水埠_共享桥面湿痕_2",
+      "JN_北河转水埠_共享桥面湿痕_3",
+      "JN_北河转水埠_共享桥面湿痕_4"
+    ]
+  },
+  "all9_image_hashes_preserved": true,
+  "all16_camera_fields_preserved": true,
+  "max_cross_run_UV_float_drift": 6.103515625e-05,
+  "UV_changed_nodes": 738,
+  "UV_determinism": "pending; separate from intentional source colour fix",
+  "actual_baseline_adapter_isolation": {
+    "baseline_actual_GLB_used": true,
+    "only_two_JSON_baseColorFactors_changed": true,
+    "entire_binary_chunk_unchanged": true,
+    "binary_chunk_sha256": "f071ea0042ad324e1fd2cc9869b676e9e5dd027c6292b27650542dc5377761d7"
+  },
+  "actual_glb": {
+    "instance_triangles": 624815,
+    "glb_bytes": 53042448,
+    "attribute_index_bytes": 29864814,
+    "images": 9,
+    "rgba8_bytes": 44554784
+  },
+  "old_glb_bytes": 53042104,
+  "statistics": {
+    "scene": "烟雨江南 · 雪月江南",
+    "objects": 4612,
+    "mesh_objects": 3094,
+    "curve_objects": 1427,
+    "vertices": 170950,
+    "polygons": 99554,
+    "materials": 53,
+    "collections": 11,
+    "cameras": 3,
+    "lights": 46,
+    "object_drivers": 4444,
+    "frames": [
+      1,
+      240
+    ],
+    "fps": 24,
+    "weather": 0
+  },
+  "spatial_seconds": 171.8,
+  "web_seconds": 200.14,
+  "human_approval": "pending",
+  "exported_material_entries": 52,
+  "unique_exported_material_names": 48,
+  "expected_new_material_extras_declarations": 2
+}

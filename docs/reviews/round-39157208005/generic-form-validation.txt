@@ -1,0 +1,11 @@
+Command: python3 validate_room.py yanyu-round41/assets/architecture/quay-boat-gear --gate form
+Exit status: 1
+FAIL: missing file: /workspace/scratch/34fac7373e27/yanyu-round41/assets/architecture/quay-boat-gear/room-brief.json
+FAIL: missing file: /workspace/scratch/34fac7373e27/yanyu-round41/assets/architecture/quay-boat-gear/plan-metadata.json
+FAIL: missing file: /workspace/scratch/34fac7373e27/yanyu-round41/assets/architecture/quay-boat-gear/props.json
+FAIL: missing file: /workspace/scratch/34fac7373e27/yanyu-round41/assets/architecture/quay-boat-gear/room-layout.json
+FAIL: missing file: /workspace/scratch/34fac7373e27/yanyu-round41/assets/architecture/quay-boat-gear/openings.json
+FAIL: missing file: /workspace/scratch/34fac7373e27/yanyu-round41/assets/architecture/quay-boat-gear/milestone-reviews.json
+FAIL: missing file: /workspace/scratch/34fac7373e27/yanyu-round41/assets/architecture/quay-boat-gear/final-report.json
+
+This is a failed generic Form check, not approval. Existing project-specific low-cost diagnostic review is explicitly user-authorized; no paid generation or production release.

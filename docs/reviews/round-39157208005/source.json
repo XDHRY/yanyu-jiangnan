@@ -1,0 +1,80 @@
+{
+  "source": "c09d781df3b2f78bc4f0da0fa3529ac71644729d",
+  "tested": "069dea9849cb236445380d1561efd36b8a69f4c0",
+  "merge": "28023275afb6b4c1ba97af4292f17a2efd32ec6e",
+  "tree": "2ab75ac0590701c304600825f0f6a66ee0327af0",
+  "base": "7e212ea1192e668567c8a8adfd2c62321fe03c86",
+  "runs": {
+    "CI": 39157207959,
+    "Smoke": 39157208025,
+    "Spatial": 39157208005,
+    "Web": 39157208021
+  },
+  "artifacts": {
+    "Smoke": 12148010054,
+    "Spatial": 12147437405,
+    "Web": 12148160014
+  },
+  "actual": {
+    "objects": 4612,
+    "mesh_objects": 3094,
+    "curve_objects": 1427,
+    "triangles_with_instances": 167982,
+    "faces_with_instances": 99554,
+    "vertices_with_instances": 170950,
+    "unique_mesh_datablocks": 1693,
+    "unique_mesh_triangles": 127296,
+    "unique_mesh_faces": 80193,
+    "unique_mesh_vertices": 143882,
+    "materials_used": 53,
+    "images_loaded": 9,
+    "estimated_texture_rgba8_bytes": 44554784,
+    "estimated_texture_rgba8_mib": 42.49,
+    "estimated_mesh_draw_calls": 3097,
+    "object_drivers": 4444,
+    "mesh_objects_using_reused_datablocks": 1515,
+    "instance_reuse_ratio": 0.4897
+  },
+  "glb": {
+    "instance_triangles": 624815,
+    "glb_bytes": 53042448,
+    "attribute_index_bytes": 29864814,
+    "images": 9,
+    "rgba8_bytes": 44554784
+  },
+  "source_material_check": {
+    "materials": [
+      {
+        "material": "JN_转水埠旧船木",
+        "base_color_factor": [
+          0.24,
+          0.105,
+          0.038,
+          1
+        ],
+        "visible_users": 8,
+        "hidden_prototypes": 3
+      },
+      {
+        "material": "JN_转水埠桥面雨湿",
+        "base_color_factor": [
+          0.19,
+          0.25,
+          0.22,
+          1
+        ],
+        "visible_users": 4,
+        "hidden_prototypes": 1
+      }
+    ],
+    "new_geometry": 0,
+    "new_images": 0,
+    "new_materials": 0,
+    "source_shader_unchanged": true,
+    "web_procedural_noise_bake": "pending",
+    "human_approval": "pending"
+  },
+  "spatial_seconds": 171.8,
+  "web_seconds": 200.14,
+  "human_approval": "pending"
+}
