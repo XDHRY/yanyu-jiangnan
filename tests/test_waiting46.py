@@ -11,6 +11,12 @@ class Waiting46(unittest.TestCase):
         self.assertEqual(views[0][0],'01_plan');self.assertEqual(views[13][0],'14_village_waterfront')
 
 class WaitingLayout46(unittest.TestCase):
+    def test_historical_totals_use_one_scoped_delta(self):
+        src=(ROOT/'tools/verify_render.py').read_text()
+        self.assertIn('legacy_expanded_tris=expanded_tris-tris46-8',src)
+        for n in ast.walk(ast.parse(src)):
+            if isinstance(n,ast.Assert) and any(isinstance(q,ast.Name) and q.id=='expanded_tris' for q in ast.walk(n.test)):
+                self.assertFalse(any(isinstance(q,ast.Eq) for q in ast.walk(n.test)), 'historical equality must use scoped legacy total')
     def setUp(self):
         tree=ast.parse((ROOT/'jiangnan.py').read_text())
         f=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='waiting46_layout')

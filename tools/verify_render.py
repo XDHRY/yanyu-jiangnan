@@ -1539,7 +1539,8 @@ for obj in route_obstacles46:
     assert not (hi[0]>-.50 and lo[0]<3.70 and hi[1]>71.295 and lo[1]<72.495 and hi[2]>.121),(obj.name,'north bypass obstruction')
 assert abs(bounds43(bpy.data.objects['JN_北河修桨作坊_引路灯柱'])[0][2]-.12)<.003
 report['waiting_pavilion46']={'new_visible_meshes':9,'source_triangles_added':116,'refined_existing_lane':True,'relocated_existing_lamp_parts':3,'shared_rack_families':3,'risers_m':risers46,'north_bypass_clear_m':lb46[1][1]-sb46[1][1],'support_and_route_rays':support_rays46,'source_closed_positive_volumes':volume46,'new_images_materials_lights':0,'human_approval':'pending','accessibility_ramp':'not implemented','structural_load':'not certified'}
-assert expanded_tris-tris37-tris40-184-tris44-tris46-8==166626,'pre-Round37 source triangle baseline changed'
+legacy_expanded_tris=expanded_tris-tris46-8
+assert legacy_expanded_tris-tris37-tris40-184-tris44==166626,'pre-Round37 source triangle baseline changed'
 assert tris37<=500 and new37,'public repair stop source budget exceeded'
 visible37=[o for o in new37 if not o.hide_render]
 assert len(visible37)==25,len(visible37)
@@ -1586,7 +1587,7 @@ mapping39=next(n for n in mat39.node_tree.nodes if n.type=='VECT_MATH' and n.ope
 assert all(abs(v-2.4)<1e-5 for v in mapping39.inputs[1].default_value)
 bump39=next(n for n in mat39.node_tree.nodes if n.type=='BUMP')
 assert abs(bump39.inputs['Distance'].default_value-.003)<1e-6
-assert expanded_tris-tris40-184-tris44==167094
+assert legacy_expanded_tris-tris40-184-tris44==167094
 report['quay_stone39']={'visible_users':23,'hidden_prototypes':2,'source_triangles':expanded_tris,'new_geometry':0,'new_materials':1,'new_images':0,'repeat_per_local_m':2.4,'nominal_repeat_m':1/2.4,'roughness':.88,'bump_distance_m':.003,'human_approval':'pending'}
 visible40=[o for o in new40 if not o.hide_render]
 assert len(new40)==17 and len(visible40)==13 and tris40==888,(len(new40),len(visible40),tris40)
