@@ -982,6 +982,61 @@ assert len(sheet_proto.data.polygons)==1
 report['town_phase15_east_dyed_paper_court']={'phase':S['JN_town_phase'],'street_and_water_overlaps_m':[round(x,3) for x in dye_overlaps],'atelier_within_east_parcel':True,'posts_on_shoes':6,'open_front_bays_m':[round(x,3) for x in dye_bays],'solidified_low_cost_roof':True,'shared_dye_vats':len(vats),'shared_dye_liquids':len(liquids),'shared_dyed_sheets':len(sheets),'drainage_to_street':True,'new_image_texture_bytes':S['JN_dyed_paper_new_image_bytes']}
 print('TOWN_PHASE15_EAST_DYED_PAPER_COURT',json.dumps(report['town_phase15_east_dyed_paper_court'],ensure_ascii=False))
 
+# Round50: physical support, independent of camera appearance.
+new50=[o for o in S.objects if o.get('JN_asset_family')=='dyed-paper-support50']
+clips50=[o for o in new50 if not o.hide_render]
+tris50=sum(sum(len(p.vertices)-2 for p in o.data.polygons) for o in new50)
+assert len(new50)==13 and len(clips50)==12 and tris50==156
+assert len({o.data.as_pointer() for o in new50})==1
+import bmesh
+bm50=bmesh.new();bm50.from_mesh(new50[0].data)
+assert all(len(e.link_faces)==2 for e in bm50.edges)
+volume50=bm50.calc_volume(signed=True);bm50.free();assert volume50>0
+dg50=bpy.context.evaluated_depsgraph_get();support_rays50=0
+def support_ray50(obj,origin,direction):
+    global support_rays50
+    ev=obj.evaluated_get(dg50);inv=ev.matrix_world.inverted()
+    hit,_,_,_=ev.ray_cast(inv@Vector(origin),(inv.to_3x3()@Vector(direction)).normalized(),distance=.04)
+    assert hit,(obj.name,origin,direction)
+    support_rays50+=1
+floor50=bpy.data.objects['JN_北河染纸坊_实体台基']
+table50=bpy.data.objects['JN_北河染纸坊_搅染长案']
+feet50=[o for o in S.objects if any(o.name.startswith('JN_北河染纸坊_'+s) for s in ('长案足','颜料架立柱','晾纸立柱'))]
+assert len(feet50)==8
+for foot in feet50:
+    lo,hi=world_bounds(foot);xy=[(lo[i]+hi[i])/2 for i in (0,1)]
+    assert abs(lo[2]-.318)<1e-5,(foot.name,lo)
+    support_ray50(floor50,(*xy,.34),(0,0,-1))
+    if '长案足' in foot.name:
+        assert abs(hi[2]-.662)<1e-5
+        support_ray50(table50,(*xy,.64),(0,0,1))
+shelf50=min([o for o in S.objects if o.name.startswith('JN_北河染纸坊_颜料架') and '立柱' not in o.name],key=lambda o:abs(world_bounds(o)[1][2]-1.38))
+slo50,shi50=world_bounds(shelf50)
+boxes50=[o for o in S.objects if o.name.startswith('JN_北河染纸坊_颜料盒_')]
+assert len(boxes50)==3
+for pigment in boxes50:
+    lo,hi=world_bounds(pigment)
+    assert abs(lo[2]-1.378)<1e-5
+    assert all(lo[k]>=slo50[k] and hi[k]<=shi50[k] for k in (0,1))
+    for x in (lo[0]+.03,hi[0]-.03):
+        for y in (lo[1]+.03,hi[1]-.03):support_ray50(shelf50,(x,y,1.40),(0,0,-1))
+    for post in [o for o in feet50 if '颜料架立柱' in o.name]:
+        plo,phi=world_bounds(post)
+        assert hi[1]<plo[1] or lo[1]>phi[1],(pigment.name,post.name)
+beam50=bpy.data.objects['JN_北河染纸坊_晾纸上枋']
+for sheet50 in sheets:
+    lo,hi=world_bounds(sheet50)
+    matching=[o for o in clips50 if lo[0]<o.location.x<hi[0]]
+    assert len(matching)==2
+    for clip in matching:
+        clo,chi=world_bounds(clip)
+        assert clo[2]<hi[2]<chi[2] and clo[1]<lo[1]<chi[1]
+        assert chi[2]>world_bounds(beam50)[0][2]
+        support_ray50(sheet50,(clip.location.x,99.68,2.10),(0,1,0))
+        support_ray50(beam50,(clip.location.x,99.78,2.16),(0,0,1))
+assert support_rays50==48
+report['dyed_paper_support50']={'refined_existing_objects':12,'grounded_feet':8,'fully_borne_pigment_boxes':3,'shared_visible_clips':12,'shared_prototypes':1,'source_triangles_added':tris50,'closed_positive_clip_volume_m3':volume50,'support_rays':support_rays50,'joint_inset_m':.002,'new_materials_images_lights':0,'human_review':'pending','load_certification':'not performed'}
+
 # West dye-material receiving court: reuse of the Round 19 parcel, grounded
 # canopy structure, open arrival, and linked low-cost stock/handling props.
 receiving_land=world_bounds(bpy.data.objects['JN_北河染纸坊_西岸北延地基'])
@@ -1539,7 +1594,7 @@ for obj in route_obstacles46:
     assert not (hi[0]>-.50 and lo[0]<3.70 and hi[1]>71.295 and lo[1]<72.495 and hi[2]>.121),(obj.name,'north bypass obstruction')
 assert abs(bounds43(bpy.data.objects['JN_北河修桨作坊_引路灯柱'])[0][2]-.12)<.003
 report['waiting_pavilion46']={'new_visible_meshes':9,'source_triangles_added':116,'refined_existing_lane':True,'relocated_existing_lamp_parts':3,'shared_rack_families':3,'risers_m':risers46,'north_bypass_clear_m':lb46[1][1]-sb46[1][1],'support_and_route_rays':support_rays46,'source_closed_positive_volumes':volume46,'new_images_materials_lights':0,'human_approval':'pending','accessibility_ramp':'not implemented','structural_load':'not certified'}
-legacy_expanded_tris=expanded_tris-tris46-8
+legacy_expanded_tris=expanded_tris-tris46-8-tris50
 assert legacy_expanded_tris-tris37-tris40-184-tris44==166626,'pre-Round37 source triangle baseline changed'
 assert tris37<=500 and new37,'public repair stop source budget exceeded'
 visible37=[o for o in new37 if not o.hide_render]

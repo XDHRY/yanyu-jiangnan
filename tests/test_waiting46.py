@@ -29,7 +29,7 @@ class Waiting46(unittest.TestCase):
 class WaitingLayout46(unittest.TestCase):
     def test_historical_totals_use_one_scoped_delta(self):
         src=(ROOT/'tools/verify_render.py').read_text()
-        self.assertIn('legacy_expanded_tris=expanded_tris-tris46-8',src)
+        self.assertIn('legacy_expanded_tris=expanded_tris-tris46-8-tris50',src)
         for n in ast.walk(ast.parse(src)):
             if isinstance(n,ast.Assert) and any(isinstance(q,ast.Name) and q.id=='expanded_tris' for q in ast.walk(n.test)):
                 self.assertFalse(any(isinstance(q,ast.Eq) for q in ast.walk(n.test)), 'historical equality must use scoped legacy total')
