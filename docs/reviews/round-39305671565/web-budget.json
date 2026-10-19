@@ -1,0 +1,20 @@
+{
+  "source_commit": "e5e08c12b8047495b6b1f7fa16365b058238a83e",
+  "baseline_round": 34,
+  "metrics": {
+    "instance_triangles": 625715,
+    "glb_bytes": 51574032,
+    "attribute_index_bytes": 28489906,
+    "images": 9,
+    "rgba8_bytes": 44554784
+  },
+  "limits": {
+    "instance_triangles": 629155,
+    "glb_bytes": 54000000,
+    "attribute_index_bytes": 30000000,
+    "images": 9,
+    "rgba8_bytes": 44554784
+  },
+  "passed": true,
+  "note": "Round35 adds a cold geometric flue and real roof/stove-back apertures within Round34's existing629155 ceiling (844 evaluated triangles remaining); all numeric limits unchanged. No new house, material or image. Source cap170000, prep cap1200 and independent flue cap260 remain enforced; record actual evaluated result, not inferred GPU performance."
+}

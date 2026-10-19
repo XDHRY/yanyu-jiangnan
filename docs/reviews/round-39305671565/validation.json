@@ -1,0 +1,1256 @@
+{
+  "weather_0": {
+    "雨丝": 750,
+    "雨落涟漪": 38,
+    "雪粒": 0,
+    "瓦上薄雪": 0,
+    "汀步薄雪": 0
+  },
+  "weather_1": {
+    "雨丝": 0,
+    "雨落涟漪": 0,
+    "雪粒": 480,
+    "瓦上薄雪": 2,
+    "汀步薄雪": 12
+  },
+  "motion_changed": {
+    "JN_风动枝组": true,
+    "JN_雨丝": true,
+    "JN_雪粒": true,
+    "JN_云团": true
+  },
+  "invalid_object_drivers": [],
+  "isolated_scene_count": 1,
+  "objects": 4644,
+  "rerun_verified": true,
+  "generated_texture_assets": {
+    "plaster": {
+      "found": true,
+      "packed": true,
+      "images": [
+        "plaster.png"
+      ]
+    },
+    "stone": {
+      "found": true,
+      "packed": true,
+      "images": [
+        "stone.png"
+      ]
+    },
+    "bark": {
+      "found": true,
+      "packed": true,
+      "images": [
+        "bark.png"
+      ]
+    },
+    "clay": {
+      "found": true,
+      "packed": true,
+      "images": [
+        "clay.png"
+      ]
+    },
+    "wood": {
+      "found": true,
+      "packed": true,
+      "images": [
+        "wood.png"
+      ]
+    },
+    "petal": {
+      "found": true,
+      "packed": true,
+      "images": [
+        "petal.png"
+      ]
+    },
+    "landscape": {
+      "found": true,
+      "packed": true,
+      "images": [
+        "landscape.png"
+      ]
+    }
+  },
+  "residential_floor_material": {
+    "users": 8,
+    "shared_meshes": 1,
+    "roughness": 0.82,
+    "repeat_per_local_m": 1.8,
+    "bump_distance_m": 0.004,
+    "new_images": 0,
+    "tangent_normal_bake": false
+  },
+  "house06_roof_pbr": {
+    "users": 1,
+    "source_vertices": 15,
+    "source_quads": 8,
+    "new_images": 2,
+    "map_size": [
+      256,
+      256
+    ],
+    "added_rgba8_bytes": 524288,
+    "normal_source": "analytic derivative of periodic height field; not albedo or high-low mesh bake",
+    "uv_period_m": 0.6,
+    "geometry_added": 0
+  },
+  "pierced_scholar_stones": 3,
+  "spatial_connectors": {
+    "moon_gate_path": 7,
+    "pavilion_steps": 3,
+    "waterside_steps": 3
+  },
+  "village_phase1": {
+    "counts": {
+      "lane": 24,
+      "banks": 62,
+      "bridge_planks": 11,
+      "bridge_posts": 12,
+      "landing_steps": 6,
+      "houses": 16
+    },
+    "z_ranges": {
+      "lane": [
+        0.025,
+        0.025
+      ],
+      "banks": [
+        0.18,
+        0.18
+      ],
+      "bridge_planks": [
+        0.55,
+        0.55
+      ],
+      "bridge_posts": [
+        1.0,
+        1.0
+      ],
+      "landing_steps": [
+        0.005,
+        0.38
+      ],
+      "houses": [
+        1.78,
+        3.884
+      ]
+    }
+  },
+  "village_paving_repair": {
+    "legacy_lane_top_m": 0.105,
+    "routes": {
+      "西水街": {
+        "length_m": 29.9,
+        "width_m": 1.82,
+        "supported_joints": 37,
+        "joint_recess_m": 0.008
+      },
+      "东水街": {
+        "length_m": 29.9,
+        "width_m": 2.2,
+        "supported_joints": 37,
+        "joint_recess_m": 0.008
+      },
+      "月门北巷": {
+        "length_m": 30.4,
+        "width_m": 1.52,
+        "supported_joints": 37,
+        "joint_recess_m": 0.008
+      }
+    },
+    "new_bitmap_bytes": 0,
+    "interlane_connector": {
+      "width_m": 0.43,
+      "length_m": 30.4,
+      "top_m": 0.112,
+      "recess_below_existing_cross_paths_m": 0.008
+    }
+  },
+  "roof_hierarchy": {
+    "standard_roofs": 4,
+    "high_ridge_roofs": 4,
+    "ridge_delta_m": 0.18,
+    "shared_rafter_rows": 8,
+    "shared_tile_end_rows": 8,
+    "firewall_houses": 2,
+    "firewall_ridges_terminated": 2,
+    "roof_mesh_variants": 3,
+    "house07_isolated_real_flue_aperture": true,
+    "new_image_texture_bytes": 0
+  },
+  "bamboo_workshop": {
+    "columns_on_shoes": 2,
+    "canopy_solidify_m": 0.06,
+    "canopy_to_street_clearance_m": 0.99,
+    "clear_entry_m": 1.2,
+    "display_table_legs": 4,
+    "baskets": 2,
+    "hanging_sieves": 1,
+    "new_image_texture_bytes": 0,
+    "plaster_bump_strength": 0.1,
+    "plaster_bump_distance_m": 0.012
+  },
+  "east_dye_yard": {
+    "court_supported": true,
+    "clear_axis_m": 1.2,
+    "canopy_columns_on_shoes": 3,
+    "canopy_solidify_m": 0.055,
+    "open_vats": 3,
+    "filled_vats": 2,
+    "shared_hanging_cloths": 3,
+    "drying_posts_on_shoes": 2,
+    "work_lanterns": 1,
+    "landing_risers_m": [
+      0.12,
+      0.12,
+      0.12
+    ],
+    "new_materials": 2,
+    "new_image_texture_bytes": 0
+  },
+  "north_paper_yard": {
+    "court_supported": true,
+    "clear_axis_m": 1.2,
+    "shared_paper_sheets": 4,
+    "rack_posts_on_shoes": 2,
+    "press_legs_grounded": 4,
+    "open_pulp_trough_walls": 5,
+    "work_lanterns": 1,
+    "north_bridge_planks": 11,
+    "north_bridge_posts": 12,
+    "north_bridge_riser_m": 0.18,
+    "new_materials": 1,
+    "new_image_texture_bytes": 0
+  },
+  "town_phase3_east_wharf": {
+    "asset_phase": "phase_3_east_wharf_storehouse",
+    "town_phase": "phase_19_quay_tea_porter",
+    "land_overlap_m": 0.2,
+    "clear_loading_axis_m": 1.4,
+    "storehouse_columns_on_shoes": 6,
+    "roof_solidify_m": 0.08,
+    "shared_crates": 4,
+    "shared_baskets": 3,
+    "supported_wharf_piles": 4,
+    "open_sampan_shell_faces": 20,
+    "boat_seats": 3,
+    "boat_gunwales": 2,
+    "boat_ribs": 2,
+    "boat_floor_battens": 3,
+    "mooring_posts": 2,
+    "lanterns": 2,
+    "reed_stems": 21,
+    "new_image_texture_bytes": 0
+  },
+  "town_phase4_east_residence": {
+    "asset_phase": "phase_4_east_residential_courtyard",
+    "town_phase": "phase_19_quay_tea_porter",
+    "land_overlap_m": 0.275,
+    "gate_design_width_m": 1.44,
+    "gate_evaluated_clear_width_m": 1.44,
+    "hall_door_clear_width_m": 1.012,
+    "through_openings": 3,
+    "solidified_roofs": 3,
+    "weaving_veranda_posts_on_shoes": 4,
+    "loom_threads": 4,
+    "linked_cloth_rolls": 2,
+    "loom_shuttle": 1,
+    "bobbins": 2,
+    "domestic_water_trough_walls": 5,
+    "new_image_texture_bytes": 0
+  },
+  "town_phase5_east_cloth_finish": {
+    "phase": "phase_19_quay_tea_porter",
+    "land_overlap_m": 0.2,
+    "street_overlap_m": 0.2,
+    "gate_design_width_m": 1.64,
+    "gate_evaluated_clear_width_m": 1.65,
+    "finishing_hall_posts_on_shoes": 6,
+    "drying_frame_posts_on_shoes": 6,
+    "linked_cloth_sheets": 8,
+    "rinsing_trough_stone_parts": 5,
+    "rinsing_water_surfaces": 1,
+    "drain_channels": 2,
+    "work_lanterns": 2,
+    "solidified_roofs": 2,
+    "new_image_texture_bytes": 0
+  },
+  "town_phase6_west_wine_court": {
+    "phase": "phase_19_quay_tea_porter",
+    "land_overlap_m": 0.3,
+    "gate_design_width_m": 1.7,
+    "gate_evaluated_clear_width_m": 1.8,
+    "hall_posts_on_shoes": 6,
+    "linked_fermentation_vats": 4,
+    "liquid_surfaces": 4,
+    "bridge_planks": 11,
+    "bridge_rail_posts": 12,
+    "bridge_risers_per_side": 3,
+    "new_image_texture_bytes": 0
+  },
+  "town_phase7_north_granary": {
+    "phase": "phase_19_quay_tea_porter",
+    "land_overlap_m": 0.25,
+    "street_overlap_m": 0.25,
+    "gate_design_width_m": 1.9,
+    "gate_evaluated_clear_width_m": 1.9,
+    "store_door_clear_width_m": 1.54,
+    "raised_floor_bottom_m": 0.58,
+    "hall_posts_on_shoes": 6,
+    "linked_grain_sacks": 6,
+    "linked_grain_bins": 3,
+    "vent_windows": 4,
+    "scale_support_feet": 2,
+    "new_image_texture_bytes": 0
+  },
+  "town_phase8_north_grain_wharf": {
+    "phase": "phase_19_quay_tea_porter",
+    "canal_overlap_m": 0.15,
+    "canal_north_end_m": 64.55,
+    "descending_step_tops_m": [
+      0.42,
+      0.28,
+      0.14
+    ],
+    "support_piles": 4,
+    "open_boat_hull_faces": 20,
+    "boat_bridge_clearance_m": 2.94,
+    "shared_round11_sacks": 2,
+    "new_image_texture_bytes": 0
+  },
+  "town_phase9_north_silk_bend": {
+    "phase": "phase_19_quay_tea_porter",
+    "west_land_overlap_m": 0.25,
+    "east_land_overlap_m": 0.275,
+    "canal_overlap_m": 0.15,
+    "basin_water_join_gap_m": 0.0,
+    "gate_design_width_m": 1.9,
+    "gate_evaluated_clear_width_m": 1.96,
+    "warehouse_posts_on_shoes": 6,
+    "loading_deck_support_piles": 4,
+    "linked_silk_bales": 6,
+    "bridge_planks": 11,
+    "bridge_rail_posts": 12,
+    "bridge_risers_per_side": 3,
+    "waiting_pavilion_posts": 4,
+    "new_image_texture_bytes": 0
+  },
+  "town_phase10_silk_trade_finish": {
+    "phase": "phase_19_quay_tea_porter",
+    "shop_opening_evaluated_m": 1.0,
+    "gate_axis_to_counter_clearance_m": 0.99,
+    "account_room_door_clearance_m": 0.78,
+    "displayed_silk_bolts": 3,
+    "account_room_destination": "desk-ledgers-abacus-stool",
+    "boat_hull_faces": 20,
+    "boat_navigation_lane_clearance_m": 0.09,
+    "boat_linked_soft_bales": 2,
+    "soft_bale_polygons": 50,
+    "soft_bale_shared_instances": 8,
+    "warehouse_bale_stack": [
+      3,
+      3
+    ],
+    "new_image_texture_bytes": 0
+  },
+  "town_phase11_west_oar_workshop": {
+    "phase": "phase_19_quay_tea_porter",
+    "route_overlap_west_water_street_m": 0.91,
+    "shed_within_existing_west_parcel": true,
+    "open_arrival_width_m": 4.22,
+    "posts_on_shoes": 4,
+    "solidified_roof": true,
+    "shared_oars": 4,
+    "oar_mesh_polygons": 14,
+    "repair_trestles": 2,
+    "rope_coils": 2,
+    "silk_edge_sets": 2,
+    "hanging_shop_signs": 1,
+    "new_image_texture_bytes": 0
+  },
+  "workshop_support43": {
+    "contacts": [
+      {
+        "contact": "JN_北河修桨作坊_长案腿 floor",
+        "gap_m": -2.9802322387695312e-08,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "JN_北河修桨作坊_长案腿 underside",
+        "gap_m": -5.960464477539063e-08,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "JN_北河修桨作坊_长案腿.001 floor",
+        "gap_m": -2.9802322387695312e-08,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "JN_北河修桨作坊_长案腿.001 underside",
+        "gap_m": -5.960464477539063e-08,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "JN_北河修桨作坊_长案腿.002 floor",
+        "gap_m": -2.9802322387695312e-08,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "JN_北河修桨作坊_长案腿.002 underside",
+        "gap_m": -5.960464477539063e-08,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "JN_北河修桨作坊_长案腿.003 floor",
+        "gap_m": -2.9802322387695312e-08,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "JN_北河修桨作坊_长案腿.003 underside",
+        "gap_m": -5.960464477539063e-08,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "JN_北河修桨作坊_修桨马凳腿 floor",
+        "gap_m": 0.0,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "JN_北河修桨作坊_修桨马凳腿 underside",
+        "gap_m": 0.0,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "JN_北河修桨作坊_修桨马凳腿.001 floor",
+        "gap_m": 0.0,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "JN_北河修桨作坊_修桨马凳腿.001 underside",
+        "gap_m": 0.0,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "JN_北河修桨作坊_修桨马凳腿.002 floor",
+        "gap_m": 0.0,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "JN_北河修桨作坊_修桨马凳腿.002 underside",
+        "gap_m": 0.0,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "JN_北河修桨作坊_修桨马凳腿.003 floor",
+        "gap_m": 0.0,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "JN_北河修桨作坊_修桨马凳腿.003 underside",
+        "gap_m": 0.0,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "blank JN_北河修桨作坊_修桨马凳横木",
+        "gap_m": 0.0,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "blank JN_北河修桨作坊_修桨马凳横木.001",
+        "gap_m": 0.0,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "lower board",
+        "gap_m": 0.0,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "upper board",
+        "gap_m": 0.0,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "upper board",
+        "gap_m": 0.0,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "upper board",
+        "gap_m": 0.0,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "upper board",
+        "gap_m": 0.0,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "木刨",
+        "gap_m": 0.0,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "木槌头",
+        "gap_m": 0.0,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "flat oil jar",
+        "gap_m": 0.0,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "flat oil jar",
+        "gap_m": 0.0,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "flat oil jar",
+        "gap_m": 0.0,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "flat oil jar",
+        "gap_m": 0.0,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "rope 1",
+        "gap_m": -2.9802322387695312e-08,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "rope 2",
+        "gap_m": -2.9802322387695312e-08,
+        "actual_support_ray": true
+      }
+    ],
+    "ray_count": 31,
+    "flat_jar_foot_radius_m": 0.085,
+    "changed_existing_objects": 17,
+    "new_objects": 0,
+    "new_source_triangles": 0,
+    "new_images": 0,
+    "new_materials": 1,
+    "local_rope_material_users": [
+      "JN_北河修桨作坊_盘绳_1",
+      "JN_北河修桨作坊_盘绳_2"
+    ],
+    "rope_donor": "JN_米行麻绳",
+    "mallet_joint_overlap_m": [
+      0.11999988555908203,
+      0.06999969482421875,
+      0.0700000524520874
+    ],
+    "shared_oars_unchanged": 4,
+    "hanging_oar_fasteners": "pending",
+    "load_certification": "not validated",
+    "human_approval": "pending"
+  },
+  "workshop_rack44": {
+    "leg_objects": 8,
+    "leg_meshes": 2,
+    "new_seat_objects": 8,
+    "new_seat_meshes": 4,
+    "oar_seats": [
+      {
+        "oar": "JN_北河修桨作坊_共享桨橹_1",
+        "seat": "JN_北河修桨作坊_承桨托座1",
+        "backer": "JN_北河修桨作坊_承桨托背1",
+        "blade_bottom_corner_rays": 4,
+        "contact_gaps_m": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "seat_backer_overlap_m": [
+          0.10000038146972656,
+          0.1100006103515625,
+          0.0779733657836914
+        ],
+        "backer_rail_overlap_m": [
+          0.10000038146972656,
+          0.1399993896484375,
+          0.13999998569488525
+        ]
+      },
+      {
+        "oar": "JN_北河修桨作坊_共享桨橹_2",
+        "seat": "JN_北河修桨作坊_承桨托座0",
+        "backer": "JN_北河修桨作坊_承桨托背0",
+        "blade_bottom_corner_rays": 4,
+        "contact_gaps_m": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "seat_backer_overlap_m": [
+          0.10000038146972656,
+          0.1100006103515625,
+          0.08197438716888428
+        ],
+        "backer_rail_overlap_m": [
+          0.10000038146972656,
+          0.1399993896484375,
+          0.13999998569488525
+        ]
+      },
+      {
+        "oar": "JN_北河修桨作坊_共享桨橹_3",
+        "seat": "JN_北河修桨作坊_承桨托座1.001",
+        "backer": "JN_北河修桨作坊_承桨托背1.001",
+        "blade_bottom_corner_rays": 4,
+        "contact_gaps_m": [
+          0.0,
+          5.960464477539063e-08,
+          0.0,
+          5.960464477539063e-08
+        ],
+        "seat_backer_overlap_m": [
+          0.10000038146972656,
+          0.1100006103515625,
+          0.0779733657836914
+        ],
+        "backer_rail_overlap_m": [
+          0.10000038146972656,
+          0.1399993896484375,
+          0.13999998569488525
+        ]
+      },
+      {
+        "oar": "JN_北河修桨作坊_共享桨橹_4",
+        "seat": "JN_北河修桨作坊_承桨托座0.001",
+        "backer": "JN_北河修桨作坊_承桨托背0.001",
+        "blade_bottom_corner_rays": 4,
+        "contact_gaps_m": [
+          0.0,
+          5.960464477539063e-08,
+          0.0,
+          5.960464477539063e-08
+        ],
+        "seat_backer_overlap_m": [
+          0.09999990463256836,
+          0.1100006103515625,
+          0.08197438716888428
+        ],
+        "backer_rail_overlap_m": [
+          0.09999990463256836,
+          0.1399993896484375,
+          0.13999998569488525
+        ]
+      }
+    ],
+    "rail_post_joints": 4,
+    "source_images_added": 0,
+    "materials_added": 0,
+    "wood_scale": [
+      1.1,
+      1.1,
+      0.3
+    ],
+    "texture_phase": "shared local phase; metre frequency preserved",
+    "load_certification": "pending",
+    "human_approval": "pending",
+    "closed_outward_mesh_volumes_m3": {
+      "JN_北河修桨作坊_长案腿": 0.009126000106334686,
+      "JN_北河修桨作坊_修桨马凳腿": 0.0050399997271597385,
+      "JN_北河修桨作坊_桨架下枋": 0.08623962042232354,
+      "JN_北河修桨作坊_桨架上枋": 0.08623969337592523,
+      "JN_北河修桨作坊_承桨托座1": 0.012063384968011329,
+      "JN_北河修桨作坊_承桨托背1": 0.0061868405900895596,
+      "JN_北河修桨作坊_承桨托座0": 0.012337698601186275,
+      "JN_北河修桨作坊_承桨托背0": 0.006210310384631157
+    }
+  },
+  "town_phase12_north_umbrella_lane": {
+    "phase": "phase_19_quay_tea_porter",
+    "west_street_overlap_m": 0.2,
+    "east_link_overlap_old_new_m": [
+      0.1,
+      0.1
+    ],
+    "canal_overlap_m": 0.2,
+    "fifth_bridge": {
+      "linked_planks": 11,
+      "posts": 12,
+      "rails": 4,
+      "risers": 6
+    },
+    "shop_within_east_parcel": true,
+    "shop_opening_m": 4.7,
+    "home_door_m": 1.18,
+    "posts_on_shoes": 6,
+    "solidified_roof": true,
+    "rear_room_destination": "ming-couch-desk-stool",
+    "shared_umbrella_canopies": 3,
+    "umbrella_canopy_polygons": 12,
+    "new_image_texture_bytes": 0
+  },
+  "town_phase13_north_paper_yard": {
+    "phase": "phase_19_quay_tea_porter",
+    "street_and_water_overlaps_m": [
+      0.1,
+      0.1,
+      0.1
+    ],
+    "workshop_within_west_parcel": true,
+    "posts_on_shoes": 6,
+    "open_work_bays_m": [
+      2.6,
+      2.6
+    ],
+    "solidified_low_cost_roof": true,
+    "soaking_vats": 2,
+    "beating_bench": 1,
+    "paper_mould": 1,
+    "shared_drying_frames": 3,
+    "shared_paper_sheets": 3,
+    "new_image_texture_bytes": 0
+  },
+  "town_phase14_east_bindery_shop": {
+    "phase": "phase_19_quay_tea_porter",
+    "shop_within_round17_east_parcel": true,
+    "posts_on_shoes": 6,
+    "open_front_bays_m": [
+      2.4,
+      2.4
+    ],
+    "solidified_low_cost_roof": true,
+    "shared_paper_reams": 6,
+    "shared_stitched_books": 5,
+    "binding_press": "four-feet-two-posts-beam-screw-platen",
+    "new_image_texture_bytes": 0
+  },
+  "town_phase15_east_dyed_paper_court": {
+    "phase": "phase_19_quay_tea_porter",
+    "street_and_water_overlaps_m": [
+      0.1,
+      0.1,
+      0.1
+    ],
+    "atelier_within_east_parcel": true,
+    "posts_on_shoes": 6,
+    "open_front_bays_m": [
+      1.95,
+      1.95
+    ],
+    "solidified_low_cost_roof": true,
+    "shared_dye_vats": 2,
+    "shared_dye_liquids": 2,
+    "shared_dyed_sheets": 6,
+    "drainage_to_street": true,
+    "new_image_texture_bytes": 0
+  },
+  "dyed_paper_support50": {
+    "refined_existing_objects": 12,
+    "grounded_feet": 8,
+    "fully_borne_pigment_boxes": 3,
+    "shared_visible_clips": 12,
+    "shared_prototypes": 1,
+    "source_triangles_added": 156,
+    "closed_positive_clip_volume_m3": 0.0007839999891519545,
+    "support_rays": 48,
+    "joint_inset_m": 0.002,
+    "new_materials_images_lights": 0,
+    "human_review": "pending",
+    "load_certification": "not performed"
+  },
+  "town_phase16_west_dye_receiving_court": {
+    "phase": "phase_19_quay_tea_porter",
+    "reuses_round19_west_parcel": true,
+    "posts_on_shoes": 4,
+    "open_receiving_bay_m": 4.6,
+    "solidified_mono_pitch_awning": true,
+    "shared_paper_bales": 6,
+    "shared_dye_sacks": 5,
+    "shared_pigment_jars": 4,
+    "shared_handcart_wheels": 2,
+    "receiving_equipment": "grounded-beam-scale-and-two-wheel-handcart",
+    "shop_identity_sign": true,
+    "new_image_texture_bytes": 0
+  },
+  "sampan_shell42": {
+    "hull_vertices": 40,
+    "hull_quads": 38,
+    "hull_triangles": 76,
+    "added_source_triangles": 184,
+    "axis_inset_m": 0.035,
+    "closed_positive_volume": true,
+    "shared_tapered_ribs": 3,
+    "supported_seats": 2,
+    "rib_top_m": 0.455,
+    "shared_contoured_rails": 2,
+    "rail_prototype_vertices": 20,
+    "rail_prototype_quads": 18,
+    "rail_width_m": 0.04,
+    "rail_height_m": 0.04,
+    "shared_oars": 3,
+    "oar_prototype_vertices": 16,
+    "oar_prototype_faces": 10,
+    "buoyancy_seaworthiness": "not validated",
+    "human_approval": "pending",
+    "oar_seat_contacts": 2,
+    "aboard_oar_lowered_m": 0.06,
+    "stored_oar_floor_and_rack_contacts": 2
+  },
+  "town_phase17_north_public_turning_quay": {
+    "phase": "phase_19_quay_tea_porter",
+    "carrier_overlaps_m": [
+      0.1,
+      0.1,
+      0.1,
+      0.1,
+      0.1
+    ],
+    "terminal_water_width_m": 5.0,
+    "shared_bridge_slabs": 9,
+    "bridge_piers_to_soffit": 3,
+    "crossing_clear_width_m": 1.24,
+    "landing_tops_m": [
+      0.16,
+      0.11,
+      0.06
+    ],
+    "shared_bench_seats": 2,
+    "grounded_bench_legs": 4,
+    "shared_bollards": 2,
+    "public_lanterns": 2,
+    "snow_particle_segments": [
+      4,
+      2
+    ],
+    "reproducible_scholar_stones": {
+      "noise_seed": 36,
+      "boolean_solver": "MANIFOLD"
+    },
+    "expanded_triangles": 168534,
+    "triangle_limit": 170000,
+    "new_image_texture_bytes": 0
+  },
+  "town_phase18_quay_boat_gear": {
+    "phase": "phase_19_quay_tea_porter",
+    "sampan_length_m": 2.36,
+    "sampan_inside_terminal_water": true,
+    "sampan_bridge_clearance_m": 0.27,
+    "open_hull_faces": 38,
+    "shared_gunwales": 2,
+    "shared_seats": 2,
+    "shared_ribs": 3,
+    "grounded_lending_rack_posts": 2,
+    "shared_oars": 3,
+    "shared_bridge_wet_marks": 4,
+    "roof_added": false,
+    "expanded_triangles": 168534,
+    "triangle_limit": 170000,
+    "new_image_texture_bytes": 0
+  },
+  "town_phase19_quay_tea_porter": {
+    "phase": "phase_19_quay_tea_porter",
+    "reuses_west_turning_pocket": true,
+    "tea_service_bounds_m": [
+      0.557,
+      2.301,
+      104.71,
+      105.307
+    ],
+    "street_clearance_m": 0.289,
+    "bench_clearance_m": 0.403,
+    "grounded_linked_baskets": 2,
+    "shared_cups": 3,
+    "shared_coals": 3,
+    "kettle_and_yoke_readable": true,
+    "roof_added": false,
+    "wet_mark_tone_lifted": true,
+    "expanded_triangles": 168534,
+    "triangle_limit": 170000,
+    "new_image_texture_bytes": 0
+  },
+  "house03_study": {
+    "grounded_cabinet_feet": 4,
+    "shelves": 3,
+    "supported_linked_books": 5,
+    "linked_repeat_families": 8,
+    "tabletop_contact_passed": true,
+    "door_mount_contact_passed": true,
+    "architectural_door_width_m": 1.144,
+    "hardware_inclusive_conservative_width_m": 1.008,
+    "new_bitmap_bytes": 0
+  },
+  "house05_rest": {
+    "grounded_bed_feet": 4,
+    "mat_pillow_blanket_contact_passed": true,
+    "table_lamp_contact_passed": true,
+    "interior_route_width_m": 1.0,
+    "interior_route_length_m": 3.2,
+    "shared_repeat_families": 7,
+    "new_bitmap_bytes": 0
+  },
+  "house05_profile": {
+    "chamfered_linked_feet": 4,
+    "chamfered_linked_railing_posts": 5,
+    "closed_cloth_profiles": 3,
+    "pillow_vertices": 24,
+    "blanket_vertices": 24,
+    "asset_triangles": 700,
+    "asset_triangle_limit": 1000,
+    "subdivision": false,
+    "new_bitmap_bytes": 0
+  },
+  "house06_needlework": {
+    "shared_repeat_families": 10,
+    "spools": 3,
+    "closed_spool_profiles": true,
+    "open_needlebox": true,
+    "tabletop_contact_passed": true,
+    "rack_floor_and_rail_contact_passed": true,
+    "drape_fold_vertices": 231,
+    "drape_grid": [
+      21,
+      11
+    ],
+    "supported_crown_rows": 21,
+    "closed_evaluated_drape": true,
+    "subdivision": false,
+    "clear_interior_strip_m": [
+      2.2,
+      1.0
+    ],
+    "new_bitmap_bytes": 0,
+    "delta_limit": 1600,
+    "scoped_asset_triangles": 1300
+  },
+  "inhabited_houses": {
+    "mesh_triangles_with_instances": 12476,
+    "triangle_budget": 18000,
+    "shells": 8,
+    "true_door_openings": 8,
+    "true_window_openings": 16,
+    "shared_wall_meshes": 1,
+    "door_clear_width_min": 1.0230000000000001,
+    "interior_depth_min": 4.3896,
+    "ray_tests_passed": 40,
+    "floor_support_passed": 8,
+    "tea_east_risers_m": [
+      0.1,
+      0.1
+    ],
+    "new_image_texture_bytes": 0
+  },
+  "house07_prep": {
+    "visible_objects": 24,
+    "mesh_instance_triangles": 1168,
+    "triangle_limit": 1200,
+    "grounded_stove_bucket_step": 3,
+    "shared_families": 6,
+    "open_vessels_with_closed_surfaces": 4,
+    "stove_mouth_ray_clear": true,
+    "arrival_strip_m": [
+      2.0,
+      1.0
+    ],
+    "architectural_door_width_m": 1.0230000000000001,
+    "hardware_inclusive_conservative_door_width_m": 0.9392992248535172,
+    "entrance_rays_clear": 3,
+    "new_bitmap_bytes": 0,
+    "new_materials": 2,
+    "pot_collar_contact": true,
+    "active_fire": false,
+    "flue_complete": false,
+    "functional_cooking_approval": "pending"
+  },
+  "house07_flue": {
+    "visible_parts": 13,
+    "source_triangles": 196,
+    "triangle_limit": 260,
+    "shared_families": 2,
+    "firebox_outlet_m": [
+      0.18,
+      0.22
+    ],
+    "shaft_bore_m": [
+      0.18,
+      0.18
+    ],
+    "roof_aperture_m": [
+      0.38,
+      0.38
+    ],
+    "flashing_outer_m": [
+      0.56,
+      0.56
+    ],
+    "roof_aperture_rays": 9,
+    "passage_rays": 6,
+    "closed_solid_surfaces": true,
+    "other_high_roofs_shared": 3,
+    "active_fire": false,
+    "thermal_draught_fire_safety": "not validated",
+    "human_approval": "pending"
+  },
+  "waiting_pavilion46": {
+    "new_visible_meshes": 9,
+    "source_triangles_added": 116,
+    "refined_existing_lane": true,
+    "relocated_existing_lamp_parts": 3,
+    "shared_rack_families": 3,
+    "risers_m": [
+      0.10000000149011612,
+      0.09999999403953552
+    ],
+    "north_bypass_clear_m": 1.25,
+    "support_and_route_rays": 27,
+    "source_closed_positive_volumes": {
+      "JN_候船整备46_上台踏步": 0.08819961529076004,
+      "JN_候船整备46_搁板0": 0.012799999427795413,
+      "JN_北河修桨作坊_候船横巷": 1.5967234742705507,
+      "JN_候船整备46_承枋0": 0.0046079999771118105,
+      "JN_候船整备46_架足0": 0.002559999923706054
+    },
+    "new_images_materials_lights": 0,
+    "human_approval": "pending",
+    "accessibility_ramp": "not implemented",
+    "structural_load": "not certified"
+  },
+  "quay_cobbler37": {
+    "visible_meshes": 25,
+    "source_triangles_including_prototypes": 468,
+    "prior_source_triangles": 166626,
+    "shared_families": 6,
+    "paving_overlap_m": 0.12,
+    "street_clearance_m": 2.78,
+    "all_closed_positive_volume": true,
+    "new_images": 0,
+    "new_materials": 0,
+    "new_roofs": 0,
+    "human_approval": "pending"
+  },
+  "house07_finish36": {
+    "audited_closed_meshes": 11,
+    "repaired_inward_meshes": 10,
+    "audit": [
+      {
+        "mesh": "JN_东岸备膳户_冷灶底座",
+        "before_m3": -0.09791997820138931,
+        "after_m3": 0.09791997820138931,
+        "flipped": true,
+        "vertices_unchanged": true
+      },
+      {
+        "mesh": "JN_东岸备膳户_灶侧壁原型",
+        "before_m3": -0.08649598807096481,
+        "after_m3": 0.08649598807096481,
+        "flipped": true,
+        "vertices_unchanged": true
+      },
+      {
+        "mesh": "JN_东岸备膳户_灶背壁",
+        "before_m3": 0.04793588760852193,
+        "after_m3": 0.04793588760852193,
+        "flipped": false,
+        "vertices_unchanged": true
+      },
+      {
+        "mesh": "JN_东岸备膳户_灶口边墩原型",
+        "before_m3": -0.020351997887094814,
+        "after_m3": 0.020351997887094814,
+        "flipped": true,
+        "vertices_unchanged": true
+      },
+      {
+        "mesh": "JN_东岸备膳户_灶口过梁",
+        "before_m3": -0.005631989799439907,
+        "after_m3": 0.005631989799439907,
+        "flipped": true,
+        "vertices_unchanged": true
+      },
+      {
+        "mesh": "JN_东岸备膳户_灶面长边原型",
+        "before_m3": -0.023760000243782997,
+        "after_m3": 0.023760000243782997,
+        "flipped": true,
+        "vertices_unchanged": true
+      },
+      {
+        "mesh": "JN_东岸备膳户_灶面端边原型",
+        "before_m3": -0.011776000261306763,
+        "after_m3": 0.011776000261306763,
+        "flipped": true,
+        "vertices_unchanged": true
+      },
+      {
+        "mesh": "JN_东岸备膳户_灶前石踏",
+        "before_m3": -0.015456039846564332,
+        "after_m3": 0.015456039846564332,
+        "flipped": true,
+        "vertices_unchanged": true
+      },
+      {
+        "mesh": "JN_东岸备膳户_砧板",
+        "before_m3": -0.004899982362985611,
+        "after_m3": 0.004899982362985611,
+        "flipped": true,
+        "vertices_unchanged": true
+      },
+      {
+        "mesh": "JN_东岸备膳户_菜刀柄",
+        "before_m3": -0.00021060089723808537,
+        "after_m3": 0.00021060089723808537,
+        "flipped": true,
+        "vertices_unchanged": true
+      },
+      {
+        "mesh": "JN_东岸备膳户_菜刀刃",
+        "before_m3": -0.00019360086722978545,
+        "after_m3": 0.00019360086722978545,
+        "flipped": true,
+        "vertices_unchanged": true
+      }
+    ],
+    "geometry_coordinates_unchanged": true,
+    "source_triangles": 168534,
+    "glaze_users": 2,
+    "grey_lime_users": 5,
+    "new_materials": 2,
+    "new_images": 0,
+    "new_objects": 0,
+    "new_triangles": 0,
+    "active_fire": false
+  },
+  "quay_stone39": {
+    "visible_users": 23,
+    "hidden_prototypes": 2,
+    "source_triangles": 168534,
+    "new_geometry": 0,
+    "new_materials": 1,
+    "new_images": 0,
+    "repeat_per_local_m": 2.4,
+    "nominal_repeat_m": 0.4166666666666667,
+    "roughness": 0.88,
+    "bump_distance_m": 0.003,
+    "human_approval": "pending"
+  },
+  "east_rope_bench40": {
+    "visible_meshes": 13,
+    "hidden_prototypes": 4,
+    "source_triangles": 888,
+    "source_cap": 1000,
+    "all_closed_positive_volume": true,
+    "grounded_legs": 4,
+    "shared_families": 4,
+    "rope_eyes": 2,
+    "rope_eye_segments": [
+      20,
+      6
+    ],
+    "support_gap_m": 0,
+    "street_clearance_m": 0.4200000762939453,
+    "bench_clearance_m": 0.5400009155273438,
+    "new_materials": 0,
+    "new_images": 0,
+    "rope_physics": "not simulated",
+    "human_approval": "pending"
+  },
+  "quay_procedural_fallback41": {
+    "materials": [
+      {
+        "material": "JN_转水埠旧船木",
+        "base_color_factor": [
+          0.24,
+          0.105,
+          0.038,
+          1
+        ],
+        "visible_users": 11,
+        "hidden_prototypes": 4
+      },
+      {
+        "material": "JN_转水埠桥面雨湿",
+        "base_color_factor": [
+          0.19,
+          0.25,
+          0.22,
+          1
+        ],
+        "visible_users": 4,
+        "hidden_prototypes": 1
+      }
+    ],
+    "new_geometry": 0,
+    "new_images": 0,
+    "new_materials": 0,
+    "source_shader_unchanged": true,
+    "web_procedural_noise_bake": "pending",
+    "human_approval": "pending"
+  },
+  "town_phase2": {
+    "phase": "phase_19_quay_tea_porter",
+    "grounded_houses": 8,
+    "street_segments": 114,
+    "street_batches": 3,
+    "tea_pavilion_columns": 4,
+    "market_stalls": 2,
+    "bridge_risers_per_side": 3,
+    "market_ceramics": 6,
+    "teacups": 2,
+    "canal_preserved": true,
+    "new_image_texture_bytes": 0
+  },
+  "village_wet_revetment": {
+    "present": true,
+    "count": 62,
+    "semantic_count": 62,
+    "batched": false,
+    "shared_mesh": "JN_村落湿润驳岸_原型",
+    "z_range": [
+      0.055,
+      0.055
+    ],
+    "water_z": 0.03,
+    "material_slots": 1
+  },
+  "spatial_semantics": {
+    "moon_gate_path": {
+      "monotonic_to_gate": true,
+      "max_internal_gap": 0.818,
+      "gate_endpoint_distance": 0.502,
+      "approach_gap_from_stepping_stones": 0.741,
+      "gate_clear_width_at_path_top": 1.702
+    },
+    "pavilion_steps": {
+      "rise_toward_platform": true,
+      "platform_edge_overlap": true,
+      "platform_front_y": -1.45
+    },
+    "waterside_steps": {
+      "rise_toward_land": true,
+      "crosses_pond_edge": true,
+      "water_step_inside_pond": true,
+      "pond_near_edge_y": -0.6
+    }
+  },
+  "spatial_warnings": [],
+  "north_lighting49": {
+    "new_area_lights": 2,
+    "retuned_lights": 3,
+    "unchanged_existing_lights": 43,
+    "new_geometry_images_materials": 0,
+    "exposure_unchanged": true,
+    "web_lighting": "not exported",
+    "direction_parameter_checks": 2
+  },
+  "outward_normals": {
+    "JN_云团": true,
+    "JN_明月": true,
+    "JN_花尖露珠_原型": true
+  },
+  "renderer": "Cycles CPU",
+  "renders": [],
+  "render_skipped": true,
+  "render_skip_reason": "formal multi-view rendering paused; use tools/diagnostic_review.py for low-cost spatial review"
+}

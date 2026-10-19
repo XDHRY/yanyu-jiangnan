@@ -1,0 +1,52 @@
+{
+  "source_commit": "e5e08c12b8047495b6b1f7fa16365b058238a83e",
+  "model_head": "6f084e9d718cda6145064cdbccc3d272686ad3b8",
+  "before_render_commit": "4eb27cb4f5426ec8125dcc302d931c51ca2d5159",
+  "source_totals": {
+    "objects": 4644,
+    "mesh_objects": 3124,
+    "curve_objects": 1427,
+    "triangles_with_instances": 168534,
+    "faces_with_instances": 99812,
+    "vertices_with_instances": 171282,
+    "unique_mesh_datablocks": 1696,
+    "unique_mesh_triangles": 127428,
+    "unique_mesh_faces": 80253,
+    "unique_mesh_vertices": 143950,
+    "materials_used": 54,
+    "images_loaded": 9,
+    "estimated_texture_rgba8_bytes": 44554784,
+    "estimated_texture_rgba8_mib": 42.49,
+    "estimated_mesh_draw_calls": 3127,
+    "object_drivers": 4444,
+    "mesh_objects_using_reused_datablocks": 1552,
+    "instance_reuse_ratio": 0.4968
+  },
+  "web_budget": {
+    "source_commit": "e5e08c12b8047495b6b1f7fa16365b058238a83e",
+    "baseline_round": 34,
+    "metrics": {
+      "instance_triangles": 625715,
+      "glb_bytes": 51574032,
+      "attribute_index_bytes": 28489906,
+      "images": 9,
+      "rgba8_bytes": 44554784
+    },
+    "limits": {
+      "instance_triangles": 629155,
+      "glb_bytes": 54000000,
+      "attribute_index_bytes": 30000000,
+      "images": 9,
+      "rgba8_bytes": 44554784
+    },
+    "passed": true,
+    "note": "Round35 adds a cold geometric flue and real roof/stove-back apertures within Round34's existing629155 ceiling (844 evaluated triangles remaining); all numeric limits unchanged. No new house, material or image. Source cap170000, prep cap1200 and independent flue cap260 remain enforced; record actual evaluated result, not inferred GPU performance."
+  },
+  "spatial_render_seconds": 205.04,
+  "web_diagnostic_render_seconds": 205.1,
+  "before_spatial_render_seconds": 303.25,
+  "all16_physical_cameras_and_questions_identical_before_after": true,
+  "new_materials_images_lights": 0,
+  "actual_vram_fps": "not measured",
+  "note": "Render times are per-run observations, not acceleration claims. RGBA8 is a texture-size estimate, not measured VRAM."
+}

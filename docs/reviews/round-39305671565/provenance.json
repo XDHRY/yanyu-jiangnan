@@ -1,0 +1,175 @@
+{
+  "baseline_main": "ca5172aa3ba8dc66c904412831da70a51ce02a3d",
+  "pr": 56,
+  "model_source": "6f084e9d718cda6145064cdbccc3d272686ad3b8",
+  "model_tree": "94665d6e3ca7ce7cf28a9a5dceea922a3ca4e006",
+  "tested_render_commit": "e5e08c12b8047495b6b1f7fa16365b058238a83e",
+  "baseline_camera_source": "8ed0372fb5f7572bcf67b37ba2a1a584fb6494ce",
+  "baseline_render_commit": "4eb27cb4f5426ec8125dcc302d931c51ca2d5159",
+  "baseline_runs": [
+    {
+      "id": 39304409843,
+      "name": "CI",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 39304409842,
+      "name": "Blender 4.5 Scene Smoke",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 39304409837,
+      "name": "Jiangnan Spatial Diagnostic",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 39304409896,
+      "name": "Jiangnan Web 3D Viewer",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "baseline_artifacts": [
+    {
+      "id": 12214125029,
+      "run": 39304409842,
+      "sha256": "aed48f7aeffaeb64ca42112050668df0c446ba1afc7376c6fc0d7912ebbeee59"
+    },
+    {
+      "id": 12213950930,
+      "run": 39304409837,
+      "sha256": "b09067791cd2edcb823f82e74940602b443716c5e8a339d0efb66ddb24e93683"
+    },
+    {
+      "id": 12213726090,
+      "run": 39304409896,
+      "sha256": "6e8c35b50562c7977ad07f46067e9603a45f1390eaeef2d7eae58e836f8dcd71"
+    }
+  ],
+  "failed_initial_source": "0d5267999c683283cb23369f2898f28808be4cbc",
+  "failed_initial_runs": [
+    {
+      "id": 39303943582,
+      "status": "in_progress",
+      "conclusion": null,
+      "name": "Blender 4.5 Scene Smoke"
+    },
+    {
+      "id": 39303943597,
+      "status": "in_progress",
+      "conclusion": null,
+      "name": "Jiangnan Web 3D Viewer"
+    },
+    {
+      "id": 39303943527,
+      "status": "in_progress",
+      "conclusion": null,
+      "name": "Jiangnan Spatial Diagnostic"
+    },
+    {
+      "id": 39303943533,
+      "status": "completed",
+      "conclusion": "failure",
+      "name": "CI"
+    }
+  ],
+  "failed_note": "Initial camera-source CI failed local old-name regression and Blender framing under22mm; Smoke success; Spatial/Web failed. Runs never used as valid Round50 images. PRbody local-pass claim retracted.",
+  "generic_form": {
+    "passed": false,
+    "missing_template_files": 7,
+    "human_approval": "pending"
+  },
+  "independent_inn_repo": "untouched",
+  "formal36_render": "not run",
+  "actual_merge_commit": "7b6765007707d3be6ea92b40fcba532ead6d4b37",
+  "merge_and_tested_tree_identical": true,
+  "model_runs": [
+    {
+      "id": 39305671536,
+      "name": "Blender 4.5 Scene Smoke",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 39305671532,
+      "name": "CI",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 39305671565,
+      "name": "Jiangnan Spatial Diagnostic",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 39305671598,
+      "name": "Jiangnan Web 3D Viewer",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "model_artifacts": [
+    {
+      "id": 12212594259,
+      "name": "Jiangnan-Blender-4.5-e5e08c12b8047495b6b1f7fa16365b058238a83e",
+      "size_in_bytes": 23693452,
+      "url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12212594259",
+      "archive_download_url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12212594259/zip",
+      "expired": false,
+      "created_at": "2026-10-19T18:50:44Z",
+      "expires_at": "2026-10-26T18:50:42Z",
+      "updated_at": "2026-10-19T18:50:44Z",
+      "digest": "sha256:c590b8106407917a562e5e4e028a5e4ab73bbd3802f057aa9359601906ba80b5",
+      "workflow_run": {
+        "id": 39305671536,
+        "repository_id": 1374819141,
+        "head_repository_id": 1374819141,
+        "head_branch": "codex/round50-dyed-paper-support",
+        "head_sha": "6f084e9d718cda6145064cdbccc3d272686ad3b8"
+      }
+    },
+    {
+      "id": 12212769516,
+      "name": "Jiangnan-Spatial-Diagnostics-e5e08c12b8047495b6b1f7fa16365b058238a83e",
+      "size_in_bytes": 16502345,
+      "url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12212769516",
+      "archive_download_url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12212769516/zip",
+      "expired": false,
+      "created_at": "2026-10-19T18:54:47Z",
+      "expires_at": "2026-11-02T18:54:45Z",
+      "updated_at": "2026-10-19T18:54:47Z",
+      "digest": "sha256:6f3b696402ec3c07e1ad3f8b3b97b4bb3abe60ac668ff3a14a6a261e3b7f687a",
+      "workflow_run": {
+        "id": 39305671565,
+        "repository_id": 1374819141,
+        "head_repository_id": 1374819141,
+        "head_branch": "codex/round50-dyed-paper-support",
+        "head_sha": "6f084e9d718cda6145064cdbccc3d272686ad3b8"
+      }
+    },
+    {
+      "id": 12214012037,
+      "name": "Jiangnan-Web-Viewer-e5e08c12b8047495b6b1f7fa16365b058238a83e",
+      "size_in_bytes": 119312858,
+      "url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12214012037",
+      "archive_download_url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12214012037/zip",
+      "expired": false,
+      "created_at": "2026-10-19T18:55:57Z",
+      "expires_at": "2026-11-18T18:55:55Z",
+      "updated_at": "2026-10-19T18:55:57Z",
+      "digest": "sha256:7a9ed69981151bebe56db9394b7bcfb509b90ac68dcb309e8a6ea53e196b147a",
+      "workflow_run": {
+        "id": 39305671598,
+        "repository_id": 1374819141,
+        "head_repository_id": 1374819141,
+        "head_branch": "codex/round50-dyed-paper-support",
+        "head_sha": "6f084e9d718cda6145064cdbccc3d272686ad3b8"
+      }
+    }
+  ],
+  "audit_note": "Independent audit manually executed after normalizing child references by stable names; pure analyzer correction only, to be committed with final handoff; no generator/render change."
+}

@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "before_sha256": "16eca77d778e588065f26f6d28460e8d12576b2515cc9205b0611ee18ef42b02",
+  "after_sha256": "1436d816a792e70c7bcfa4504330f9cafd6fb5020a684d14fc3e28a1b4e7ff2c",
+  "retained_mesh_nodes": 3110,
+  "refined_existing_nodes": [
+    "JN_北河染纸坊_晾纸立柱",
+    "JN_北河染纸坊_晾纸立柱.001",
+    "JN_北河染纸坊_颜料架立柱",
+    "JN_北河染纸坊_颜料架立柱.001",
+    "JN_北河染纸坊_颜料盒_1",
+    "JN_北河染纸坊_颜料盒_2",
+    "JN_北河染纸坊_颜料盒_3",
+    "JN_北河染纸坊_长案足",
+    "JN_北河染纸坊_长案足.001",
+    "JN_北河染纸坊_长案足.002",
+    "JN_北河染纸坊_长案足.003",
+    "JN_北河染纸坊_染纸竹夹__WEB_MESH"
+  ],
+  "added_visible_clips": 12,
+  "shared_clip_meshes": 1,
+  "clip_triangles": 144,
+  "support_rays": 48,
+  "materials_and_images_preserved": true,
+  "cross_build_uv_changed_streams": 725,
+  "cross_build_uv_max_abs": 6.103515625e-05,
+  "uv_determinism": "pending",
+  "human_approval": "pending",
+  "load_certification": "not performed"
+}
