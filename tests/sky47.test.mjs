@@ -1,5 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
 import {SKY47,DIRECTIONS47,skyWeights47} from '../web/viewer/sky47.mjs';
 test('full six-direction fallback has finite unit axes',()=>{
  assert.equal(Object.keys(DIRECTIONS47).length,6);
@@ -20,4 +21,10 @@ test('invalid direction rejected',()=>{
 });
 test('runtime-only cost is explicitly bounded; no texture allowance',()=>{
  assert.equal(SKY47.triangles,1);assert.equal(SKY47.positionBytes,36);assert.equal(SKY47.images,0);
+});
+test('environment projection is guarded before generic resize projection',()=>{
+ const app=readFileSync(new URL('../web/viewer/app.js',import.meta.url),'utf8');
+ const apply=app.slice(app.indexOf('function applyProjection(){'),app.indexOf('function render(t)'));
+ assert.ok(apply.indexOf('if(environmentState47)')<apply.indexOf('if(projectionRef)'));
+ assert.match(apply,/camera\.fov=90;camera\.updateProjectionMatrix\(\);return;/);
 });

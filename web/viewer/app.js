@@ -143,6 +143,7 @@ function usePerspective(){
  applyProjection();
 }
 function applyProjection(){
+ if(environmentState47){camera.aspect=innerWidth/innerHeight;camera.fov=90;camera.updateProjectionMatrix();return;}
  if(projectionRef){const p=projectionForPreset(projectionRef,innerWidth/innerHeight);Object.assign(camera,p);}
  else if(camera.isPerspectiveCamera){camera.aspect=innerWidth/innerHeight;camera.fov=52;}
  camera.updateProjectionMatrix();

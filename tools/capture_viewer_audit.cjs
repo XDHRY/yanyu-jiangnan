@@ -35,7 +35,8 @@ async function main(){
    const s=await page.evaluate(()=>window.JIANGNAN_REVIEW.snapshot());
    if(!s.sky47.ready||s.sky47.triangles!==1||s.sky47.positionBytes!==36||s.sky47.images!==0)throw Error('sky pass contract');
    await page.screenshot({path:path.join(out,'environment47-'+direction+'.png')});
-   environment.push({direction,viewDirection:s.viewDirection,sky47:s.sky47});
+   if(s.fov!==90)throw Error('environment projection changed during resize');
+   environment.push({direction,viewDirection:s.viewDirection,fov:s.fov,projection:s.projection,sky47:s.sky47});
   }
   await page.evaluate(()=>window.JIANGNAN_REVIEW.restoreEnvironment47());
   await page.setViewportSize({width:1024,height:640});

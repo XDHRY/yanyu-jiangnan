@@ -11,6 +11,8 @@ def verify(root):
     results=[]
     for row in data['environment']:
         name=row['direction'];direction=row['viewDirection']
+        assert row['fov']==90,(name,'six-direction FOV changed')
+        assert abs(row['projection'][0]-1)<1e-6 and abs(row['projection'][5]-1)<1e-6,(name,'90-degree square projection')
         assert sum(a*b for a,b in zip(direction,axes[name]))>1-1e-6,(name,direction)
         im=Image.open(root/f'environment47-{name}.png').convert('RGB');assert im.size==(256,256)
         extrema=im.getextrema();assert min(lo for lo,hi in extrema)>=5,(name,'uncovered/black pixels',extrema)
