@@ -1,0 +1,7 @@
+Round43 first camera draft source6c07e791bcea7efbab1ea14ec190061c5df2479f, no model changes.
+Web39190260732 job117861297615 failed before rendering at diagnostic_review.py fit_workshop43.
+2026-10-19T02:32:11.1618217Z assert cam.data.lens>=22 and padding bounds
+2026-10-19T02:32:11.1619943Z AssertionError: [0.4309369921684265,0.9405940771102905,0.1537487655878067,0.6070979237556458]
+The selected fitting set mistakenly included the long connecting street and guide lamp far to the right, forcing an over-wide lens below22mm. No valid baseline image was produced by this draft.
+Correction: fit actual shed/props only; connecting street and guide lamp remain rendered, never hide any scene object or relax lens/padding checks. Wait for all first jobs to complete before pushing camera-only correction.
+Second camera-only source d985448025bedd249fa890eb88f0caffb7a12fec also failed the22mm floor at Web39190533397/job117862121281, timestamp2026-10-19T02:34:56.4956522Z, bounds[.215879,.756068,.144157,.940594]. The first oblique was still too close for full-height shed framing. No valid baseline captures exist for either rejected draft. Move camera back to(-4.6,63,3.3), target(-4.6,73.2,1.8), preserving all geometry and checks. The successful manifest records actual fitted lens/bounds.
