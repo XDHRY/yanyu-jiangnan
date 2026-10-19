@@ -1,0 +1,10 @@
+{
+  "schema":"yanyu-jiangnan.workshop-rack44.v1",
+  "baseline":"bdf8ba29e30f5ae3544e8348ac04f399b409ddcf",
+  "source":"jiangnan.py::workshop_rack44/town_phase11_west_oar_workshop",
+  "units":"metres",
+  "changes":{"shared_existing_legs":8,"leg_meshes_before":8,"leg_meshes_after":2,"changed_rack_bars":2,"new_seat_and_backer_objects":8,"new_shared_seat_meshes":4,"new_materials":0,"new_images":0},
+  "construction":{"rails":"width4.40, centreY74.53; both ends lap rear columns","blade_seats":"0.52x0.38x0.05; top follows minimum rotated blade corner","backers":"0.10x0.14, overlap horizontal seat and lower rail","fastening":"static timber bearing; dynamic restraint and load calculation pending"},
+  "material":{"source":"existing project JN_温润木作/wood.png; no external asset","mapping":"centred metre Object BOX, multiplier1.1/1.1/0.30 unchanged; leg siblings share local phase, old absolute phase intentionally not preserved","normal":"existing geometry normals and Blender image bump; no PBR bake added","license":"existing project-authored asset provenance unchanged"},
+  "pending":["actual CI/Smoke/Spatial/Web","independent GLB support and buffer measurement","human Function/Form/Runtime","generic Form evidence","full UV/PBR/LOD/collision","structural load and oar restraint"]
+}

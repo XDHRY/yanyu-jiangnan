@@ -766,6 +766,39 @@ assert all(abs(a-b)<1e-5 for a,b in zip(rope43['JN_web_base_color_factor'],(.38,
 assert [n.type for n in rope43.node_tree.nodes]==[n.type for n in donor43.node_tree.nodes]
 assert [(l.from_node.name,l.from_socket.name,l.to_node.name,l.to_socket.name) for l in rope43.node_tree.links]==[(l.from_node.name,l.from_socket.name,l.to_node.name,l.to_socket.name) for l in donor43.node_tree.links]
 report['workshop_support43']={'contacts':contacts43,'ray_count':31,'flat_jar_foot_radius_m':.085,'changed_existing_objects':17,'new_objects':0,'new_source_triangles':0,'new_images':0,'new_materials':1,'local_rope_material_users':users43,'rope_donor':'JN_米行麻绳','mallet_joint_overlap_m':joint43,'shared_oars_unchanged':4,'hanging_oar_fasteners':'pending','load_certification':'not validated','human_approval':'pending'}
+# Round44: shared centred legs keep world bounds, scale and previous contacts.
+report['workshop_support43']['contacts']=list(contacts43)
+for family,size in [('长案腿',(.13,.13,.54)),('修桨马凳腿',(.12,.12,.35))]:
+    legs=[o for o in S.objects if o.name.startswith(prefix43+family)]
+    assert len(legs)==4 and len({o.data.as_pointer() for o in legs})==1
+    assert all(tuple(o.scale)==(1,1,1) for o in legs)
+    for o in legs:
+        b=bounds43(o)
+        assert all(abs((b[1][i]-b[0][i])-size[i])<.0001 for i in range(3))
+        assert all(abs(sum(v.co[i] for v in o.data.vertices))<.0001 for i in range(3))
+rack44=[]
+for i,oar in enumerate(sorted(shared_oars,key=lambda o:o.name),1):
+    seat=ob43('承桨托座'+str(i%2)+('.001' if i>2 else ''))
+    back=ob43('承桨托背'+str(i%2)+('.001' if i>2 else ''))
+    # Ray goes through the actual lowest corner, not its bounding-box centre.
+    ev=oar.evaluated_get(dg43);data=ev.to_mesh()
+    try:pts=[ev.matrix_world@v.co for v in data.vertices]
+    finally:ev.to_mesh_clear()
+    p=min(pts,key=lambda p:p.z)
+    support43('oar blade '+str(i),oar,seat,xy=[p.x,p.y])
+    sb=bounds43(seat);bb=bounds43(back);rb=bounds43(ob43('桨架下枋'))
+    seat_overlap=[min(sb[1][j],bb[1][j])-max(sb[0][j],bb[0][j]) for j in range(3)]
+    rail_overlap=[min(rb[1][j],bb[1][j])-max(rb[0][j],bb[0][j]) for j in range(3)]
+    assert min(seat_overlap)>.009 and min(rail_overlap)>.009
+    rack44.append({'oar':oar.name,'seat':seat.name,'backer':back.name,'blade_contact_z':p.z,'seat_backer_overlap_m':seat_overlap,'backer_rail_overlap_m':rail_overlap})
+for label in ('桨架下枋','桨架上枋'):
+    rb=bounds43(ob43(label))
+    for post in [o for o in oar_cols if abs(pos(o).y-74.60)<.01]:
+        pb=bounds43(post)
+        assert min(min(rb[1][j],pb[1][j])-max(rb[0][j],pb[0][j]) for j in range(3))>.04
+for label in ('承桨托座1','承桨托座0','承桨托背1','承桨托背0'):
+    assert ob43(label).data==ob43(label+'.001').data
+report['workshop_rack44']={'leg_objects':8,'leg_meshes':2,'new_seat_objects':8,'new_seat_meshes':4,'oar_seats':rack44,'rail_post_joints':4,'source_images_added':0,'materials_added':0,'wood_scale':(1.1,1.1,.30),'texture_phase':'shared local phase; metre frequency preserved','load_certification':'pending','human_approval':'pending'}
 # North umbrella lane: verify the fifth bridge closes a walkable two-bank loop,
 # and the mixed-use house has grounded structure, a real shop opening and a
 # second real opening to an inhabited rear room.
