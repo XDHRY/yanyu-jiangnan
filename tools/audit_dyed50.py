@@ -45,9 +45,15 @@ def audit(before,after):
     added=set(n)-set(n0);assert added and all(x.startswith('JN_染纸支撑50_纸夹_') for x in added),added
     assert not(set(n0)-set(n))
     retained=0;uv_count=0;uv_max=0.;changed=[]
+    def node_semantics(doc,node):
+        # Added nodes legitimately renumber glTF IDs: compare relationships
+        # by stable child name, while retaining every transform and extra.
+        out={k:v for k,v in node.items() if k not in ('mesh','children')}
+        if 'children' in node:out['children']=[doc['nodes'][i]['name'] for i in node['children']]
+        return out
     for name,node0 in n0.items():
         node=n[name]
-        assert {k:v for k,v in node0.items() if k!='mesh'}=={k:v for k,v in node.items() if k!='mesh'},name
+        assert node_semantics(g0,node0)==node_semantics(g,node),name
         if 'mesh' not in node:continue
         if target(name):changed.append(name);continue
         ps0=g0['meshes'][node0['mesh']]['primitives'];ps=g['meshes'][node['mesh']]['primitives'];assert len(ps0)==len(ps)
