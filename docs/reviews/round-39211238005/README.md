@@ -9,3 +9,19 @@ Actual Web metrics: {"instance_triangles": 625055, "glb_bytes": 53019336, "attri
 Open Jiangnan.blend to edit, or jiangnan-town-standalone.html locally to review Web. No production deployment or human Function/Form/Runtime approval. Generic Form still fails old evidence/schema requirements. Full PBR/UV/LOD/collision, physical mobile, night dark detail and load/dynamic restraint remain pending.
 
 Next: inspect latest main/PR/Actions, choose a different connected public/life node. Preserve all existing town, budgets and 14 core+2 focus cameras; no 36-view formal render.
+
+## 实际图集 / Actual renders
+
+左列旧Round44、右列本轮Round45；上排Blender、下排实际网页。相机保持，优化不改变外观。
+
+![Round45 before after](round45-before-after.jpg)
+
+本轮Spatial39211238005的16张实际Blender诊断图：
+
+![Round45 sixteen views](round45-contact-sheet.jpg)
+
+实际Web39211237965四捕获（桌面/竖屏15与16）：
+
+![Round45 runtime](round45-runtime.jpg)
+
+[完整终版交接](https://github.com/XDHRY/yanyu-jiangnan/blob/main/docs/iterations/20261019-workshop-streams.md)；独立审阅ZIP已在本对话交付，含16张原图与可编辑模型。这里的拼图全部来自实际构建，没有概念图。
