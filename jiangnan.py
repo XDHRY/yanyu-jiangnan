@@ -2016,6 +2016,55 @@ def workshop_layout43():
             'upper_board_z':.475,'planer_z':1.045,'mallet_z':1.055,
             'oil_z':.98+.22*cos(pi/6),'rope_z':.30+.018*cos(pi/6)}
 
+def waiting46_layout():
+    """Metre contract: connected widened apron, two 0.10m risers, small rack."""
+    return {
+        'lane_outline':[(-4.70,70.70),(3.50,70.70),(3.50,72.54),(-1.40,72.54),(-1.40,72.00),(-4.70,72.00)],
+        'step':((.10,71.08,.17),(2.10,.42,.10)),
+        'legs':[(x,y,.52) for x in (1.55,1.87) for y in (69.12,69.68)],
+        'rails':[(x,69.40,.72) for x in (1.55,1.87)],
+        'slats':[(1.71,y,.80) for y in (69.22,69.58)],
+        'leg_size':(.08,.08,.40),'rail_size':(.08,.72,.08),'slat_size':(.50,.32,.08),
+    }
+
+def waiting_pavilion46():
+    """A real entrance and luggage destination, not decorative route clutter."""
+    import bmesh
+    spec=waiting46_layout();c=C['water'];wood=M['wood']
+    lane=bpy.data.objects['JN_北河修桨作坊_候船横巷']
+    ring=spec['lane_outline'];n=len(ring)
+    verts=[(x,y,z) for z in (0,.12) for x,y in ring]
+    faces=[tuple(reversed(range(n))),tuple(range(n,2*n))]
+    faces += [(i,(i+1)%n,(i+1)%n+n,i+n) for i in range(n)]
+    lane.data.clear_geometry();lane.data.from_pydata(verts,[],faces);lane.data.update()
+    lane['JN_route46']='continuous L apron; north bypass >=1.20m; west connection preserved'
+    created=[]
+    step=box('候船整备46_上台踏步',*spec['step'],M['stone'],c,.006);created.append(step)
+    for label,size,places in [('架足',spec['leg_size'],spec['legs']),('承枋',spec['rail_size'],spec['rails']),('搁板',spec['slat_size'],spec['slats'])]:
+        if label=='搁板':size=(size[1],size[0],size[2])
+        first=None
+        for i,place in enumerate(places):
+            if first is None:
+                obj=box('候船整备46_'+label+str(i),(0,0,0),size,wood,c,.004)
+                obj.modifiers[0].segments=1;first=obj
+            else:
+                obj=bpy.data.objects.new(PREFIX+'候船整备46_'+label+str(i),first.data);c.objects.link(obj)
+                mod=obj.modifiers.new('浅倒角','BEVEL');mod.width=.004;mod.segments=1
+            obj.location=place;obj['JN_shared_family46']=label;created.append(obj)
+            if label=='搁板':obj.rotation_euler.z=pi/2
+    for obj in created:
+        obj['JN_asset_family']='waiting-pavilion46';obj['JN_units']='metres'
+    # The old guide lamp stood inside the newly measured bypass. Move the
+    # existing pole, shade AND light together onto the south edge of the lane.
+    for tag in ('引路灯柱','引路纱灯','引路灯火'):
+        obj=bpy.data.objects['JN_北河修桨作坊_'+tag]
+        obj.location.x+=.30;obj.location.y-=.60
+        obj['JN_route46']='relocated together to free the north bypass; no added light'
+    # Repair winding only on this new closed family and the changed lane.
+    for data in {o.data for o in created+[lane]}:
+        bm=bmesh.new();bm.from_mesh(data);bmesh.ops.recalc_face_normals(bm,faces=list(bm.faces));bm.to_mesh(data);bm.free();data.update()
+    S['JN_waiting46_new_objects']=9;S['JN_waiting46_new_images']=0
+
 def workshop_rack44():
     """Two repeated static seats follow the lowest rotated blade corners."""
     rows=[]
@@ -3513,6 +3562,7 @@ def viewport():
     bpy.context.view_layer.update()
 def build(stage=None):
     start();courtyard();village_phase1_skeleton();town_phase2_market();town_phase3_east_wharf();town_phase4_east_residence();town_phase5_cloth_finish_yard();town_phase6_west_wine_court();town_phase7_north_granary();town_phase8_north_grain_wharf();town_phase9_north_silk_bend();town_phase10_silk_trade_finish();town_phase11_west_oar_workshop();town_phase12_north_umbrella_lane();town_phase13_north_paper_yard();town_phase14_east_bindery_shop();town_phase15_east_dyed_paper_court();town_phase16_west_dye_receiving_court();town_phase17_north_public_turning_quay();town_phase18_quay_boat_gear();town_phase19_quay_tea_porter()
+    waiting_pavilion46()
     refine_village_house03_study()
     refine_village_house05_rest()
     refine_village_house06_needlework()

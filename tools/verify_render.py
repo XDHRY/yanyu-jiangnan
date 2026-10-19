@@ -1488,7 +1488,59 @@ seat_objects44=[o for o in S.objects if o.name.startswith('JN_北河修桨作坊
 assert len(seat_objects44)==8
 tris44=sum(sum(len(p.vertices)-2 for p in o.data.polygons) for o in seat_objects44)
 assert tris44==96,'Round44 seat geometry changed'
-assert expanded_tris-tris37-tris40-184-tris44==166626,'pre-Round37 source triangle baseline changed'
+new46=[o for o in S.objects if o.get('JN_asset_family')=='waiting-pavilion46']
+tris46=sum(sum(len(p.vertices)-2 for p in o.data.polygons) for o in new46)
+assert len(new46)==9 and tris46==108
+lane46=bpy.data.objects['JN_北河修桨作坊_候船横巷']
+assert sum(len(p.vertices)-2 for p in lane46.data.polygons)==20
+floor46=bpy.data.objects['JN_北河丝行_候船亭台基']
+step46=bpy.data.objects['JN_候船整备46_上台踏步']
+lb46=bounds43(lane46);pb46=bounds43(floor46);sb46=bounds43(step46)
+assert abs(sb46[0][2]-lb46[1][2])<1e-5
+risers46=[sb46[1][2]-lb46[1][2],pb46[1][2]-sb46[1][2]]
+assert all(abs(r-.10)<1e-5 for r in risers46),risers46
+assert sb46[0][1]<pb46[1][1]-.05 and sb46[1][1]<lb46[1][1]-1.20
+legs46=[o for o in new46 if o.get('JN_shared_family46')=='架足']
+rails46=[o for o in new46 if o.get('JN_shared_family46')=='承枋']
+slats46=[o for o in new46 if o.get('JN_shared_family46')=='搁板']
+assert [len(legs46),len(rails46),len(slats46)]==[4,2,2]
+assert all(len({o.data.as_pointer() for o in family})==1 for family in [legs46,rails46,slats46])
+support_rays46=0
+def ray46(obj,xy,z):
+    global support_rays46
+    ev=obj.evaluated_get(dg43);inv=ev.matrix_world.inverted()
+    hit,p,_,_=ev.ray_cast(inv@Vector((*xy,z+.003)),(inv.to_3x3()@Vector((0,0,-1))).normalized(),distance=.006)
+    assert hit and abs((ev.matrix_world@p).z-z)<1e-5,(obj.name,xy,z)
+    support_rays46+=1
+ray46(lane46,(.10,71.15),.12)
+for leg in legs46:
+    lo,hi=bounds43(leg);assert abs(lo[2]-.32)<1e-5
+    xy=[(lo[i]+hi[i])/2 for i in (0,1)];ray46(floor46,xy,.32)
+    rail=min(rails46,key=lambda o:abs(o.location.x-leg.location.x))
+    assert bounds43(rail)[0][2]<hi[2] and bounds43(rail)[1][2]>hi[2]
+for slat in slats46:
+    assert abs(bounds43(slat)[0][2]-.76)<1e-5
+    for rail in rails46:ray46(rail,(rail.location.x,slat.location.y),.76)
+volume46={}
+import bmesh
+for data in {o.data for o in new46+[lane46]}:
+    bm=bmesh.new();bm.from_mesh(data)
+    assert all(len(e.link_faces)==2 for e in bm.edges),data.name
+    volume=bm.calc_volume(signed=True);bm.free();assert volume>0,data.name
+    volume46[data.name]=volume
+# Check a 1.20m-wide north route, including the relocated existing lamp, not
+# just empty plan rectangles. The public west street completes the east turn.
+route_obstacles46=[floor46,step46]+new46+[bpy.data.objects['JN_北河修桨作坊_'+t] for t in ('引路灯柱','引路纱灯')]
+for x in (.10,.70,1.30,1.90,2.50,3.10):
+    for y in (71.295,71.895,72.495):
+        ray46(lane46,(x,y),.12)
+for obj in route_obstacles46:
+    lo,hi=bounds43(obj)
+    assert not (hi[0]>-.50 and lo[0]<3.70 and hi[1]>71.295 and lo[1]<72.495 and hi[2]>.121),(obj.name,'north bypass obstruction')
+assert abs(bounds43(bpy.data.objects['JN_北河修桨作坊_引路灯柱'])[0][2]-.12)<.003
+report['waiting_pavilion46']={'new_visible_meshes':9,'source_triangles_added':116,'refined_existing_lane':True,'relocated_existing_lamp_parts':3,'shared_rack_families':3,'risers_m':risers46,'north_bypass_clear_m':lb46[1][1]-sb46[1][1],'support_and_route_rays':support_rays46,'source_closed_positive_volumes':volume46,'new_images_materials_lights':0,'human_approval':'pending','accessibility_ramp':'not implemented','structural_load':'not certified'}
+legacy_expanded_tris=expanded_tris-tris46-8
+assert legacy_expanded_tris-tris37-tris40-184-tris44==166626,'pre-Round37 source triangle baseline changed'
 assert tris37<=500 and new37,'public repair stop source budget exceeded'
 visible37=[o for o in new37 if not o.hide_render]
 assert len(visible37)==25,len(visible37)
@@ -1535,7 +1587,7 @@ mapping39=next(n for n in mat39.node_tree.nodes if n.type=='VECT_MATH' and n.ope
 assert all(abs(v-2.4)<1e-5 for v in mapping39.inputs[1].default_value)
 bump39=next(n for n in mat39.node_tree.nodes if n.type=='BUMP')
 assert abs(bump39.inputs['Distance'].default_value-.003)<1e-6
-assert expanded_tris-tris40-184-tris44==167094
+assert legacy_expanded_tris-tris40-184-tris44==167094
 report['quay_stone39']={'visible_users':23,'hidden_prototypes':2,'source_triangles':expanded_tris,'new_geometry':0,'new_materials':1,'new_images':0,'repeat_per_local_m':2.4,'nominal_repeat_m':1/2.4,'roughness':.88,'bump_distance_m':.003,'human_approval':'pending'}
 visible40=[o for o in new40 if not o.hide_render]
 assert len(new40)==17 and len(visible40)==13 and tris40==888,(len(new40),len(visible40),tris40)
