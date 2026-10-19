@@ -93,6 +93,9 @@ raw,topology_report=remove_coincident_triangles(raw)
 from web_shared_streams45 import share_workshop_streams
 raw,sharing_report=share_workshop_streams(raw)
 topology_report['scoped_stream_sharing45']=sharing_report
+from web_shared_streams48 import share_static_streams
+raw,sharing48=share_static_streams(raw)
+topology_report['static_stream_sharing48']=sharing48
 topology_report['source_commit']=os.environ.get('GITHUB_SHA')
 with open(os.path.join(WEB,'topology-audit.json'),'w',encoding='utf-8') as f:
     json.dump(topology_report,f,ensure_ascii=False,indent=2)
