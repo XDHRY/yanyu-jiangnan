@@ -1,0 +1,25 @@
+{
+  "schema": "yanyu-jiangnan.asset-manifest.v1",
+  "asset": "web-static-stream-sharing48",
+  "baseline_commit": "80f2fbd013885360a0c7a8a63ca07351262ced8e",
+  "source": "tools/web_shared_streams48.py",
+  "scope": "Lossless primitive accessor reuse after existing scoped Round45 sharing; no new buildings or mesh merging",
+  "units": "metres; unchanged",
+  "provenance": "Project-authored Python; reuses only exact existing repository-produced GLB bytes and metadata",
+  "new_bitmap_bytes": 0,
+  "new_materials": 0,
+  "paid_assets": 0,
+  "uv_normals_lod": "UV/normal/index bytes preserved, no tolerance or float rounding; LOD remains pending",
+  "validation": {
+    "local_python_tests": 74,
+    "local_node_tests": 10,
+    "isolated_baseline_artifact": 12180414509,
+    "isolated_attribute_references_repointed": 795,
+    "isolated_same_input_binary_bytes_saved": 1384364,
+    "isolated_same_input_glb_bytes_saved": 1493004,
+    "ci_and_current_render": "pending",
+    "generic_form": "Not approved: 5 existing missing-file/schema failures; human gates pending"
+  },
+  "limits": {"source_triangles": 170000, "web_triangles": 629155, "attribute_index_bytes": 30000000, "diagnostic_cameras": 16, "long_edge": 1024},
+  "limitations": "No draw-call, mesh-count, triangle, physical VRAM or FPS reduction claimed; unknown stream consumers fail closed. Inn repository untouched."
+}
