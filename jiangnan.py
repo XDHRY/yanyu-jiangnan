@@ -2016,6 +2016,15 @@ def workshop_layout43():
             'upper_board_z':.475,'planer_z':1.045,'mallet_z':1.055,
             'oil_z':.98+.22*cos(pi/6),'rope_z':.30+.018*cos(pi/6)}
 
+def workshop_rack44():
+    """Two repeated static seats follow the lowest rotated blade corners."""
+    rows=[]
+    for i,x in enumerate((-6.18,-5.15,-4.10,-3.08),1):
+        angle=-.065 if i%2 else .075
+        bottom=.98-.41*cos(angle)-.1968*abs(sin(angle))
+        rows.append((i,x,angle,bottom))
+    return rows
+
 def town_phase11_west_oar_workshop():
     """Add a grounded west-bank oar workshop and refine the silk-shop threshold."""
     c=C['water'];stone=M['stone'];wood=M['wood'];wetstone=M['darkstone']
@@ -2053,11 +2062,28 @@ def town_phase11_west_oar_workshop():
     # the centre arrival clear.  Every floor object physically lands on either
     # the platform or a visible support.
     box('北河修桨作坊_工作长案',(-5.55,73.52,.91),(2.28,.62,.14),wood,c,.014)
-    for x in (-6.40,-4.70):
-        for y in (73.30,73.74):box('北河修桨作坊_长案腿',(x,y,support43['table_leg'][0]),(.13,.13,support43['table_leg'][1]),wood,c,.005)
+    def outward44(obj):
+        import bmesh
+        bm=bmesh.new();bm.from_mesh(obj.data)
+        bmesh.ops.recalc_face_normals(bm,faces=list(bm.faces));bm.to_mesh(obj.data);bm.free();obj.data.update()
+        return obj
+    def shared44(label,centers,size,bev=0):
+        # Centred metre-scale coordinates; no scale transforms. Texture phase
+        # becomes common to siblings, not its physical frequency or orientation.
+        first=None
+        for center in centers:
+            if first is None:
+                obj=outward44(box('北河修桨作坊_'+label,(0,0,0),size,wood,c,bev));first=obj
+            else:
+                obj=bpy.data.objects.new(PREFIX+'北河修桨作坊_'+label,first.data);c.objects.link(obj)
+                for modifier in first.modifiers:
+                    m=obj.modifiers.new(modifier.name,modifier.type);m.width=modifier.width;m.segments=modifier.segments
+            obj.location=center;obj['JN_shared_family44']=label
+        return first
+    shared44('长案腿',[(x,y,support43['table_leg'][0]) for x in (-6.40,-4.70) for y in (73.30,73.74)],(.13,.13,support43['table_leg'][1]),.005)
     for x in (-5.82,-3.88):
         box('北河修桨作坊_修桨马凳横木',(x,72.36,.72),(.94,.16,.14),wood,c,.008)
-        for dx in (-.31,.31):box('北河修桨作坊_修桨马凳腿',(x+dx,72.36,support43['trestle_leg'][0]),(.12,.12,support43['trestle_leg'][1]),wood,c,.005)
+    shared44('修桨马凳腿',[(x+dx,72.36,support43['trestle_leg'][0]) for x in (-5.82,-3.88) for dx in (-.31,.31)],(.12,.12,support43['trestle_leg'][1]),.005)
     box('北河修桨作坊_待刨桨坯',(-4.85,72.36,support43['blank_z']),(3.20,.16,.11),wood,c,.012)
     box('北河修桨作坊_备用船板一',(-3.45,73.63,support43['lower_board_z']),(1.95,.34,.12),wood,c,.010)
     box('北河修桨作坊_备用船板二',(-3.50,73.63,support43['upper_board_z']),(1.72,.30,.11),wood,c,.010)
@@ -2072,13 +2098,31 @@ def town_phase11_west_oar_workshop():
     k=len(ov);ov.extend(((-.24,-.030,-.50),(-.24,-.030,-.12),(-.07,-.030,.10),(.07,-.030,.10),(.24,-.030,-.12),(.24,-.030,-.50),(-.24,.030,-.50),(-.24,.030,-.12),(-.07,.030,.10),(.07,.030,.10),(.24,.030,-.12),(.24,.030,-.50)))
     of.extend(tuple(k+i for i in f) for f in ((0,1,2,3,4,5),(11,10,9,8,7,6),(0,6,7,1),(1,7,8,2),(2,8,9,3),(3,9,10,4),(4,10,11,5),(5,11,6,0)))
     oar=mesh('北河修桨作坊_桨橹原型',ov,of,wood,c);oar.hide_render=True;oar.hide_viewport=True
-    box('北河修桨作坊_桨架下枋',(wx,74.34,.88),(4.05,.14,.14),wood,c,.006)
-    box('北河修桨作坊_桨架上枋',(wx,74.34,2.34),(4.05,.14,.14),wood,c,.006)
+    # Both ends overlap the rear posts; the old bars stopped short of them.
+    outward44(box('北河修桨作坊_桨架下枋',(wx,74.53,.88),(4.40,.14,.14),wood,c,.006))
+    outward44(box('北河修桨作坊_桨架上枋',(wx,74.53,2.34),(4.40,.14,.14),wood,c,.006))
     for i,x in enumerate((-6.18,-5.15,-4.10,-3.08),1):
         o=bpy.data.objects.new(PREFIX+f'北河修桨作坊_共享桨橹_{i}',oar.data);c.objects.link(o)
         # Lift the blades above the trestle silhouette and scale the full oars
         # back under the rear beam, so both blade and shaft read in the human view.
         o.location=(x,74.24,.98);o.scale=(.82,.82,.82);o.rotation_euler[1]=(-.065 if i%2 else .075)
+
+    # Two handed seat families: broad horizontal bearing beneath the blade,
+    # plus a visible vertical backer lapped into the lower crossbar. No claim
+    # of dynamic fastening or structural load certification.
+    for parity in (1,0):
+        rows=[r for r in workshop_rack44() if r[0]%2==parity]
+        bottom=rows[0][3]
+        seat=shared44('承桨托座'+str(parity),[(x,74.38,bottom-.025) for _,x,_,_ in rows],(.52,.38,.05))
+        # A flat shelf only touched the lowest blade corner. Slope its existing
+        # four top vertices to the actual rotated blade-bottom plane; keep the
+        # underside level, the same 8 vertices/6 faces and the shared family.
+        angle=rows[0][2]
+        for v in seat.data.vertices:
+            if v.co.z>0:
+                v.co.z=.98-.41/cos(angle)-sin(angle)/cos(angle)*v.co.x-(bottom-.025)
+        seat.data.update()
+        shared44('承桨托背'+str(parity),[(x,74.53,(bottom-.05+.95)/2) for _,x,_,_ in rows],(.10,.14,.95-(bottom-.05)))
 
     # Restrained tools and rope explain active maintenance without visual clutter.
     box('北河修桨作坊_木刨',(-5.80,73.47,support43['planer_z']),(.42,.18,.13),wetstone,c,.006)
