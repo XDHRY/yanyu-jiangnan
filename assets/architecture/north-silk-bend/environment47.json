@@ -1,0 +1,15 @@
+{
+  "schema":"yanyu-jiangnan.runtime-sky47.v1",
+  "baseline_main":"a90a811865b10af9d8c9cd09500f774bbe738fcc",
+  "status":"local tests passed; actual Chromium pixels and current CI pending",
+  "purpose":"cover uncovered Web sky directions with a restrained unlit world-direction gradient, preserving authored distant mountain cards and the full town",
+  "source":"web/viewer/sky47.mjs::createSkyPass47",
+  "colors_srgb":{"horizon":"#1e303a","zenith":"#172b42","nadir":"#152222"},
+  "mapping":"camera inverse projection and world rotation; perspective per-ray, orthographic parallel ray; continuous elevation blend, azimuth-invariant",
+  "scope":"not an equirectangular image, complete mountain panorama, weather, moon, environment lighting or Blender/Web lighting parity",
+  "provenance":{"generator":"repository-authored GLSL, no image generator or external asset","new_source_images":0,"license":"project source terms; no third-party image"},
+  "budget":{"new_glb_triangles":0,"new_source_objects":0,"new_source_materials":0,"new_textures":0,"runtime_extra_triangles":1,"runtime_position_buffer_bytes":36,"runtime_extra_shader_materials":1,"runtime_extra_draw_passes":1,"paid_credits":0,"scene_triangle_cap_unchanged":629155,"attribute_index_cap_unchanged":30000000},
+  "cameras":{"six_environment_only_runtime_qa":["front","right","rear","left","up","down"],"environment_qa_resolution":[256,256],"blender_views":16,"diagnostic_resolution":[1024,640],"all_16_presets_preserved":true,"formal36":false},
+  "verification":{"python":60,"node":10,"actual_pixel_test":"tools/verify_environment47.py; all six90-degree square projections checked after resize","same_camera_web_before":"Round46 Web39226769146 artifact12173809890 SHA256 77a9f1533b4b389bf0c93a6ea3c9345d91954445650b18baf6740128f6b7bb02","generic_form":"5 existing schema/evidence failures; not approved"},
+  "pending":["actual current CI/Smoke/Web build","actual six-direction sky pixels and loaded desktop/mobile captures","human Function/Form/Runtime","complete mountain panorama and Blender dark-area readability","UV determinism/PBR/LOD/collision/physical-device performance"]
+}
