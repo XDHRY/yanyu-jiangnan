@@ -3,12 +3,13 @@
   "baseline":"2b8f6f5aee5ab6231e1ac68490d843a7fab801fe",
   "source":"jiangnan.py::waiting46_layout/waiting_pavilion46",
   "units":"metres",
-  "status":"pending actual final Blender/Web build and render review",
+  "status":"verified CI/Smoke/16 Blender renders/Web and independent GLB audit; human production approval pending",
+  "evidence":{"source_commit":"1b4b69c418587c03ecb6df6ff5c624cfa3796b28","tested_commit":"c13fb90294e1fb0aeda2c59a05a6103e6b7e275c","merge_commit":"1dfe3a146c90c8062c98a07ecfbd8215da7cd071","ci":39226769137,"smoke":39226769301,"spatial":39226769245,"web":39226769146,"native_rays":27,"independent_glb_rays":29,"source_triangles":168378,"web_triangles":625571,"attribute_index_bytes":29876166,"glb_bytes":53066256,"images_rgba8_estimate_bytes":44554784,"spatial_seconds":307.74},
   "function":"north waiting-pavilion arrival, existing guide light out of bypass, small luggage support beside old bench",
   "changes":{"new_visible_objects":9,"new_shared_rack_mesh_families":3,"new_unique_meshes":4,"refined_existing_lane_meshes":1,"relocated_existing_lamp_parts":3,"source_triangles_delta":116,"new_images_materials_lights_buildings":0},
   "construction":{"step_m":[2.10,0.42,0.10],"step_top_m":0.22,"old_lane_top_m":0.12,"old_platform_top_m":0.32,"riser_sequence_m":[0.10,0.10],"north_apron_edge_y":72.54,"minimum_ray_tested_bypass_m":1.20,"added_apron_area_m2":2.646,"rack_outer_m":[0.50,0.72,0.52],"rack_top_m":0.84,"rack_legs":4,"rack_rails":2,"rack_slats":2,"rack_slat_gap_m":0.04,"lamp_translation_m":[0.30,-0.60,0]},
   "materials":{"source":"existing JN_stone / JN_wood; textures/stone.png and textures/wood.png, repository-authored prior provenance and license unchanged","mapping":"existing metre Object/BOX multiplier; top slats use local-Y long axis rotated90deg into world-X to carry the existing wood grain; no new UV/PBR bake","normal":"outward source winding on only4 new source Mesh and refined lane; existing material bump retained"},
   "camera":{"fixed_14_core":true,"focus15":"15_sampan_shell preserved","focus16":"16_waiting_pavilion; same fixed envelope before/after; no hidden props or rendered proxies","resolution":[1024,640],"formal36":false},
   "budget":{"source_triangles_max":170000,"glb_triangles_max":629155,"attribute_index_bytes_max":30000000,"new_image_bytes":0,"paid_credits":0},
-  "pending":["actual final build/export/render and independent GLB rays","human Function/Form/Runtime and generic Form evidence","accessibility ramp / load certification","full PBR/UV/LOD/collision/physical mobile","cross-build UV floating determinism"]
+  "pending":["Web south sky/background coverage and dark Blender readability","human Function/Form/Runtime and generic Form evidence","accessibility ramp / load certification","full PBR/UV/LOD/collision/physical mobile","cross-build UV floating determinism"]
 }
