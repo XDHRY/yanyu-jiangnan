@@ -1,0 +1,241 @@
+{
+  "source_commit": "fa9d45d277cb895ddd7fa7e73fac6f977849d8d7",
+  "environment": [
+    {
+      "direction": "front",
+      "viewDirection": [
+        0,
+        0,
+        -1
+      ],
+      "fov": 90,
+      "projection": [
+        1.0000000000000002,
+        0,
+        0,
+        0,
+        0,
+        1.0000000000000002,
+        0,
+        0,
+        0,
+        0,
+        -1.0002000200020003,
+        -1,
+        0,
+        0,
+        -0.20002000200020004,
+        0
+      ],
+      "sky47": {
+        "mode": "world-direction-gradient47",
+        "horizon": 1978426,
+        "zenith": 1518402,
+        "nadir": 1384994,
+        "triangles": 1,
+        "positionBytes": 36,
+        "images": 0,
+        "scope": "full-direction sky fallback, not a complete mountain panorama or Blender lighting",
+        "ready": true,
+        "frames": 136
+      }
+    },
+    {
+      "direction": "right",
+      "viewDirection": [
+        1,
+        0,
+        -2.220446049250313e-16
+      ],
+      "fov": 90,
+      "projection": [
+        1.0000000000000002,
+        0,
+        0,
+        0,
+        0,
+        1.0000000000000002,
+        0,
+        0,
+        0,
+        0,
+        -1.0002000200020003,
+        -1,
+        0,
+        0,
+        -0.20002000200020004,
+        0
+      ],
+      "sky47": {
+        "mode": "world-direction-gradient47",
+        "horizon": 1978426,
+        "zenith": 1518402,
+        "nadir": 1384994,
+        "triangles": 1,
+        "positionBytes": 36,
+        "images": 0,
+        "scope": "full-direction sky fallback, not a complete mountain panorama or Blender lighting",
+        "ready": true,
+        "frames": 165
+      }
+    },
+    {
+      "direction": "rear",
+      "viewDirection": [
+        0,
+        0,
+        1
+      ],
+      "fov": 90,
+      "projection": [
+        1.0000000000000002,
+        0,
+        0,
+        0,
+        0,
+        1.0000000000000002,
+        0,
+        0,
+        0,
+        0,
+        -1.0002000200020003,
+        -1,
+        0,
+        0,
+        -0.20002000200020004,
+        0
+      ],
+      "sky47": {
+        "mode": "world-direction-gradient47",
+        "horizon": 1978426,
+        "zenith": 1518402,
+        "nadir": 1384994,
+        "triangles": 1,
+        "positionBytes": 36,
+        "images": 0,
+        "scope": "full-direction sky fallback, not a complete mountain panorama or Blender lighting",
+        "ready": true,
+        "frames": 171
+      }
+    },
+    {
+      "direction": "left",
+      "viewDirection": [
+        -1,
+        0,
+        -2.220446049250313e-16
+      ],
+      "fov": 90,
+      "projection": [
+        1.0000000000000002,
+        0,
+        0,
+        0,
+        0,
+        1.0000000000000002,
+        0,
+        0,
+        0,
+        0,
+        -1.0002000200020003,
+        -1,
+        0,
+        0,
+        -0.20002000200020004,
+        0
+      ],
+      "sky47": {
+        "mode": "world-direction-gradient47",
+        "horizon": 1978426,
+        "zenith": 1518402,
+        "nadir": 1384994,
+        "triangles": 1,
+        "positionBytes": 36,
+        "images": 0,
+        "scope": "full-direction sky fallback, not a complete mountain panorama or Blender lighting",
+        "ready": true,
+        "frames": 177
+      }
+    },
+    {
+      "direction": "up",
+      "viewDirection": [
+        0,
+        1,
+        -2.220446049250313e-16
+      ],
+      "fov": 90,
+      "projection": [
+        1.0000000000000002,
+        0,
+        0,
+        0,
+        0,
+        1.0000000000000002,
+        0,
+        0,
+        0,
+        0,
+        -1.0002000200020003,
+        -1,
+        0,
+        0,
+        -0.20002000200020004,
+        0
+      ],
+      "sky47": {
+        "mode": "world-direction-gradient47",
+        "horizon": 1978426,
+        "zenith": 1518402,
+        "nadir": 1384994,
+        "triangles": 1,
+        "positionBytes": 36,
+        "images": 0,
+        "scope": "full-direction sky fallback, not a complete mountain panorama or Blender lighting",
+        "ready": true,
+        "frames": 183
+      }
+    },
+    {
+      "direction": "down",
+      "viewDirection": [
+        0,
+        -1,
+        -2.220446049250313e-16
+      ],
+      "fov": 90,
+      "projection": [
+        1.0000000000000002,
+        0,
+        0,
+        0,
+        0,
+        1.0000000000000002,
+        0,
+        0,
+        0,
+        0,
+        -1.0002000200020003,
+        -1,
+        0,
+        0,
+        -0.20002000200020004,
+        0
+      ],
+      "sky47": {
+        "mode": "world-direction-gradient47",
+        "horizon": 1978426,
+        "zenith": 1518402,
+        "nadir": 1384994,
+        "triangles": 1,
+        "positionBytes": 36,
+        "images": 0,
+        "scope": "full-direction sky fallback, not a complete mountain panorama or Blender lighting",
+        "ready": true,
+        "frames": 189
+      }
+    }
+  ],
+  "page_errors": [],
+  "scope": "runtime-only unlit sky fallback, not a complete panoramic mountain environment; six256px QA views, not extra Blender cameras"
+}

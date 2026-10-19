@@ -1,0 +1,149 @@
+{
+  "source_commit": "fa9d45d277cb895ddd7fa7e73fac6f977849d8d7",
+  "passed": true,
+  "actual_pixel_count": 393216,
+  "views": [
+    {
+      "direction": "front",
+      "center_rgb": [
+        30,
+        48,
+        58
+      ],
+      "range_rgb": [
+        [
+          21,
+          30
+        ],
+        [
+          34,
+          48
+        ],
+        [
+          34,
+          66
+        ]
+      ],
+      "pixels": 65536
+    },
+    {
+      "direction": "right",
+      "center_rgb": [
+        30,
+        48,
+        58
+      ],
+      "range_rgb": [
+        [
+          21,
+          30
+        ],
+        [
+          34,
+          48
+        ],
+        [
+          34,
+          66
+        ]
+      ],
+      "pixels": 65536
+    },
+    {
+      "direction": "rear",
+      "center_rgb": [
+        30,
+        48,
+        58
+      ],
+      "range_rgb": [
+        [
+          21,
+          30
+        ],
+        [
+          34,
+          48
+        ],
+        [
+          34,
+          66
+        ]
+      ],
+      "pixels": 65536
+    },
+    {
+      "direction": "left",
+      "center_rgb": [
+        30,
+        48,
+        58
+      ],
+      "range_rgb": [
+        [
+          21,
+          30
+        ],
+        [
+          34,
+          48
+        ],
+        [
+          34,
+          66
+        ]
+      ],
+      "pixels": 65536
+    },
+    {
+      "direction": "up",
+      "center_rgb": [
+        23,
+        43,
+        66
+      ],
+      "range_rgb": [
+        [
+          23,
+          24
+        ],
+        [
+          43,
+          43
+        ],
+        [
+          65,
+          66
+        ]
+      ],
+      "pixels": 65536
+    },
+    {
+      "direction": "down",
+      "center_rgb": [
+        21,
+        34,
+        34
+      ],
+      "range_rgb": [
+        [
+          21,
+          21
+        ],
+        [
+          34,
+          34
+        ],
+        [
+          34,
+          34
+        ]
+      ],
+      "pixels": 65536
+    }
+  ],
+  "runtime_extra_triangles": 1,
+  "runtime_extra_position_bytes": 36,
+  "new_image_bytes": 0,
+  "note": "GLB geometry budget is separate; runtime adds one draw pass/material. No HDRI, moon, weather, lighting equivalence, complete mountain panorama or physical-device FPS claim."
+}

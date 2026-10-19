@@ -1,0 +1,120 @@
+{
+  "round": 47,
+  "base_main": "a90a811865b10af9d8c9cd09500f774bbe738fcc",
+  "source_commit": "141027e6bad40a6a81c696d8a3c13e44117bb9bc",
+  "tested_commit": "fa9d45d277cb895ddd7fa7e73fac6f977849d8d7",
+  "tested_tree": "40ff16d28dfd24c817b128717afab387ba12cda4",
+  "pr": 53,
+  "ci_run": 39240031866,
+  "smoke_run": 39240031816,
+  "web_run": 39240031825,
+  "before_round": 46,
+  "before_web_run": 39226769146,
+  "before_artifact": {
+    "id": 12173809890,
+    "name": "Jiangnan-Web-Viewer-c13fb90294e1fb0aeda2c59a05a6103e6b7e275c",
+    "size_in_bytes": 119887894,
+    "url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12173809890",
+    "archive_download_url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12173809890/zip",
+    "expired": false,
+    "created_at": "2026-10-19T09:08:48Z",
+    "expires_at": "2026-11-18T09:08:46Z",
+    "updated_at": "2026-10-19T09:08:48Z",
+    "digest": "sha256:77a9f1533b4b389bf0c93a6ea3c9345d91954445650b18baf6740128f6b7bb02",
+    "workflow_run": {
+      "id": 39226769146,
+      "repository_id": 1374819141,
+      "head_repository_id": 1374819141,
+      "head_branch": "codex/round46-waiting-pavilion",
+      "head_sha": "1b4b69c418587c03ecb6df6ff5c624cfa3796b28"
+    }
+  },
+  "scope": "Runtime sky fallback only;16 Blender camera/model preserved,1 runtime-only triangle/36 position bytes/1 shader material/1 draw pass; no new image",
+  "generic_form": "5 existing evidence/schema failures; human approval pending",
+  "first_candidate": {
+    "source": "dad5ceee07c1ab40b8659c07146e984509c2d32a",
+    "tested": "25c27da0490096ceb6a51abfb677203b063308af",
+    "ci_run": 39238650252,
+    "smoke_run": 39238650636,
+    "web_run": 39238650401,
+    "artifact": {
+      "id": 12181395073,
+      "name": "Jiangnan-Web-Viewer-25c27da0490096ceb6a51abfb677203b063308af",
+      "size_in_bytes": 120145076,
+      "url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12181395073",
+      "archive_download_url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12181395073/zip",
+      "expired": false,
+      "created_at": "2026-10-19T10:45:33Z",
+      "expires_at": "2026-11-18T10:45:32Z",
+      "updated_at": "2026-10-19T10:45:33Z",
+      "digest": "sha256:06e5a5c8f2359f9dd0cc4ac4a5ec469dc7a2bb6d3b2bd1885c221c14880fc81d",
+      "workflow_run": {
+        "id": 39238650401,
+        "repository_id": 1374819141,
+        "head_repository_id": 1374819141,
+        "head_branch": "codex/round47-web-sky-coverage",
+        "head_sha": "dad5ceee07c1ab40b8659c07146e984509c2d32a"
+      }
+    },
+    "status": "all workflows passed; manual review identified unguarded environment resize projection; six FOVs not recorded so first-camera52-degree inference not claimed as captured fact",
+    "local_reproduction": "not run: local Playwright Chromium binary missing; no download or alternate browser attempted"
+  },
+  "web_dir": "web47-12180414509",
+  "viewer_dir": "viewer47-final",
+  "smoke_dir": "smoke47-12180244196",
+  "web_artifact": {
+    "id": 12180414509,
+    "name": "Jiangnan-Web-Viewer-fa9d45d277cb895ddd7fa7e73fac6f977849d8d7",
+    "size_in_bytes": 120140687,
+    "url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12180414509",
+    "archive_download_url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12180414509/zip",
+    "expired": false,
+    "created_at": "2026-10-19T10:53:33Z",
+    "expires_at": "2026-11-18T10:53:31Z",
+    "updated_at": "2026-10-19T10:53:33Z",
+    "digest": "sha256:2b8815fcafa06923f74415a5abbc162c527ad6cdbb5b3bc34d5a66b890652fc8",
+    "workflow_run": {
+      "id": 39240031825,
+      "repository_id": 1374819141,
+      "head_repository_id": 1374819141,
+      "head_branch": "codex/round47-web-sky-coverage",
+      "head_sha": "141027e6bad40a6a81c696d8a3c13e44117bb9bc"
+    }
+  },
+  "smoke_artifact": {
+    "id": 12180244196,
+    "name": "Jiangnan-Blender-4.5-fa9d45d277cb895ddd7fa7e73fac6f977849d8d7",
+    "size_in_bytes": 23686740,
+    "url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12180244196",
+    "archive_download_url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12180244196/zip",
+    "expired": false,
+    "created_at": "2026-10-19T10:50:22Z",
+    "expires_at": "2026-10-26T10:50:20Z",
+    "updated_at": "2026-10-19T10:50:22Z",
+    "digest": "sha256:d1129c023141b5809c3bcdd8be483c2aff1521d028cda5da021eafd296bc86ee",
+    "workflow_run": {
+      "id": 39240031816,
+      "repository_id": 1374819141,
+      "head_repository_id": 1374819141,
+      "head_branch": "codex/round47-web-sky-coverage",
+      "head_sha": "141027e6bad40a6a81c696d8a3c13e44117bb9bc"
+    }
+  },
+  "final_render_seconds": 152.87,
+  "first_render_seconds": 309.02,
+  "before_render_seconds": 305.66,
+  "budget": {
+    "instance_triangles": 625571,
+    "glb_bytes": 53060668,
+    "attribute_index_bytes": 29870982,
+    "images": 9,
+    "rgba8_bytes": 44554784
+  },
+  "buffer_variation": "existing exact stream sharing matches vary with cross-build UV floats;5184 fewer current attribute bytes is NOT a new optimization or guaranteed reclaimed budget",
+  "local_tests": {
+    "python": 60,
+    "node": 10
+  },
+  "sky_pixels": 393216,
+  "merge_commit": "ec761d06c036793cc201bc3febbee55ef02d596a"
+}

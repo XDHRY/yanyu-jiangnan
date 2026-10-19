@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/workspace/scratch/34fac7373e27/yanyu-round47/tools/verify_environment47.py", line 30, in <module>
+    if __name__=='__main__':print(json.dumps(verify(sys.argv[1]),ensure_ascii=False))
+                                             ^^^^^^^^^^^^^^^^^^^
+  File "/workspace/scratch/34fac7373e27/yanyu-round47/tools/verify_environment47.py", line 14, in verify
+    assert row['fov']==90,(name,'six-direction FOV changed')
+           ~~~^^^^^^^
+KeyError: 'fov'
