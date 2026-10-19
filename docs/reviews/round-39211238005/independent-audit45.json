@@ -1,0 +1,25 @@
+{
+  "old_sha256": "c8552ff3a200b29647d34ae95a2f88e43bdb96c383c1f72a2ac492e03d727432",
+  "new_sha256": "3deb283d063e1079510375673d1126e76f0422815de3581f7554305551ec4fc5",
+  "geometry_nodes": 3113,
+  "all_node_transforms_meshes_materials_cameras_preserved": true,
+  "images_sha256": [
+    "b282898c00f165b319f0735c922c986094c9da0b3032e31d572cc0f76376a8f7",
+    "0bb841af72023c00b7596e321911ec69138eeb290f3858dd25b959b95d1be44c",
+    "bccb86173de1490e94be40b3d0413f88cbb93421cd6585908569945b2bc7ea35",
+    "f7a9c359ad93f73ab931865f2d334673765fa0fd762a7411fb0afe179f3436ca",
+    "6b2a895dfd5f068afc37d49a7d9207daa63ed8d3739c343825c81efb990aaae8",
+    "1c8eaa7e714849df80ec86caf90b6bb44d2a2e6b99c074f17ddab1aa1d84ef2a",
+    "9af4280e7ae2acead58186c448192c951d8e62412906d33231f7a7df742a3ed9",
+    "04357eb3759690c613f3a5550054e242d7d39e2c8db69b3272756df157ec6253",
+    "6ec4835a5f829e9a928eb4558afe54f531a403223ddf68a344f4c071dfbe494e"
+  ],
+  "compared_attribute_streams": 6735,
+  "indices_all_bit_identical": true,
+  "instance_triangles": 625055,
+  "old_attribute_index_bytes": 29873670,
+  "new_attribute_index_bytes": 29838246,
+  "uv_different_streams": 735,
+  "uv_max_absolute_drift": 6.103515625e-05,
+  "uv_cross_build_determinism": "pending"
+}
