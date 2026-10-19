@@ -18,6 +18,7 @@ on:
       - 'tools/camera_contract.py'
       - 'tools/verify_web_cameras.py'
       - 'tools/capture_viewer_audit.cjs'
+      - 'tools/verify_environment47.py'
       - 'tests/**'
       - 'web/viewer/**'
       - '.github/workflows/web-viewer.yml'
@@ -121,6 +122,7 @@ jobs:
         run: |
           npx playwright install --with-deps chromium
           node tools/capture_viewer_audit.cjs "${RUNNER_TEMP}/package" "${RUNNER_TEMP}/runtime-audit"
+          python tools/verify_environment47.py "${RUNNER_TEMP}/runtime-audit"
       - name: Publish viewer artifact
         if: always()
         uses: actions/upload-artifact@v4

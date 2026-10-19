@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { projectionForPreset } from './camera_projection.mjs';
+import { createSkyPass47, DIRECTIONS47 } from './sky47.mjs';
 
 const $ = (s)=>document.querySelector(s);
 const renderer = new THREE.WebGLRenderer({antialias:true, powerPreference:'high-performance'});
@@ -14,7 +15,9 @@ renderer.shadowMap.enabled = false;
 $('#viewport').appendChild(renderer.domElement);
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x0f1717);
+// Draw a sky fallback before the untouched town; never put a sky dome in GLB.
+scene.background = null;
+const sky47=createSkyPass47(THREE);renderer.autoClear=false;
 scene.fog = new THREE.FogExp2(0x152222, 0.0045);
 let camera = new THREE.PerspectiveCamera(52, innerWidth/innerHeight, 0.03, 1000);
 let projectionRef=null, transitionId=0, activePreset=null, presetPoseLocked=false;
@@ -144,12 +147,24 @@ function applyProjection(){
  else if(camera.isPerspectiveCamera){camera.aspect=innerWidth/innerHeight;camera.fov=52;}
  camera.updateProjectionMatrix();
 }
-function render(t){requestAnimationFrame(render);const dt=Math.min(.05,(t-state.last)/1000);state.last=t;if(controls.enabled&&state.mode==='orbit'&&!presetPoseLocked)controls.update();flyStep(dt);renderer.render(scene,camera);} requestAnimationFrame(render);
+function render(t){requestAnimationFrame(render);const dt=Math.min(.05,(t-state.last)/1000);state.last=t;if(controls.enabled&&state.mode==='orbit'&&!presetPoseLocked)controls.update();flyStep(dt);renderer.clear();sky47.render(renderer,camera);renderer.render(scene,camera);} requestAnimationFrame(render);
 addEventListener('resize',()=>{applyProjection();renderer.setSize(innerWidth,innerHeight)});
 // Reproducible local/CI review hook, not an approval or a production telemetry endpoint.
-window.JIANGNAN_REVIEW={goPreset:(i)=>goPreset(i,false),snapshot:()=>{
+let environmentState47=null;
+window.JIANGNAN_REVIEW={goPreset:(i)=>goPreset(i,false),
+ environment47:(name)=>{
+  if(!state.root||!DIRECTIONS47[name])throw Error('unknown environment direction');
+  if(!environmentState47)environmentState47={camera,enabled:controls.enabled,visible:state.root.visible,grid:grid.visible,axes:axes.visible};
+  controls.enabled=false;state.root.visible=false;grid.visible=false;axes.visible=false;
+  camera=new THREE.PerspectiveCamera(90,innerWidth/innerHeight,0.1,1000);
+  if(name==='up'||name==='down')camera.up.set(0,0,-1);
+  camera.lookAt(new THREE.Vector3(...DIRECTIONS47[name]));camera.updateMatrixWorld();
+  return sky47.snapshot().frames;
+ },
+ restoreEnvironment47:()=>{if(environmentState47){camera=environmentState47.camera;controls.object=camera;controls.enabled=environmentState47.enabled;state.root.visible=environmentState47.visible;grid.visible=environmentState47.grid;axes.visible=environmentState47.axes;environmentState47=null;applyProjection();}},
+ snapshot:()=>{
  const p=state.presets.find(c=>c.name===activePreset),wp=new THREE.Vector3(),wq=new THREE.Quaternion();if(p){p.getWorldPosition(wp);p.getWorldQuaternion(wq).normalize();}
- return {ready:!!state.root,presets:state.presets.map(c=>({name:c.name,type:c.type})),activePreset,cameraType:camera.type,position:camera.position.toArray(),quaternion:camera.quaternion.toArray(),poseError:p?camera.position.distanceTo(wp):null,rotationError:p?camera.quaternion.angleTo(wq):null,projection:camera.projectionMatrix.toArray(),frame:renderer.info.render.frame,triangles:renderer.info.render.triangles,fov:camera.fov,reference:projectionRef};
+ return {ready:!!state.root,sky47:sky47.snapshot(),viewDirection:camera.getWorldDirection(new THREE.Vector3()).toArray(),presets:state.presets.map(c=>({name:c.name,type:c.type})),activePreset,cameraType:camera.type,position:camera.position.toArray(),quaternion:camera.quaternion.toArray(),poseError:p?camera.position.distanceTo(wp):null,rotationError:p?camera.quaternion.angleTo(wq):null,projection:camera.projectionMatrix.toArray(),frame:renderer.info.render.frame,triangles:renderer.info.render.triangles,fov:camera.fov,reference:projectionRef};
 }};
 
 async function setupDiagnostics(){ let diag=window.JIANGNAN_DIAGNOSTICS||[]; if(!diag.length){ try{ const m=await fetch('./diagnostics/manifest.json').then(r=>r.json()); diag=m.views.map(v=>({title:v.file.replace('.png','')+' · '+(v.question||''),src:'./diagnostics/'+v.file})); }catch(e){} } if(diag.length){ $('#diagBtn').hidden=false; $('#diagBtn').onclick=()=>{const d=$('#diag');d.open?d.close():d.showModal();}; const g=$('#diagGrid'); g.innerHTML=''; diag.forEach(x=>{const a=document.createElement('button');a.innerHTML=`<img src="${x.src}"><span>${x.title}</span>`;a.onclick=()=>{ $('#diagLarge').src=x.src; $('#diagCaption').textContent=x.title; };g.appendChild(a);}); }}

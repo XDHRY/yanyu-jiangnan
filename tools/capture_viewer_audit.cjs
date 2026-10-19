@@ -9,7 +9,7 @@ async function main(){
  await new Promise(r=>server.listen(0,'127.0.0.1',r));let browser;
  try{
   browser=await chromium.launch({headless:true,args:['--use-angle=swiftshader','--enable-unsafe-swiftshader','--no-sandbox']});
-  const page=await browser.newPage({viewport:{width:1024,height:640},deviceScaleFactor:1});const errors=[];page.on('pageerror',e=>errors.push(String(e)));
+  const page=await browser.newPage({viewport:{width:1024,height:640},deviceScaleFactor:1});const errors=[];page.on('pageerror',e=>errors.push(String(e)));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
   await page.goto('http://127.0.0.1:'+server.address().port+'/',{waitUntil:'domcontentloaded'});
   await page.waitForFunction(()=>window.JIANGNAN_REVIEW?.snapshot().ready&&window.JIANGNAN_REVIEW.snapshot().triangles>0,null,{timeout:180000});
   // Model readiness precedes the loading overlay's CSS fade. Never capture
@@ -27,6 +27,21 @@ async function main(){
   }
   await page.locator('#fly').evaluate(b=>b.click());if((await page.evaluate(()=>window.JIANGNAN_REVIEW.snapshot())).cameraType!=='PerspectiveCamera')throw Error('fly must be perspective');
   await page.locator('#fit').evaluate(b=>b.click());if((await page.evaluate(()=>window.JIANGNAN_REVIEW.snapshot())).activePreset!==null)throw Error('fit must reset preset');
+  // Six tiny runtime-only sky checks do not add or replace a Blender camera.
+  const environment=[];await page.setViewportSize({width:256,height:256});
+  for(const direction of ['front','right','rear','left','up','down']){
+   const before=await page.evaluate(d=>window.JIANGNAN_REVIEW.environment47(d),direction);
+   await page.waitForFunction(f=>window.JIANGNAN_REVIEW.snapshot().sky47.frames>f+3,before,{timeout:10000});
+   const s=await page.evaluate(()=>window.JIANGNAN_REVIEW.snapshot());
+   if(!s.sky47.ready||s.sky47.triangles!==1||s.sky47.positionBytes!==36||s.sky47.images!==0)throw Error('sky pass contract');
+   await page.screenshot({path:path.join(out,'environment47-'+direction+'.png')});
+   environment.push({direction,viewDirection:s.viewDirection,sky47:s.sky47});
+  }
+  await page.evaluate(()=>window.JIANGNAN_REVIEW.restoreEnvironment47());
+  await page.setViewportSize({width:1024,height:640});
+  await page.evaluate(()=>window.JIANGNAN_REVIEW.goPreset(15));
+  await page.waitForFunction(()=>{const s=window.JIANGNAN_REVIEW.snapshot();return s.activePreset===s.presets[15].name&&s.poseError<1e-5&&s.rotationError<1e-5;},null,{timeout:10000});
+  fs.writeFileSync(path.join(out,'environment47.json'),JSON.stringify({source_commit:manifest.source_commit,environment,page_errors:errors,scope:'runtime-only unlit sky fallback, not a complete panoramic mountain environment; six256px QA views, not extra Blender cameras'},null,2));
   if(errors.length)throw Error(errors.join('\n'));
   fs.writeFileSync(path.join(out,'runtime-camera-audit.json'),JSON.stringify({source_commit:manifest.source_commit,diagnostic_sha256:manifest.diagnostic_manifest_sha256,renderer:'Chromium WebGL SwiftShader',captures:rows,page_errors:errors,human_runtime_approval:'pending',note:'Browser export omits Blender lights/weather. Camera/loaded-model audit only; not final art approval.'},null,2));
  }finally{if(browser)await browser.close();await new Promise(r=>server.close(r));}
