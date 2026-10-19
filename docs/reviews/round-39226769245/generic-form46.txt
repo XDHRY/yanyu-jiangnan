@@ -1,0 +1,5 @@
+FAIL: missing file: /workspace/scratch/34fac7373e27/yanyu-round46/assets/architecture/north-silk-bend/plan-metadata.json
+FAIL: props.json: expected schema game-room.prop-manifest.v1
+FAIL: room-layout.json: expected schema game-room.layout.v1
+FAIL: openings.json: expected schema game-room.opening-schedule.v1
+FAIL: missing file: /workspace/scratch/34fac7373e27/yanyu-round46/assets/architecture/north-silk-bend/final-report.json

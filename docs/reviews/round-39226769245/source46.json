@@ -1,0 +1,131 @@
+{
+  "round": 46,
+  "base_main": "2b8f6f5aee5ab6231e1ac68490d843a7fab801fe",
+  "initial_camera_source": "28d36f95a08f7929b71aaa2fb9411801a20e27a6",
+  "initial_spatial_run": 39224169413,
+  "initial_web_run": 39224169443,
+  "before_source_commit": "b77cfc4b6a6dfaecda4328100d91fb65d65ab3e7",
+  "before_tested_commit": "6ddd63359cb626f883c7ce4ece3cd79e4b0af16a",
+  "before_spatial_run": 39225141854,
+  "before_web_run": 39225141818,
+  "source_commit": "1b4b69c418587c03ecb6df6ff5c624cfa3796b28",
+  "tested_commit": "c13fb90294e1fb0aeda2c59a05a6103e6b7e275c",
+  "tested_tree": "008111aef934479bb064ef12fa760354e825cde0",
+  "ci_run": 39226769137,
+  "smoke_run": 39226769301,
+  "spatial_run": 39226769245,
+  "web_run": 39226769146,
+  "pr": 52,
+  "before_spatial_dir": "before46-spatial-12174355495",
+  "before_web_dir": "before46-web-12173962297",
+  "artifacts": {
+    "before_spatial": {
+      "id": 12174355495,
+      "name": "Jiangnan-Spatial-Diagnostics-6ddd63359cb626f883c7ce4ece3cd79e4b0af16a",
+      "size_in_bytes": 16206607,
+      "url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12174355495",
+      "archive_download_url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12174355495/zip",
+      "expired": false,
+      "created_at": "2026-10-19T08:53:43Z",
+      "expires_at": "2026-11-02T08:53:42Z",
+      "updated_at": "2026-10-19T08:53:43Z",
+      "digest": "sha256:096485c4cb3477258968a761f3c7936b49e696dd8df22a27b75e589f39bfd55a",
+      "workflow_run": {
+        "id": 39225141854,
+        "repository_id": 1374819141,
+        "head_repository_id": 1374819141,
+        "head_branch": "codex/round46-waiting-pavilion",
+        "head_sha": "b77cfc4b6a6dfaecda4328100d91fb65d65ab3e7"
+      }
+    },
+    "before_web": {
+      "id": 12173962297,
+      "name": "Jiangnan-Web-Viewer-6ddd63359cb626f883c7ce4ece3cd79e4b0af16a",
+      "size_in_bytes": 119805918,
+      "url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12173962297",
+      "archive_download_url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12173962297/zip",
+      "expired": false,
+      "created_at": "2026-10-19T08:55:45Z",
+      "expires_at": "2026-11-18T08:55:44Z",
+      "updated_at": "2026-10-19T08:55:45Z",
+      "digest": "sha256:4e82bb62753e1692307fbe6c68c5d3b0308b924e2b85553f728a3456ae2e111b",
+      "workflow_run": {
+        "id": 39225141818,
+        "repository_id": 1374819141,
+        "head_repository_id": 1374819141,
+        "head_branch": "codex/round46-waiting-pavilion",
+        "head_sha": "b77cfc4b6a6dfaecda4328100d91fb65d65ab3e7"
+      }
+    },
+    "spatial": {
+      "id": 12174078648,
+      "name": "Jiangnan-Spatial-Diagnostics-c13fb90294e1fb0aeda2c59a05a6103e6b7e275c",
+      "size_in_bytes": 16209808,
+      "url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12174078648",
+      "archive_download_url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12174078648/zip",
+      "expired": false,
+      "created_at": "2026-10-19T09:07:21Z",
+      "expires_at": "2026-11-02T09:07:20Z",
+      "updated_at": "2026-10-19T09:07:21Z",
+      "digest": "sha256:6e0f504145f904cd744d900dd213b7076265ccc1380e04b9894e11f1402ddf01",
+      "workflow_run": {
+        "id": 39226769245,
+        "repository_id": 1374819141,
+        "head_repository_id": 1374819141,
+        "head_branch": "codex/round46-waiting-pavilion",
+        "head_sha": "1b4b69c418587c03ecb6df6ff5c624cfa3796b28"
+      }
+    },
+    "web": {
+      "id": 12173809890,
+      "name": "Jiangnan-Web-Viewer-c13fb90294e1fb0aeda2c59a05a6103e6b7e275c",
+      "size_in_bytes": 119887894,
+      "url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12173809890",
+      "archive_download_url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12173809890/zip",
+      "expired": false,
+      "created_at": "2026-10-19T09:08:48Z",
+      "expires_at": "2026-11-18T09:08:46Z",
+      "updated_at": "2026-10-19T09:08:48Z",
+      "digest": "sha256:77a9f1533b4b389bf0c93a6ea3c9345d91954445650b18baf6740128f6b7bb02",
+      "workflow_run": {
+        "id": 39226769146,
+        "repository_id": 1374819141,
+        "head_repository_id": 1374819141,
+        "head_branch": "codex/round46-waiting-pavilion",
+        "head_sha": "1b4b69c418587c03ecb6df6ff5c624cfa3796b28"
+      }
+    },
+    "smoke": {
+      "id": 12174272347,
+      "name": "Jiangnan-Blender-4.5-c13fb90294e1fb0aeda2c59a05a6103e6b7e275c",
+      "size_in_bytes": 23684321,
+      "url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12174272347",
+      "archive_download_url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12174272347/zip",
+      "expired": false,
+      "created_at": "2026-10-19T09:01:29Z",
+      "expires_at": "2026-10-26T09:01:28Z",
+      "updated_at": "2026-10-19T09:01:29Z",
+      "digest": "sha256:f7703d0dbc0ba61bc904dc19cb5710f17f45629b12c4922a4b54287eb485bc12",
+      "workflow_run": {
+        "id": 39226769301,
+        "repository_id": 1374819141,
+        "head_repository_id": 1374819141,
+        "head_branch": "codex/round46-waiting-pavilion",
+        "head_sha": "1b4b69c418587c03ecb6df6ff5c624cfa3796b28"
+      }
+    }
+  },
+  "failed_model_source": "8fd39cd849ddc2f69db8e73008be3aa52681a80e",
+  "failed_runs": {
+    "ci": 39226302451,
+    "smoke": 39226302389,
+    "spatial": 39226302273,
+    "web": 39226302325
+  },
+  "spatial_dir": "spatial46-12174078648",
+  "web_dir": "web46-12173809890",
+  "smoke_dir": "smoke46-12174272347",
+  "merge_commit": "1dfe3a146c90c8062c98a07ecfbd8215da7cd071",
+  "spatial_render_seconds": 307.74,
+  "camera_parity": "all16 manifests identical excluding timing"
+}

@@ -1,0 +1,54 @@
+{
+  "old_sha256": "c1652cce4d5a47570429cb859d9485b58d515091aeb34736cfbcbd51542fd7ec",
+  "new_sha256": "7d72cffb67512521ad3d9665d0778b9196589346aed7bc68f6f6434b9e403902",
+  "preserved_non_target_geometry_nodes": 3110,
+  "added_geometry_nodes": [
+    "JN_候船整备46_上台踏步",
+    "JN_候船整备46_承枋0",
+    "JN_候船整备46_承枋1",
+    "JN_候船整备46_搁板0",
+    "JN_候船整备46_搁板1",
+    "JN_候船整备46_架足0",
+    "JN_候船整备46_架足1",
+    "JN_候船整备46_架足2",
+    "JN_候船整备46_架足3"
+  ],
+  "changed_old_geometry_nodes": [
+    "JN_北河修桨作坊_候船横巷",
+    "JN_北河修桨作坊_引路灯柱__WEB_MESH",
+    "JN_北河修桨作坊_引路纱灯"
+  ],
+  "materials_images_cameras_preserved": true,
+  "images_sha256": [
+    "b282898c00f165b319f0735c922c986094c9da0b3032e31d572cc0f76376a8f7",
+    "0bb841af72023c00b7596e321911ec69138eeb290f3858dd25b959b95d1be44c",
+    "bccb86173de1490e94be40b3d0413f88cbb93421cd6585908569945b2bc7ea35",
+    "f7a9c359ad93f73ab931865f2d334673765fa0fd762a7411fb0afe179f3436ca",
+    "6b2a895dfd5f068afc37d49a7d9207daa63ed8d3739c343825c81efb990aaae8",
+    "1c8eaa7e714849df80ec86caf90b6bb44d2a2e6b99c074f17ddab1aa1d84ef2a",
+    "9af4280e7ae2acead58186c448192c951d8e62412906d33231f7a7df742a3ed9",
+    "04357eb3759690c613f3a5550054e242d7d39e2c8db69b3272756df157ec6253",
+    "6ec4835a5f829e9a928eb4558afe54f531a403223ddf68a344f4c071dfbe494e"
+  ],
+  "non_target_position_normal_max_delta": 0,
+  "uv_different_streams": 731,
+  "uv_max_absolute_drift": 6.103515625e-05,
+  "uv_determinism": "pending",
+  "actual_glb_support_route_rays": 29,
+  "positive_closed_surface_volumes_m3": {
+    "JN_候船整备46_上台踏步": 0.08808950139883163,
+    "JN_候船整备46_承枋0": 0.004580181291679374,
+    "JN_候船整备46_承枋1": 0.004580181291679374,
+    "JN_候船整备46_搁板0": 0.012771544241222323,
+    "JN_候船整备46_搁板1": 0.012771544241222321,
+    "JN_候船整备46_架足0": 0.002542421260157268,
+    "JN_候船整备46_架足1": 0.002542421260157268,
+    "JN_候船整备46_架足2": 0.002542421260157268,
+    "JN_候船整备46_架足3": 0.002542421260157268,
+    "JN_北河修桨作坊_候船横巷": 1.5950129357868423
+  },
+  "verified_north_route_width_m": 1.2,
+  "new_images_materials": 0,
+  "human_approval": "pending",
+  "load_accessibility_collision": "not certified"
+}
