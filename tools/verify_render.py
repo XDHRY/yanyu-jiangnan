@@ -1735,6 +1735,22 @@ print('SPATIAL_SEMANTICS',json.dumps(report['spatial_semantics'],ensure_ascii=Fa
 if report['spatial_warnings']:
     print('SPATIAL_WARNINGS',json.dumps(report['spatial_warnings'],ensure_ascii=False))
 
+lights49=[('JN_北岸夜读49_候船月光',(3,74,10),(-2,70,.9),600,8),
+          ('JN_北岸夜读49_舢板月光',(10,100,9),(7.30,102.65,.45),360,7)]
+for name,loc,target,watts,size in lights49:
+    o=bpy.data.objects[name];d=o.data
+    assert o.type=='LIGHT' and d.type=='AREA' and d.shape=='DISK'
+    assert (o.location-Vector(loc)).length<1e-5 and abs(d.energy-watts)<1e-5 and abs(d.size-size)<1e-5
+    assert max(abs(a-b) for a,b in zip(d.color,(.40,.58,.82)))<1e-5
+    direction=o.rotation_euler.to_quaternion()@Vector((0,0,-1))
+    assert direction.dot((Vector(target)-o.location).normalized())>.99999
+for name,watts in [('JN_北河修桨作坊_工作灯火',105),('JN_北河修桨作坊_引路灯火',50),('JN_北河转水埠_东岸灯照船补光',140)]:
+    assert abs(bpy.data.objects[name].data.energy-watts)<1e-5
+report['north_lighting49']=json.loads(S['JN_north_lighting49'])
+assert report['north_lighting49']['unchanged_existing_lights']==43
+assert sum(o.type=='LIGHT' for o in S.objects)==48
+report['north_lighting49']['direction_parameter_checks']=2
+
 report['outward_normals']={}
 for prefix in ['JN_云团','JN_明月','JN_花尖露珠']:
     o=next(o for o in S.objects if o.name.startswith(prefix));m=o.data;m.calc_loop_triangles()

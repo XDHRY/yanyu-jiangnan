@@ -3534,6 +3534,27 @@ def optimize_static_batches():
     S['JN_static_batch_sources']=sum(len(g) for g in groups)
     S['JN_static_batch_groups']=7
 
+def north_lighting49():
+    """Soft northern moon pools plus existing lanterns; metre-scale geometry untouched."""
+    tuned={'JN_北河修桨作坊_工作灯火':105,'JN_北河修桨作坊_引路灯火':50,
+           'JN_北河转水埠_东岸灯照船补光':140}
+    def state(o):
+        d=o.data
+        return [d.type,list(o.location),list(o.rotation_euler),list(d.color),d.energy,
+                d.size if d.type=='AREA' else d.shadow_soft_size]
+    previous={o.name:state(o) for o in S.objects if o.type=='LIGHT'}
+    for name,energy in tuned.items():bpy.data.objects[name].data.energy=energy
+    fixtures=[('北岸夜读49_候船月光',(3,74,10),(-2,70,.9),600,8),
+              ('北岸夜读49_舢板月光',(10,100,9),(7.30,102.65,.45),360,7)]
+    for name,loc,target,watts,size in fixtures:
+        o=light(name,loc,(.40,.58,.82),watts,size,target,kind='AREA')
+        o['JN_target49']=list(target);o['JN_function']='soft northern moon modelling; Blender authoring light'
+    unchanged=[name for name,old in previous.items() if name not in tuned]
+    assert all(state(bpy.data.objects[name])==previous[name] for name in unchanged)
+    S['JN_north_lighting49']=json.dumps({'new_area_lights':2,'retuned_lights':3,
+        'unchanged_existing_lights':len(unchanged),'new_geometry_images_materials':0,
+        'exposure_unchanged':True,'web_lighting':'not exported'},ensure_ascii=False)
+
 def statistics():
     obs=list(S.objects);meshes=[o for o in obs if o.type=='MESH'];curves=[o for o in obs if o.type=='CURVE']
     mats=set(m for o in obs if hasattr(o.data,'materials') for m in o.data.materials if m)
@@ -3581,6 +3602,7 @@ def build(stage=None):
     optimize_static_batches()
     # Reuse the finished source wood/rope/iron materials without mutating them.
     town_east_rope_bench40()
+    north_lighting49()
     S.frame_set(80);viewport()
     print('STAGE',level,'OBJECTS',len(S.objects))
 if __name__=='__main__':
