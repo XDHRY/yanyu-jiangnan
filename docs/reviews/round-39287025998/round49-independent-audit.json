@@ -1,0 +1,95 @@
+{
+  "source_commit": "fc5291daeda6cb7139c7fc4bd95d8257b9eb244a",
+  "old_round": 48,
+  "old_tested_commit": "0f7505e845a1e001a103a7367cdce5b369fcc404",
+  "scene_statistics": {
+    "scene": "\u70df\u96e8\u6c5f\u5357 \u00b7 \u96ea\u6708\u6c5f\u5357",
+    "objects": 4631,
+    "mesh_objects": 3111,
+    "curve_objects": 1427,
+    "vertices": 171178,
+    "polygons": 99734,
+    "materials": 54,
+    "collections": 11,
+    "cameras": 3,
+    "lights": 48,
+    "object_drivers": 4444,
+    "frames": [
+      1,
+      240
+    ],
+    "fps": 24,
+    "weather": 0
+  },
+  "unchanged_glb": {
+    "nodes": true,
+    "cameras": true,
+    "materials": true,
+    "textures": true,
+    "samplers": true
+  },
+  "packed_image_payloads_unchanged": true,
+  "sixteen_camera_presets_unchanged": true,
+  "primitive_consumers": 9048,
+  "position_normal_indices_unchanged": true,
+  "cross_build_stream_difference_counts": {
+    "TEXCOORD_0": 739
+  },
+  "web_budget": {
+    "instance_triangles": 625571,
+    "glb_bytes": 51570700,
+    "attribute_index_bytes": 28489306,
+    "images": 9,
+    "rgba8_bytes": 44554784
+  },
+  "focus_image_comparison": {
+    "15_sampan_shell": {
+      "roi_xyxy": [
+        300,
+        230,
+        760,
+        470
+      ],
+      "old_mean_rgb": [
+        17.12407608695652,
+        12.063233695652174,
+        11.295860507246378
+      ],
+      "new_mean_rgb": [
+        35.71878623188406,
+        28.27538949275362,
+        24.138432971014492
+      ],
+      "whole_mean_absolute_rgb_delta": [
+        11.018495178222656,
+        15.813381958007813,
+        17.231185913085938
+      ]
+    },
+    "16_waiting_pavilion": {
+      "roi_xyxy": [
+        445,
+        240,
+        665,
+        470
+      ],
+      "old_mean_rgb": [
+        22.325612648221345,
+        20.46381422924901,
+        21.86600790513834
+      ],
+      "new_mean_rgb": [
+        45.54772727272727,
+        48.21792490118577,
+        52.24877470355731
+      ],
+      "whole_mean_absolute_rgb_delta": [
+        11.772109985351562,
+        15.60791473388672,
+        17.76114501953125
+      ]
+    }
+  },
+  "note": "Real Blender lighting change; Web exporter excludes lights. Cross-build UV nondeterminism remains pending; no new geometry/images/materials. ROI means describe images, not aesthetic approval or device FPS.",
+  "cross_build_uv_max_delta": 6.103515625e-05
+}
