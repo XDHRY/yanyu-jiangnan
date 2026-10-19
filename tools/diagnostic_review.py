@@ -29,7 +29,7 @@ VIEWS=[
     ('13_canal_bridge',(13.2,11.2,8.6),(7.3,15.1,.9),46,0,'水巷木桥：高位斜俯视完整检查桥板、栏柱、双岸驳岸、桥头落地与临水民居尺度'),
     ('14_village_waterfront',(7.3,29.0,2.25),(7.3,16.0,1.35),40,0,'临水回望：检查八栋民居沿水巷的聚落节奏、河埠和木桥是否形成江南村落层次'),
     ('15_sampan_shell',(9.5,99.8,2.0),(7.3,102.65,.35),42,0,'舢板结构：开放内舱、35毫米轴向内缩壳体与封边、两坐板和共享木横肋真实接触；不隐藏资产'),
-    ('16_east_rope_bench',(15.8,108.4,3.0),(12.88,105.12,.62),42,0,'东岸缆作近景：整备案四足与横枨、共享绳环落案、割绳刀和船具架/石凳/主街净距；不隐藏资产'),
+    ('16_oar_workshop_support',(-4.6,63.0,3.3),(-4.6,73.2,1.8),42,0,'西岸修桨作坊：屋檐—柱梁—台基、案腿/马凳落地、桨坯/船板/工具真实接触；不隐藏资产'),
 ]
 
 for o in list(bpy.data.objects):
@@ -141,13 +141,28 @@ def fit_cobbler37(cam):
         cam.data.lens/=factor*1.01;bpy.context.view_layer.update()
     assert cam.data.lens>=22 and min(bounds[0],bounds[2])>.045 and max(bounds[1],bounds[3])<.955,bounds
     return {'objects':len(selected),'projected_bounds':bounds,'padding_fraction':.045,'fitted_lens_mm':cam.data.lens,'full_rope_bench_bounds':True}
+def fit_workshop43(cam):
+    bpy.context.view_layer.update()
+    # Frame the shed itself, not the long connecting street or its guide lamp.
+    # They remain visible in the scene; this only selects fitting bounds.
+    obs=[o for o in S.objects if o.name.startswith('JN_北河修桨作坊_') and not any(t in o.name for t in ('候船横巷','引路')) and o.type=='MESH' and not o.hide_render]
+    pts=[o.matrix_world@Vector(p) for o in obs for p in o.bound_box]
+    for _ in range(6):
+        q=[world_to_camera_view(S,cam,p) for p in pts]
+        assert min(p.z for p in q)>cam.data.clip_start
+        bounds=[min(p.x for p in q),max(p.x for p in q),min(p.y for p in q),max(p.y for p in q)]
+        factor=max(abs(v-.5) for v in bounds)/.445
+        if factor<=1:break
+        cam.data.lens/=factor*1.01;bpy.context.view_layer.update()
+    assert cam.data.lens>=22 and min(bounds[0],bounds[2])>.045 and max(bounds[1],bounds[3])<.955,bounds
+    return {'objects':len(obs),'projected_bounds':bounds,'fitted_lens_mm':cam.data.lens,'whole_workshop_bounds':True,'padding_fraction':.045,'fit_only_omits':['候船横巷','引路灯'],'hidden_objects':[]}
 # Reject bad framing before spending time on the fourteen fixed render views.
-probe=add_cam(*VIEWS[15][:5]);fit_cobbler37(probe);created.remove(probe)
+probe=add_cam(*VIEWS[15][:5]);fit_workshop43(probe);created.remove(probe)
 probe_data=probe.data;bpy.data.objects.remove(probe,do_unlink=True);bpy.data.cameras.remove(probe_data)
 for name,loc,target,lens,ortho,question in VIEWS:
     cam=add_cam(name,loc,target,lens,ortho)
     S.camera=cam
-    framing=fit_sampan42(cam) if name=='15_sampan_shell' else fit_cobbler37(cam) if name=='16_east_rope_bench' else None
+    framing=fit_sampan42(cam) if name=='15_sampan_shell' else fit_workshop43(cam) if name=='16_oar_workshop_support' else None
     S.render.filepath=os.path.join(DIAG,name+'.png')
     excluded=[]
     if name=='11_village_plan':
