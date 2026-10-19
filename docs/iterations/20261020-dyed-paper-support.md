@@ -1,5 +1,31 @@
 # Round50 — east dyed-paper court support batch
 
+## Final verified model result
+
+PR56 merged: model source6f084e9d718cda6145064cdbccc3d272686ad3b8, actual test/render e5e08c12b8047495b6b1f7fa16365b058238a83e, merge7b6765007707d3be6ea92b40fcba532ead6d4b37; all same model tree94665d6e3ca7ce7cf28a9a5dceea922a3ca4e006. Existing village baseline retained, independent ming-inn repo untouched. Below initial-stage notes are historical, not current pending status.
+
+Post-merge CI39306916620 and Smoke39306916545 completed success before final analyzer/metadata-only handoff update. No duplicate model render dispatch.
+
+- Refined12 existing objects:4 bench feet,2 shelf posts,2 drying posts,3 pigment boxes,1 bamboo tool.8 feet now lower-bound .318m against .32m plinth, controlled2mm inset; bench underside .66m/feet top .662m.3 boxes fully borne and separated from posts.12 visible timber clips share1 closed outward-normal mesh, plus1 hidden prototype;6 old paper cards and upper/lower beams unchanged.0 new building/material/image/light. Source+156 triangles/Web+144; no budget increase.
+-79Python+10Node, CI39305671532/Smoke39305671536/Spatial39305671565/Web39305671598 allsuccess. Native48 support rays and independent exported GLB48 rays pass, positive closed clip volume .000783999989m3. No spatial warnings.4 actual browser captures and6 sky directions/393216pixels pass, page_errors[]. Web lights still differ from Blender (no Blender lights exported).
+- Real16x1024x640 reviewed; before-render4eb27cb4f5426ec8125dcc302d931c51ca2d5159 vs after e5e08c12b8047495b6b1f7fa16365b058238a83e.14 courtyard/village core cameras retained;15/16 rotated to this court, then all16 actual camera settings/presets/projections identical before-after. No proxy/hidden architecture/no36 formal renders. Roof/posts/plinth/steps preserved; frame feet reach floor, paper clips now attach, pigment boxes bear fully. Some bench feet remain partially column-occluded; load contacts covered by independent geometry/rays. Background terrain edge, night material fidelity and overall realism remain debt.
+-4644objects/3124Mesh/1427curves/171282vertices/99812faces/168534source triangles;1696uniqueMesh/54materials/48lights/4444drivers. Sourcecap170000余1466。Web625715triangles/cap629155余3440；GLB51574032bytes；attribute/index28489906/cap30000000余1510094。9images44554784bytesRGBA8=42.49MiBestimate,not measuredVRAM/FPS. Spatial205.04s/Web diagnostic205.10s, no speedup claim. Source estimated drawcalls3127 is not device measurement.
+- IndependentGLBreadback3110non-target meshes retain exact positions/normals/indices; old transforms/parent-child relationships/materials/9imagebytes preserved.725cross-buildUVstreams max6.103515625e-5 drift remainspending. All16GLBcamera projections/viewerpresets equal; offlineHTML embeds exactfinalGLBSHA1436d816a792e70c7bcfa4504330f9cafd6fb5020a684d14fc3e28a1b4e7ff2c. Pure audit tool normalized child relationships by stable node names (glTF indices legitimately renumber); this analyzer-only correction ran successfully on both actual exports and is committed with this handoff, not a generator/render change.
+
+### Evidence and persistence
+
+- Smokeartifact12212594259 SHA256c590b8106407917a562e5e4e028a5e4ab73bbd3802f057aa9359601906ba80b5; Spatial12212769516 SHA2566f3b696402ec3c07e1ad3f8b3b97b4bb3abe60ac668ff3a14a6a261e3b7f687a; Web12214012037 SHA2567a9ed69981151bebe56db9394b7bcfb509b90ac68dcb309e8a6ea53e196b147a.
+- Persistent review branch review/round-39305671565, README docs/reviews/round-39305671565/README.md, actual thumbnails/provenance/performance/support/budgets. Independent ZIP68files/122528043bytes SHA256097b1b314245d46e015be5639fb5aceb1dcc6a06028b3d6346e80b6e65e684c8 contains32before/after originals, editable packedblend, actualGLB, offlineHTML,4webcaptures/6skyQA and JSON. Library libfile_619a7151c04c8191999b20a29f28acc2 / file_000000001f8c81f5adc6335f3c3a2275;contact libfile_0002069959d48191861ebbb8c4179ed0;comparison libfile_c8b404db4494819182380b790fcb2cf6. All3 saves succeeded with local identity applied.
+- First0d52679 camera batch invalid (CI39303943533/Spatial39303943527/Web39303943597 failed;Smoke39303943582 success). Initial incorrect local-pass PRbody retracted. Corrective8ed0372 camera-only batch CI39304409843/Smoke39304409842/Spatial39304409837/Web39304409896 allsuccess before model branch update. No duplicated dispatch/overlapping branch update; full parent trees retained and expected-head leases used. Tested model/actual merge trees match.
+
+### Remaining and next round
+
+Generic roomForm failed7missing template files; human Function/Form/Runtime stillpending, no fake approvals. UV determinism, complete PBR/texture-scale evidence/normal-AO packing, LOD/collision, terrain boundary/full panorama, night material detail, real-device/FPS/VRAM, accessibility/load checks remain. No new bitmap was added this round; existing procedural/shared wood/stone/paper materials and packed9images remain unchanged; licence project-generated geometry, no paid/external asset.
+
+Next: firstread latestmain/openPR/Actions/handoff, avoid duplicate builds. Prioritize existing dyed-paper/bindery material mapping and UV determinism (or another connected life-detail batch) rather than new buildings on this narrow remaining budget. Preserve14core+2focus baseline if comparing this court; never revert to pre-village main or36formal renders. Entire town not accepted yet.
+
+## Historical preparation log
+
 Baseline main ca5172aa3ba8dc66c904412831da70a51ce02a3d, including Round49 and all village progress. Latest openPR/Actions checked: no overlapping work. Full tracked baseline restored and blob hashes matched. Independent ming-inn repo untouched.
 
 Initial observation stage changes only the two rotating focus cameras, retaining10 courtyard+4 village core cameras and16 total1024x640 low-cost views. New15 surveys east dyed-paper court roof/posts/plinth/street; new16 observes working furniture, storage and drying frame. Fixed spatial envelopes preserve the before/after camera. No rendered proxy or hidden architecture.

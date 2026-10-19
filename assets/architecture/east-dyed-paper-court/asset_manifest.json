@@ -14,7 +14,14 @@
   "human_gates": {"function": "pending", "form": "pending", "runtime": "pending"},
   "round50": {
     "baseline_main": "ca5172aa3ba8dc66c904412831da70a51ce02a3d",
-    "status": "prepared; Blender and render validation pending",
+    "status": "automated support and render verified; human gates pending",
+    "model_source": "6f084e9d718cda6145064cdbccc3d272686ad3b8",
+    "tested_render_commit": "e5e08c12b8047495b6b1f7fa16365b058238a83e",
+    "merged_pr": 56,
+    "runs": {"ci": 39305671532, "smoke": 39305671536, "spatial": 39305671565, "web": 39305671598},
+    "actual_native_support_rays": 48,
+    "actual_independent_glb_support_rays": 48,
+    "actual_web_triangles_added": 144,
     "refined_existing_objects": 12,
     "grounded_feet": 8,
     "fully_borne_pigment_boxes": 3,
@@ -27,6 +34,6 @@
     "clip_source": "jiangnan.py; project-generated closed box with outward normals; existing wood material; metres",
     "texture_mapping": "Existing material and physical-scale mapping reused unchanged; no new source bitmap or external license.",
     "lod": "12 triangles per clip, shared mesh; separate LOD/collision chain pending",
-    "support": "2mm controlled joint inset, 48 native rays planned; not structural load certification"
+    "support": "2mm controlled joint inset, 48 native plus48 independent GLB rays passed; not structural load certification"
   }
 }
