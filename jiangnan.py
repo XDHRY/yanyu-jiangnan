@@ -2009,10 +2009,23 @@ def town_phase10_silk_trade_finish():
     S['JN_silk_boat_navigation_clearance_m']=.09
     S['JN_silk_shop_new_image_bytes']=0
 
+def workshop_layout43():
+    """Metre-scale contact contract; source and evaluated mesh checks agree."""
+    return {'floor':.30,'table_top':.98,'table_leg':(.57,.54),
+            'trestle_leg':(.475,.35),'blank_z':.845,'lower_board_z':.36,
+            'upper_board_z':.475,'planer_z':1.045,'mallet_z':1.055,
+            'oil_z':.98+.22*cos(pi/6),'rope_z':.30+.018*cos(pi/6)}
+
 def town_phase11_west_oar_workshop():
     """Add a grounded west-bank oar workshop and refine the silk-shop threshold."""
     c=C['water'];stone=M['stone'];wood=M['wood'];wetstone=M['darkstone']
     ropemat=bpy.data.materials.get(PREFIX+'米行麻绳') or M['edge']
+    support43=workshop_layout43()
+    # Local donor copy: preserve Blender node shading and all other rope users.
+    rope43=ropemat.copy();rope43.name=PREFIX+'修桨作坊盘绳43'
+    rope43.diffuse_color=(.38,.23,.09,1)
+    rope43['JN_web_base_color_factor']=(.38,.23,.09,1)
+    rope43.roughness=.90
 
     # A public cross-lane overlaps the proven west water street and opens into
     # the waiting pavilion.  The repair shed sits wholly on the Round 13 west
@@ -2041,13 +2054,13 @@ def town_phase11_west_oar_workshop():
     # the platform or a visible support.
     box('北河修桨作坊_工作长案',(-5.55,73.52,.91),(2.28,.62,.14),wood,c,.014)
     for x in (-6.40,-4.70):
-        for y in (73.30,73.74):box('北河修桨作坊_长案腿',(x,y,.53),(.13,.13,.70),wood,c,.005)
+        for y in (73.30,73.74):box('北河修桨作坊_长案腿',(x,y,support43['table_leg'][0]),(.13,.13,support43['table_leg'][1]),wood,c,.005)
     for x in (-5.82,-3.88):
         box('北河修桨作坊_修桨马凳横木',(x,72.36,.72),(.94,.16,.14),wood,c,.008)
-        for dx in (-.31,.31):box('北河修桨作坊_修桨马凳腿',(x+dx,72.36,.38),(.12,.12,.60),wood,c,.005)
-    box('北河修桨作坊_待刨桨坯',(-4.85,72.36,.83),(3.20,.16,.11),wood,c,.012)
-    box('北河修桨作坊_备用船板一',(-3.45,73.63,.41),(1.95,.34,.12),wood,c,.010)
-    box('北河修桨作坊_备用船板二',(-3.50,73.58,.55),(1.72,.30,.11),wood,c,.010)
+        for dx in (-.31,.31):box('北河修桨作坊_修桨马凳腿',(x+dx,72.36,support43['trestle_leg'][0]),(.12,.12,support43['trestle_leg'][1]),wood,c,.005)
+    box('北河修桨作坊_待刨桨坯',(-4.85,72.36,support43['blank_z']),(3.20,.16,.11),wood,c,.012)
+    box('北河修桨作坊_备用船板一',(-3.45,73.63,support43['lower_board_z']),(1.95,.34,.12),wood,c,.010)
+    box('北河修桨作坊_备用船板二',(-3.50,73.63,support43['upper_board_z']),(1.72,.30,.11),wood,c,.010)
 
     # One compact shared oar mesh provides four rack instances.  The blade and
     # shaft remain real silhouette geometry rather than painted detail.
@@ -2068,13 +2081,18 @@ def town_phase11_west_oar_workshop():
         o.location=(x,74.24,.98);o.scale=(.82,.82,.82);o.rotation_euler[1]=(-.065 if i%2 else .075)
 
     # Restrained tools and rope explain active maintenance without visual clutter.
-    box('北河修桨作坊_木刨',(-5.80,73.47,1.06),(.42,.18,.13),wetstone,c,.006)
-    box('北河修桨作坊_木槌柄',(-5.30,73.45,1.08),(.52,.07,.07),wood,c,.004)
-    box('北河修桨作坊_木槌头',(-5.53,73.45,1.08),(.18,.16,.15),wood,c,.005)
-    uv('北河修桨作坊_桐油罐',(-6.34,73.45,1.12),(.17,.17,.22),wetstone,c,12,6)
+    box('北河修桨作坊_木刨',(-5.80,73.47,support43['planer_z']),(.42,.18,.13),wetstone,c,.006)
+    box('北河修桨作坊_木槌柄',(-5.30,73.45,support43['mallet_z']),(.52,.07,.07),wood,c,.004)
+    box('北河修桨作坊_木槌头',(-5.53,73.45,support43['mallet_z']),(.18,.16,.15),wood,c,.005)
+    oil43=uv('北河修桨作坊_桐油罐',(-6.34,73.45,support43['oil_z']),(.17,.17,.22),wetstone,c,12,6)
+    # Flatten the bottom fan without adding vertices/faces; a real .085m foot.
+    for v in oil43.data.vertices:v.co.z=max(v.co.z,support43['table_top'])
+    for p in oil43.data.polygons:
+        if all(abs(oil43.data.vertices[i].co.z-support43['table_top'])<1e-5 for i in p.vertices):p.use_smooth=False
+    oil43.data.update()
     for j,r in enumerate((.34,.25),1):
-        pts=[(-3.20+r*cos(2*pi*i/20),72.76+r*sin(2*pi*i/20),.34+.025*j) for i in range(21)]
-        line(f'北河修桨作坊_盘绳_{j}',pts,.018,ropemat,c,res=1,bevel_res=1)
+        pts=[(-3.20+r*cos(2*pi*i/20),72.76+r*sin(2*pi*i/20),support43['rope_z']) for i in range(21)]
+        line(f'北河修桨作坊_盘绳_{j}',pts,.018,rope43,c,res=1,bevel_res=1)
 
     # A single task lantern and a low guide lamp preserve the moonlit hierarchy.
     line('北河修桨作坊_工作灯挑杆',[(-3.35,74.60,2.96),(-3.35,73.38,2.96),(-3.35,73.38,2.48)],.020,wood,c,res=2,bevel_res=1)

@@ -716,6 +716,56 @@ assert len([o for o in S.objects if o.name.startswith('JN_北河丝行_悬绢包
 assert bpy.data.objects.get('JN_北河丝行_木质招幌牌') and bpy.data.objects.get('JN_北河丝行_账房纱灯')
 report['town_phase11_west_oar_workshop']={'phase':S['JN_town_phase'],'route_overlap_west_water_street_m':round(lane_overlap,3),'shed_within_existing_west_parcel':True,'open_arrival_width_m':round(oar_open,3),'posts_on_shoes':4,'solidified_roof':True,'shared_oars':len(shared_oars),'oar_mesh_polygons':len(oar_proto.data.polygons),'repair_trestles':2,'rope_coils':2,'silk_edge_sets':2,'hanging_shop_signs':1,'new_image_texture_bytes':S['JN_oar_workshop_new_image_bytes']}
 print('TOWN_PHASE11_WEST_OAR_WORKSHOP',json.dumps(report['town_phase11_west_oar_workshop'],ensure_ascii=False))
+# Round43: evaluate real modifier/curve meshes, then ray-cast actual supports.
+prefix43='JN_北河修桨作坊_';dg43=bpy.context.evaluated_depsgraph_get()
+def ob43(name):return bpy.data.objects[prefix43+name]
+def bounds43(o):
+    ev=o.evaluated_get(dg43);data=ev.to_mesh()
+    try:pts=[ev.matrix_world@v.co for v in data.vertices]
+    finally:ev.to_mesh_clear()
+    return ([min(p[i] for p in pts) for i in range(3)],[max(p[i] for p in pts) for i in range(3)])
+contacts43=[]
+def support43(label,prop,support,xy=None,underside=False):
+    pb=bounds43(prop);sb=bounds43(support)
+    gap=sb[0][2]-pb[1][2] if underside else pb[0][2]-sb[1][2]
+    assert abs(gap)<.0001,('workshop43 contact gap',label,gap)
+    z=sb[0][2] if underside else sb[1][2]
+    xy=xy or [(pb[0][i]+pb[1][i])/2 for i in (0,1)]
+    origin=Vector((*xy,z-.003 if underside else z+.003));direction=Vector((0,0,1 if underside else -1))
+    ev=support.evaluated_get(dg43);inv=ev.matrix_world.inverted()
+    hit,where,normal,face=ev.ray_cast(inv@origin,(inv.to_3x3()@direction).normalized(),distance=.006)
+    assert hit and abs((ev.matrix_world@where).z-z)<.0001,('workshop43 real support ray',label)
+    contacts43.append({'contact':label,'gap_m':gap,'actual_support_ray':True})
+floor43=ob43('实体台基');table43=ob43('工作长案')
+beams43=[o for o in S.objects if o.name.startswith(prefix43+'修桨马凳横木')]
+for stem in ('长案腿','修桨马凳腿'):
+    legs=[o for o in S.objects if o.name.startswith(prefix43+stem)];assert len(legs)==4
+    for leg in legs:
+        support43(leg.name+' floor',leg,floor43)
+        beam=table43 if stem=='长案腿' else min(beams43,key=lambda o:abs(pos(o).x-pos(leg).x))
+        support43(leg.name+' underside',leg,beam,underside=True)
+for beam in beams43:support43('blank '+beam.name,ob43('待刨桨坯'),beam,xy=[pos(beam).x,pos(beam).y])
+support43('lower board',ob43('备用船板一'),floor43)
+upper43=bounds43(ob43('备用船板二'))
+for x in (upper43[0][0]+.02,upper43[1][0]-.02):
+    for y in (upper43[0][1]+.02,upper43[1][1]-.02):support43('upper board',ob43('备用船板二'),ob43('备用船板一'),xy=[x,y])
+for name in ('木刨','木槌头'):support43(name,ob43(name),table43)
+jar43=ob43('桐油罐');points43=[jar43.matrix_world@v.co for v in jar43.data.vertices]
+base43=[p for p in points43 if abs(p.z-.98)<.0001]
+assert len({(round(p.x,5),round(p.y,5)) for p in base43})>=13,'jar has no planar foot'
+assert all(not p.use_smooth for p in jar43.data.polygons if all(abs(jar43.data.vertices[i].co.z-.98)<.0001 for i in p.vertices))
+for dx,dy in ((-.04,0),(.04,0),(0,-.04),(0,.04)):support43('flat oil jar',jar43,table43,xy=[-6.34+dx,73.45+dy])
+for j,r in ((1,.34),(2,.25)):support43('rope '+str(j),ob43('盘绳_'+str(j)),floor43,xy=[-3.20+r,72.76])
+handle43=bounds43(ob43('木槌柄'));head43=bounds43(ob43('木槌头'))
+joint43=[min(handle43[1][i],head43[1][i])-max(handle43[0][i],head43[0][i]) for i in range(3)]
+assert min(joint43)>0 and len(contacts43)==31
+rope43=bpy.data.materials['JN_修桨作坊盘绳43'];donor43=bpy.data.materials['JN_米行麻绳']
+users43=[o.name for o in S.objects if any(m==rope43 for m in getattr(o.data,'materials',[]))]
+assert set(users43)=={prefix43+'盘绳_1',prefix43+'盘绳_2'}
+assert all(abs(a-b)<1e-5 for a,b in zip(rope43['JN_web_base_color_factor'],(.38,.23,.09,1)))
+assert [n.type for n in rope43.node_tree.nodes]==[n.type for n in donor43.node_tree.nodes]
+assert [(l.from_node.name,l.from_socket.name,l.to_node.name,l.to_socket.name) for l in rope43.node_tree.links]==[(l.from_node.name,l.from_socket.name,l.to_node.name,l.to_socket.name) for l in donor43.node_tree.links]
+report['workshop_support43']={'contacts':contacts43,'ray_count':31,'flat_jar_foot_radius_m':.085,'changed_existing_objects':17,'new_objects':0,'new_source_triangles':0,'new_images':0,'new_materials':1,'local_rope_material_users':users43,'rope_donor':'JN_米行麻绳','mallet_joint_overlap_m':joint43,'shared_oars_unchanged':4,'hanging_oar_fasteners':'pending','load_certification':'not validated','human_approval':'pending'}
 # North umbrella lane: verify the fifth bridge closes a walkable two-bank loop,
 # and the mixed-use house has grounded structure, a real shop opening and a
 # second real opening to an inhabited rear room.

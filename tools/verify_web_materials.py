@@ -96,3 +96,13 @@ for name,factor,rough,count in [('JN_转水埠旧船木',(.24,.105,.038,1),.55,1
 report['quay41_procedural_fallback']=fallback41
 (root/'material-audit.json').write_text(json.dumps(report,ensure_ascii=False,indent=2))
 print('QUAY41_PROCEDURAL_FALLBACK_OK',len(fallback41))
+rows43=[r for r in report.get('materials',[]) if r.get('source_material')=='JN_修桨作坊盘绳43']
+if rows43:
+    assert len(rows43)==1 and rows43[0]['source_images']==[]
+    mats43=[(i,m) for i,m in enumerate(g['materials']) if m['name']=='JN_修桨作坊盘绳43__WEB'];assert len(mats43)==1
+    i43,m43=mats43[0];p43=m43['pbrMetallicRoughness']
+    assert len(p43.get('baseColorFactor',[]))==4 and all(abs(a-b)<1e-5 for a,b in zip(p43['baseColorFactor'],(.38,.23,.09,1)))
+    assert abs(p43['roughnessFactor']-.90)<1e-5 and p43.get('metallicFactor',1)==0
+    users43=[n['name'] for n in g['nodes'] if 'mesh' in n and any(p.get('material')==i43 for p in g['meshes'][n['mesh']]['primitives'])]
+    assert set(users43)=={'JN_北河修桨作坊_盘绳_1__WEB_MESH','JN_北河修桨作坊_盘绳_2__WEB_MESH'},users43
+    print('WORKSHOP43_LOCAL_ROPE_FALLBACK_OK',users43)

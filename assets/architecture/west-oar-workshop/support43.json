@@ -1,0 +1,13 @@
+{
+  "schema": "yanyu-jiangnan.workshop-support43.v1",
+  "source": "jiangnan.py:workshop_layout43 + town_phase11_west_oar_workshop",
+  "baseline": "fe3456537358b7805c67e415d511d34dc010c526",
+  "units": "metres",
+  "scope": {"changed_existing_objects":17,"new_objects":0,"new_triangles":0,"new_images":0,"new_materials":1},
+  "supports": {"platform_top":0.30,"table_underside":0.84,"table_top":0.98,"trestle_underside":0.65,"trestle_top":0.79},
+  "members": {"table_legs":{"count":4,"center_z":0.57,"height":0.54},"trestle_legs":{"count":4,"center_z":0.475,"height":0.35},"blank":{"bottom":0.79},"boards":{"lower_bottom":0.30,"joint_z":0.42,"upper_y":73.63},"oil_jar":{"flat_base_z":0.98,"foot_radius":0.085,"same_vertices_faces":true},"tools":{"planer_bottom":0.98,"mallet_head_bottom":0.98,"handle_joint":"overlaps head intentionally"},"rope_coils":{"count":2,"floor_contact":"evaluated tube bottom at0.30, not centreline"}},
+  "material": {"name":"JN_修桨作坊盘绳43","source":"local node-tree copy of project-generated JN_米行麻绳","visible_users":2,"base_color_factor":[0.38,0.23,0.09,1],"roughness":0.90,"mapping":"original procedural Object coordinates; no bitmap or directional-light bake","source_images":[],"license":"project-authored procedural donor; no external or paid asset","normal":"donor procedural bump only in Blender; web geometry normals, true PBR bake pending"},
+  "cameras": {"fixed_core":14,"retained_focus":"15_sampan_shell","rotated_focus":"16_oar_workshop_support","resolution":[1024,640],"baseline_camera_drafts_failed":2},
+  "machine_validation": "31 evaluated-mesh support rays and contact gaps under0.0001m; run results belong to iteration handoff",
+  "pending": ["human Function/Form/Runtime","generic Form schema and evidence repair","hanging oar fasteners and load","complete UV/PBR","LOD","collision/navigation","physical mobile device"]
+}
