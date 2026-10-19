@@ -11,7 +11,18 @@
   "production_cameras": ["15_sampan_shell", "16_oar_workshop_support"],
   "performance": {"max_scene_triangles": 170000, "new_image_bytes": 0, "paid_service_credits": 0, "linked_oars": 4},
   "runtime": {"collision": "not_generated", "navigation": "not_generated", "lod": "not_generated", "uv_export_audit": "pending"},
-  "round43_current": {
+  "round44_current": {
+    "evidence":"rack44.json and docs/iterations/20261019-workshop-rack.md; original Round15 dimensions remain historical",
+    "source":"1ad5b3bfa71609e4ef893a34aca7908ada794e14",
+    "existing_legs_shared_source_meshes":2,"leg_visible_objects":8,"actual_glb_leg_mesh_entries":8,
+    "new_visible_seat_backer_objects":8,"new_shared_meshes":4,"sloped_seat_corner_rays":16,
+    "rear_rail_post_joints":4,"closed_outward_source_meshes":8,"closed_outward_visible_users":18,
+    "new_materials_images_lights_buildings":0,"source_triangles_added":96,
+    "web_attribute_index_bytes":29873670,"remaining_attribute_index_bytes":126330,
+    "wood_mapping":"metre multiplier preserved; leg siblings share local phase, not original absolute UV",
+    "human_approval":"pending","dynamic_fasteners_and_load":"pending","web_evaluated_modifier_instancing":"pending"
+  },
+  "round43_historical": {
     "evidence": "support43.json and docs/iterations/20261019-workshop-support.md; Round15 props dimensions remain historical, not new asset counts",
     "floor_top":0.30,"table_top":0.98,"workbench_visible_height_above_floor":0.68,
     "repaired_existing_objects":17,"evaluated_support_rays":31,
