@@ -1,0 +1,34 @@
+{
+  "desktop15": {
+    "mean_abs_rgb_difference": [
+      0.0005126953125,
+      0.00058135986328125,
+      0.00057220458984375
+    ],
+    "exact_pixels": false
+  },
+  "desktop16": {
+    "mean_abs_rgb_difference": [
+      0.0027374267578125,
+      0.002984619140625,
+      0.00321807861328125
+    ],
+    "exact_pixels": false
+  },
+  "mobile15": {
+    "mean_abs_rgb_difference": [
+      1.822821728034998e-05,
+      4.860857941426662e-05,
+      3.645643456069996e-05
+    ],
+    "exact_pixels": false
+  },
+  "mobile16": {
+    "mean_abs_rgb_difference": [
+      0.00037975452667395797,
+      0.00034026005589986633,
+      0.00039798274395430795
+    ],
+    "exact_pixels": false
+  }
+}

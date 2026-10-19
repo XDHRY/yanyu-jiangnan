@@ -1,0 +1,38 @@
+{
+  "baseline_round": 47,
+  "baseline_commit": "fa9d45d277cb895ddd7fa7e73fac6f977849d8d7",
+  "current_commit": "0f7505e845a1e001a103a7367cdce5b369fcc404",
+  "same": {
+    "nodes": true,
+    "materials": true,
+    "cameras": true,
+    "textures": true,
+    "samplers": true,
+    "scenes": true,
+    "packed_image_payloads": true,
+    "sixteen_presets": true
+  },
+  "primitive_consumers": 9048,
+  "cross_build_stream_differences": {
+    "TEXCOORD_0": {
+      "consumers": 735,
+      "metadata_differences": 0,
+      "max_float_delta": 6.103515625e-05
+    }
+  },
+  "baseline_metrics": {
+    "instance_triangles": 625571,
+    "glb_bytes": 53060668,
+    "attribute_index_bytes": 29870982,
+    "images": 9,
+    "rgba8_bytes": 44554784
+  },
+  "current_metrics": {
+    "instance_triangles": 625571,
+    "glb_bytes": 51573252,
+    "attribute_index_bytes": 28491802,
+    "images": 9,
+    "rgba8_bytes": 44554784
+  },
+  "warning": "Cross-build UV differences are not this optimizer editing UVs. Same-build final fingerprint is separately verified; no whole-GLB cross-build determinism or physical VRAM/FPS claim."
+}

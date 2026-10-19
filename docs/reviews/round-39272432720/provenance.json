@@ -1,0 +1,69 @@
+{
+  "round": 48,
+  "date": "2026-10-19",
+  "repository": "XDHRY/yanyu-jiangnan",
+  "baseline": "80f2fbd013885360a0c7a8a63ca07351262ced8e",
+  "source": "a0b1e4db232a9146197901fda9ca4dca59968c8c",
+  "tested": "0f7505e845a1e001a103a7367cdce5b369fcc404",
+  "merge": "52a3c20ec8158032a20eed0f85a84b7d0965f51f",
+  "tested_tree": "0876d192ffea8d9924c254b1983267df0f47e96a",
+  "merge_tree": "0876d192ffea8d9924c254b1983267df0f47e96a",
+  "pr": 54,
+  "runs": {
+    "ci": 39272433175,
+    "smoke": 39272432732,
+    "spatial": 39272432401,
+    "web": 39272432720
+  },
+  "artifacts": {
+    "smoke": {
+      "id": 12195648285,
+      "size": 23685644,
+      "sha256": "38d838bf987d10e2dab331219aae31da0fd566427e3008ec7891251b524aaa81"
+    },
+    "spatial": {
+      "id": 12195993629,
+      "name": "Jiangnan-Spatial-Diagnostics-0f7505e845a1e001a103a7367cdce5b369fcc404",
+      "size_in_bytes": 16209310,
+      "url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12195993629",
+      "archive_download_url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12195993629/zip",
+      "expired": false,
+      "created_at": "2026-10-19T14:56:01Z",
+      "expires_at": "2026-11-02T14:56:00Z",
+      "updated_at": "2026-10-19T14:56:01Z",
+      "digest": "sha256:3e8031a53dbabfd1352bcf313f396835921eee8ce7563e91e7d0b5cdbc1165a0",
+      "workflow_run": {
+        "id": 39272432401,
+        "repository_id": 1374819141,
+        "head_repository_id": 1374819141,
+        "head_branch": "codex/round48-static-stream-sharing",
+        "head_sha": "a0b1e4db232a9146197901fda9ca4dca59968c8c"
+      }
+    },
+    "web": {
+      "id": 12197290554,
+      "name": "Jiangnan-Web-Viewer-0f7505e845a1e001a103a7367cdce5b369fcc404",
+      "size_in_bytes": 118057384,
+      "url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12197290554",
+      "archive_download_url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12197290554/zip",
+      "expired": false,
+      "created_at": "2026-10-19T14:58:45Z",
+      "expires_at": "2026-11-18T14:58:43Z",
+      "updated_at": "2026-10-19T14:58:45Z",
+      "digest": "sha256:7da0c7fbc31cb7bc133501af3bd92ebba8cbc6175da78f5f3177437b0aa22d45",
+      "workflow_run": {
+        "id": 39272432720,
+        "repository_id": 1374819141,
+        "head_repository_id": 1374819141,
+        "head_branch": "codex/round48-static-stream-sharing",
+        "head_sha": "a0b1e4db232a9146197901fda9ca4dca59968c8c"
+      }
+    }
+  },
+  "all_gates": "success",
+  "generic_form": "not approved; five known missing-file/schema failures",
+  "human_runtime": "pending",
+  "new_buildings": 0,
+  "new_images": 0,
+  "independent_inn_repository": "untouched"
+}

@@ -1,0 +1,14 @@
+{
+  "source_commit": "0f7505e845a1e001a103a7367cdce5b369fcc404",
+  "passed": true,
+  "actual_final_glb_sha256": "72fe376b0ffd3a836ef2ca37857bdea6ff149c85f6ddf41db98b64a61a16a0bd",
+  "every_primitive_stream_matches_original_same_build": true,
+  "semantic_fingerprint": "4cae0945cfb86c85bfaa957ce1582580bd739371e8a18607f0b9fcadbd1375d3",
+  "primitive_stream_consumers": 9048,
+  "idempotent": true,
+  "attribute_references_repointed": 795,
+  "index_references_repointed": 0,
+  "same_input_glb_bytes_saved": 1493004,
+  "same_input_binary_bytes_saved": 1384364,
+  "note": "No mesh/draw-call/triangle reduction, UV rounding or physical-device VRAM/FPS claim."
+}
