@@ -1460,7 +1460,11 @@ new37=[o for o in S.objects if o.get('JN_asset_family')=='quay-cobbler37' and o.
 tris37=sum(len(o.data.loop_triangles) for o in new37)
 new40=[o for o in S.objects if o.get('JN_asset_family')=='east-rope-bench40' and o.type=='MESH']
 tris40=sum(len(o.data.loop_triangles) for o in new40)
-assert expanded_tris-tris37-tris40-184==166626,'pre-Round37 source triangle baseline changed'
+seat_objects44=[o for o in S.objects if o.name.startswith('JN_北河修桨作坊_承桨托')]
+assert len(seat_objects44)==8
+tris44=sum(sum(len(p.vertices)-2 for p in o.data.polygons) for o in seat_objects44)
+assert tris44==96,'Round44 seat geometry changed'
+assert expanded_tris-tris37-tris40-184-tris44==166626,'pre-Round37 source triangle baseline changed'
 assert tris37<=500 and new37,'public repair stop source budget exceeded'
 visible37=[o for o in new37 if not o.hide_render]
 assert len(visible37)==25,len(visible37)
@@ -1507,7 +1511,7 @@ mapping39=next(n for n in mat39.node_tree.nodes if n.type=='VECT_MATH' and n.ope
 assert all(abs(v-2.4)<1e-5 for v in mapping39.inputs[1].default_value)
 bump39=next(n for n in mat39.node_tree.nodes if n.type=='BUMP')
 assert abs(bump39.inputs['Distance'].default_value-.003)<1e-6
-assert expanded_tris-tris40-184==167094
+assert expanded_tris-tris40-184-tris44==167094
 report['quay_stone39']={'visible_users':23,'hidden_prototypes':2,'source_triangles':expanded_tris,'new_geometry':0,'new_materials':1,'new_images':0,'repeat_per_local_m':2.4,'nominal_repeat_m':1/2.4,'roughness':.88,'bump_distance_m':.003,'human_approval':'pending'}
 visible40=[o for o in new40 if not o.hide_render]
 assert len(new40)==17 and len(visible40)==13 and tris40==888,(len(new40),len(visible40),tris40)
