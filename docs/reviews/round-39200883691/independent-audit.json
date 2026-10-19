@@ -1,0 +1,458 @@
+{
+  "source_tested": "b1f5b08b1d5b1b01d0f7a6af37cc5528d8ff4200",
+  "non_target_geometry_nodes_preserved": 3095,
+  "old_target_count": 10,
+  "new_visible_meshes": [
+    "JN_北河修桨作坊_承桨托座0",
+    "JN_北河修桨作坊_承桨托座0.001",
+    "JN_北河修桨作坊_承桨托座1",
+    "JN_北河修桨作坊_承桨托座1.001",
+    "JN_北河修桨作坊_承桨托背0",
+    "JN_北河修桨作坊_承桨托背0.001",
+    "JN_北河修桨作坊_承桨托背1",
+    "JN_北河修桨作坊_承桨托背1.001"
+  ],
+  "all_material_definitions_and_image_hashes_preserved": true,
+  "all16_camera_fields_preserved": true,
+  "non_target_max_uv_float_drift": 6.103515625e-05,
+  "uv_determinism": "pending",
+  "leg_world_bound_max_errors": {
+    "JN_北河修桨作坊_修桨马凳腿.001": 2.4400651454925537e-06,
+    "JN_北河修桨作坊_长案腿": 2.4437904357910156e-06,
+    "JN_北河修桨作坊_长案腿.003": 5.185604095458984e-06,
+    "JN_北河修桨作坊_修桨马凳腿.003": 2.4400651454925537e-06,
+    "JN_北河修桨作坊_修桨马凳腿.002": 2.4400651454925537e-06,
+    "JN_北河修桨作坊_修桨马凳腿": 2.4400651454925537e-06,
+    "JN_北河修桨作坊_长案腿.002": 2.4437904357910156e-06,
+    "JN_北河修桨作坊_长案腿.001": 5.185604095458984e-06
+  },
+  "old31_contacts": {
+    "contacts": [
+      {
+        "contact": "长案腿 floor",
+        "gap_m": -2.9802322387695312e-08,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "长案腿 underside",
+        "gap_m": -2.9802322387695312e-08,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "长案腿.001 floor",
+        "gap_m": -2.9802322387695312e-08,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "长案腿.001 underside",
+        "gap_m": -2.9802322387695312e-08,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "长案腿.002 floor",
+        "gap_m": -2.9802322387695312e-08,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "长案腿.002 underside",
+        "gap_m": -2.9802322387695312e-08,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "长案腿.003 floor",
+        "gap_m": -2.9802322387695312e-08,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "长案腿.003 underside",
+        "gap_m": -2.9802322387695312e-08,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "修桨马凳腿 floor",
+        "gap_m": -1.4901161193847656e-08,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "修桨马凳腿 underside",
+        "gap_m": -1.4901161193847656e-08,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "修桨马凳腿.001 floor",
+        "gap_m": -1.4901161193847656e-08,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "修桨马凳腿.001 underside",
+        "gap_m": -1.4901161193847656e-08,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "修桨马凳腿.002 floor",
+        "gap_m": -1.4901161193847656e-08,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "修桨马凳腿.002 underside",
+        "gap_m": -1.4901161193847656e-08,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "修桨马凳腿.003 floor",
+        "gap_m": -1.4901161193847656e-08,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "修桨马凳腿.003 underside",
+        "gap_m": -1.4901161193847656e-08,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "blank 修桨马凳横木",
+        "gap_m": 0.0,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "blank 修桨马凳横木.001",
+        "gap_m": 0.0,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "lower board",
+        "gap_m": 0.0,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "upper board",
+        "gap_m": 0.0,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "upper board",
+        "gap_m": 0.0,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "upper board",
+        "gap_m": 0.0,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "upper board",
+        "gap_m": 0.0,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "木刨",
+        "gap_m": 0.0,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "木槌头",
+        "gap_m": 0.0,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "flat oil jar",
+        "gap_m": 0.0,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "flat oil jar",
+        "gap_m": 0.0,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "flat oil jar",
+        "gap_m": 0.0,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "flat oil jar",
+        "gap_m": 0.0,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "盘绳_1",
+        "gap_m": -2.9802322387695312e-08,
+        "actual_support_ray": true
+      },
+      {
+        "contact": "盘绳_2",
+        "gap_m": -2.9802322387695312e-08,
+        "actual_support_ray": true
+      }
+    ],
+    "flat_jar_bottom_rays": [
+      true,
+      true,
+      true,
+      true
+    ],
+    "mallet_handle_head_overlap_m": [
+      0.11999988555908203,
+      0.06999969482421875,
+      0.0700000524520874
+    ],
+    "floor_top_m": 0.30000001192092896,
+    "table_top_m": 0.9800000190734863
+  },
+  "oar_seats": [
+    {
+      "oar": "共享桨橹_1",
+      "seat": "承桨托座1",
+      "bottom_corner_rays": 4,
+      "actual_support_rays": true,
+      "joint_overlap_m": [
+        [
+          0.10000000149011612,
+          0.10999847203493118,
+          0.07797336392104626
+        ],
+        [
+          0.10000000149011612,
+          0.1399993896484375,
+          0.13999998569488525
+        ]
+      ]
+    },
+    {
+      "oar": "共享桨橹_2",
+      "seat": "承桨托座0",
+      "bottom_corner_rays": 4,
+      "actual_support_rays": true,
+      "joint_overlap_m": [
+        [
+          0.10000000149011612,
+          0.10999847203493118,
+          0.08197435364127159
+        ],
+        [
+          0.10000000149011612,
+          0.1399993896484375,
+          0.13999998569488525
+        ]
+      ]
+    },
+    {
+      "oar": "共享桨橹_3",
+      "seat": "承桨托座1.001",
+      "bottom_corner_rays": 4,
+      "actual_support_rays": true,
+      "joint_overlap_m": [
+        [
+          0.10000000149011612,
+          0.10999847203493118,
+          0.07797336392104626
+        ],
+        [
+          0.10000000149011612,
+          0.1399993896484375,
+          0.13999998569488525
+        ]
+      ]
+    },
+    {
+      "oar": "共享桨橹_4",
+      "seat": "承桨托座0.001",
+      "bottom_corner_rays": 4,
+      "actual_support_rays": true,
+      "joint_overlap_m": [
+        [
+          0.10000000149011612,
+          0.10999847203493118,
+          0.08197435364127159
+        ],
+        [
+          0.10000000149011612,
+          0.1399993896484375,
+          0.13999998569488525
+        ]
+      ]
+    }
+  ],
+  "source_rack": {
+    "leg_objects": 8,
+    "leg_meshes": 2,
+    "new_seat_objects": 8,
+    "new_seat_meshes": 4,
+    "oar_seats": [
+      {
+        "oar": "JN_北河修桨作坊_共享桨橹_1",
+        "seat": "JN_北河修桨作坊_承桨托座1",
+        "backer": "JN_北河修桨作坊_承桨托背1",
+        "blade_bottom_corner_rays": 4,
+        "contact_gaps_m": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "seat_backer_overlap_m": [
+          0.10000038146972656,
+          0.1100006103515625,
+          0.0779733657836914
+        ],
+        "backer_rail_overlap_m": [
+          0.10000038146972656,
+          0.1399993896484375,
+          0.13999998569488525
+        ]
+      },
+      {
+        "oar": "JN_北河修桨作坊_共享桨橹_2",
+        "seat": "JN_北河修桨作坊_承桨托座0",
+        "backer": "JN_北河修桨作坊_承桨托背0",
+        "blade_bottom_corner_rays": 4,
+        "contact_gaps_m": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "seat_backer_overlap_m": [
+          0.10000038146972656,
+          0.1100006103515625,
+          0.08197438716888428
+        ],
+        "backer_rail_overlap_m": [
+          0.10000038146972656,
+          0.1399993896484375,
+          0.13999998569488525
+        ]
+      },
+      {
+        "oar": "JN_北河修桨作坊_共享桨橹_3",
+        "seat": "JN_北河修桨作坊_承桨托座1.001",
+        "backer": "JN_北河修桨作坊_承桨托背1.001",
+        "blade_bottom_corner_rays": 4,
+        "contact_gaps_m": [
+          0.0,
+          5.960464477539063e-08,
+          0.0,
+          5.960464477539063e-08
+        ],
+        "seat_backer_overlap_m": [
+          0.10000038146972656,
+          0.1100006103515625,
+          0.0779733657836914
+        ],
+        "backer_rail_overlap_m": [
+          0.10000038146972656,
+          0.1399993896484375,
+          0.13999998569488525
+        ]
+      },
+      {
+        "oar": "JN_北河修桨作坊_共享桨橹_4",
+        "seat": "JN_北河修桨作坊_承桨托座0.001",
+        "backer": "JN_北河修桨作坊_承桨托背0.001",
+        "blade_bottom_corner_rays": 4,
+        "contact_gaps_m": [
+          0.0,
+          5.960464477539063e-08,
+          0.0,
+          5.960464477539063e-08
+        ],
+        "seat_backer_overlap_m": [
+          0.09999990463256836,
+          0.1100006103515625,
+          0.08197438716888428
+        ],
+        "backer_rail_overlap_m": [
+          0.09999990463256836,
+          0.1399993896484375,
+          0.13999998569488525
+        ]
+      }
+    ],
+    "rail_post_joints": 4,
+    "source_images_added": 0,
+    "materials_added": 0,
+    "wood_scale": [
+      1.1,
+      1.1,
+      0.3
+    ],
+    "texture_phase": "shared local phase; metre frequency preserved",
+    "load_certification": "pending",
+    "human_approval": "pending",
+    "closed_outward_mesh_volumes_m3": {
+      "JN_北河修桨作坊_长案腿": 0.009126000106334686,
+      "JN_北河修桨作坊_修桨马凳腿": 0.0050399997271597385,
+      "JN_北河修桨作坊_桨架下枋": 0.08623962042232354,
+      "JN_北河修桨作坊_桨架上枋": 0.08623969337592523,
+      "JN_北河修桨作坊_承桨托座1": 0.012063384968011329,
+      "JN_北河修桨作坊_承桨托背1": 0.0061868405900895596,
+      "JN_北河修桨作坊_承桨托座0": 0.012337698601186275,
+      "JN_北河修桨作坊_承桨托背0": 0.006210310384631157
+    }
+  },
+  "statistics": {
+    "scene": "烟雨江南 · 雪月江南",
+    "objects": 4620,
+    "mesh_objects": 3102,
+    "curve_objects": 1427,
+    "vertices": 171102,
+    "polygons": 99678,
+    "materials": 54,
+    "collections": 11,
+    "cameras": 3,
+    "lights": 46,
+    "object_drivers": 4444,
+    "frames": [
+      1,
+      240
+    ],
+    "fps": 24,
+    "weather": 0
+  },
+  "baseline_budget": {
+    "instance_triangles": 624959,
+    "glb_bytes": 53049640,
+    "attribute_index_bytes": 29871174,
+    "images": 9,
+    "rgba8_bytes": 44554784
+  },
+  "actual_glb": {
+    "instance_triangles": 625055,
+    "glb_bytes": 53057484,
+    "attribute_index_bytes": 29873670,
+    "images": 9,
+    "rgba8_bytes": 44554784
+  },
+  "spatial_seconds": 166.05,
+  "web_seconds": 308.04,
+  "human_approval": "pending",
+  "closed_positive_volumes_m3": {
+    "JN_北河修桨作坊_修桨马凳腿.001": 0.005023005820055803,
+    "JN_北河修桨作坊_长案腿": 0.009102855299493324,
+    "JN_北河修桨作坊_承桨托座0": 0.012337698503444162,
+    "JN_北河修桨作坊_长案腿.003": 0.009102855299493324,
+    "JN_北河修桨作坊_承桨托背1.001": 0.00618684065274163,
+    "JN_北河修桨作坊_修桨马凳腿.003": 0.005023005820055803,
+    "JN_北河修桨作坊_承桨托背1": 0.00618684065274163,
+    "JN_北河修桨作坊_承桨托座0.001": 0.012337698503444162,
+    "JN_北河修桨作坊_承桨托背0.001": 0.006210310399304101,
+    "JN_北河修桨作坊_修桨马凳腿.002": 0.005023005820055803,
+    "JN_北河修桨作坊_修桨马凳腿": 0.005023005820055803,
+    "JN_北河修桨作坊_桨架下枋": 0.08604250468662199,
+    "JN_北河修桨作坊_桨架上枋": 0.08604258363999608,
+    "JN_北河修桨作坊_承桨托座1.001": 0.01206338511775243,
+    "JN_北河修桨作坊_承桨托座1": 0.01206338511775243,
+    "JN_北河修桨作坊_承桨托背0": 0.006210310399304101,
+    "JN_北河修桨作坊_长案腿.002": 0.009102855299493324,
+    "JN_北河修桨作坊_长案腿.001": 0.009102855299493324
+  },
+  "leg_export_before": {
+    "visible_nodes": 8,
+    "export_mesh_entries": 8,
+    "attribute_index_bytes": 59832
+  },
+  "leg_export_after": {
+    "visible_nodes": 8,
+    "export_mesh_entries": 8,
+    "attribute_index_bytes": 55944
+  }
+}
