@@ -29,7 +29,7 @@ VIEWS=[
     ('13_canal_bridge',(13.2,11.2,8.6),(7.3,15.1,.9),46,0,'水巷木桥：高位斜俯视完整检查桥板、栏柱、双岸驳岸、桥头落地与临水民居尺度'),
     ('14_village_waterfront',(7.3,29.0,2.25),(7.3,16.0,1.35),40,0,'临水回望：检查八栋民居沿水巷的聚落节奏、河埠和木桥是否形成江南村落层次'),
     ('15_sampan_shell',(9.5,99.8,2.0),(7.3,102.65,.35),42,0,'舢板结构：开放内舱、35毫米轴向内缩壳体与封边、两坐板和共享木横肋真实接触；不隐藏资产'),
-    ('16_oar_workshop_support',(-4.6,63.0,3.3),(-4.6,73.2,1.8),42,0,'西岸修桨作坊：屋檐—柱梁—台基、案腿/马凳落地、桨坯/船板/工具真实接触；不隐藏资产'),
+    ('16_waiting_pavilion',(5.9,77.0,4.5),(.1,68.7,1.8),42,0,'候船亭—横巷：完整屋檐—柱梁—台基、上台高差、长凳与行李搁架支撑及中央通行带；不隐藏资产'),
 ]
 
 for o in list(bpy.data.objects):
@@ -156,13 +156,27 @@ def fit_workshop43(cam):
         cam.data.lens/=factor*1.01;bpy.context.view_layer.update()
     assert cam.data.lens>=22 and min(bounds[0],bounds[2])>.045 and max(bounds[1],bounds[3])<.955,bounds
     return {'objects':len(obs),'projected_bounds':bounds,'fitted_lens_mm':cam.data.lens,'whole_workshop_bounds':True,'padding_fraction':.045,'fit_only_omits':['候船横巷','引路灯'],'hidden_objects':[]}
+def fit_waiting46(cam):
+    # Fixed construction envelope, NOT rendered proxy geometry. This keeps the
+    # before/after camera identical even when the small entrance step is added.
+    pts=[Vector((x,y,z)) for x in (-2.35,2.55) for y in (66.1,71.5) for z in (0,5.2)]
+    bpy.context.view_layer.update()
+    for _ in range(6):
+        q=[world_to_camera_view(S,cam,p) for p in pts]
+        assert min(p.z for p in q)>cam.data.clip_start
+        bounds=[min(p.x for p in q),max(p.x for p in q),min(p.y for p in q),max(p.y for p in q)]
+        factor=max(abs(v-.5) for v in bounds)/.445
+        if factor<=1:break
+        cam.data.lens/=factor*1.01;bpy.context.view_layer.update()
+    assert cam.data.lens>=22 and min(bounds[0],bounds[2])>.045 and max(bounds[1],bounds[3])<.955,bounds
+    return {'fixed_envelope_m':[[-2.35,66.1,0],[2.55,71.5,5.2]],'projected_bounds':bounds,'fitted_lens_mm':cam.data.lens,'padding_fraction':.045,'hidden_objects':[],'proxy_geometry_created':False}
 # Reject bad framing before spending time on the fourteen fixed render views.
-probe=add_cam(*VIEWS[15][:5]);fit_workshop43(probe);created.remove(probe)
+probe=add_cam(*VIEWS[15][:5]);fit_waiting46(probe);created.remove(probe)
 probe_data=probe.data;bpy.data.objects.remove(probe,do_unlink=True);bpy.data.cameras.remove(probe_data)
 for name,loc,target,lens,ortho,question in VIEWS:
     cam=add_cam(name,loc,target,lens,ortho)
     S.camera=cam
-    framing=fit_sampan42(cam) if name=='15_sampan_shell' else fit_workshop43(cam) if name=='16_oar_workshop_support' else None
+    framing=fit_sampan42(cam) if name=='15_sampan_shell' else fit_waiting46(cam) if name=='16_waiting_pavilion' else None
     S.render.filepath=os.path.join(DIAG,name+'.png')
     excluded=[]
     if name=='11_village_plan':
