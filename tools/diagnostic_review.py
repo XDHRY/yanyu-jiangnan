@@ -143,7 +143,9 @@ def fit_cobbler37(cam):
     return {'objects':len(selected),'projected_bounds':bounds,'padding_fraction':.045,'fitted_lens_mm':cam.data.lens,'full_rope_bench_bounds':True}
 def fit_workshop43(cam):
     bpy.context.view_layer.update()
-    obs=[o for o in S.objects if o.name.startswith('JN_北河修桨作坊_') and o.type=='MESH' and not o.hide_render]
+    # Frame the shed itself, not the long connecting street or its guide lamp.
+    # They remain visible in the scene; this only selects fitting bounds.
+    obs=[o for o in S.objects if o.name.startswith('JN_北河修桨作坊_') and not any(t in o.name for t in ('候船横巷','引路')) and o.type=='MESH' and not o.hide_render]
     pts=[o.matrix_world@Vector(p) for o in obs for p in o.bound_box]
     for _ in range(6):
         q=[world_to_camera_view(S,cam,p) for p in pts]
@@ -153,7 +155,7 @@ def fit_workshop43(cam):
         if factor<=1:break
         cam.data.lens/=factor*1.01;bpy.context.view_layer.update()
     assert cam.data.lens>=22 and min(bounds[0],bounds[2])>.045 and max(bounds[1],bounds[3])<.955,bounds
-    return {'objects':len(obs),'projected_bounds':bounds,'fitted_lens_mm':cam.data.lens,'whole_workshop_bounds':True,'padding_fraction':.045}
+    return {'objects':len(obs),'projected_bounds':bounds,'fitted_lens_mm':cam.data.lens,'whole_workshop_bounds':True,'padding_fraction':.045,'fit_only_omits':['候船横巷','引路灯'],'hidden_objects':[]}
 # Reject bad framing before spending time on the fourteen fixed render views.
 probe=add_cam(*VIEWS[15][:5]);fit_workshop43(probe);created.remove(probe)
 probe_data=probe.data;bpy.data.objects.remove(probe,do_unlink=True);bpy.data.cameras.remove(probe_data)
