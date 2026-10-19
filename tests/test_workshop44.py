@@ -17,3 +17,11 @@ class Workshop44(unittest.TestCase):
     def test_no_scale_or_material_replacement(self):
         self.assertIn("obj.location=center;obj['JN_shared_family44']=label",source)
         self.assertIn("(4.40,.14,.14)",source)
+    def test_sloped_top_full_bottom_plane(self):
+        for i,x,a,z in ns['workshop_rack44']():
+            for vx in (-.24,.24):
+                wx=x+.82*(vx*math.cos(a)-.5*math.sin(a))
+                wz=.98+.82*(-vx*math.sin(a)-.5*math.cos(a))
+                self.assertAlmostEqual(wz,.98-.41/math.cos(a)-math.tan(a)*(wx-x))
+                top=.98-.41/math.cos(a)-math.tan(a)*(.26 if vx>0 else -.26)
+                self.assertGreater(top-(z-.05),.03)

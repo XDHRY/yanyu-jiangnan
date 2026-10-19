@@ -780,17 +780,23 @@ rack44=[]
 for i,oar in enumerate(sorted(shared_oars,key=lambda o:o.name),1):
     seat=ob43('承桨托座'+str(i%2)+('.001' if i>2 else ''))
     back=ob43('承桨托背'+str(i%2)+('.001' if i>2 else ''))
-    # Ray goes through the actual lowest corner, not its bounding-box centre.
+    # Four real bottom corners contact the sloped seat, not just its low edge.
     ev=oar.evaluated_get(dg43);data=ev.to_mesh()
-    try:pts=[ev.matrix_world@v.co for v in data.vertices]
+    try:pts=[ev.matrix_world@v.co for v in data.vertices if abs(v.co.z+.50)<1e-5]
     finally:ev.to_mesh_clear()
-    p=min(pts,key=lambda p:p.z)
-    support43('oar blade '+str(i),oar,seat,xy=[p.x,p.y])
+    assert len(pts)==4
+    seat_ev=seat.evaluated_get(dg43);inv=seat_ev.matrix_world.inverted();gaps=[]
+    for p in pts:
+        origin=p+Vector((0,0,.003));direction=Vector((0,0,-1))
+        hit,where,normal,face=seat_ev.ray_cast(inv@origin,(inv.to_3x3()@direction).normalized(),distance=.006)
+        gap=p.z-(seat_ev.matrix_world@where).z
+        assert hit and abs(gap)<.0001,('sloped oar seat',i,gap)
+        gaps.append(gap)
     sb=bounds43(seat);bb=bounds43(back);rb=bounds43(ob43('桨架下枋'))
     seat_overlap=[min(sb[1][j],bb[1][j])-max(sb[0][j],bb[0][j]) for j in range(3)]
     rail_overlap=[min(rb[1][j],bb[1][j])-max(rb[0][j],bb[0][j]) for j in range(3)]
     assert min(seat_overlap)>.009 and min(rail_overlap)>.009
-    rack44.append({'oar':oar.name,'seat':seat.name,'backer':back.name,'blade_contact_z':p.z,'seat_backer_overlap_m':seat_overlap,'backer_rail_overlap_m':rail_overlap})
+    rack44.append({'oar':oar.name,'seat':seat.name,'backer':back.name,'blade_bottom_corner_rays':4,'contact_gaps_m':gaps,'seat_backer_overlap_m':seat_overlap,'backer_rail_overlap_m':rail_overlap})
 for label in ('桨架下枋','桨架上枋'):
     rb=bounds43(ob43(label))
     for post in [o for o in oar_cols if abs(pos(o).y-74.60)<.01]:
@@ -799,6 +805,24 @@ for label in ('桨架下枋','桨架上枋'):
 for label in ('承桨托座1','承桨托座0','承桨托背1','承桨托背0'):
     assert ob43(label).data==ob43(label+'.001').data
 report['workshop_rack44']={'leg_objects':8,'leg_meshes':2,'new_seat_objects':8,'new_seat_meshes':4,'oar_seats':rack44,'rail_post_joints':4,'source_images_added':0,'materials_added':0,'wood_scale':(1.1,1.1,.30),'texture_phase':'shared local phase; metre frequency preserved','load_certification':'pending','human_approval':'pending'}
+normal44={}
+for obj in S.objects:
+    if not obj.name.startswith(prefix43) or not any(k in obj.name for k in ('长案腿','修桨马凳腿','桨架下枋','桨架上枋','承桨托')):continue
+    data=obj.data
+    if data.name in normal44:continue
+    data.calc_loop_triangles()
+    center=sum((v.co for v in data.vertices),Vector())/len(data.vertices)
+    volume=sum((data.vertices[t.vertices[0]].co-center).dot((data.vertices[t.vertices[1]].co-center).cross(data.vertices[t.vertices[2]].co-center)) for t in data.loop_triangles)/6
+    assert volume>0,(obj.name,'inward normals',volume)
+    counts={}
+    for p in data.polygons:
+        ids=list(p.vertices)
+        for a,b in zip(ids,ids[1:]+ids[:1]):
+            key=tuple(sorted((a,b)));counts[key]=counts.get(key,0)+1
+    assert set(counts.values())=={2},(obj.name,'nonmanifold')
+    normal44[data.name]=volume
+assert len(normal44)==8
+report['workshop_rack44']['closed_outward_mesh_volumes_m3']=normal44
 # North umbrella lane: verify the fifth bridge closes a walkable two-bank loop,
 # and the mixed-use house has grounded structure, a real shop opening and a
 # second real opening to an inhabited rear room.

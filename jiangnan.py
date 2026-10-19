@@ -2062,13 +2062,18 @@ def town_phase11_west_oar_workshop():
     # the centre arrival clear.  Every floor object physically lands on either
     # the platform or a visible support.
     box('北河修桨作坊_工作长案',(-5.55,73.52,.91),(2.28,.62,.14),wood,c,.014)
+    def outward44(obj):
+        import bmesh
+        bm=bmesh.new();bm.from_mesh(obj.data)
+        bmesh.ops.recalc_face_normals(bm,faces=list(bm.faces));bm.to_mesh(obj.data);bm.free();obj.data.update()
+        return obj
     def shared44(label,centers,size,bev=0):
         # Centred metre-scale coordinates; no scale transforms. Texture phase
         # becomes common to siblings, not its physical frequency or orientation.
         first=None
         for center in centers:
             if first is None:
-                obj=box('北河修桨作坊_'+label,(0,0,0),size,wood,c,bev);first=obj
+                obj=outward44(box('北河修桨作坊_'+label,(0,0,0),size,wood,c,bev));first=obj
             else:
                 obj=bpy.data.objects.new(PREFIX+'北河修桨作坊_'+label,first.data);c.objects.link(obj)
                 for modifier in first.modifiers:
@@ -2094,8 +2099,8 @@ def town_phase11_west_oar_workshop():
     of.extend(tuple(k+i for i in f) for f in ((0,1,2,3,4,5),(11,10,9,8,7,6),(0,6,7,1),(1,7,8,2),(2,8,9,3),(3,9,10,4),(4,10,11,5),(5,11,6,0)))
     oar=mesh('北河修桨作坊_桨橹原型',ov,of,wood,c);oar.hide_render=True;oar.hide_viewport=True
     # Both ends overlap the rear posts; the old bars stopped short of them.
-    box('北河修桨作坊_桨架下枋',(wx,74.53,.88),(4.40,.14,.14),wood,c,.006)
-    box('北河修桨作坊_桨架上枋',(wx,74.53,2.34),(4.40,.14,.14),wood,c,.006)
+    outward44(box('北河修桨作坊_桨架下枋',(wx,74.53,.88),(4.40,.14,.14),wood,c,.006))
+    outward44(box('北河修桨作坊_桨架上枋',(wx,74.53,2.34),(4.40,.14,.14),wood,c,.006))
     for i,x in enumerate((-6.18,-5.15,-4.10,-3.08),1):
         o=bpy.data.objects.new(PREFIX+f'北河修桨作坊_共享桨橹_{i}',oar.data);c.objects.link(o)
         # Lift the blades above the trestle silhouette and scale the full oars
@@ -2108,7 +2113,15 @@ def town_phase11_west_oar_workshop():
     for parity in (1,0):
         rows=[r for r in workshop_rack44() if r[0]%2==parity]
         bottom=rows[0][3]
-        shared44('承桨托座'+str(parity),[(x,74.38,bottom-.025) for _,x,_,_ in rows],(.52,.38,.05))
+        seat=shared44('承桨托座'+str(parity),[(x,74.38,bottom-.025) for _,x,_,_ in rows],(.52,.38,.05))
+        # A flat shelf only touched the lowest blade corner. Slope its existing
+        # four top vertices to the actual rotated blade-bottom plane; keep the
+        # underside level, the same 8 vertices/6 faces and the shared family.
+        angle=rows[0][2]
+        for v in seat.data.vertices:
+            if v.co.z>0:
+                v.co.z=.98-.41/cos(angle)-sin(angle)/cos(angle)*v.co.x-(bottom-.025)
+        seat.data.update()
         shared44('承桨托背'+str(parity),[(x,74.53,(bottom-.05+.95)/2) for _,x,_,_ in rows],(.10,.14,.95-(bottom-.05)))
 
     # Restrained tools and rope explain active maintenance without visual clutter.
