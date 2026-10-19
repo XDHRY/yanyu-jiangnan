@@ -2523,17 +2523,27 @@ def town_phase15_east_dyed_paper_court():
     sheet.hide_render=True;sheet.hide_viewport=True
     box('北河染纸坊_晾纸上枋',(16.40,99.78,2.24),(2.35,.12,.12),wood,c,.005)
     box('北河染纸坊_晾纸下枋',(16.40,99.78,.76),(2.35,.12,.12),wood,c,.005)
-    for x in (15.28,17.52):box('北河染纸坊_晾纸立柱',(x,99.78,1.50),(.12,.12,1.60),wood,c,.004)
+    for x in (15.28,17.52):box('北河染纸坊_晾纸立柱',(x,99.78,1.309),(.12,.12,1.982),wood,c,.004)
+    # Round50: one closed outward-wound mesh, twelve linked paper/beam clips.
+    clip50=box('染纸支撑50_纸夹原型',(0,0,0),(.035,.14,.16),wood,c)
+    import bmesh
+    bm=bmesh.new();bm.from_mesh(clip50.data)
+    bmesh.ops.recalc_face_normals(bm,faces=list(bm.faces));bm.to_mesh(clip50.data);bm.free()
+    clip50.hide_render=True;clip50.hide_viewport=True
+    clip50['JN_asset_family']='dyed-paper-support50'
     for i,x in enumerate((15.48,15.86,16.24,16.62,17.00,17.38),1):
         o=bpy.data.objects.new(PREFIX+f'北河染纸坊_共享靛纸_{i}',sheet.data);c.objects.link(o);o.location=(x,99.70,1.49)
+        for j,dx in enumerate((-.10,.10),1):
+            clip=bpy.data.objects.new(PREFIX+f'染纸支撑50_纸夹_{i}_{j}',clip50.data);c.objects.link(clip)
+            clip.location=(x+dx,99.72,2.16);clip['JN_asset_family']='dyed-paper-support50'
     for zz in (.72,1.32,1.92):box('北河染纸坊_颜料架',(17.22,97.95,zz),(.40,1.90,.12),wood,c,.005)
-    for y in (97.28,98.62):box('北河染纸坊_颜料架立柱',(17.22,y,1.30),(.12,.12,1.90),wood,c,.004)
-    for i,(y,mat) in enumerate(((97.45,madder),(98.05,M['gold']),(98.65,indigo)),1):
-        box(f'北河染纸坊_颜料盒_{i}',(17.02,y,1.42),(.30,.38,.18),mat,c,.018)
+    for y in (97.28,98.62):box('北河染纸坊_颜料架立柱',(17.22,y,1.284),(.12,.12,1.932),wood,c,.004)
+    for i,(y,mat) in enumerate(((97.56,madder),(97.95,M['gold']),(98.34,indigo)),1):
+        box(f'北河染纸坊_颜料盒_{i}',(17.18,y,1.468),(.30,.38,.18),mat,c,.018)
     box('北河染纸坊_搅染长案',(13.72,98.48,.74),(1.52,.64,.16),wood,c,.010)
     for x in (13.16,14.28):
-        for y in (98.25,98.71):box('北河染纸坊_长案足',(x,y,.40),(.12,.12,.68),wood,c,.004)
-    line('北河染纸坊_染纸竹夹',[(13.12,98.42,.86),(14.26,98.52,.92)],.025,wood,c,res=1,bevel_res=1)
+        for y in (98.25,98.71):box('北河染纸坊_长案足',(x,y,.49),(.12,.12,.344),wood,c,.004)
+    line('北河染纸坊_染纸竹夹',[(13.12,98.42,.845),(14.26,98.52,.845)],.025,wood,c,res=1,bevel_res=1)
     line('北河染纸坊_梁下吊灯索',[(14.30,98.48,3.08),(14.30,98.48,2.58)],.012,wood,c,res=1,bevel_res=0)
     box('北河染纸坊_梁下纸灯罩',(14.30,98.48,2.43),(.25,.25,.30),M['paper'],c,.016)
     light('北河染纸坊_梁下工作灯',(14.30,98.48,2.35),(1,.40,.16),72,.95,target=(14.70,97.60,.70),kind='AREA')

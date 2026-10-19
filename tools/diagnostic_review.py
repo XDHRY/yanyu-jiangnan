@@ -28,8 +28,8 @@ VIEWS=[
     ('12_village_lane',(1.4,8.4,1.75),(1.4,31.5,1.35),42,0,'村巷人眼：月门北巷通往茶集的连续地面、民居侧廊、桥前横巷和远端茶亭'),
     ('13_canal_bridge',(13.2,11.2,8.6),(7.3,15.1,.9),46,0,'水巷木桥：高位斜俯视完整检查桥板、栏柱、双岸驳岸、桥头落地与临水民居尺度'),
     ('14_village_waterfront',(7.3,29.0,2.25),(7.3,16.0,1.35),40,0,'临水回望：检查八栋民居沿水巷的聚落节奏、河埠和木桥是否形成江南村落层次'),
-    ('15_sampan_shell',(9.5,99.8,2.0),(7.3,102.65,.35),42,0,'舢板结构：开放内舱、35毫米轴向内缩壳体与封边、两坐板和共享木横肋真实接触；不隐藏资产'),
-    ('16_waiting_pavilion',(7.8,79.7,5.4),(.1,68.7,1.8),42,0,'候船亭—横巷：完整屋檐—柱梁—台基、上台高差、长凳与行李搁架支撑及中央通行带；不隐藏资产'),
+    ('15_dyed_paper_court',(4.2,88.4,9.3),(14.8,98.0,1.9),42,0,'东岸染纸院：临街两步、开放柱网、屋檐—柱梁—台基与漂洗—染缸—晾纸动线'),
+    ('16_dyed_paper_support',(8.8,95.4,2.65),(15.2,98.4,1.30),42,0,'染纸近景：搅染案足、颜料架及盒底承托、晾纸立柱落地与纸夹悬挂；不隐藏资产'),
 ]
 
 for o in list(bpy.data.objects):
@@ -170,13 +170,28 @@ def fit_waiting46(cam):
         cam.data.lens/=factor*1.01;bpy.context.view_layer.update()
     assert cam.data.lens>=22 and min(bounds[0],bounds[2])>.045 and max(bounds[1],bounds[3])<.955,bounds
     return {'fixed_envelope_m':[[-2.35,66.1,0],[3.7,72.7,5.2]],'projected_bounds':bounds,'fitted_lens_mm':cam.data.lens,'padding_fraction':.045,'hidden_objects':[],'proxy_geometry_created':False}
-# Reject bad framing before spending time on the fourteen fixed render views.
-probe=add_cam(*VIEWS[15][:5]);fit_waiting46(probe);created.remove(probe)
-probe_data=probe.data;bpy.data.objects.remove(probe,do_unlink=True);bpy.data.cameras.remove(probe_data)
+def fit_dyed50(cam,detail=False):
+    # Fixed spatial envelope, not proxy geometry: same framing before/after.
+    lo,hi=((13.0,97.0,.25),(17.65,100.0,2.40)) if detail else ((11.70,95.15,0),(17.95,100.85,4.40))
+    pts=[Vector((x,y,z)) for x in (lo[0],hi[0]) for y in (lo[1],hi[1]) for z in (lo[2],hi[2])]
+    bpy.context.view_layer.update()
+    for _ in range(8):
+        q=[world_to_camera_view(S,cam,p) for p in pts]
+        assert min(p.z for p in q)>cam.data.clip_start
+        bounds=[min(p.x for p in q),max(p.x for p in q),min(p.y for p in q),max(p.y for p in q)]
+        factor=max(abs(v-.5) for v in bounds)/.445
+        if factor<=1:break
+        cam.data.lens/=factor*1.01;bpy.context.view_layer.update()
+    assert cam.data.lens>=22 and min(bounds[0],bounds[2])>.045 and max(bounds[1],bounds[3])<.955,bounds
+    return {'fixed_envelope_m':[lo,hi],'projected_bounds':bounds,'fitted_lens_mm':cam.data.lens,'hidden_objects':[],'proxy_geometry_created':False}
+# Reject both focus frames before spending time on the fourteen fixed views.
+for index in (14,15):
+    probe=add_cam(*VIEWS[index][:5]);fit_dyed50(probe,index==15);created.remove(probe)
+    probe_data=probe.data;bpy.data.objects.remove(probe,do_unlink=True);bpy.data.cameras.remove(probe_data)
 for name,loc,target,lens,ortho,question in VIEWS:
     cam=add_cam(name,loc,target,lens,ortho)
     S.camera=cam
-    framing=fit_sampan42(cam) if name=='15_sampan_shell' else fit_waiting46(cam) if name=='16_waiting_pavilion' else None
+    framing=fit_dyed50(cam,name.startswith('16_')) if name.startswith(('15_','16_')) else None
     S.render.filepath=os.path.join(DIAG,name+'.png')
     excluded=[]
     if name=='11_village_plan':
