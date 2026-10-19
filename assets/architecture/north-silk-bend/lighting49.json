@@ -1,0 +1,22 @@
+{
+  "schema":"yanyu-jiangnan.north-lighting49.v1",
+  "baseline_commit":"1bac41e76498d1080a84fa621627cdf3b7b534f0",
+  "source":"jiangnan.py::north_lighting49",
+  "units":"metres, Blender light watts",
+  "purpose":"Separate boat inner shell and pavilion timber in northern night shadows while keeping warm lantern pools",
+  "new_area_lights":[
+    {"name":"JN_北岸夜读49_候船月光","position":[3,74,10],"target":[-2,70,0.9],"watts":600,"diameter_m":8,"color":[0.40,0.58,0.82]},
+    {"name":"JN_北岸夜读49_舢板月光","position":[10,100,9],"target":[7.3,102.65,0.45],"watts":360,"diameter_m":7,"color":[0.40,0.58,0.82]}
+  ],
+  "retuned_existing_lights":[
+    {"name":"JN_北河修桨作坊_工作灯火","before_watts":76,"after_watts":105},
+    {"name":"JN_北河修桨作坊_引路灯火","before_watts":36,"after_watts":50},
+    {"name":"JN_北河转水埠_东岸灯照船补光","before_watts":90,"after_watts":140}
+  ],
+  "changes":{"new_light_objects":2,"retuned_lights":3,"untouched_existing_lights":43,"new_geometry":0,"new_materials":0,"new_images":0,"new_buildings":0,"paid_credits":0},
+  "provenance":"Project-authored reproducible Blender Python. Existing image sources, licences, metre mapping, UV/normals and LOD state unchanged.",
+  "camera":"10 courtyard +4 village +2 existing focus cameras, 1024x640; exposure and framing unchanged",
+  "runtime":"Existing exporter excludes lights; Web appearance improvement not claimed. Shared fixture record for later runtime lighting work; no bake in BaseColor.",
+  "validation":"Source syntax/unit suite pending; native light-direction/parameter and non-target-light assertions added. CI/render/budget/visual review pending.",
+  "pending":["actual same-camera Blender comparison","full PBR/UV/LOD/collision/navigation","Web lighting parity","generic Form legacy evidence and explicit human approval"]
+}
