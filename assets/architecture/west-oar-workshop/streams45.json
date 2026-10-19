@@ -1,0 +1,22 @@
+{
+  "schema":"yanyu-jiangnan.workshop-streams45.v1",
+  "source":"tools/web_shared_streams45.py; applied after exact topology cleanup by tools/export_web.py",
+  "baseline":"95f9977784ff15680239400285e447760f09c6df",
+  "verified_source":"ebf8e713b73f3b7485c9c7e1a4dbacc47c91adf9",
+  "tested":"f281b17cac8c43a82e0ff050ac567efd6abe1d07",
+  "merge":"b5b4c1fbd2e778d6f90d1f86381d792ba22652c8",
+  "target":"eight existing JN_北河修桨作坊_长案腿 / 修桨马凳腿 nodes only",
+  "new_geometry_objects_images_materials_lights":0,
+  "target_mesh_entries_before_after":[8,8],
+  "removed_exact_duplicate_accessors":14,
+  "all_retained_view_payloads_bit_identical":true,
+  "attribute_index_bytes_before_after":[29873670,29838246],
+  "remaining_attribute_index_bytes":161754,
+  "glb_bytes_before_after":[53057484,53019336],
+  "instance_triangles":625055,
+  "glb_sha256":"3deb283d063e1079510375673d1126e76f0422815de3581f7554305551ec4fc5",
+  "material_mapping_sources_licenses":"unchanged from rack44.json; no new bitmap/PBR/UV bake or external asset",
+  "cameras":"all 16 actual fields preserved, long edge1024; no36-view render",
+  "evidence":"docs/iterations/20261019-workshop-streams.md and review/round-39211238005",
+  "pending":["UV cross-build floating drift6.103515625e-5","complete mesh instancing and measured GPU VRAM/FPS","generic Form and human Function/Form/Runtime","PBR/LOD/collision/physical mobile","night dark detail and dynamic load"]
+}
