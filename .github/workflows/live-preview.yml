@@ -2,25 +2,47 @@ name: Offline Animated Model Preview
 on:
   pull_request:
     branches: [main]
-    paths: ['tools/live_preview/**','.github/workflows/live-preview.yml']
+    paths: ['tools/live_preview/**','.github/workflows/live-preview.yml','jiangnan.py','textures/**','tools/web_materials.py','tools/web_material_factors.py','tools/procedural_palette53.py']
 permissions:
   contents: read
   actions: read
 jobs:
   offline-runtime:
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
         with:
           node-version: '22'
-      - uses: actions/download-artifact@v4
-        with:
-          github-token: ${{ github.token }}
-          run-id: 39396940527
-          name: Jiangnan-Web-Viewer-6c310375fe261866f311d27e5f5cd8e2657266ca
-          path: source-viewer
+      - name: Reuse successful same-head Web build without dispatching another build
+        env:
+          GH_TOKEN: ${{ github.token }}
+          JN_HEAD: ${{ github.event.pull_request.head.sha }}
+          JN_BRANCH: ${{ github.head_ref }}
+        run: |
+          python - <<'PY'
+          import json,os,subprocess,time
+          from pathlib import Path
+          repo=os.environ['GITHUB_REPOSITORY'];head=os.environ['JN_HEAD'];branch=os.environ['JN_BRANCH']
+          def get(path):return json.loads(subprocess.check_output(['gh','api',path]))
+          deadline=time.monotonic()+1200
+          while time.monotonic()<deadline:
+              runs=get(f'repos/{repo}/actions/runs?per_page=100')['workflow_runs']
+              candidates=[r for r in runs if r['name']=='Jiangnan Web 3D Viewer' and r['head_sha']==head and r['head_branch']==branch and r['event']=='pull_request']
+              assert len(candidates)<=1,'Duplicate Web builds for same head; reconcile before preview'
+              if candidates and candidates[0]['status']=='completed':
+                  run=candidates[0];assert run['conclusion']=='success','Upstream Web build failed'
+                  artifacts=get(f"repos/{repo}/actions/runs/{run['id']}/artifacts")['artifacts']
+                  artifacts=[a for a in artifacts if a['name'].startswith('Jiangnan-Web-Viewer-') and not a['expired']]
+                  assert len(artifacts)==1
+                  artifact=artifacts[0]
+                  subprocess.run(['gh','run','download',str(run['id']),'--repo',repo,'-n',artifact['name'],'-D','source-viewer'],check=True)
+                  Path('source-viewer/workflow-source.json').write_text(json.dumps({'conclusion':run['conclusion'],'expected_head':head,'model_source':run['head_sha'],'web_run':run['id'],'artifact':artifact['id'],'artifact_digest':artifact.get('digest')}))
+                  break
+              time.sleep(20)
+          else:raise RuntimeError('Same-head Web build not ready; no duplicate dispatch performed')
+          PY
       - name: Build from unchanged verified model
         run: python tools/live_preview/build.py source-viewer live-delivery
       - name: Install browser test runtime
@@ -50,3 +72,4 @@ jobs:
           path: live-delivery/
           retention-days: 30
           if-no-files-found: error
+

@@ -125,3 +125,33 @@ if rows43:
     users43=[n['name'] for n in g['nodes'] if 'mesh' in n and any(p.get('material')==i43 for p in g['meshes'][n['mesh']]['primitives'])]
     assert set(users43)=={'JN_北河修桨作坊_盘绳_1__WEB_MESH','JN_北河修桨作坊_盘绳_2__WEB_MESH'},users43
     print('WORKSHOP43_LOCAL_ROPE_FALLBACK_OK',users43)
+
+# Source-declared vegetation fallback must survive the actual Blender export.
+rows53=[r for r in report.get('materials',[]) if r.get('source_material')=='JN_moss']
+if rows53:
+    assert len(rows53)==1 and rows53[0]['source_images']==[]
+    factor=rows53[0].get('base_color_factor')
+    assert factor is not None and len(factor)==4
+    assert max(abs(a-b) for a,b in zip(factor,(.065,.12,.064,1)))<1e-6
+    mats53=[(i,m) for i,m in enumerate(g['materials']) if m['name']=='JN_moss__WEB']
+    assert len(mats53)==1
+    i53,m53=mats53[0];p53=m53['pbrMetallicRoughness']
+    assert len(p53.get('baseColorFactor',[]))==4
+    assert max(abs(a-b) for a,b in zip(p53['baseColorFactor'],factor))<1e-6
+    assert abs(p53['roughnessFactor']-.88)<1e-6 and p53.get('metallicFactor',1)==0
+    assert 'baseColorTexture' not in p53 and 'normalTexture' not in m53
+    users53=[n['name'] for n in g['nodes'] if 'mesh' in n and any(p.get('material')==i53 for p in g['meshes'][n['mesh']]['primitives'])]
+    assert users53 and any('远竹' in n for n in users53) and any('苔岸细草' in n for n in users53)
+    report['vegetation53']={'passed':True,'visible_users':sorted(users53),'base_color_factor':factor,
+                           'new_images':0,'scope':'authored colour only; procedural variation/normal bake pending'}
+    (root/'material-audit.json').write_text(json.dumps(report,ensure_ascii=False,indent=2))
+    print('VEGETATION53_SOURCE_COLOUR_OK',len(users53))
+
+from procedural_palette53 import verify_palette
+palette53=verify_palette(g,report.get('materials',[]))
+if palette53:
+    report['procedural_palette53']={'passed':True,'materials':palette53,'visible_users':321,
+        'new_images':0,'scope':'source flat colour, procedural noise and true PBR bake pending'}
+    (root/'material-audit.json').write_text(json.dumps(report,ensure_ascii=False,indent=2))
+    print('PROCEDURAL_PALETTE53_OK',len(palette53),321)
+

@@ -17,7 +17,7 @@ async function main(){
   await page.waitForFunction(()=>{const e=document.querySelector('#loading');return e?.classList.contains('done')&&Number(getComputedStyle(e).opacity)<0.001;},null,{timeout:10000});
   await page.evaluate(()=>document.body.classList.add('ui-hidden'));await page.addStyleTag({content:'#restoreUI{display:none!important}'});
   const rows=[];
-  for(const [label,width,height,index] of [['desktop15',1024,640,14],['desktop16',1024,640,15],['mobile15',390,844,14],['mobile16',390,844,15]]){
+  for(const [label,width,height,index] of [['desktop01',1024,640,0],['desktop06',1024,640,5],['desktop15',1024,640,14],['desktop16',1024,640,15],['mobile15',390,844,14],['mobile16',390,844,15]]){
    await page.setViewportSize({width,height});const before=await page.evaluate(i=>{const r=window.JIANGNAN_REVIEW;const f=r.snapshot().frame;r.goPreset(i);return f;},index);
    try{await page.waitForFunction(({index,before})=>{const s=window.JIANGNAN_REVIEW.snapshot();return s.activePreset===s.presets[index].name&&s.frame>before+3&&s.poseError<1e-5&&s.rotationError<1e-5;},{index,before},{timeout:60000});}catch(e){const failed=await page.evaluate(()=>window.JIANGNAN_REVIEW.snapshot());console.error('CAMERA_AUDIT_FAILED',label,JSON.stringify(failed));fs.writeFileSync(path.join(out,'failed-camera.json'),JSON.stringify({label,...failed},null,2));await page.screenshot({path:path.join(out,'failed-camera.png')});throw e;}
    const snapshot=await page.evaluate(()=>({...window.JIANGNAN_REVIEW.snapshot(),loadingOverlayOpacity:Number(getComputedStyle(document.querySelector('#loading')).opacity)}));
@@ -48,3 +48,4 @@ async function main(){
  }finally{if(browser)await browser.close();await new Promise(r=>server.close(r));}
 }
 main().catch(e=>{console.error(e);process.exitCode=1;});
+
