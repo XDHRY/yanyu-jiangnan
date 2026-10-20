@@ -5,15 +5,18 @@ same local-coordinate scale. BOX blend seams and procedural bump are not baked.
 An albedo is NEVER a tangent normal. Until a real bake exists use geometry normals.
 """
 import bpy
+from material_coordinates51 import object_uv,validate_axes
 
 UV_NAME='JN_WEB_MetreUV'
 
 def prepare_web_materials(objects):
     originals={m for o in objects for m in getattr(o.data,'materials',[]) if m}
-    adapted={};scales={};textured=set();rows=[]
+    adapted={};scales={};coordinate_axes={};textured=set();rows=[]
     for original in sorted(originals,key=lambda m:m.name):
         if not original.use_nodes:continue
         mat=original.copy();mat.name=original.name+'__WEB'
+        axes=validate_axes(original.get('JN_web_object_axes51',(0,1,2)))
+        coordinate_axes[mat.name]=axes
         nodes=mat.node_tree.nodes;links=mat.node_tree.links
         removed=0;images=[];scale=None
         for node in list(nodes):
@@ -40,7 +43,7 @@ def prepare_web_materials(objects):
         if scale:scales[mat.name]=scale
         rows.append({'source_material':original.name,'export_material':mat.name,
                      'base_color_factor':list(original['JN_web_base_color_factor']) if 'JN_web_base_color_factor' in original else None,
-                     'source_images':sorted(set(images)),'object_coordinate_scale':scale,
+                     'source_images':sorted(set(images)),'object_coordinate_scale':scale,'coordinate_axes':axes,
                      'removed_bump_nodes':removed,'normal_policy':'source tangent normal map preserved' if any(n.type=='NORMAL_MAP' for n in nodes) else 'geometric normals; true tangent bake pending'})
     meshes={};converted=0;uv_faces=0;fallback_faces=0;hidden=[]
     deps=bpy.context.evaluated_depsgraph_get()
@@ -69,7 +72,7 @@ def prepare_web_materials(objects):
                     axis=max(range(3),key=lambda i:abs(poly.normal[i]));a,b=[i for i in range(3) if i!=axis]
                     for loop in poly.loop_indices:
                         co=data.vertices[data.loops[loop].vertex_index].co
-                        layer.data[loop].uv=(((co[a]-lo[a])/max(span[a],1e-8),(co[b]-lo[b])/max(span[b],1e-8)) if fallback else (co[a]*scale[a],co[b]*scale[b]))
+                        layer.data[loop].uv=(((co[a]-lo[a])/max(span[a],1e-8),(co[b]-lo[b])/max(span[b],1e-8)) if fallback else object_uv(co,poly.normal,scale,coordinate_axes[mat.name]))
                     uv_faces+=1
                     if fallback:fallback_faces+=1
             meshes[key]=data

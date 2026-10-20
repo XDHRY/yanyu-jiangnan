@@ -468,6 +468,36 @@ def refine_clouds():
         mul=n.new('ShaderNodeMath');mul.operation='MULTIPLY';l.new(source,mul.inputs[0]);l.new(fade.outputs[0],mul.inputs[1]);l.new(mul.outputs[0],p.inputs['Density'])
         p.inputs['Emission Strength'].default_value=0
     light('高云月照',(-3,18,18),(.6,.75,1),1900,9,(0,27,12))
+def dyed_grain51_layout():
+    return {
+        'X': {'axes':(2,1,0),'users':tuple('JN_北河染纸坊_'+n for n in ('横向穿梁','横向穿梁.001','横向穿梁.002','晾纸上枋','晾纸下枋','搅染长案'))},
+        'Y': {'axes':(0,2,1),'users':tuple('JN_北河染纸坊_'+n for n in ('纵向檐枋','纵向檐枋.001','颜料架','颜料架.001','颜料架.002'))},
+    }
+
+def refine_dyed_grain51():
+    """Local timber-axis mapping; original image, scale and shader retained."""
+    source=M['wood'];rows=[]
+    for axis,spec in dyed_grain51_layout().items():
+        mat=source.copy();mat.name=PREFIX+'染纸顺纹51_'+axis
+        mat['JN_web_object_axes51']=spec['axes']
+        nodes=mat.node_tree.nodes;links=mat.node_tree.links
+        mappings={n.inputs['Vector'].links[0].from_node for n in nodes if n.type=='TEX_IMAGE' and n.image and n.projection=='BOX'}
+        assert len(mappings)==1,'wood image mapping contract missing'
+        mapping=next(iter(mappings));assert mapping.type=='VECT_MATH' and mapping.operation=='MULTIPLY'
+        incoming=mapping.inputs[0].links[0].from_socket
+        for link in list(mapping.inputs[0].links):links.remove(link)
+        separate=nodes.new('ShaderNodeSeparateXYZ');combine=nodes.new('ShaderNodeCombineXYZ')
+        separate.label='Round51 original metre coordinates';combine.label='Round51 grain along '+axis
+        links.new(incoming,separate.inputs[0])
+        for i,j in enumerate(spec['axes']):links.new(separate.outputs[j],combine.inputs[i])
+        links.new(combine.outputs[0],mapping.inputs[0])
+        for name in spec['users']:
+            obj=bpy.data.objects[name]
+            assert len(obj.data.materials)==1 and obj.data.materials[0]==source,name
+            obj.data.materials[0]=mat
+        rows.append({'axis':axis,'axes':spec['axes'],'users':spec['users'],'source_image':'wood.png','mapped_scale':list(mapping.inputs[1].default_value)})
+    S['JN_dyed_grain51']=json.dumps(rows,ensure_ascii=False)
+
 def image_material(key,asset,scale,depth=.035,uv=False,tint=None):
     path=os.path.join(P['output_dir'],'textures',asset+'.png')
     if not os.path.exists(path):return
@@ -3613,6 +3643,7 @@ def build(stage=None):
     # Reuse the finished source wood/rope/iron materials without mutating them.
     town_east_rope_bench40()
     north_lighting49()
+    if level>=5 and P.get('art_upgrade',False):refine_dyed_grain51()
     S.frame_set(80);viewport()
     print('STAGE',level,'OBJECTS',len(S.objects))
 if __name__=='__main__':

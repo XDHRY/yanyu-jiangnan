@@ -51,6 +51,24 @@ for m in g['materials']:
         p=m['pbrMetallicRoughness'];assert 'baseColorTexture' in p
         assert all(abs(a-b)<1e-5 for a,b in zip(p['baseColorFactor'],(.45,.52,.54,1)))
 print('MATERIAL_CONTRACT_OK',checked,normals)
+
+# Optional round51 contract: keep minimal legacy fixtures valid, but fail closed
+# when either real axis material is declared in the actual source report.
+grain_rows51=[r for r in report.get('materials',[]) if r.get('source_material','').startswith('JN_染纸顺纹51_')]
+if grain_rows51:
+    assert len(grain_rows51)==2
+    users51={}
+    for row in grain_rows51:
+        axis=row['source_material'][-1];assert axis in ('X','Y')
+        assert row['coordinate_axes']==([2,1,0] if axis=='X' else [0,2,1])
+        assert max(abs(a-b) for a,b in zip(row['object_coordinate_scale'],(1.1,1.1,.3)))<1e-6
+        indices=[i for i,m in enumerate(g['materials']) if m['name']==row['export_material']]
+        assert len(indices)==1 and g['materials'][indices[0]]['pbrMetallicRoughness'].get('baseColorTexture')
+        users={n['name'] for n in g['nodes'] if 'mesh' in n and any(p.get('material')==indices[0] for p in g['meshes'][n['mesh']]['primitives'])}
+        assert len(users)==(6 if axis=='X' else 5) and all(n.startswith('JN_北河染纸坊_') for n in users),users
+        users51[axis]=sorted(users)
+    report['dyed_grain51']={'passed':True,'users':users51,'new_images':0,'tangent_bake':'pending'}
+    (root/'material-audit.json').write_text(json.dumps(report,ensure_ascii=False,indent=2))
 for name,factor,rough in [('JN_备膳青白釉',(.48,.57,.50,1),.27),('JN_备膳烟道灰面',(.56,.57,.53,1),.88)]:
     if not any(row.get('source_material')==name for row in report.get('materials',[])):continue
     mats=[m for m in g['materials'] if m['name'].startswith(name)]

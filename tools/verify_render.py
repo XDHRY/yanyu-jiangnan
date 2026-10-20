@@ -1806,6 +1806,30 @@ assert report['north_lighting49']['unchanged_existing_lights']==43
 assert sum(o.type=='LIGHT' for o in S.objects)==48
 report['north_lighting49']['direction_parameter_checks']=2
 
+grain51=json.loads(S['JN_dyed_grain51']);assert len(grain51)==2
+grain_users51=[];source_wood51=bpy.data.materials['JN_wood']
+source_images51={n.image for n in source_wood51.node_tree.nodes if n.type=='TEX_IMAGE' and n.image}
+for row in grain51:
+    axis=row['axis'];mat=bpy.data.materials['JN_染纸顺纹51_'+axis]
+    expected=(2,1,0) if axis=='X' else (0,2,1)
+    assert tuple(row['axes'])==tuple(mat['JN_web_object_axes51'])==expected
+    users=[o.name for o in S.objects if o.type=='MESH' and mat in list(o.data.materials)]
+    assert sorted(users)==sorted(row['users']) and len(users)==(6 if axis=='X' else 5)
+    grain_users51.extend(users)
+    assert {n.image for n in mat.node_tree.nodes if n.type=='TEX_IMAGE' and n.image}==source_images51
+    mapping=next(n.inputs['Vector'].links[0].from_node for n in mat.node_tree.nodes if n.type=='TEX_IMAGE' and n.image and n.projection=='BOX')
+    assert max(abs(a-b) for a,b in zip(mapping.inputs[1].default_value,(1.1,1.1,.3)))<1e-6
+    combine=mapping.inputs[0].links[0].from_node;assert combine.type=='COMBXYZ'
+    for i,j in enumerate(expected):
+        link=combine.inputs[i].links[0];separate=link.from_node
+        assert separate.type=='SEPXYZ' and link.from_socket==separate.outputs[j]
+        assert separate.inputs[0].links[0].from_socket.name=='Object'
+    old_bs=next(n for n in source_wood51.node_tree.nodes if n.type=='BSDF_PRINCIPLED')
+    bs=next(n for n in mat.node_tree.nodes if n.type=='BSDF_PRINCIPLED')
+    assert abs(bs.inputs['Roughness'].default_value-old_bs.inputs['Roughness'].default_value)<1e-6
+assert len(set(grain_users51))==11
+report['dyed_grain51']={'refined_existing_objects':11,'new_local_materials':2,'new_images_geometry':0,'groups':grain51,'long_grain_repeat_m':1/.3,'cross_grain_repeat_m':1/1.1,'source_image_shared':True,'source_shader_and_scale_preserved':True,'box_blend_end_grain_and_tangent_bake':'pending','human_approval':'pending'}
+
 report['outward_normals']={}
 for prefix in ['JN_云团','JN_明月','JN_花尖露珠']:
     o=next(o for o in S.objects if o.name.startswith(prefix));m=o.data;m.calc_loop_triangles()
