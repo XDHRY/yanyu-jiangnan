@@ -500,6 +500,14 @@ def refine_dyed_grain51():
             obj=bpy.data.objects[name]
             assert len(obj.data.materials)==1 and obj.data.materials[0]==source,name
             assert obj.data.users==1,'shared source geometry requires explicit isolation'
+            # Round51 discovered inward legacy box winding; repair only these
+            # eleven closed timbers before authoring UV, no added vertices/faces.
+            import bmesh
+            bm=bmesh.new();bm.from_mesh(obj.data)
+            assert all(len(e.link_faces)==2 for e in bm.edges),name
+            bmesh.ops.recalc_face_normals(bm,faces=list(bm.faces))
+            assert bm.calc_volume(signed=True)>0,name
+            bm.to_mesh(obj.data);bm.free();obj.data.update()
             layer=obj.data.uv_layers.get('JN_GRAIN51_MetreUV') or obj.data.uv_layers.new(name='JN_GRAIN51_MetreUV')
             for poly in obj.data.polygons:
                 for loop in poly.loop_indices:

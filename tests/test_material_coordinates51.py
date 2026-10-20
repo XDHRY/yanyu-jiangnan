@@ -31,3 +31,9 @@ class Grain51(unittest.TestCase):
             for normal in ((1,0,0),(0,1,0),(0,0,1),(.7,.2,.1)):
                 args=((13.7,98.2,1.9),normal,(1.1,1.1,.3),axes)
                 self.assertEqual(ns['dyed_grain51_uv'](*args),object_uv(*args))
+    def test_local_normal_guard_precedes_uv_authoring(self):
+        tree=ast.parse((ROOT/'jiangnan.py').read_text());f=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='refine_dyed_grain51')
+        src=ast.unparse(f)
+        self.assertIn('bm.calc_volume(signed=True) > 0',src)
+        self.assertIn('len(e.link_faces) == 2',src)
+        self.assertLess(src.index('bmesh.ops.recalc_face_normals'),src.index('layer = obj.data.uv_layers'))

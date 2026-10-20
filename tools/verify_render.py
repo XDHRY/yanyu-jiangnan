@@ -1807,7 +1807,7 @@ assert sum(o.type=='LIGHT' for o in S.objects)==48
 report['north_lighting49']['direction_parameter_checks']=2
 
 grain51=json.loads(S['JN_dyed_grain51']);assert len(grain51)==2
-grain_users51=[];source_wood51=bpy.data.materials['JN_wood']
+grain_users51=[];grain_volumes51={};source_wood51=bpy.data.materials['JN_wood']
 source_images51={n.image for n in source_wood51.node_tree.nodes if n.type=='TEX_IMAGE' and n.image}
 for row in grain51:
     axis=row['axis'];mat=bpy.data.materials['JN_染纸顺纹51_'+axis]
@@ -1823,6 +1823,10 @@ for row in grain51:
         assert tex.projection=='FLAT' and tex.inputs['Vector'].links[0].from_node.uv_map=='JN_GRAIN51_MetreUV'
     for name in users:
         data=bpy.data.objects[name].data;layer=data.uv_layers['JN_GRAIN51_MetreUV']
+        bm51=bmesh.new();bm51.from_mesh(data)
+        assert all(len(e.link_faces)==2 for e in bm51.edges),name
+        grain_volumes51[name]=bm51.calc_volume(signed=True);bm51.free()
+        assert grain_volumes51[name]>0,name
         for poly in data.polygons:
             dominant=max(range(3),key=lambda i:abs(poly.normal[expected[i]]));a,b=[i for i in range(3) if i!=dominant]
             for loop in poly.loop_indices:
@@ -1834,6 +1838,7 @@ for row in grain51:
     assert abs(bs.inputs['Roughness'].default_value-old_bs.inputs['Roughness'].default_value)<1e-6
 assert len(set(grain_users51))==11
 report['dyed_grain51']={'refined_existing_objects':11,'new_local_materials':2,'new_images_geometry':0,'groups':grain51,'long_grain_repeat_m':1/.3,'cross_grain_repeat_m':1/1.1,'source_image_shared':True,'source_shader_and_scale_preserved':True,'box_blend_end_grain_and_tangent_bake':'pending','human_approval':'pending'}
+report['dyed_grain51']['closed_positive_source_volumes']=grain_volumes51
 
 report['outward_normals']={}
 for prefix in ['JN_云团','JN_明月','JN_花尖露珠']:

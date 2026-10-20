@@ -23,6 +23,7 @@
     "users_x": "3 crossbeams,2 drying rails,1 mixing table",
     "users_y": "2 eave longitudinal beams,3 pigment shelves",
     "normals_roughness": "Original shader/roughness/image bump retained; Web geometry normals until true tangent bake",
+    "normal_repair": "11legacy closed timber boxes had inward winding; recalculate only target source faces before UV, native/GLB positive-volume validation pending; no added vertices/faces",
     "pending": "BOX seams/endgrain/tangent PBR bake, UV determinism, LOD/collision/human approval"
   },
   "round50": {
