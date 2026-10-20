@@ -14,7 +14,13 @@
   "human_gates": {"function": "pending", "form": "pending", "runtime": "pending"},
   "round51": {
     "baseline_main": "389f037e341f15031c39fb97fbe4234bcd6dc1d8",
-    "status": "prepared; Blender/Web/render validation pending",
+    "status": "CI/Smoke/16-render/Web and independent GLB verified; human gates pending",
+    "model_source": "32f70112e022abf3007d8222b8f01ec01a9e5e9e",
+    "tested_render_commit": "6c310375fe261866f311d27e5f5cd8e2657266ca",
+    "merged_commit": "2309f27bccd2923b26464b793cba66c3bae03f6c",
+    "runs": {"ci":39396940853,"smoke":39396940572,"spatial":39396940627,"web":39396940527},
+    "actual_uv_samples":176,
+    "closed_outward_glb_nodes":11,
     "refined_objects": 11,
     "new_local_materials": 2,
     "new_geometry_images_lights": 0,
@@ -23,7 +29,7 @@
     "users_x": "3 crossbeams,2 drying rails,1 mixing table",
     "users_y": "2 eave longitudinal beams,3 pigment shelves",
     "normals_roughness": "Original shader/roughness/image bump retained; Web geometry normals until true tangent bake",
-    "normal_repair": "11legacy closed timber boxes had inward winding; recalculate only target source faces before UV, native/GLB positive-volume validation pending; no added vertices/faces",
+    "normal_repair": "11legacy closed timber boxes had inward winding; target source faces recalculated before UV; native/GLB closed positive volumes and every evaluated face outward verified; no added vertices/faces",
     "pending": "BOX seams/endgrain/tangent PBR bake, UV determinism, LOD/collision/human approval"
   },
   "round50": {

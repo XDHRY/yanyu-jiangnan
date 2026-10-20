@@ -19,8 +19,20 @@ def audit(before,after):
     checked=0;retained=0;uv_drift=0;max_drift=0.;samples={};uv_error=0.;triangles=0;volumes={};max_vertex_distance=0.
     old_mats={m['name']:m for m in g0['materials']};new_mats={m['name']:m for m in g['materials']}
     assert set(new_mats)-set(old_mats)=={'JN_染纸顺纹51_X__WEB','JN_染纸顺纹51_Y__WEB'}
-    assert all(new_mats[k]==v for k,v in old_mats.items()),'old material changed'
-    assert g0['cameras']==g['cameras'] and g0['textures']==g['textures'] and g0['samplers']==g['samplers']
+    def material_semantic(doc,value):
+        # Texture table offsets change when two materials are inserted. Compare
+        # the referenced texture/sampler/image definitions, not numeric offsets.
+        if isinstance(value,list):return [material_semantic(doc,v) for v in value]
+        if not isinstance(value,dict):return value
+        out={}
+        for key,v in value.items():
+            if key.endswith('Texture') and isinstance(v,dict) and 'index' in v:
+                out[key]={**v,'index':doc['textures'][v['index']]}
+            else:out[key]=material_semantic(doc,v)
+        return out
+    assert all(material_semantic(g,new_mats[k])==material_semantic(g0,v) for k,v in old_mats.items()),'old material changed'
+    assert g0['cameras']==g['cameras'] and g0['samplers']==g['samplers']
+    assert all(t in g['textures'] for t in g0['textures'])
     def images(doc,binary):
         out=[]
         for im in doc['images']:

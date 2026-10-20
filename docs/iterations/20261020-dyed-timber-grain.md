@@ -1,4 +1,26 @@
-# Round51 染纸院木作长轴顺纹（待终批构建）
+# Round51 染纸院木作长轴顺纹与朝外法线
+
+## 终版实测交接（2026-10-20；以下旧待验证段落为历史）
+
+PR [57](https://github.com/XDHRY/yanyu-jiangnan/pull/57)已合并。基线main389f037e341f15031c39fb97fbe4234bcd6dc1d8；源32f70112e022abf3007d8222b8f01ec01a9e5e9e，实际测试/出图6c310375fe261866f311d27e5f5cd8e2657266ca，合并2309f27bccd2923b26464b793cba66c3bae03f6c，三者模型树同021a1571314b75dcad3c7bb9dc69cf2818efcbf6。完整父树保留，非单文件树替换；独立客栈库未改。
+
+完成11旧木作（6X/5Y）显式米制JN_GRAIN51_MetreUV和朝内绕序修复。2局部共享原木材副本，复用wood.png原图/粗糙度/倍率；0新增对象、顶点、面、建筑、灯或位图。源图1254×1254/2687668字节，SHA256 bccb86173de1490e94be40b3d0413f88cbb93421cd6585908569945b2bc7ea35；来源及许可沿用原项目记录。
+
+86Python+10Node；终批[CI39396940853](https://github.com/XDHRY/yanyu-jiangnan/actions/runs/39396940853)、[Smoke39396940572](https://github.com/XDHRY/yanyu-jiangnan/actions/runs/39396940572)、[Spatial39396940627](https://github.com/XDHRY/yanyu-jiangnan/actions/runs/39396940627)、[Web39396940527](https://github.com/XDHRY/yanyu-jiangnan/actions/runs/39396940527)全部success。前两批全部结束才更新分支，无重复dispatch。Smoke artifact12251849309，Spatial12253585016，Web12252258470；其实际ZIP SHA分别996d4f59d5a62434c74a4005db9a2da182ed48d654b1b3ba3757755f9268ae7e、00f366825b4620fb33ae278ae54f8d6c423d579be650bc8f52dca0bdcabfd939、c5254e22ccb375380c5a4f7bbb45cefd0cdd5d347ccec66a2467215a726c7deb。
+
+原生逐loop UV、11闭合正体积、旧48支撑射线通过，spatial_warnings空。独立真实GLB检查3134几何节点：3123非目标三角角点位置/法线一致；目标点集最大差1.52587890625e-5米。11目标导出表面每面朝外、正体积且0.1mm焊接后闭合，176平面UV采样最大误差2.8228759759940658e-5。9图字节、旧材质实际纹理引用/参数、节点关系/变换/16相机保留。两新材质导致纹理表索引重排，分析器改按实际引用定义比较并对真实GLB重跑通过；此分析器修正不改变出图来源。非目标725条UV微漂移最大6.103515625e-5仍pending，未声称全局逐字节确定。
+
+4644对象/3124Mesh/99812面/168534源三角面/1696独立Mesh/56材质/48灯/4444驱动。Web625715三角面，属性索引28498114字节（较旧50多8208）、GLB51584888字节（多10856）；上限不放宽。9图RGBA8估算44554784字节/42.49MiB，非显存/FPS实测。Spatial16图305.99秒，Web16图305.68秒，不作加速结论。
+
+真实16×1024×640、4网页桌面/移动捕获和6天空方向图已审；相机所有物理字段与旧50一致，仅耗时不同。屋檐—梁柱—台基保持，木纹沿构件长轴；Blender夜景暗部和Web地形截边仍是美术债务。HTML内嵌GLB SHA与实际78901a98b7fb534b976c19b77ea11032a128555f4fd6d4e2753a62f73f9faef1一致，page_errors空。Web与Blender灯光不等价。14核心+2聚焦保持，未恢复36正式渲染。
+
+持久审阅分支review/round-39396940627的docs/reviews/round-39396940627/README.md；完整75文件ZIP126592738字节，SHA256 9faa5a2f854c33c13eb8785269704d03e2032087f3ca57fab409f89e40752118，含本轮16原图、明确标注旧50的16基线原图、前两稿近景、可编辑blend、GLB、离线网页和实际核验数据。本轮旧50基线ZIP传输容器SHA与API原digest不同，但解包GLB与旧50已记录1436d816a792e70c7bcfa4504330f9cafd6fb5020a684d14fc3e28a1b4e7ff2c完全一致，二者身份不可混淆。
+
+未完成：端纹/逐面接缝/完整tangent PBR烘焙、全局UV稳定性、LOD/碰撞、地形截边/远山全景、夜景暗部、实际设备/无障碍/载荷和人工验收；通用Form实跑缺7模板文件，不记通过，整镇未验收。下一轮先查main/PR/Actions与本记录，转相邻不同生活节点或河岸地形边缘的结构/材质批次；源仅余1466/Web三角面余3440，不放宽预算。先追踪合并后CI/Smoke，不重跑同commit诊断。
+
+保存状态：完整ZIP与3张JPG的批量持久保存请求被服务HTTP403拒绝，未另路重试，也未声称保存成功。ZIP在本轮可下载；仓库审阅分支提交38bc8b98668b4344a384602ad586031c6dbdc2fb持久保存3张实际拼图/对比图、provenance、性能和独立审计JSON，并链接上述原始Actions artifact。artifact有期限，不等于完整ZIP永久存档；后续需恢复文件保存服务后保存本包。合并后CI39398732970与Smoke39398732936均success。本交接仅改分析器引用比较及metadata，不改模型生成器或出图来源；其CI/Smoke下一轮先追踪，不重复触发。
+
+## 实施历史
 
 基线main389f037e341f15031c39fb97fbe4234bcd6dc1d8，已含第50轮和全部村镇；重新读取main/开放PR/Actions确认无并行构建。272个完整基线文件均与远端blob匹配。独立ming-inn仓库未改。
 
