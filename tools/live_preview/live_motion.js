@@ -6,7 +6,8 @@ const css=document.createElement('style');css.textContent=`
 #livePanel{position:fixed;z-index:8;right:10px;top:max(58px,calc(env(safe-area-inset-top) + 48px));max-width:min(320px,calc(100vw - 20px));padding:8px 10px;color:#e8e3d7;background:#102722ed;border:1px solid #9a855d88;border-radius:13px;font:13px system-ui;backdrop-filter:blur(12px)}
 #livePanel summary{cursor:pointer;list-style:none;min-height:28px;display:flex;align-items:center;justify-content:space-between;gap:20px}#livePanel summary::after{content:'展开 ▾';color:#cbbd9f}#livePanel[open] summary::after{content:'收起 ▴'}
 #livePanel .row{display:flex;gap:6px;margin:8px 0;flex-wrap:wrap}#livePanel button,#livePanel select{min-height:38px;border:1px solid #69775d;border-radius:8px;background:#253a32;color:#f1e9d4;padding:6px 9px;font:inherit}#livePanel select{width:100%}#livePanel p{line-height:1.5;font-size:11px;color:#b9c8bf;max-width:290px}#livePanel button.active{background:#77603b}#livePanel .badge{font-size:10px;color:#cbbd9f}.ui-hidden #livePanel{display:none!important}
-@media(min-width:761px){#livePanel{right:334px;top:104px}}`;
+@media(min-width:761px){#livePanel{right:334px;top:104px}}
+@media(max-width:760px){body:has(#topPanel:not(.collapsed)) #livePanel{display:none}}`;
 document.head.appendChild(css);
 const panel=document.createElement('details');panel.id='livePanel';panel.className='chrome';panel.innerHTML=`<summary><span>场景动效 · <b id="liveState">载入中</b></span></summary>
 <div class="badge">真实模型 Round51 · 网页动效预览 2026-10-20</div>
@@ -16,6 +17,13 @@ const panel=document.createElement('details');panel.id='livePanel';panel.classNa
 <p>单指旋转、双指缩放/平移。原有工具、机位均可折叠；沉浸模式隐藏全部面板。</p>
 <p>本版新增实时水面法线波、局部雨雪、昼夜预览。不是流体/积雪模拟；没有人物、船只行走动画。网页光照不等于 Blender。</p>`;
 document.body.appendChild(panel);
+function closeOtherPanels(keep){
+ for(const [id,button,label] of [['topPanel','topToggle','工具'],['scenePanel','sceneToggle','展开'],['helpPanel','helpToggle','展开']]){
+  if(id===keep)continue;document.getElementById(id).classList.add('collapsed');const b=document.getElementById(button);b.textContent=label;b.setAttribute('aria-expanded','false');
+ }
+}
+panel.addEventListener('toggle',()=>{if(panel.open&&matchMedia('(max-width:760px)').matches)closeOtherPanels('livePanel');});
+for(const [id,button] of [['topPanel','topToggle'],['scenePanel','sceneToggle'],['helpPanel','helpToggle']])document.getElementById(button).addEventListener('click',()=>{if(matchMedia('(max-width:760px)').matches){panel.open=false;closeOtherPanels(id);}});
 const $=s=>document.querySelector(s),S={ready:false,playing:true,time:0,weather:'rain',night:false,water:[],areas:[],tour:false,tourClock:0,tourIndex:0,frames:0};
 let last=performance.now(),rain,snow;
 const N=700,positions=new Float32Array(N*6),flakes=new Float32Array(N*3),seed=new Float32Array(N*3);
@@ -66,8 +74,8 @@ function frame(now){requestAnimationFrame(frame);const dt=Math.min(.05,(now-last
  const cam=E.camera(),cx=cam.position.x,cz=cam.position.z;
  for(let i=0;i<N;i++){
   const k=i*3,x=cx+seed[k]+Math.sin(S.time*.7+i)*.22,z=cz+seed[k+2];
-  const y=cam.position.y+10-((seed[k+1]+S.time*(S.weather==='snow'?.55:9))%22);
-  const floor=Math.max(.05,y);
+  const low=Math.max(.12,cam.position.y-10),height=Math.max(10,cam.position.y+10-low);
+  const floor=low+height-((seed[k+1]+S.time*(S.weather==='snow'?.55:9))%height);
   if(S.weather==='snow'){flakes[k]=x+Math.sin(S.time*.8+i)*.3;flakes[k+1]=floor;flakes[k+2]=z;}
   else{positions.set([x,floor,z,x+.045,floor+.35,z+.02],i*6);}
  }

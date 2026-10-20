@@ -28,8 +28,23 @@ jobs:
           npm install --no-save playwright@1.62.1
           npx playwright install --with-deps chromium
       - name: Test offline HTML, motion, pause, snow, navigation and mobile UI
-        run: node tools/live_preview/capture.cjs live-delivery
+        run: |
+          node tools/live_preview/capture.cjs live-delivery
+          python -m pip install Pillow --quiet --disable-pip-version-check
+          python - <<'PY'
+          from PIL import Image,ImageChops
+          from pathlib import Path
+          import json
+          root=Path('live-delivery/runtime-proof')
+          a=Image.open(root/'desktop-rain-a.png').convert('RGB')
+          b=Image.open(root/'desktop-rain-b.png').convert('RGB')
+          diff=ImageChops.difference(a,b)
+          count=sum(max(rgb)>2 for rgb in diff.getdata())
+          assert count>100,('no visible animation',count)
+          (root/'motion-pixels.json').write_text(json.dumps({'passed':True,'changed_pixels_above_2':count,'total_pixels':a.width*a.height,'scope':'same camera actual screen motion, not FPS benchmark'}))
+          PY
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: Jiangnan-Offline-Live-Preview-${{ github.sha }}
           path: live-delivery/
