@@ -12,6 +12,20 @@
   "lod": "Hero diagnostic source; shared low-segment props; no separate runtime LOD chain yet.",
   "license": "Project-generated procedural geometry; no paid or external generated asset.",
   "human_gates": {"function": "pending", "form": "pending", "runtime": "pending"},
+  "round51": {
+    "baseline_main": "389f037e341f15031c39fb97fbe4234bcd6dc1d8",
+    "status": "prepared; Blender/Web/render validation pending",
+    "refined_objects": 11,
+    "new_local_materials": 2,
+    "new_geometry_images_lights": 0,
+    "source_image": "textures/wood.png; existing packed project-generated image and original prompt/license retained",
+    "mapping": "Authored JN_GRAIN51_MetreUV on11 source Meshes, X:(Z,Y,X), Y:(X,Z,Y), scale(1.1,1.1,0.3), FLAT UVMap shared by Blender and Web; repeats3.333m/0.909m",
+    "users_x": "3 crossbeams,2 drying rails,1 mixing table",
+    "users_y": "2 eave longitudinal beams,3 pigment shelves",
+    "normals_roughness": "Original shader/roughness/image bump retained; Web geometry normals until true tangent bake",
+    "normal_repair": "11legacy closed timber boxes had inward winding; recalculate only target source faces before UV, native/GLB positive-volume validation pending; no added vertices/faces",
+    "pending": "BOX seams/endgrain/tangent PBR bake, UV determinism, LOD/collision/human approval"
+  },
   "round50": {
     "baseline_main": "ca5172aa3ba8dc66c904412831da70a51ce02a3d",
     "status": "automated support and render verified; human gates pending",
