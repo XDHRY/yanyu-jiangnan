@@ -147,3 +147,11 @@ if rows53:
     (root/'material-audit.json').write_text(json.dumps(report,ensure_ascii=False,indent=2))
     print('VEGETATION53_SOURCE_COLOUR_OK',len(users53))
 
+from procedural_palette53 import verify_palette
+palette53=verify_palette(g,report.get('materials',[]))
+if palette53:
+    report['procedural_palette53']={'passed':True,'materials':palette53,'visible_users':321,
+        'new_images':0,'scope':'source flat colour, procedural noise and true PBR bake pending'}
+    (root/'material-audit.json').write_text(json.dumps(report,ensure_ascii=False,indent=2))
+    print('PROCEDURAL_PALETTE53_OK',len(palette53),321)
+

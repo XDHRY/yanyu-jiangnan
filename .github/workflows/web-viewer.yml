@@ -8,6 +8,9 @@ on:
       - 'textures/**'
       - 'tools/export_web.py'
       - 'tools/web_materials.py'
+      - 'tools/procedural_palette53.py'
+      - 'tools/live_preview/**'
+      - '.github/workflows/live-preview.yml'
       - 'tools/material_coordinates51.py'
       - 'tools/web_material_factors.py'
       - 'tools/web_topology.py'
@@ -156,3 +159,4 @@ jobs:
             ${{ runner.temp }}/runtime-audit/
           if-no-files-found: warn
           retention-days: 14
+

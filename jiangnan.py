@@ -3617,6 +3617,24 @@ def north_lighting49():
         'unchanged_existing_lights':len(unchanged),'new_geometry_images_materials':0,
         'exposure_unchanged':True,'web_lighting':'not exported'},ensure_ascii=False)
 
+def declare_procedural_palette53():
+    """Preserve authored flat colour for the remaining unsupported noise shaders.
+
+    No shader nodes, geometry or image data change. Explicit scope prevents
+    accidentally multiplying a photographed albedo by its original dark colour.
+    """
+    names=('酒坊粗陶','米行旧木板','米行麻布','米行麻绳','丝行原麻绢包',
+           '丝行月白绢','丝行黛青绢','丝行绛红绢','染料麻袋','染料赭黄',
+           '转水埠茶盏青瓷','庭外湿土')
+    declared={}
+    for name in names:
+        mat=bpy.data.materials[PREFIX+name]
+        assert mat.use_nodes and not any(n.type=='TEX_IMAGE' for n in mat.node_tree.nodes),name
+        mat['JN_web_base_color_factor']=list(mat.diffuse_color)
+        declared[mat.name]=list(mat.diffuse_color)
+    assert len(declared)==12
+    S['JN_procedural_palette53']=json.dumps(declared,ensure_ascii=False,sort_keys=True)
+
 def statistics():
     obs=list(S.objects);meshes=[o for o in obs if o.type=='MESH'];curves=[o for o in obs if o.type=='CURVE']
     mats=set(m for o in obs if hasattr(o.data,'materials') for m in o.data.materials if m)
@@ -3666,6 +3684,7 @@ def build(stage=None):
     town_east_rope_bench40()
     north_lighting49()
     if level>=5 and P.get('art_upgrade',False):refine_dyed_grain51()
+    if level>=5 and P.get('art_upgrade',False):declare_procedural_palette53()
     S.frame_set(80);viewport()
     print('STAGE',level,'OBJECTS',len(S.objects))
 if __name__=='__main__':
