@@ -70,9 +70,19 @@ assert len(floor_users)==8 and all(o.name.endswith('_室内地坪') for o in flo
 assert len({o.data.as_pointer() for o in floor_users})==1
 floor_bsdf=next(n for n in floor_material.node_tree.nodes if n.type=='BSDF_PRINCIPLED')
 assert abs(floor_bsdf.inputs['Roughness'].default_value-.82)<1e-5
-floor_bump=next(n for n in floor_material.node_tree.nodes if n.type=='BUMP')
-assert abs(floor_bump.inputs['Distance'].default_value-.004)<1e-6
-report['residential_floor_material']={'users':8,'shared_meshes':1,'roughness':.82,'repeat_per_local_m':1.8,'bump_distance_m':.004,'new_images':0,'tangent_normal_bake':False}
+assert floor_material.get('JN_stone54')=='periodic_metric_micro_pits_v1'
+assert floor_bsdf.inputs['Roughness'].is_linked and floor_bsdf.inputs['Normal'].is_linked
+assert not any(n.type=='BUMP' for n in floor_material.node_tree.nodes)
+assert floor_users[0].data.uv_layers.get('JN_STONE_MicroUV54')
+for name in ('stone54_normal','stone54_orm'):
+    im=bpy.data.images[name]
+    assert tuple(im.size)==(512,512) and im.packed_file and im.colorspace_settings.name=='Non-Color'
+floor_users[0].data.calc_loop_triangles()
+data=floor_users[0].data
+assert sum(data.vertices[t.vertices[0]].co.dot(data.vertices[t.vertices[1]].co.cross(data.vertices[t.vertices[2]].co))/6 for t in data.loop_triangles)>0
+report['residential_floor_material']=json.loads(S['JN_stone54'])
+assert tuple(bpy.data.images['stone54_basecolor'].size)==(512,512) and bpy.data.images['stone54_basecolor'].packed_file
+report['residential_floor_material'].update({'new_images':3,'normal_source':'periodic metric height derivative; not albedo or high-low bake','albedo_source':'quiet procedural colour, no directional lighting','albedo_period_per_local_m':.32})
 roof_pbr=bpy.data.materials['JN_绣户黛瓦PBR']
 roof_users=[o for o in S.objects if o.type=='MESH' and roof_pbr in list(o.data.materials) and not o.hide_render]
 assert [o.name for o in roof_users]==['JN_村落民居_06_屋面']
@@ -1870,6 +1880,7 @@ else:
 with open(os.path.join(VALIDATION,'validation.json'),'w',encoding='utf-8') as f:json.dump(report,f,ensure_ascii=False,indent=2)
 weather(0);S.camera=bpy.data.objects['JN_三分之四'];S.frame_set(80)
 print('ALL_RENDER_JOBS_COMPLETED' if formal_render else 'ALL_ASSERTIONS_COMPLETED',json.dumps(report,ensure_ascii=False))
+
 
 
 

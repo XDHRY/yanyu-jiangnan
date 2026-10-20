@@ -13,6 +13,8 @@ for mesh in g['meshes']:
         if 'material' not in prim:continue
         m=g['materials'][prim['material']];p=m.get('pbrMetallicRoughness',{})
         color=p.get('baseColorTexture');normal=m.get('normalTexture')
+        for texture in (p.get('metallicRoughnessTexture'),m.get('occlusionTexture')):
+            if texture:assert 'TEXCOORD_'+str(texture.get('texCoord',0)) in prim['attributes'],(m['name'],'missing data-map UV')
         if color:
             assert 'TEXCOORD_'+str(color.get('texCoord',0)) in prim['attributes'],(m['name'],'missing basecolor UV')
             checked+=1
@@ -27,7 +29,22 @@ if any(m.get('source_material')=='JN_民居细磨青石' for m in report.get('ma
     for material in floor_materials:
         pbr=material['pbrMetallicRoughness']
         assert all(abs(a-b)<1e-5 for a,b in zip(pbr['baseColorFactor'],(.45,.52,.54,1)))
-        assert abs(pbr['roughnessFactor']-.82)<1e-5
+        assert abs(pbr['roughnessFactor']-1)<1e-5
+        assert 'normalTexture' in material and 'metallicRoughnessTexture' in pbr and 'occlusionTexture' in material
+        nt=material['normalTexture'];rt=pbr['metallicRoughnessTexture'];ot=material['occlusionTexture'];ct=pbr['baseColorTexture']
+        assert g['textures'][rt['index']]['source']==g['textures'][ot['index']]['source']
+        assert len({g['textures'][t['index']]['source'] for t in (ct,nt,rt)})==3
+        assert nt.get('texCoord',0)==rt.get('texCoord',0)==ot.get('texCoord',0)==ct.get('texCoord',0)
+        assert abs(nt.get('scale',1)-.65)<1e-5
+        for texture in (ct,nt,rt):
+            image=g['images'][g['textures'][texture['index']]['source']]
+            view=g['bufferViews'][image['bufferView']]
+            start=28+n+view.get('byteOffset',0)
+            assert data[start:start+8]==b'\x89PNG\r\n\x1a\n'
+            assert struct.unpack_from('>II',data,start+16)==(512,512),'stone map export size changed'
+        users54=[node for node in g['nodes'] if 'mesh' in node and any(g['materials'][p.get('material',-1)] is material for p in g['meshes'][node['mesh']]['primitives'])]
+        assert len(users54)==8 and all(n['name'].endswith('_室内地坪') for n in users54)
+        report['stone54']={'passed':True,'users':8,'normal_texture':True,'roughness_texture':True,'occlusion_texture':True,'basecolor_texture':True,'microcavity_not_scene_ao':True,'explicit_metric_uv':nt.get('texCoord',0)}
 report.update({'textured_primitives_checked':checked,'normal_primitives_checked':normals,'glb_images':len(g.get('images',[])),'color_normal_aliases':0,'missing_uvs':0})
 roof_materials=[m for m in g['materials'] if m['name'].startswith('JN_绣户黛瓦PBR')]
 if any(m.get('source_material')=='JN_绣户黛瓦PBR' for m in report.get('materials',[])):
@@ -154,4 +171,5 @@ if palette53:
         'new_images':0,'scope':'source flat colour, procedural noise and true PBR bake pending'}
     (root/'material-audit.json').write_text(json.dumps(report,ensure_ascii=False,indent=2))
     print('PROCEDURAL_PALETTE53_OK',len(palette53),321)
+
 

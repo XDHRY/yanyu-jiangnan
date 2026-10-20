@@ -10,13 +10,16 @@ const css=document.createElement('style');css.textContent=`
 @media(max-width:760px){body:has(#topPanel:not(.collapsed)) #livePanel{display:none}}`;
 document.head.appendChild(css);
 const panel=document.createElement('details');panel.id='livePanel';panel.className='chrome';panel.innerHTML=`<summary><span>场景动效 · <b id="liveState">载入中</b></span></summary>
-<div class="badge">真实模型 Round51 · 网页动效预览 2026-10-20</div>
+<div class="badge" id="liveSourceBadge"></div>
 <div class="row"><button id="livePause">暂停动效</button><button id="liveDay">切换夜景</button><button id="liveTour">全镇导览</button></div>
 <div class="row"><button id="liveRain" class="active">雨</button><button id="liveSnow">雪</button><button id="liveClear">晴</button></div>
 <select id="liveAreas" aria-label="跳转建模区域"><option value="">跳转到已建区域…</option></select>
 <p>单指旋转、双指缩放/平移。原有工具、机位均可折叠；沉浸模式隐藏全部面板。</p>
 <p>本版新增实时水面法线波、局部雨雪、昼夜预览。不是流体/积雪模拟；没有人物、船只行走动画。网页光照不等于 Blender。</p>`;
 document.body.appendChild(panel);
+const meta=window.JN_LIVE_MODEL_META;
+if(!meta||!/^[a-f0-9]{40}$/.test(meta.source))throw Error('Missing verified model source');
+document.getElementById('liveSourceBadge').textContent=`真实模型 ${meta.source.slice(0,10)} · Web构建 ${meta.web_run}`;
 function closeOtherPanels(keep){
  for(const [id,button,label] of [['topPanel','topToggle','工具'],['scenePanel','sceneToggle','展开'],['helpPanel','helpToggle','展开']]){
   if(id===keep)continue;document.getElementById(id).classList.add('collapsed');const b=document.getElementById(button);b.textContent=label;b.setAttribute('aria-expanded','false');
@@ -87,3 +90,4 @@ function frame(now){requestAnimationFrame(frame);const dt=Math.min(.05,(now-last
 window.JIANGNAN_LIVE={setWeather:weather,goArea,snapshot:()=>({ready:S.ready,playing:S.playing,time:S.time,weather:S.weather,night:S.night,frames:S.frames,water_meshes:S.water,areas:S.areas.map(a=>({label:a.label,tag:a.tag,mesh_count:a.count})),rain_segments:N,snow_points:N,additional_draw_calls:1,model_animation_clips:0,scope:'runtime preview: normal waves, camera-local precipitation, daylight controls; no fluid, accumulation, roof collision, character or boat animation'})};
 requestAnimationFrame(frame);
 })();
+

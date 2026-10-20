@@ -11,3 +11,17 @@
 上一轮的9图/42.49MiB仅为旧基线，本观察批不改任何模型/材质/贴图。后续需补实际对象/面/材质/贴图内存与耗时、源commit/run/artifact、前后实图、独立GLB读回和动效来源核验。
 
 通用Function/Form/Runtime人工验收仍pending，不推断为通过；沿用用户授权的诊断/代码PR闭环，非生产部署。无付费生成，无36正式渲染，无重复dispatch。
+
+## 本地待执行实现
+
+`stone_height54/stone_maps54/refine_stone_floor54` 使用私有seed54的72处周期Gaussian微孔和微量周期磨纹，0.32当地米/循环；512²数据图名stone54_normal与stone54_orm。真实height梯度产生归一化切线法线，强度0.65；R为0.88–1局部微孔遮蔽近似，G为0.80–0.87粗糙度，B=0非金属。保留底色及乘色，旧底色Bump断开并移除，第二套明确UV不冒充原底色UV；实例缩放保留，世界循环0.2976–0.336米。8地坪维持1共享Mesh，若原共享盒signed volume为负，仅翻目标面绕序并验证正体积，不改顶点。
+
+晚于灶、烟道及河埠材质复制后执行，避免扩大材质作用域。新增glTF Normal/metallicRoughness/Occlusion贴图与UV、大小、源隔离断言。现有图片总RGBA和几何/字节限值不放宽；单独11图预算已明确。运行时来源标牌改为真实commit+Web run，并将误名Blender_animation_clips改为exported_glb_animation_clips，说明原Blender驱动并非零。
+
+本地12测试（5微孔数值+7机位/动线）与Python/JS编译通过，完整CI/Blender/导出仍待执行，不能计为已完成PBR。CI新增numpy依赖用于直接测试源生成函数；Blender自带numpy。
+
+## 查看基线后的修订
+
+已查看观察批39458469393的15/16原PNG：全镇建设呈长河串联且远空地/场景边界仍生硬；16门洞通视成立，但原地坪底色纹理过大、斑驳粗糙，不能只换法线。追加同源原创512²低反差、无方向光的sRGB BaseColor，改为三图共享显式米制UV；其他石材仍使用旧stone.png不改。图数预算明确9→12，总RGBA预计比旧基线下降约1MiB，所有几何/总RGBA/GLB/属性索引限值不变。此前11图为看图前计划，已被本节取代。另加安静底色测试，本地相关26项通过；仍待Blender/实际GLB验证。
+
+基线：源d51f2b1b845855ddbd31753a73b873a68bd0cdaa，测试合并503780fddfb5a25ba3a098db66310f8d9fca1b7e。CI39458469346、Smoke39458469373、Spatial39458469393、Web39458469307全部成功后才推送材质批。Spatial artifact12282236213，ZIP SHA256406b0dc96f5b2667ac146bfcbfbbe0c9b99271aa3513edc79243c9bab83f6c10。不重复触发，不并行改同分支。

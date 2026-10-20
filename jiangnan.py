@@ -3484,6 +3484,86 @@ def refine_quay_stone39():
     S['JN_quay_stone39_visible_users']=23
     S['JN_quay_stone39_repeat_per_m']=2.4
 
+def stone_height54(u,v):
+    """Original periodic metric micro-pits. No albedo, lighting or external assets."""
+    import numpy as np
+    rng=random.Random(54);period=.32
+    height=.000012*np.sin(2*math.pi*(37*u+29*v))
+    for _ in range(72):
+        cx,cy=rng.random(),rng.random();radius=rng.uniform(.0015,.0045);depth=rng.uniform(.00016,.00055)
+        dx=((u-cx+.5)%1-.5)*period;dy=((v-cy+.5)%1-.5)*period
+        height=height-depth*np.exp(-(dx*dx+dy*dy)/(2*radius*radius))
+    return height
+
+def stone_maps54(size=512):
+    import numpy as np
+    uv=(np.arange(size,dtype=np.float64)+.5)/size
+    u,v=np.meshgrid(uv,uv);height=stone_height54(u,v);step=.32/size
+    dx=(np.roll(height,-1,axis=1)-np.roll(height,1,axis=1))/(2*step)
+    dy=(np.roll(height,-1,axis=0)-np.roll(height,1,axis=0))/(2*step)
+    normal=np.stack((-dx,-dy,np.ones_like(height)),axis=-1)
+    normal/=np.linalg.norm(normal,axis=-1,keepdims=True)
+    cavity=np.clip(-height/.00065,0,1)
+    normal_rgba=np.concatenate((normal*.5+.5,np.ones((*height.shape,1))),axis=-1).astype(np.float32)
+    orm=np.stack((1-.12*cavity,.80+.07*cavity,np.zeros_like(height),np.ones_like(height)),axis=-1).astype(np.float32)
+    return normal_rgba,orm
+
+def stone_color54(size=512):
+    """Quiet fine-ground stone colour, no directional illumination or copied albedo."""
+    import numpy as np
+    uv=(np.arange(size,dtype=np.float64)+.5)/size;u,v=np.meshgrid(uv,uv)
+    broad=.018*np.sin(2*math.pi*(3*u+2*v))+.012*np.cos(2*math.pi*(5*u-7*v))
+    grain=.006*np.sin(2*math.pi*(61*u+47*v))*np.cos(2*math.pi*(43*u-53*v))
+    cavity=np.clip(-stone_height54(u,v)/.00065,0,1)
+    variation=broad+grain-.008*cavity
+    rgb=np.stack((.60+variation,.64+variation,.63+variation),axis=-1)
+    return np.concatenate((rgb,np.ones((*u.shape,1))),axis=-1).astype(np.float32)
+
+def refine_stone_floor54():
+    """Late isolated material edit: derivative maps on eight existing linked floors."""
+    mat=bpy.data.materials['JN_民居细磨青石'];nodes=mat.node_tree.nodes;links=mat.node_tree.links
+    floors=[o for o in S.objects if o.type=='MESH' and mat in list(o.data.materials)]
+    assert len(floors)==8 and all(o.name.endswith('_室内地坪') for o in floors)
+    assert len({o.data.as_pointer() for o in floors})==1
+    data=floors[0].data
+    # Existing box helper may wind inward. Repair only this shared target, never positions.
+    data.calc_loop_triangles()
+    volume=sum(data.vertices[t.vertices[0]].co.dot(data.vertices[t.vertices[1]].co.cross(data.vertices[t.vertices[2]].co))/6 for t in data.loop_triangles)
+    if volume<0:data.flip_normals();data.update()
+    assert abs(volume)>0
+    uv=data.uv_layers.new(name='JN_STONE_MicroUV54')
+    for poly in data.polygons:
+        axis=max(range(3),key=lambda k:abs(poly.normal[k]));a,b=[k for k in range(3) if k!=axis]
+        for i in poly.loop_indices:
+            co=data.vertices[data.loops[i].vertex_index].co;uv.data[i].uv=(co[a]/.32,co[b]/.32)
+    bsdf=next(n for n in nodes if n.type=='BSDF_PRINCIPLED')
+    for node in list(nodes):
+        if node.type=='BUMP':nodes.remove(node)
+    uvnode=nodes.new('ShaderNodeUVMap');uvnode.uv_map=uv.name
+    textures=[]
+    for name,values in zip(('stone54_normal','stone54_orm','stone54_basecolor'),(*stone_maps54(),stone_color54())):
+        image=bpy.data.images.new(name,width=512,height=512,alpha=True)
+        image.colorspace_settings.name='sRGB' if name.endswith('basecolor') else 'Non-Color';image.pixels.foreach_set(values.ravel());image.update()
+        image.filepath_raw=os.path.join(P['output_dir'],'textures',name+'.png');image.file_format='PNG';image.save();image.pack()
+        tex=nodes.new('ShaderNodeTexImage');tex.image=image;tex.extension='REPEAT';links.new(uvnode.outputs['UV'],tex.inputs['Vector']);textures.append(tex)
+    tint=next(n for n in nodes if n.type=='MIX_RGB' and n.blend_type=='MULTIPLY')
+    links.new(textures[2].outputs['Color'],tint.inputs[1])
+    for node in list(nodes):
+        if node.type=='TEX_IMAGE' and node not in textures:nodes.remove(node)
+    normal=nodes.new('ShaderNodeNormalMap');normal.space='TANGENT';normal.uv_map=uv.name;normal.inputs['Strength'].default_value=.65
+    links.new(textures[0].outputs['Color'],normal.inputs['Color']);links.new(normal.outputs['Normal'],bsdf.inputs['Normal'])
+    channels=nodes.new('ShaderNodeSeparateRGB');links.new(textures[1].outputs['Color'],channels.inputs[0])
+    links.new(channels.outputs['G'],bsdf.inputs['Roughness']);links.new(channels.outputs['B'],bsdf.inputs['Metallic'])
+    group=bpy.data.node_groups.new('glTF Material Output','ShaderNodeTree')
+    group.interface.new_socket(name='Occlusion',in_out='INPUT',socket_type='NodeSocketFloat')
+    group.nodes.new('NodeGroupInput');settings=nodes.new('ShaderNodeGroup');settings.node_tree=group
+    links.new(channels.outputs['R'],settings.inputs['Occlusion'])
+    mat['JN_stone54']='periodic_metric_micro_pits_v1'
+    background=next(im for im in bpy.data.images if 'landscape' in im.name.lower())
+    assert tuple(background.size)==(2172,724)
+    background.scale(1254,418);background.filepath_raw=os.path.join(P['output_dir'],'textures','landscape54_1254.png');background.file_format='PNG';background.save();background.pack()
+    S['JN_stone54']=json.dumps({'users':8,'shared_meshes':1,'normal_size':512,'orm_size':512,'basecolor_size':512,'local_period_m':.32,'world_period_range_m':[.2976,.336],'microcavity':'analytic local visibility approximation; not scene AO bake','floor_volume_before_m3':volume,'winding_flipped':volume<0,'background_size':[1254,418]},ensure_ascii=False)
+
 def roof_microtexel33(u,v):
     """Periodic 0.6m clay height field: analytic derivatives, never albedo-as-normal."""
     k=2*math.pi
@@ -3685,6 +3765,7 @@ def build(stage=None):
     north_lighting49()
     if level>=5 and P.get('art_upgrade',False):refine_dyed_grain51()
     if level>=5 and P.get('art_upgrade',False):declare_procedural_palette53()
+    if level>=5 and P.get('art_upgrade',False):refine_stone_floor54()
     S.frame_set(80);viewport()
     print('STAGE',level,'OBJECTS',len(S.objects))
 if __name__=='__main__':
@@ -3693,6 +3774,7 @@ if __name__=='__main__':
         rdir=os.path.join(P['output_dir'],'renders');os.makedirs(rdir,exist_ok=True)
         for name in ['正面','顶视','三分之四']:
             S.camera=bpy.data.objects[PREFIX+name];S.render.filepath=os.path.join(rdir,name+'.png');bpy.ops.render.render(write_still=True)
+
 
 
 
