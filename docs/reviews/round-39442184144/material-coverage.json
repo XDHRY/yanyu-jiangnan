@@ -1,0 +1,451 @@
+{
+  "material_count": 55,
+  "image_count": 9,
+  "animation_clips": 0,
+  "normal_texture_materials": 1,
+  "metallic_roughness_texture_materials": 1,
+  "ao_texture_materials": 0,
+  "materials": [
+    {
+      "name": "JN_darkstone__WEB",
+      "users": 167,
+      "albedo_texture": false,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_plaster__WEB",
+      "users": 66,
+      "albedo_texture": true,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_tile__WEB",
+      "users": 74,
+      "albedo_texture": true,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_wood__WEB",
+      "users": 849,
+      "albedo_texture": true,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_stone__WEB",
+      "users": 338,
+      "albedo_texture": true,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_edge__WEB",
+      "users": 46,
+      "albedo_texture": true,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_bronze__WEB",
+      "users": 56,
+      "albedo_texture": false,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_paper__WEB",
+      "users": 46,
+      "albedo_texture": false,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_tile__WEB",
+      "users": 25,
+      "albedo_texture": true,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_edge__WEB",
+      "users": 66,
+      "albedo_texture": true,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_wood__WEB",
+      "users": 112,
+      "albedo_texture": true,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_gold__WEB",
+      "users": 55,
+      "albedo_texture": false,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_moss__WEB",
+      "users": 214,
+      "albedo_texture": false,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_water__WEB",
+      "users": 21,
+      "albedo_texture": false,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_湿润青石__WEB",
+      "users": 91,
+      "albedo_texture": false,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_民居细磨青石__WEB",
+      "users": 8,
+      "albedo_texture": true,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_绣户黛瓦PBR__WEB",
+      "users": 1,
+      "albedo_texture": true,
+      "normal_texture": true,
+      "metallic_roughness_texture": true,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_染坊靛蓝染液__WEB",
+      "users": 3,
+      "albedo_texture": false,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_染坊靛青布__WEB",
+      "users": 3,
+      "albedo_texture": false,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_纸坊楮皮宣纸__WEB",
+      "users": 10,
+      "albedo_texture": false,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_北街茶集_青灰陶釉__WEB",
+      "users": 8,
+      "albedo_texture": false,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_北街茶集_灰麻布__WEB",
+      "users": 10,
+      "albedo_texture": false,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_ivory__WEB",
+      "users": 46,
+      "albedo_texture": true,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_酒坊粗陶__WEB",
+      "users": 4,
+      "albedo_texture": false,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_米行旧木板__WEB",
+      "users": 5,
+      "albedo_texture": false,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_米行麻布__WEB",
+      "users": 8,
+      "albedo_texture": false,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_米行麻绳__WEB",
+      "users": 43,
+      "albedo_texture": false,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_丝行原麻绢包__WEB",
+      "users": 11,
+      "albedo_texture": false,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_丝行月白绢__WEB",
+      "users": 3,
+      "albedo_texture": false,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_丝行黛青绢__WEB",
+      "users": 4,
+      "albedo_texture": false,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_丝行绛红绢__WEB",
+      "users": 3,
+      "albedo_texture": false,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_染纸顺纹51_Y__WEB",
+      "users": 5,
+      "albedo_texture": true,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_染纸顺纹51_X__WEB",
+      "users": 6,
+      "albedo_texture": true,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_染纸靛青__WEB",
+      "users": 10,
+      "albedo_texture": false,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_染纸茜红__WEB",
+      "users": 1,
+      "albedo_texture": false,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_染料麻袋__WEB",
+      "users": 17,
+      "albedo_texture": false,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_染料赭黄__WEB",
+      "users": 5,
+      "albedo_texture": false,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_转水埠细磨青石__WEB",
+      "users": 23,
+      "albedo_texture": true,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_转水埠旧船木__WEB",
+      "users": 11,
+      "albedo_texture": false,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_转水埠桥面雨湿__WEB",
+      "users": 4,
+      "albedo_texture": false,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_bark__WEB",
+      "users": 4,
+      "albedo_texture": true,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_转水埠茶担暖木__WEB",
+      "users": 5,
+      "albedo_texture": false,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_转水埠茶盏青瓷__WEB",
+      "users": 3,
+      "albedo_texture": false,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_起居榻青灰织物__WEB",
+      "users": 5,
+      "albedo_texture": false,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_起居榻温白麻布__WEB",
+      "users": 4,
+      "albedo_texture": false,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_备膳灶细磨青石__WEB",
+      "users": 12,
+      "albedo_texture": true,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_备膳户熟铁__WEB",
+      "users": 6,
+      "albedo_texture": false,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_备膳青白釉__WEB",
+      "users": 2,
+      "albedo_texture": false,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_备膳烟道灰面__WEB",
+      "users": 5,
+      "albedo_texture": true,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_庭外湿土__WEB",
+      "users": 1,
+      "albedo_texture": false,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_修桨作坊盘绳43__WEB",
+      "users": 2,
+      "albedo_texture": false,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_bark__WEB",
+      "users": 329,
+      "albedo_texture": true,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_pink__WEB",
+      "users": 20,
+      "albedo_texture": true,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_dew__WEB",
+      "users": 257,
+      "albedo_texture": false,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    },
+    {
+      "name": "JN_生成远山_借景__WEB",
+      "users": 1,
+      "albedo_texture": true,
+      "normal_texture": false,
+      "metallic_roughness_texture": false,
+      "ao_texture": false
+    }
+  ],
+  "note": "Texture coverage, not a human quality approval. Scalar roughness PBR is not counted as a roughness texture."
+}

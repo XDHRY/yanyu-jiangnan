@@ -1,0 +1,50 @@
+{
+  "source": "9446418c352ae89469e1f7bf77894688fd4bbd5b",
+  "tested": "04ce52d90236820915388555b219a202923c85d7",
+  "source_totals": {
+    "objects": 4644,
+    "mesh_objects": 3124,
+    "curve_objects": 1427,
+    "triangles_with_instances": 168534,
+    "faces_with_instances": 99812,
+    "vertices_with_instances": 171282,
+    "unique_mesh_datablocks": 1696,
+    "unique_mesh_triangles": 127428,
+    "unique_mesh_faces": 80253,
+    "unique_mesh_vertices": 143950,
+    "materials_used": 56,
+    "images_loaded": 9,
+    "estimated_texture_rgba8_bytes": 44554784,
+    "estimated_texture_rgba8_mib": 42.49,
+    "estimated_mesh_draw_calls": 3127,
+    "object_drivers": 4444,
+    "mesh_objects_using_reused_datablocks": 1552,
+    "instance_reuse_ratio": 0.4968
+  },
+  "spatial_16_seconds": 298.39,
+  "web_native_16_seconds": 208.53,
+  "web_budget": {
+    "source_commit": "04ce52d90236820915388555b219a202923c85d7",
+    "baseline_round": 34,
+    "metrics": {
+      "instance_triangles": 625715,
+      "glb_bytes": 51584788,
+      "attribute_index_bytes": 28494850,
+      "images": 9,
+      "rgba8_bytes": 44554784
+    },
+    "limits": {
+      "instance_triangles": 629155,
+      "glb_bytes": 54000000,
+      "attribute_index_bytes": 30000000,
+      "images": 9,
+      "rgba8_bytes": 44554784
+    },
+    "passed": true,
+    "note": "Round35 adds a cold geometric flue and real roof/stove-back apertures within Round34's existing629155 ceiling (844 evaluated triangles remaining); all numeric limits unchanged. No new house, material or image. Source cap170000, prep cap1200 and independent flue cap260 remain enforced; record actual evaluated result, not inferred GPU performance."
+  },
+  "warnings": [],
+  "actual_gpu_vram": null,
+  "actual_physical_phone_fps": null,
+  "note": "No speedup or real-VRAM claim. Native scene still has4444 object drivers; exported GLB has0animation clips; Web effects are runtime only."
+}

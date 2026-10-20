@@ -1,0 +1,29 @@
+{
+  "passed": true,
+  "before_sha256": "78901a98b7fb534b976c19b77ea11032a128555f4fd6d4e2753a62f73f9faef1",
+  "after_sha256": "ee2dead87890a8fa2807be1f55db864f45b2ac8bd5c9d9228a612bcf6919f78e",
+  "mesh_nodes_retained": 3134,
+  "triangles": 625715,
+  "changed_materials": [
+    "JN_moss__WEB",
+    "JN_酒坊粗陶__WEB",
+    "JN_米行旧木板__WEB",
+    "JN_米行麻布__WEB",
+    "JN_米行麻绳__WEB",
+    "JN_丝行原麻绢包__WEB",
+    "JN_丝行月白绢__WEB",
+    "JN_丝行黛青绢__WEB",
+    "JN_丝行绛红绢__WEB",
+    "JN_染料麻袋__WEB",
+    "JN_染料赭黄__WEB",
+    "JN_转水埠茶盏青瓷__WEB",
+    "JN_庭外湿土__WEB"
+  ],
+  "images_preserved": 9,
+  "position_normal_triangle_corners": "exact",
+  "cross_build_uv_changed_streams": 726,
+  "cross_build_uv_max_abs": 6.103515625e-05,
+  "uv_determinism": "pending",
+  "scope": "13 original procedural colours / 321 old mesh users, not new geometry/PBR",
+  "human_approval": "pending"
+}

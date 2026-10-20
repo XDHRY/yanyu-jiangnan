@@ -1,0 +1,37 @@
+{
+  "model_source": "9446418c352ae89469e1f7bf77894688fd4bbd5b",
+  "tested_render": "04ce52d90236820915388555b219a202923c85d7",
+  "tree": "927dbec66d2bbc66eff8f76c1986987f657af577",
+  "pr": 60,
+  "ci": 39442184123,
+  "smoke": 39442184319,
+  "spatial": 39442184144,
+  "web": 39442184140,
+  "offline": 39442184155,
+  "smoke_artifact": 12275162351,
+  "spatial_artifact": 12273988484,
+  "web_artifact": 12275427426,
+  "comparison_images": [
+    {
+      "left": "Round51 tested6c310375, Web39396940527, desktop15.png",
+      "right": "Round53 tested04ce52d9, Web39442184140, desktop15.png"
+    },
+    {
+      "left": "Round53 first tested e074094f, Web39440290709, desktop06.png",
+      "right": "Round53 final tested04ce52d9, Web39442184140, desktop06.png"
+    }
+  ],
+  "scope": "13 old procedural material colours,321 old exported mesh users; no new geometry/images/materials/lights; native shaders unchanged",
+  "human_final_art_approval": "pending",
+  "unfixed": [
+    "full Normal/Roughness/AO coverage",
+    "terrain/background continuity",
+    "11-plan camera occlusion",
+    "PR58 workshop normals draft",
+    "UV float drift",
+    "LOD/collision/physical phone"
+  ],
+  "offline_artifact": 12274224013,
+  "offline_artifact_sha256": "d1c4366ee39c6b3b540057615b1fa67f0ad8a3c6ea481e4fd65b32d1302c06f5",
+  "ui_legacy_label": "Viewer still says Round51 for geometric lineage; actual Round53 source9446418c and all13 palette fixes are in the embedded verified GLB. Do not infer old GLB from that static caption; future caption should read provenance."
+}

@@ -1,0 +1,11 @@
+{
+  "filename": "yanyu-round53-live-review.zip",
+  "bytes": 49843082,
+  "sha256": "22dd590a69d0066051e69a79b44415fa6219ed03a4a9331ea0a0dbce2940f154",
+  "saved": true,
+  "html_sha256": "aabcc8c4615edc62ec13d3eaa30ff3b84d11ff27dc74a68292bd31ea8e8e69b6",
+  "embedded_glb_sha256": "ee2dead87890a8fa2807be1f55db864f45b2ac8bd5c9d9228a612bcf6919f78e",
+  "zip_crc_and_original_16_png_hashes": "passed",
+  "editable_glb_extractor_actual_run": "passed",
+  "scope": "Current-model animated HTML,16 actual native PNGs,real before-after and audits; not additional architecture/PBR images"
+}
