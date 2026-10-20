@@ -4,6 +4,7 @@
   "baseline_source":"9d2e5625b7d9cbd5e2034ac9502b6e4e45334778",
   "baseline_run":39091885332,
   "baseline":{"instance_triangles":628311,"glb_bytes":52973096,"attribute_index_bytes":29827470,"images":9,"rgba8_bytes":44554784},
-  "limits":{"instance_triangles":629155,"glb_bytes":54000000,"attribute_index_bytes":30000000,"images":9,"rgba8_bytes":44554784},
-  "scope":"Round35 adds a cold geometric flue and real roof/stove-back apertures within Round34's existing629155 ceiling (844 evaluated triangles remaining); all numeric limits unchanged. No new house, material or image. Source cap170000, prep cap1200 and independent flue cap260 remain enforced; record actual evaluated result, not inferred GPU performance."
+  "limits":{"instance_triangles":629155,"glb_bytes":54000000,"attribute_index_bytes":30000000,"images":12,"rgba8_bytes":44554784},
+  "scope":"Round54 explicit image-count reallocation9→12 after real closeup reveals coarse albedo: far-background2172x724→1254x418 funds three512x512 stone maps (sRGB BaseColor, Non-Color micro Normal/ORM). Geometry, GLB bytes, attribute/index bytes and total RGBA byte ceilings unchanged. Source cap170000 remains. Actual exports must pass; image count alone is not memory usage or GPU performance."
 }
+

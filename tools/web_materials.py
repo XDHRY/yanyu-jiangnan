@@ -43,7 +43,7 @@ def prepare_web_materials(objects):
         if scale:scales[mat.name]=scale
         rows.append({'source_material':original.name,'export_material':mat.name,
                      'base_color_factor':list(original['JN_web_base_color_factor']) if 'JN_web_base_color_factor' in original else None,
-                     'source_images':sorted(set(images)),'object_coordinate_scale':scale,'coordinate_axes':axes,
+                     'source_images':sorted(set(images)),'stone54':original.get('JN_stone54'),'object_coordinate_scale':scale,'coordinate_axes':axes,
                      'authored_uv51':original.get('JN_grain_uv51'),'authored_scale51':list(original['JN_grain_scale51']) if 'JN_grain_scale51' in original else None,
                      'removed_bump_nodes':removed,'normal_policy':'source tangent normal map preserved' if any(n.type=='NORMAL_MAP' for n in nodes) else 'geometric normals; true tangent bake pending'})
     meshes={};converted=0;uv_faces=0;fallback_faces=0;hidden=[]
@@ -88,3 +88,4 @@ def prepare_web_materials(objects):
             'projected_faces':uv_faces,'normalized_fallback_faces':fallback_faces,'hidden_render_objects_skipped':hidden,'uv_name':UV_NAME,'source_scene_saved':False,
             'mapping':'local Object scale preserved, dominant-face BOX approximation; blend seams pending',
             'new_images':0,'new_geometry_authored':0,'human_form_runtime_approval':'pending'}
+

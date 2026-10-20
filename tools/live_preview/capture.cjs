@@ -12,6 +12,8 @@ const {chromium}=require('playwright');
   await page.waitForFunction(()=>window.JIANGNAN_LIVE?.snapshot().ready&&window.JIANGNAN_LIVE.snapshot().frames>8,null,{timeout:180000});
   await page.waitForFunction(()=>Number(getComputedStyle(document.querySelector('#loading')).opacity)<.001);
   let s=await page.evaluate(()=>JIANGNAN_LIVE.snapshot());
+  const source=await page.evaluate(()=>({meta:window.JN_LIVE_MODEL_META,badge:document.getElementById('liveSourceBadge')?.textContent}));
+  if(!source.meta||!source.badge.includes(source.meta.source.slice(0,10))||!source.badge.includes(String(source.meta.web_run)))throw Error('visible model source does not match verified provenance');
   if(!s.water_meshes.length||s.areas.length<15)throw Error('missing real water/whole-town navigation');
   await page.locator('#livePanel').evaluate(e=>e.open=true);
   await page.screenshot({path:path.join(out,'desktop-rain-a.png')});
@@ -34,6 +36,7 @@ const {chromium}=require('playwright');
   await page.screenshot({path:path.join(out,'mobile-immersive.png')});await page.locator('#restoreUI').click();
   if(await page.locator('body').evaluate(e=>e.classList.contains('ui-hidden')))throw Error('restore failed');
   if(external.length||errors.length)throw Error(JSON.stringify({errors,external}));
-  fs.writeFileSync(path.join(out,'runtime.json'),JSON.stringify({passed:true,offline_file_url:true,external_requests:external,page_errors:errors,initial:s,paused:frozen,final:await page.evaluate(()=>JIANGNAN_LIVE.snapshot()),desktop:[1024,640],mobile:[390,844],physical_phone_tested:false,renderer:'Chromium WebGL SwiftShader',not_fps_benchmark:true},null,2));
+  fs.writeFileSync(path.join(out,'runtime.json'),JSON.stringify({passed:true,source_badge_verified:source,offline_file_url:true,external_requests:external,page_errors:errors,initial:s,paused:frozen,final:await page.evaluate(()=>JIANGNAN_LIVE.snapshot()),desktop:[1024,640],mobile:[390,844],physical_phone_tested:false,renderer:'Chromium WebGL SwiftShader',not_fps_benchmark:true},null,2));
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});
+
