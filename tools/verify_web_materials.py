@@ -61,7 +61,8 @@ if grain_rows51:
     for row in grain_rows51:
         axis=row['source_material'][-1];assert axis in ('X','Y')
         assert row['coordinate_axes']==([2,1,0] if axis=='X' else [0,2,1])
-        assert max(abs(a-b) for a,b in zip(row['object_coordinate_scale'],(1.1,1.1,.3)))<1e-6
+        assert row['object_coordinate_scale'] is None and row['authored_uv51']=='JN_GRAIN51_MetreUV'
+        assert max(abs(a-b) for a,b in zip(row['authored_scale51'],(1.1,1.1,.3)))<1e-6
         indices=[i for i,m in enumerate(g['materials']) if m['name']==row['export_material']]
         assert len(indices)==1 and g['materials'][indices[0]]['pbrMetallicRoughness'].get('baseColorTexture')
         users={n['name'] for n in g['nodes'] if 'mesh' in n and any(p.get('material')==indices[0] for p in g['meshes'][n['mesh']]['primitives'])}

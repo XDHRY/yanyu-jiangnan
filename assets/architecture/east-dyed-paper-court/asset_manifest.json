@@ -19,7 +19,7 @@
     "new_local_materials": 2,
     "new_geometry_images_lights": 0,
     "source_image": "textures/wood.png; existing packed project-generated image and original prompt/license retained",
-    "mapping": "Object metres permuted X:(Z,Y,X), Y:(X,Z,Y), original scale(1.1,1.1,0.3); grain repeat3.333m along timber/transverse0.909m",
+    "mapping": "Authored JN_GRAIN51_MetreUV on11 source Meshes, X:(Z,Y,X), Y:(X,Z,Y), scale(1.1,1.1,0.3), FLAT UVMap shared by Blender and Web; repeats3.333m/0.909m",
     "users_x": "3 crossbeams,2 drying rails,1 mixing table",
     "users_y": "2 eave longitudinal beams,3 pigment shelves",
     "normals_roughness": "Original shader/roughness/image bump retained; Web geometry normals until true tangent bake",

@@ -474,28 +474,39 @@ def dyed_grain51_layout():
         'Y': {'axes':(0,2,1),'users':tuple('JN_北河染纸坊_'+n for n in ('纵向檐枋','纵向檐枋.001','颜料架','颜料架.001','颜料架.002'))},
     }
 
+def dyed_grain51_uv(co,normal,scale,axes):
+    dominant=max(range(3),key=lambda i:abs(normal[axes[i]]))
+    a,b=[i for i in range(3) if i!=dominant]
+    return co[axes[a]]*scale[a],co[axes[b]]*scale[b]
+
 def refine_dyed_grain51():
     """Local timber-axis mapping; original image, scale and shader retained."""
     source=M['wood'];rows=[]
     for axis,spec in dyed_grain51_layout().items():
         mat=source.copy();mat.name=PREFIX+'染纸顺纹51_'+axis
         mat['JN_web_object_axes51']=spec['axes']
+        mat['JN_grain_uv51']='JN_GRAIN51_MetreUV'
         nodes=mat.node_tree.nodes;links=mat.node_tree.links
         mappings={n.inputs['Vector'].links[0].from_node for n in nodes if n.type=='TEX_IMAGE' and n.image and n.projection=='BOX'}
         assert len(mappings)==1,'wood image mapping contract missing'
         mapping=next(iter(mappings));assert mapping.type=='VECT_MATH' and mapping.operation=='MULTIPLY'
-        incoming=mapping.inputs[0].links[0].from_socket
-        for link in list(mapping.inputs[0].links):links.remove(link)
-        separate=nodes.new('ShaderNodeSeparateXYZ');combine=nodes.new('ShaderNodeCombineXYZ')
-        separate.label='Round51 original metre coordinates';combine.label='Round51 grain along '+axis
-        links.new(incoming,separate.inputs[0])
-        for i,j in enumerate(spec['axes']):links.new(separate.outputs[j],combine.inputs[i])
-        links.new(combine.outputs[0],mapping.inputs[0])
+        scale=tuple(mapping.inputs[1].default_value);mat['JN_grain_scale51']=scale
+        uvnode=nodes.new('ShaderNodeUVMap');uvnode.uv_map='JN_GRAIN51_MetreUV'
+        uvnode.label='Round51 authored metre UV, grain along '+axis
+        for tex in [n for n in nodes if n.type=='TEX_IMAGE' and n.image and n.projection=='BOX']:
+            for link in list(tex.inputs['Vector'].links):links.remove(link)
+            links.new(uvnode.outputs['UV'],tex.inputs['Vector']);tex.projection='FLAT'
         for name in spec['users']:
             obj=bpy.data.objects[name]
             assert len(obj.data.materials)==1 and obj.data.materials[0]==source,name
+            assert obj.data.users==1,'shared source geometry requires explicit isolation'
+            layer=obj.data.uv_layers.get('JN_GRAIN51_MetreUV') or obj.data.uv_layers.new(name='JN_GRAIN51_MetreUV')
+            for poly in obj.data.polygons:
+                for loop in poly.loop_indices:
+                    co=obj.data.vertices[obj.data.loops[loop].vertex_index].co
+                    layer.data[loop].uv=dyed_grain51_uv(co,poly.normal,scale,spec['axes'])
             obj.data.materials[0]=mat
-        rows.append({'axis':axis,'axes':spec['axes'],'users':spec['users'],'source_image':'wood.png','mapped_scale':list(mapping.inputs[1].default_value)})
+        rows.append({'axis':axis,'axes':spec['axes'],'users':spec['users'],'source_image':'wood.png','mapped_scale':list(scale),'authored_uv':'JN_GRAIN51_MetreUV'})
     S['JN_dyed_grain51']=json.dumps(rows,ensure_ascii=False)
 
 def image_material(key,asset,scale,depth=.035,uv=False,tint=None):

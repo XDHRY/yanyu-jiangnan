@@ -24,3 +24,10 @@ class Grain51(unittest.TestCase):
         users=[u for group in s.values() for u in group['users']]
         self.assertEqual([len(s[a]['users']) for a in ('X','Y')],[6,5]);self.assertEqual(len(set(users)),11)
         self.assertTrue(all(u.startswith('JN_北河染纸坊_') for u in users))
+    def test_authoring_and_export_contract_agree(self):
+        tree=ast.parse((ROOT/'jiangnan.py').read_text());f=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='dyed_grain51_uv')
+        ns={};exec(compile(ast.Module(body=[f],type_ignores=[]),'uv51','exec'),ns)
+        for axes in ((0,1,2),(2,1,0),(0,2,1)):
+            for normal in ((1,0,0),(0,1,0),(0,0,1),(.7,.2,.1)):
+                args=((13.7,98.2,1.9),normal,(1.1,1.1,.3),axes)
+                self.assertEqual(ns['dyed_grain51_uv'](*args),object_uv(*args))

@@ -1817,13 +1817,18 @@ for row in grain51:
     assert sorted(users)==sorted(row['users']) and len(users)==(6 if axis=='X' else 5)
     grain_users51.extend(users)
     assert {n.image for n in mat.node_tree.nodes if n.type=='TEX_IMAGE' and n.image}==source_images51
-    mapping=next(n.inputs['Vector'].links[0].from_node for n in mat.node_tree.nodes if n.type=='TEX_IMAGE' and n.image and n.projection=='BOX')
-    assert max(abs(a-b) for a,b in zip(mapping.inputs[1].default_value,(1.1,1.1,.3)))<1e-6
-    combine=mapping.inputs[0].links[0].from_node;assert combine.type=='COMBXYZ'
-    for i,j in enumerate(expected):
-        link=combine.inputs[i].links[0];separate=link.from_node
-        assert separate.type=='SEPXYZ' and link.from_socket==separate.outputs[j]
-        assert separate.inputs[0].links[0].from_socket.name=='Object'
+    scale=tuple(mat['JN_grain_scale51']);assert max(abs(a-b) for a,b in zip(scale,(1.1,1.1,.3)))<1e-6
+    assert mat['JN_grain_uv51']=='JN_GRAIN51_MetreUV'
+    for tex in [n for n in mat.node_tree.nodes if n.type=='TEX_IMAGE' and n.image]:
+        assert tex.projection=='FLAT' and tex.inputs['Vector'].links[0].from_node.uv_map=='JN_GRAIN51_MetreUV'
+    for name in users:
+        data=bpy.data.objects[name].data;layer=data.uv_layers['JN_GRAIN51_MetreUV']
+        for poly in data.polygons:
+            dominant=max(range(3),key=lambda i:abs(poly.normal[expected[i]]));a,b=[i for i in range(3) if i!=dominant]
+            for loop in poly.loop_indices:
+                co=data.vertices[data.loops[loop].vertex_index].co
+                want=(co[expected[a]]*scale[a],co[expected[b]]*scale[b])
+                assert max(abs(q-r) for q,r in zip(layer.data[loop].uv,want))<1e-5,(name,loop)
     old_bs=next(n for n in source_wood51.node_tree.nodes if n.type=='BSDF_PRINCIPLED')
     bs=next(n for n in mat.node_tree.nodes if n.type=='BSDF_PRINCIPLED')
     assert abs(bs.inputs['Roughness'].default_value-old_bs.inputs['Roughness'].default_value)<1e-6
