@@ -28,7 +28,7 @@ class Stone54Tests(unittest.TestCase):
         self.assertLess(6*1254*1254*4+1254*418*4+2*256*256*4+3*512*512*4,44554784)
     def test_quiet_unlit_color(self):
         c=scope['stone_color54']();self.assertEqual(c.shape,(512,512,4))
-        self.assertLess(float(np.std(c[...,0])),.02);self.assertGreater(float(c[...,:3].min()),.55)
+        self.assertLess(float(np.std(c[...,0])),.008);self.assertGreater(float(c[...,:3].min()),.55)
         self.assertLess(float(c[...,:3].max()),.69);self.assertTrue(np.all(c[...,3]==1))
 
 if __name__=='__main__':unittest.main()

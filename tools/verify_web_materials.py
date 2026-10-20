@@ -29,12 +29,12 @@ if any(m.get('source_material')=='JN_民居细磨青石' for m in report.get('ma
     for material in floor_materials:
         pbr=material['pbrMetallicRoughness']
         assert all(abs(a-b)<1e-5 for a,b in zip(pbr['baseColorFactor'],(.45,.52,.54,1)))
-        assert abs(pbr['roughnessFactor']-1)<1e-5
+        assert abs(pbr.get('roughnessFactor',1)-1)<1e-5
         assert 'normalTexture' in material and 'metallicRoughnessTexture' in pbr and 'occlusionTexture' in material
         nt=material['normalTexture'];rt=pbr['metallicRoughnessTexture'];ot=material['occlusionTexture'];ct=pbr['baseColorTexture']
         assert g['textures'][rt['index']]['source']==g['textures'][ot['index']]['source']
         assert len({g['textures'][t['index']]['source'] for t in (ct,nt,rt)})==3
-        assert nt.get('texCoord',0)==rt.get('texCoord',0)==ot.get('texCoord',0)==ct.get('texCoord',0)
+        assert nt.get('texCoord',0)==rt.get('texCoord',0)==ot.get('texCoord',0)!=ct.get('texCoord',0)
         assert abs(nt.get('scale',1)-.65)<1e-5
         for texture in (ct,nt,rt):
             image=g['images'][g['textures'][texture['index']]['source']]

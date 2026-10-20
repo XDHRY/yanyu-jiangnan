@@ -3512,10 +3512,11 @@ def stone_color54(size=512):
     """Quiet fine-ground stone colour, no directional illumination or copied albedo."""
     import numpy as np
     uv=(np.arange(size,dtype=np.float64)+.5)/size;u,v=np.meshgrid(uv,uv)
-    broad=.018*np.sin(2*math.pi*(3*u+2*v))+.012*np.cos(2*math.pi*(5*u-7*v))
-    grain=.006*np.sin(2*math.pi*(61*u+47*v))*np.cos(2*math.pi*(43*u-53*v))
-    cavity=np.clip(-stone_height54(u,v)/.00065,0,1)
-    variation=broad+grain-.008*cavity
+    variation=np.random.default_rng(5402).normal(0,.0015,(size,size));rng=random.Random(5401)
+    for _ in range(36):
+        cx,cy=rng.random(),rng.random();radius=rng.uniform(.015,.1);amplitude=rng.uniform(-.005,.005)
+        dx=(u-cx+.5)%1-.5;dy=(v-cy+.5)%1-.5
+        variation+=amplitude*np.exp(-(dx*dx+dy*dy)/(2*radius*radius))
     rgb=np.stack((.60+variation,.64+variation,.63+variation),axis=-1)
     return np.concatenate((rgb,np.ones((*u.shape,1))),axis=-1).astype(np.float32)
 
@@ -3536,6 +3537,11 @@ def refine_stone_floor54():
         axis=max(range(3),key=lambda k:abs(poly.normal[k]));a,b=[k for k in range(3) if k!=axis]
         for i in poly.loop_indices:
             co=data.vertices[data.loops[i].vertex_index].co;uv.data[i].uv=(co[a]/.32,co[b]/.32)
+    colour_uv=data.uv_layers.new(name='JN_STONE_ColourUV54')
+    for poly in data.polygons:
+        axis=max(range(3),key=lambda k:abs(poly.normal[k]));a,b=[k for k in range(3) if k!=axis]
+        for i in poly.loop_indices:
+            co=data.vertices[data.loops[i].vertex_index].co;colour_uv.data[i].uv=(co[a]/1.28,co[b]/1.28)
     bsdf=next(n for n in nodes if n.type=='BSDF_PRINCIPLED')
     for node in list(nodes):
         if node.type=='BUMP':nodes.remove(node)
@@ -3547,6 +3553,8 @@ def refine_stone_floor54():
         image.filepath_raw=os.path.join(P['output_dir'],'textures',name+'.png');image.file_format='PNG';image.save();image.pack()
         tex=nodes.new('ShaderNodeTexImage');tex.image=image;tex.extension='REPEAT';links.new(uvnode.outputs['UV'],tex.inputs['Vector']);textures.append(tex)
     tint=next(n for n in nodes if n.type=='MIX_RGB' and n.blend_type=='MULTIPLY')
+    colour_node=nodes.new('ShaderNodeUVMap');colour_node.uv_map=colour_uv.name
+    links.new(colour_node.outputs['UV'],textures[2].inputs['Vector'])
     links.new(textures[2].outputs['Color'],tint.inputs[1])
     for node in list(nodes):
         if node.type=='TEX_IMAGE' and node not in textures:nodes.remove(node)
@@ -3561,8 +3569,12 @@ def refine_stone_floor54():
     mat['JN_stone54']='periodic_metric_micro_pits_v1'
     background=next(im for im in bpy.data.images if 'landscape' in im.name.lower())
     assert tuple(background.size)==(2172,724)
+    # Discard only this datablock's old packed payload, not the source PNG.
+    # Otherwise Image.pack() can resurrect the original2172x724 bytes on blend reload.
+    if background.packed_file:background.unpack(method='REMOVE')
     background.scale(1254,418);background.filepath_raw=os.path.join(P['output_dir'],'textures','landscape54_1254.png');background.file_format='PNG';background.save();background.pack()
-    S['JN_stone54']=json.dumps({'users':8,'shared_meshes':1,'normal_size':512,'orm_size':512,'basecolor_size':512,'local_period_m':.32,'world_period_range_m':[.2976,.336],'microcavity':'analytic local visibility approximation; not scene AO bake','floor_volume_before_m3':volume,'winding_flipped':volume<0,'background_size':[1254,418]},ensure_ascii=False)
+    assert tuple(background.size)==(1254,418) and background.packed_file
+    S['JN_stone54']=json.dumps({'users':8,'shared_meshes':1,'normal_size':512,'orm_size':512,'basecolor_size':512,'basecolor_period_local_m':1.28,'local_period_m':.32,'world_period_range_m':[.2976,.336],'microcavity':'analytic local visibility approximation; not scene AO bake','floor_volume_before_m3':volume,'winding_flipped':volume<0,'background_size':[1254,418]},ensure_ascii=False)
 
 def roof_microtexel33(u,v):
     """Periodic 0.6m clay height field: analytic derivatives, never albedo-as-normal."""

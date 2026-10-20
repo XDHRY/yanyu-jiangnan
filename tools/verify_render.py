@@ -74,6 +74,7 @@ assert floor_material.get('JN_stone54')=='periodic_metric_micro_pits_v1'
 assert floor_bsdf.inputs['Roughness'].is_linked and floor_bsdf.inputs['Normal'].is_linked
 assert not any(n.type=='BUMP' for n in floor_material.node_tree.nodes)
 assert floor_users[0].data.uv_layers.get('JN_STONE_MicroUV54')
+assert floor_users[0].data.uv_layers.get('JN_STONE_ColourUV54')
 for name in ('stone54_normal','stone54_orm'):
     im=bpy.data.images[name]
     assert tuple(im.size)==(512,512) and im.packed_file and im.colorspace_settings.name=='Non-Color'
@@ -82,7 +83,10 @@ data=floor_users[0].data
 assert sum(data.vertices[t.vertices[0]].co.dot(data.vertices[t.vertices[1]].co.cross(data.vertices[t.vertices[2]].co))/6 for t in data.loop_triangles)>0
 report['residential_floor_material']=json.loads(S['JN_stone54'])
 assert tuple(bpy.data.images['stone54_basecolor'].size)==(512,512) and bpy.data.images['stone54_basecolor'].packed_file
-report['residential_floor_material'].update({'new_images':3,'normal_source':'periodic metric height derivative; not albedo or high-low bake','albedo_source':'quiet procedural colour, no directional lighting','albedo_period_per_local_m':.32})
+report['residential_floor_material'].update({'new_images':3,'normal_source':'periodic metric height derivative; not albedo or high-low bake','albedo_source':'quiet irregular procedural mineral colour, no directional lighting','albedo_period_local_m':1.28})
+background54=next(im for im in bpy.data.images if 'landscape' in im.name.lower())
+assert tuple(background54.size)==(1254,418) and background54.packed_file,'resampled background must survive blend reload, not just metadata'
+assert len(image_inventory)==12
 roof_pbr=bpy.data.materials['JN_绣户黛瓦PBR']
 roof_users=[o for o in S.objects if o.type=='MESH' and roof_pbr in list(o.data.materials) and not o.hide_render]
 assert [o.name for o in roof_users]==['JN_村落民居_06_屋面']
