@@ -111,6 +111,9 @@ def start():
     # Explicit flat fallback for the noise-node colour unsupported by glTF.
     # Keep the Blender shader unchanged, and never bake albedo into normals.
     M['darkstone']['JN_web_base_color_factor']=list(M['darkstone'].diffuse_color)
+    # Procedural vegetation colour is not representable by glTF's node subset.
+    # Declare the authored linear colour at source, not only in one HTML wrapper.
+    M['moss']['JN_web_base_color_factor']=list(M['moss'].diffuse_color)
     for n in M['plaster'].node_tree.nodes:
         if n.type=='VALTORGB':n.color_ramp.elements[0].color=(.51,.55,.51,1)
         if n.type=='BUMP':n.inputs['Strength'].default_value=.12;n.inputs['Distance'].default_value=.018
@@ -3671,6 +3674,7 @@ if __name__=='__main__':
         rdir=os.path.join(P['output_dir'],'renders');os.makedirs(rdir,exist_ok=True)
         for name in ['正面','顶视','三分之四']:
             S.camera=bpy.data.objects[PREFIX+name];S.render.filepath=os.path.join(rdir,name+'.png');bpy.ops.render.render(write_still=True)
+
 
 
 
