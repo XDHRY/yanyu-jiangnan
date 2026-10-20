@@ -49,10 +49,13 @@ function attach(){
      float a=sin(vLiveXZ.x*2.1+vLiveXZ.y*1.8+uLiveTime*1.7)*0.065;
      float b=cos(vLiveXZ.y*3.2-vLiveXZ.x*1.3-uLiveTime*2.2)*0.045;
      vec3 wave=normalize(mat3(viewMatrix)*vec3(a,1.0,b));
-     normal=gl_FrontFacing?wave:-wave;`);
+     normal=dot(wave,normalize(vViewPosition))>=0.0?wave:-wave;`);
    };live.customProgramCacheKey=()=> 'jiangnan-live-water-v1';return live;
   });o.material=Array.isArray(o.material)?cloned:cloned[0];S.water.push(o.name);
  });
+ // Recover the authoring moss colour lost by the glTF procedural fallback.
+ // This is a flat fallback, not a new texture/PBR bake.
+ const tinted=new Set();root.traverse(o=>{if(!o.isMesh)return;for(const m of (Array.isArray(o.material)?o.material:[o.material]))if(m?.name==='JN_moss__WEB'&&!tinted.has(m)){m.color.setRGB(.065,.12,.064);m.roughness=.88;tinted.add(m);}});
  rain=new T.LineSegments(new T.BufferGeometry(),new T.LineBasicMaterial({color:0xc5dbe2,transparent:true,opacity:.4,depthWrite:false}));rain.geometry.setAttribute('position',new T.BufferAttribute(positions,3).setUsage(T.DynamicDrawUsage));rain.frustumCulled=false;
  snow=new T.Points(new T.BufferGeometry(),new T.PointsMaterial({color:0xf4f6ef,size:.065,transparent:true,opacity:.8,depthWrite:false}));snow.geometry.setAttribute('position',new T.BufferAttribute(flakes,3).setUsage(T.DynamicDrawUsage));snow.frustumCulled=false;E.scene.add(rain,snow);
  const spec=[['北街茶集','小镇北街茶集广场'],['东岸织户宅院','东岸织户宅院'],['晒布后园','东岸晒布后园'],['西岸酒坊院','西岸酒坊院'],['米行粮栈','北端米行粮栈'],['北粮水埠','北粮水埠'],['北河丝行','北河丝行'],['修桨作坊','北河修桨作坊'],['伞巷','北河伞巷'],['造纸院','北河纸坊'],['装帧纸铺','北河纸铺'],['染纸院','北河染纸坊'],['染料行','北河染料行'],['转水埠与候船区','北河转水埠'],['桥西补履摊','桥西补履'],['西岸书户','西岸书户'],['东岸起居户','东岸起居户'],['东岸绣户','东岸绣户'],['东岸备膳户','东岸备膳户']];

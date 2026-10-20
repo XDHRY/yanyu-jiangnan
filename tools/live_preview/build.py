@@ -12,7 +12,11 @@ expected='e89147df3342e51c8abe4bef21b31009adc49f4a528d28dce46a9cbf35d60c49'
 assert hashlib.sha256(bundle.encode()).hexdigest()==expected,'Unrecognized source bundle; do not guess private aliases'
 marker='ob();nb().catch('
 assert bundle.count(marker)==1
-hook="window.JN_LIVE_RUNTIME={THREE:Sf,scene:Fn,root:()=>_e.root,camera:()=>De,goPreset:i=>op(i,false),fitArea:(c,s)=>e_(c,s),lights:night=>{eb.intensity=night?.48:2;jg.intensity=night?.25:3.2;Qg.intensity=night?.4:1.2;}};"
+hook="""window.JN_LIVE_RUNTIME={THREE:Sf,scene:Fn,root:()=>_e.root,camera:()=>De,goPreset:i=>op(i,false),fitArea:(c,s)=>{
+_e.tour=false;at('#tour').classList.remove('active');e_(c,s);
+const radius=s.length()*.5+.35,v=De.fov*Math.PI/360,h=Math.atan(Math.tan(v)*innerWidth/innerHeight),distance=radius/Math.sin(Math.min(v,h))*1.12;
+De.position.copy(c).add(new Sf.Vector3(.85,.48,1).normalize().multiplyScalar(distance));Pt.target.copy(c);Pt.update();
+},lights:night=>{eb.intensity=night ? .48 : 2;jg.intensity=night ? .25 : 3.2;Qg.intensity=night ? .4 : 1.2;}};"""
 # Resolve only reviewed stable function/variable aliases, fail closed otherwise.
 assert 'function e_(' in bundle and 'var Qg=new li(' in bundle,'fit/light alias mismatch'
 new_bundle=bundle.replace(marker,hook+marker)
