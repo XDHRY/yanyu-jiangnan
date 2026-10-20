@@ -1,0 +1,101 @@
+{
+  "passed": true,
+  "before_sha256": "1436d816a792e70c7bcfa4504330f9cafd6fb5020a684d14fc3e28a1b4e7ff2c",
+  "after_sha256": "78901a98b7fb534b976c19b77ea11032a128555f4fd6d4e2753a62f73f9faef1",
+  "geometry_nodes_checked": 3134,
+  "non_target_nodes_retained": 3123,
+  "refined_material_and_normal_nodes": 11,
+  "new_local_materials": 2,
+  "non_target_triangle_corners_positions_normals_identical": true,
+  "target_evaluated_vertex_max_distance_m": 1.52587890625e-05,
+  "target_closed_positive_volumes": {
+    "JN_北河染纸坊_纵向檐枋": {
+      "before": -0.23685455913882858,
+      "after": 0.23685455913882858,
+      "closed_after_weld_m": 0.0001,
+      "all_faces_outward": true
+    },
+    "JN_北河染纸坊_纵向檐枋.001": {
+      "before": -0.23685359929518301,
+      "after": 0.23685359929518304,
+      "closed_after_weld_m": 0.0001,
+      "all_faces_outward": true
+    },
+    "JN_北河染纸坊_横向穿梁": {
+      "before": -0.19968697641531793,
+      "after": 0.19968697641531793,
+      "closed_after_weld_m": 0.0001,
+      "all_faces_outward": true
+    },
+    "JN_北河染纸坊_横向穿梁.001": {
+      "before": -0.19968780717002818,
+      "after": 0.19968780717002818,
+      "closed_after_weld_m": 0.0001,
+      "all_faces_outward": true
+    },
+    "JN_北河染纸坊_横向穿梁.002": {
+      "before": -0.19969515920866301,
+      "after": 0.19969515920866301,
+      "closed_after_weld_m": 0.0001,
+      "all_faces_outward": true
+    },
+    "JN_北河染纸坊_晾纸上枋": {
+      "before": -0.03376289479649946,
+      "after": 0.03376300036270508,
+      "closed_after_weld_m": 0.0001,
+      "all_faces_outward": true
+    },
+    "JN_北河染纸坊_晾纸下枋": {
+      "before": -0.033762933664631865,
+      "after": 0.03376303923013859,
+      "closed_after_weld_m": 0.0001,
+      "all_faces_outward": true
+    },
+    "JN_北河染纸坊_颜料架": {
+      "before": -0.09112933171604083,
+      "after": 0.09112933171604083,
+      "closed_after_weld_m": 0.0001,
+      "all_faces_outward": true
+    },
+    "JN_北河染纸坊_颜料架.001": {
+      "before": -0.09112937633167356,
+      "after": 0.09112937633167356,
+      "closed_after_weld_m": 0.0001,
+      "all_faces_outward": true
+    },
+    "JN_北河染纸坊_颜料架.002": {
+      "before": -0.0911293770756245,
+      "after": 0.09112937571133935,
+      "closed_after_weld_m": 0.0001,
+      "all_faces_outward": true
+    },
+    "JN_北河染纸坊_搅染长案": {
+      "before": -0.15537808474467787,
+      "after": 0.1553781551886829,
+      "closed_after_weld_m": 0.0001,
+      "all_faces_outward": true
+    }
+  },
+  "instance_triangles": 625715,
+  "all_old_node_relationships_transforms_materials_images_and_cameras_preserved": true,
+  "flat_face_uv_samples": {
+    "JN_北河染纸坊_纵向檐枋": 16,
+    "JN_北河染纸坊_纵向檐枋.001": 16,
+    "JN_北河染纸坊_横向穿梁": 16,
+    "JN_北河染纸坊_横向穿梁.001": 16,
+    "JN_北河染纸坊_横向穿梁.002": 16,
+    "JN_北河染纸坊_晾纸上枋": 16,
+    "JN_北河染纸坊_晾纸下枋": 16,
+    "JN_北河染纸坊_颜料架": 16,
+    "JN_北河染纸坊_颜料架.001": 16,
+    "JN_北河染纸坊_颜料架.002": 16,
+    "JN_北河染纸坊_搅染长案": 16
+  },
+  "max_authored_uv_error": 2.8228759759940658e-05,
+  "non_target_uv_changed_streams": 725,
+  "non_target_uv_max_abs": 6.103515625e-05,
+  "cross_build_uv_determinism": "pending",
+  "source_image_bytes_preserved": 9,
+  "box_endgrain_tangent_bake": "pending",
+  "human_approval": "pending"
+}

@@ -1,0 +1,209 @@
+{
+  "round": 51,
+  "baseline_main": "389f037e341f15031c39fb97fbe4234bcd6dc1d8",
+  "baseline_render": "e5e08c12b8047495b6b1f7fa16365b058238a83e",
+  "pr": 57,
+  "source_commit": "32f70112e022abf3007d8222b8f01ec01a9e5e9e",
+  "tested_commit": "6c310375fe261866f311d27e5f5cd8e2657266ca",
+  "source_tree": "021a1571314b75dcad3c7bb9dc69cf2818efcbf6",
+  "first_source": "133829b5b5505b0e871fdfbba11931e03f593a76",
+  "first_runs": [
+    {
+      "id": 39394963302,
+      "name": "Blender 4.5 Scene Smoke",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 39394963403,
+      "name": "CI",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 39394963310,
+      "name": "Jiangnan Spatial Diagnostic",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 39394963369,
+      "name": "Jiangnan Web 3D Viewer",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "first_spatial": {
+    "id": 12250659748,
+    "run": 39394963310,
+    "api_digest": "0fd1ac3c2c2231edeb8b545027fd5d84616b21f5bd2690099d60efa2cf220644"
+  },
+  "uv_only_source": "fc250ed8816dee54bde650776a11997834834451",
+  "uv_only_tested": "2c2511ea94cf740a4bbd2804f2fb3f2588d7b105",
+  "uv_only_runs": [
+    {
+      "id": 39396008396,
+      "name": "CI",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 39396008484,
+      "name": "Blender 4.5 Scene Smoke",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 39396008415,
+      "name": "Jiangnan Web 3D Viewer",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 39396008297,
+      "name": "Jiangnan Spatial Diagnostic",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "uv_only_spatial": [
+    {
+      "id": 12252082192,
+      "name": "Jiangnan-Spatial-Diagnostics-2c2511ea94cf740a4bbd2804f2fb3f2588d7b105",
+      "size_in_bytes": 16503298,
+      "url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12252082192",
+      "archive_download_url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12252082192/zip",
+      "expired": false,
+      "created_at": "2026-10-20T08:54:20Z",
+      "expires_at": "2026-11-03T08:54:19Z",
+      "updated_at": "2026-10-20T08:54:20Z",
+      "digest": "sha256:356cff36600e5802c6475bf91eb73812646179cb11a5e98bcacaa0a874ab7db2",
+      "workflow_run": {
+        "id": 39396008297,
+        "repository_id": 1374819141,
+        "head_repository_id": 1374819141,
+        "head_branch": "codex/round51-dyed-timber-grain",
+        "head_sha": "fc250ed8816dee54bde650776a11997834834451"
+      }
+    }
+  ],
+  "baseline_artifact": {
+    "id": 12214012037,
+    "run": 39305671598,
+    "sha256": "7a9ed69981151bebe56db9394b7bcfb509b90ac68dcb309e8a6ea53e196b147a"
+  },
+  "baseline_download_zip_sha256": "44b413553b6bcfc7baf08e982397c0f88670ad1e1fa67688bfab456f0164e3ab",
+  "baseline_glb_sha256": "1436d816a792e70c7bcfa4504330f9cafd6fb5020a684d14fc3e28a1b4e7ff2c",
+  "baseline_note": "Downloaded baseline archive transport bytes differ from original API digest; extracted GLB exactly matches independently recorded Round50 final SHA and manifests/render source. Do not conflate container SHA with content identity.",
+  "wood_image": {
+    "path": "textures/wood.png",
+    "size": [
+      1254,
+      1254
+    ],
+    "bytes": 2687668,
+    "sha256": "bccb86173de1490e94be40b3d0413f88cbb93421cd6585908569945b2bc7ea35",
+    "source": "existing project-generated image; original prompt/license retained"
+  },
+  "formal36": "not run",
+  "independent_inn_repo": "untouched",
+  "human_approval": "pending",
+  "generic_form": {
+    "passed": false,
+    "missing_template_files": 7
+  },
+  "scope": "11 existing closed timbers: authored metre UV and inward-winding correction;2 local materials;0 new vertices/faces/objects/images/lights",
+  "merge_commit": "2309f27bccd2923b26464b793cba66c3bae03f6c",
+  "final_runs": [
+    {
+      "id": 39396940853,
+      "name": "CI",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 39396940572,
+      "name": "Blender 4.5 Scene Smoke",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 39396940627,
+      "name": "Jiangnan Spatial Diagnostic",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 39396940527,
+      "name": "Jiangnan Web 3D Viewer",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "final_artifacts": {
+    "smoke": [
+      {
+        "id": 12251849309,
+        "name": "Jiangnan-Blender-4.5-6c310375fe261866f311d27e5f5cd8e2657266ca",
+        "size_in_bytes": 23700391,
+        "url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12251849309",
+        "archive_download_url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12251849309/zip",
+        "expired": false,
+        "created_at": "2026-10-20T08:57:39Z",
+        "expires_at": "2026-10-27T08:57:38Z",
+        "updated_at": "2026-10-20T08:57:39Z",
+        "digest": "sha256:996d4f59d5a62434c74a4005db9a2da182ed48d654b1b3ba3757755f9268ae7e",
+        "workflow_run": {
+          "id": 39396940572,
+          "repository_id": 1374819141,
+          "head_repository_id": 1374819141,
+          "head_branch": "codex/round51-dyed-timber-grain",
+          "head_sha": "32f70112e022abf3007d8222b8f01ec01a9e5e9e"
+        }
+      }
+    ],
+    "spatial": [
+      {
+        "id": 12253585016,
+        "name": "Jiangnan-Spatial-Diagnostics-6c310375fe261866f311d27e5f5cd8e2657266ca",
+        "size_in_bytes": 16504577,
+        "url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12253585016",
+        "archive_download_url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12253585016/zip",
+        "expired": false,
+        "created_at": "2026-10-20T09:03:04Z",
+        "expires_at": "2026-11-03T09:03:02Z",
+        "updated_at": "2026-10-20T09:03:04Z",
+        "digest": "sha256:00f366825b4620fb33ae278ae54f8d6c423d579be650bc8f52dca0bdcabfd939",
+        "workflow_run": {
+          "id": 39396940627,
+          "repository_id": 1374819141,
+          "head_repository_id": 1374819141,
+          "head_branch": "codex/round51-dyed-timber-grain",
+          "head_sha": "32f70112e022abf3007d8222b8f01ec01a9e5e9e"
+        }
+      }
+    ],
+    "web": [
+      {
+        "id": 12252258470,
+        "name": "Jiangnan-Web-Viewer-6c310375fe261866f311d27e5f5cd8e2657266ca",
+        "size_in_bytes": 119352633,
+        "url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12252258470",
+        "archive_download_url": "https://api.github.com/repos/XDHRY/yanyu-jiangnan/actions/artifacts/12252258470/zip",
+        "expired": false,
+        "created_at": "2026-10-20T09:04:39Z",
+        "expires_at": "2026-11-19T09:04:37Z",
+        "updated_at": "2026-10-20T09:04:39Z",
+        "digest": "sha256:c5254e22ccb375380c5a4f7bbb45cefd0cdd5d347ccec66a2467215a726c7deb",
+        "workflow_run": {
+          "id": 39396940527,
+          "repository_id": 1374819141,
+          "head_repository_id": 1374819141,
+          "head_branch": "codex/round51-dyed-timber-grain",
+          "head_sha": "32f70112e022abf3007d8222b8f01ec01a9e5e9e"
+        }
+      }
+    ]
+  },
+  "independent_audit_note": "Texture references normalized by actual texture definitions rather than shifting indices; analyzer-only patch, actual source GLBs unchanged."
+}
