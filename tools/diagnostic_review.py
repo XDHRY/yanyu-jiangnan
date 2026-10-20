@@ -28,8 +28,8 @@ VIEWS=[
     ('12_village_lane',(1.4,8.4,1.75),(1.4,31.5,1.35),42,0,'村巷人眼：月门北巷通往茶集的连续地面、民居侧廊、桥前横巷和远端茶亭'),
     ('13_canal_bridge',(13.2,11.2,8.6),(7.3,15.1,.9),46,0,'水巷木桥：高位斜俯视完整检查桥板、栏柱、双岸驳岸、桥头落地与临水民居尺度'),
     ('14_village_waterfront',(7.3,29.0,2.25),(7.3,16.0,1.35),40,0,'临水回望：检查八栋民居沿水巷的聚落节奏、河埠和木桥是否形成江南村落层次'),
-    ('15_dyed_paper_court',(4.2,88.4,9.3),(14.8,98.0,1.9),42,0,'东岸染纸院：临街两步、开放柱网、屋檐—柱梁—台基与漂洗—染缸—晾纸动线'),
-    ('16_dyed_paper_support',(8.8,95.4,2.65),(15.2,98.4,1.30),42,0,'染纸近景：搅染案足、颜料架及盒底承托、晾纸立柱落地与纸夹悬挂；不隐藏资产'),
+    ('15_town_overview',(95,-85,115),(3,50,0),50,200,'全镇斜俯总览：庭院—双岸街巷—北河作坊与染纸院的实际连通，不隐藏建筑'),
+    ('16_stone_floor',(.70,19.85,.95),(-1.2,19.85,.26),46,0,'书户门内青石：真实开放门洞中的地坪微孔、反射与案凳接地；不移除屋顶或墙体'),
 ]
 
 for o in list(bpy.data.objects):
@@ -185,13 +185,33 @@ def fit_dyed50(cam,detail=False):
     assert cam.data.lens>=22 and min(bounds[0],bounds[2])>.045 and max(bounds[1],bounds[3])<.955,bounds
     return {'fixed_envelope_m':[lo,hi],'projected_bounds':bounds,'fitted_lens_mm':cam.data.lens,'hidden_objects':[],'proxy_geometry_created':False}
 # Reject both focus frames before spending time on the fourteen fixed views.
+def fit_focus54(cam,index):
+    bpy.context.view_layer.update()
+    if index==14:
+        pts=[Vector((x,y,z)) for x in (-24,30) for y in (-12,115) for z in (-.5,12)]
+        local=[cam.matrix_world.inverted()@p for p in pts]
+        lo=[min(p[i] for p in local) for i in (0,1)];hi=[max(p[i] for p in local) for i in (0,1)]
+        cam.location+=cam.rotation_euler.to_quaternion()@Vector(((lo[0]+hi[0])/2,(lo[1]+hi[1])/2,0))
+        cam.data.ortho_scale=max(hi[0]-lo[0],(hi[1]-lo[1])*1024/640)*1.16
+        bpy.context.view_layer.update()
+        q=[world_to_camera_view(S,cam,p) for p in pts]
+        bounds=[min(p.x for p in q),max(p.x for p in q),min(p.y for p in q),max(p.y for p in q)]
+        assert min(bounds[0],bounds[2])>.045 and max(bounds[1],bounds[3])<.955,bounds
+        return {'fixed_envelope_m':[[-24,-12,-.5],[30,115,12]],'projected_bounds':bounds,'hidden_objects':[],'proxy_geometry_created':False}
+    dg=bpy.context.evaluated_depsgraph_get();hits=[]
+    for x in (-.4,-1.,-1.6):
+        point=Vector((x,19.85,.26));direction=(point-cam.location).normalized()
+        hit=S.ray_cast(dg,cam.location,direction,distance=(point-cam.location).length+.04)
+        assert hit[0] and hit[4].name=='JN_村落民居_03_室内地坪',('floor focus blocked',hit[4].name if hit[0] else None)
+        hits.append(hit[4].name)
+    return {'clear_floor_rays':hits,'hidden_objects':[],'proxy_geometry_created':False,'camera_mode':'existing open doorway, not roof removal'}
 for index in (14,15):
-    probe=add_cam(*VIEWS[index][:5]);fit_dyed50(probe,index==15);created.remove(probe)
+    probe=add_cam(*VIEWS[index][:5]);fit_focus54(probe,index);created.remove(probe)
     probe_data=probe.data;bpy.data.objects.remove(probe,do_unlink=True);bpy.data.cameras.remove(probe_data)
 for name,loc,target,lens,ortho,question in VIEWS:
     cam=add_cam(name,loc,target,lens,ortho)
     S.camera=cam
-    framing=fit_dyed50(cam,name.startswith('16_')) if name.startswith(('15_','16_')) else None
+    framing=fit_focus54(cam,14 if name.startswith('15_') else 15) if name.startswith(('15_','16_')) else None
     S.render.filepath=os.path.join(DIAG,name+'.png')
     excluded=[]
     if name=='11_village_plan':
@@ -233,6 +253,7 @@ S.frame_set(orig['frame'])
 S.render.resolution_x=orig['x'];S.render.resolution_y=orig['y'];S.render.resolution_percentage=orig['pct']
 if orig['camera'] and bpy.data.objects.get(orig['camera']):S.camera=bpy.data.objects[orig['camera']]
 print('DIAGNOSTIC_RENDER_COMPLETE',json.dumps({'views':len(VIEWS),'dir':DIAG},ensure_ascii=False))
+
 
 
 
