@@ -1,0 +1,122 @@
+{
+  "baseline_sha256": "b3a2c42619320a7df634083081aa7614f122196694061d3cb9b8992a49251e36",
+  "new_sha256": "2fc16183b4e8659305671284bc5c82e7a7558213f08278a096746f412e43b479",
+  "geometry_nodes": 3134,
+  "positions_and_transforms_unchanged": true,
+  "normal_changes_only": [],
+  "old_images_byte_identical": [
+    "plaster",
+    "clay",
+    "wood",
+    "stone",
+    "roof06_normal",
+    "roof06_orm",
+    "petal",
+    "bark"
+  ],
+  "explicitly_resampled_background": {
+    "old": [
+      "landscape"
+    ],
+    "new": [
+      "landscape54_1254"
+    ]
+  },
+  "images": {
+    "plaster": {
+      "sha256": "b282898c00f165b319f0735c922c986094c9da0b3032e31d572cc0f76376a8f7",
+      "size": [
+        1254,
+        1254
+      ]
+    },
+    "clay": {
+      "sha256": "0bb841af72023c00b7596e321911ec69138eeb290f3858dd25b959b95d1be44c",
+      "size": [
+        1254,
+        1254
+      ]
+    },
+    "wood": {
+      "sha256": "bccb86173de1490e94be40b3d0413f88cbb93421cd6585908569945b2bc7ea35",
+      "size": [
+        1254,
+        1254
+      ]
+    },
+    "stone": {
+      "sha256": "f7a9c359ad93f73ab931865f2d334673765fa0fd762a7411fb0afe179f3436ca",
+      "size": [
+        1254,
+        1254
+      ]
+    },
+    "stone54_normal": {
+      "sha256": "f61fcdca9a75c3dc072b0bad2a04882a144e6c8dcc2f7465a7319274d9f2851b",
+      "size": [
+        512,
+        512
+      ]
+    },
+    "stone54_orm": {
+      "sha256": "39c5ba3746deb7e2d9d5b5edafc58ec8aa0e26ccd2e0aca1cee970e7f9dd874f",
+      "size": [
+        512,
+        512
+      ]
+    },
+    "stone54_basecolor": {
+      "sha256": "04c43b9643fdb4cd9719e5180a1de69169da7f1414c44101c945c3d0e287d07e",
+      "size": [
+        512,
+        512
+      ]
+    },
+    "roof06_normal": {
+      "sha256": "6b2a895dfd5f068afc37d49a7d9207daa63ed8d3739c343825c81efb990aaae8",
+      "size": [
+        256,
+        256
+      ]
+    },
+    "roof06_orm": {
+      "sha256": "1c8eaa7e714849df80ec86caf90b6bb44d2a2e6b99c074f17ddab1aa1d84ef2a",
+      "size": [
+        256,
+        256
+      ]
+    },
+    "petal": {
+      "sha256": "9af4280e7ae2acead58186c448192c951d8e62412906d33231f7a7df742a3ed9",
+      "size": [
+        1254,
+        1254
+      ]
+    },
+    "bark": {
+      "sha256": "04357eb3759690c613f3a5550054e242d7d39e2c8db69b3272756df157ec6253",
+      "size": [
+        1254,
+        1254
+      ]
+    },
+    "landscape54_1254": {
+      "sha256": "968d467924c1404176727b205b650bcefc77487458df749108965852c7ff7334",
+      "size": [
+        1254,
+        418
+      ]
+    }
+  },
+  "changed_materials": [
+    "JN_民居细磨青石__WEB"
+  ],
+  "other_material_graphs_preserved": 54,
+  "cameras_unchanged": 16,
+  "uv_stability": {
+    "changed_compatible_nontarget_streams": 734,
+    "max_abs_delta": 6.103515625e-05,
+    "fully_deterministic": "pending; reordered layouts not asserted"
+  },
+  "scope": "unordered POSITION/NORMAL triangle corners; not complete topology/index equivalence or human approval"
+}

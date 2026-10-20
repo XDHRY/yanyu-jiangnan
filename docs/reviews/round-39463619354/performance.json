@@ -1,0 +1,27 @@
+{
+  "source_commit": "9b624214d728f90fc757788cf9010d667860668a",
+  "tested_merge": "3aa20ec3037854a480d7f606f9a92ca3695d2f37",
+  "native": {
+    "objects": 4644,
+    "mesh_objects": 3124,
+    "faces": 99812,
+    "triangles": 168534,
+    "materials": 56,
+    "blender_drivers": 4444,
+    "diagnostic_views": 16,
+    "render_seconds": 313.56
+  },
+  "web": {
+    "triangles": 625715,
+    "materials": 55,
+    "glb_bytes": 51336748,
+    "attribute_index_bytes": 28496578,
+    "images": 12,
+    "rgba8_base_level_bytes_estimate": 43507088,
+    "exported_glb_animation_clips": 0
+  },
+  "runtime_effects": ["water normal waves", "local rain/snow", "day/night preview", "whole-town area navigation"],
+  "physical_phone_tested": false,
+  "fps_benchmark": false,
+  "human_function_form_runtime_approval": "pending"
+}
