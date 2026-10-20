@@ -39,11 +39,14 @@ def canonical_materials(g,im):
             value=dict(value)
             if key.endswith('Texture') and 'index' in value:
                 texture=g['textures'][value['index']];source=g['images'][texture['source']]
-                value['index']={'image_name':source.get('name'),'sampler':g.get('samplers',[])[texture['sampler']] if 'sampler' in texture else None}
+                name=source.get('name');name='landscape' if name and 'landscape' in name.lower() else name
+                value['index']={'image_name':name,'sampler':g.get('samplers',[])[texture['sampler']] if 'sampler' in texture else None}
             return {k:canonical(v,k) for k,v in value.items()}
         if isinstance(value,list):return [canonical(v) for v in value]
         return value
-    for m in g['materials']:result[m['name']]=canonical(m)
+    for m in g['materials']:result.setdefault(m['name'],[]).append(canonical(m))
+    # glTF names need not be unique: preserve every material, not last-by-name only.
+    for values in result.values():values.sort(key=lambda m:json.dumps(m,sort_keys=True))
     return result
 
 if __name__=='__main__':
@@ -74,7 +77,8 @@ if __name__=='__main__':
     same=[name for name in oi if ni.get(name)==oi[name]]
     changed=[name for name in oi if ni.get(name)!=oi[name]]
     assert len(same)==8 and len(changed)==1,(same,changed)
-    assert 'landscape' in changed[0].lower() and ni[changed[0]]['size']==[1254,418]
+    resized=[name for name in ni if 'landscape' in name.lower()]
+    assert len(resized)==1 and 'landscape' in changed[0].lower() and ni[resized[0]]['size']==[1254,418]
     assert len(ni)==12
     oldm,newm=canonical_materials(og,oi),canonical_materials(ng,ni)
     assert oldm.keys()==newm.keys()
@@ -84,8 +88,8 @@ if __name__=='__main__':
     assert oc==nc and og['cameras']==ng['cameras']
     out={'baseline_sha256':hashlib.sha256(old).hexdigest(),'new_sha256':hashlib.sha256(new).hexdigest(),
          'geometry_nodes':len(nm),'positions_and_transforms_unchanged':True,'normal_changes_only':altered_normals,
-         'old_images_byte_identical':same,'explicitly_resampled_background':changed,'images':ni,
-         'changed_materials':changed_materials,'other_material_graphs_preserved':len(oldm)-1,
+         'old_images_byte_identical':same,'explicitly_resampled_background':{'old':changed,'new':resized},'images':ni,
+         'changed_materials':changed_materials,'other_material_graphs_preserved':sum(len(v) for k,v in oldm.items() if k not in changed_materials),
          'cameras_unchanged':len(nc),'uv_stability':{'changed_compatible_nontarget_streams':uv_streams,'max_abs_delta':uv_max,'fully_deterministic':'pending; reordered layouts not asserted'},
          'scope':'unordered POSITION/NORMAL triangle corners; not complete topology/index equivalence or human approval'}
     Path(sys.argv[3]).write_text(json.dumps(out,ensure_ascii=False,indent=2)+'\n');print(json.dumps(out,ensure_ascii=False))

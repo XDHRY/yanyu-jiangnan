@@ -3512,9 +3512,12 @@ def stone_color54(size=512):
     """Quiet fine-ground stone colour, no directional illumination or copied albedo."""
     import numpy as np
     uv=(np.arange(size,dtype=np.float64)+.5)/size;u,v=np.meshgrid(uv,uv)
-    variation=np.random.default_rng(5402).normal(0,.0015,(size,size));rng=random.Random(5401)
+    noise=np.random.default_rng(5402).normal(0,.020,(size,size))
+    # Irregular2.5–5mm mineral grains, not sinusoidal/grid colour or directional light.
+    variation=np.clip((4*noise+np.roll(noise,1,0)+np.roll(noise,-1,0)+np.roll(noise,1,1)+np.roll(noise,-1,1))/8,-.030,.030)
+    rng=random.Random(5401)
     for _ in range(36):
-        cx,cy=rng.random(),rng.random();radius=rng.uniform(.015,.1);amplitude=rng.uniform(-.005,.005)
+        cx,cy=rng.random(),rng.random();radius=rng.uniform(.015,.1);amplitude=rng.uniform(-.010,.010)
         dx=(u-cx+.5)%1-.5;dy=(v-cy+.5)%1-.5
         variation+=amplitude*np.exp(-(dx*dx+dy*dy)/(2*radius*radius))
     rgb=np.stack((.60+variation,.64+variation,.63+variation),axis=-1)
