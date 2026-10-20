@@ -41,3 +41,18 @@ da7537a/测试树3e370d9：CI105Python+10Node通过，Smoke39461358776/Spatial39
 此轮通用Form验证器对residential-floor素材目录报告缺7个room-package文件（brief/plan-metadata/props/layout/openings/reviews/final-report），该目录只是既有材质manifest而非完整新房间包；不将此失败改为通过。人工Function/Form/Runtime保持pending，按用户已有授权继续既有Blender/16机位/Web诊断代码闭环，非生产部署。
 
 da7537a全部5项最终成功后才推下一颗粒修订；其离线run39461358766/artifact12282678942已通过真实file://离线、桌面/手机视口、雨雪/水波/暂停/导览/折叠/来源标牌断言。Web GLB51212544B、625715三角、28495810属性索引B、55材质/12图43507088B；GLB SHA dab47050f293b3feb801c2a646c7b8e3de654c261863db133e77115dfea5f9bf。独立读回对基线b3a2c42619320a7df634083081aa7614f122196694061d3cb9b8992a49251e36证明3134几何节点位置/法线/变换及16相机不变、54非目标材质图不变、8旧图字节不变，仅背景改尺寸/文件名。对同名glTF材质使用多重集合，不丢弃55材质中的4个重名项。非目标UV直接兼容流731处有漂移，最大6.103515625e-5；仍pending，未称稳定性修复。
+
+
+## Round54终版（2026-10-21）
+
+源提交9b624214d728f90fc757788cf9010d667860668a，测试合并3aa20ec3037854a480d7f606f9a92ca3695d2f37，完整源树88f64611cecf85573e939e472f068f72b3235cef；PR61按expected-head正常合并558f4cb3572d8d8f7936fbcd3fef94504348b8c9。独立客栈库未改。
+
+实际交付8处既有共享青石室内地坪的512²原创BaseColor/Normal/ORM，0新建筑/对象/网格/材质。色图1.28当地米循环，微孔Normal/ORM0.32当地米循环；BaseColor不含方向光，Normal来自程序高度导数，ORM微孔遮蔽只是局部可见度近似，不是场景AO烘焙。远山背景2172×724→1254×418回收RGBA预算；图数限值明确9→12，几何、GLB、属性索引和总RGBA字节上限未放宽。
+
+五项最终门禁全部通过：CI39463619342（105Python+10Node）、Smoke39463619386、Spatial39463619354、Web39463619352、Offline39463619400 attempt2。Offline attempt1截图30秒超时后，只重试失败作业一次，未重复模型构建；attempt2实际file://、雨水面变化/暂停/雪夜/区域导航/390×844手机折叠均通过，零外部请求/页面错误，1013变化像素；实体手机/FPS未测。
+
+最终Spatial artifact12284266970，SHA256 a3c7e7e951a6f3418feed831cb4fd91d8703e09e10c26f82db69dfd0241b5eb4；Web artifact12284626720，SHA256 b9eb75322204a19233ad6641783aa762b632dc1c91296a86e4974982d268bf70；Offline artifact12296274388，SHA256 3fd98051eb4ce82e12ef9ed2a3d6740ed1ba0bb59266057ae2b965d8944a53d4。最终用户ZIP yanyu-round54-live-review.zip 为52275041B，SHA256 10b24ff541c241a1936aa081468250e6fb68e90ff28297b5033a2a389eb0c1a2，Library文件libfile_f80469d3b85c8191b16510e3d954b167。包含同源离线HTML、16原PNG、浏览器实截、B/A、3张PBR图和GLB提取脚本；提取GLB51336748B，SHA256 2fc16183b4e8659305671284bc5c82e7a7558213f08278a096746f412e43b479，与provenance一致。
+
+实测Native4644对象/3124Mesh/99812面/168534三角/56材质/4444驱动，16图313.56秒；Web625715三角/55材质/28496578属性索引字节/12图43507088B基础RGBA估算（41.49MiB，非显存）。独立GLB审计证明3134几何节点位置/变换保持、16相机保持、54非目标材质图保持、8旧图字节保持；非目标734个兼容UV流最大漂移6.103515625e-5，跨构建完全确定仍pending。
+
+美术复核：旧粗斑驳被克制细矿物颗粒替代，但无真实铺石接缝；全镇总览仍暴露大面积生硬地界/远景包围，部分板腿家具与木作偏粗胚，旧核心11遮挡未修。网页是简化实时光照，GLB0动画片段，雨雪/水面/昼夜为查看器效果；无人物/船只行为、流体、积雪和屋檐碰撞。人工Function/Form/Runtime、通用room包schema、实体设备、LOD/碰撞仍pending，不能称整体精美完工。下一轮优先studyhouse03板腿凳的明式细腿/枨/牙板/可信接合与石板接缝、场景边界，不再只调底色。
