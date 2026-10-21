@@ -1344,7 +1344,22 @@ door_hardware=[o for o in S.objects if o.name.startswith(('JN_西岸书户_门�
 min_north_edge=min([door03[0][1]]+[world_bounds(o)[0][1] for o in door_hardware])
 conservative_width=min_north_edge-(20.1-.55*1.04)
 assert conservative_width>=1.00,conservative_width
-report['house03_study']={'grounded_cabinet_feet':4,'shelves':3,'supported_linked_books':5,'linked_repeat_families':8,'tabletop_contact_passed':True,'door_mount_contact_passed':True,'architectural_door_width_m':1.144,'hardware_inclusive_conservative_width_m':round(conservative_width,4),'new_bitmap_bytes':0}
+bench03=bpy.data.objects['JN_村落民居_03_长凳']
+bench03.data.calc_loop_triangles()
+bench_bounds=world_bounds(bench03)
+assert bench03.get('JN_bench55')=='isolated_four_legs_aprons_stretchers'
+assert bench03.get('JN_bench55_part_count')==13
+assert len(bench03.data.vertices)==104 and len(bench03.data.polygons)==78 and len(bench03.data.loop_triangles)==156
+bench55_delta_tris=len(bench03.data.loop_triangles)-36
+assert bench55_delta_tris==120
+assert abs(bench_bounds[0][2]-floor03[1][2])<.0001 and abs(bench_bounds[1][2]-.58)<.0001
+other_benches=[bpy.data.objects[f'JN_村落民居_{i:02d}_长凳'] for i in (1,2,4,5,6,7,8)]
+assert len({o.data.as_pointer() for o in other_benches})==1
+assert bench03.data.as_pointer()!=other_benches[0].data.as_pointer()
+assert all(len(o.data.vertices)==24 for o in other_benches)
+assert bench03.get('JN_bench55_inherited_users_after_isolation')>=8
+assert S['JN_house03_bench55']=='one_existing_instance_isolated_four_legs_four_aprons_four_stretchers'
+report['house03_study']={'grounded_cabinet_feet':4,'shelves':3,'supported_linked_books':5,'linked_repeat_families':8,'tabletop_contact_passed':True,'door_mount_contact_passed':True,'architectural_door_width_m':1.144,'hardware_inclusive_conservative_width_m':round(conservative_width,4),'bench55_parts':13,'bench55_source_triangles':156,'bench55_other_shared_houses_unchanged':7,'new_bitmap_bytes':0}
 
 floor05=world_bounds(bpy.data.objects['JN_村落民居_05_室内地坪'])
 rest_feet=[o for o in objs('JN_东岸起居户_榻足_') if not o.hide_render]
@@ -1609,7 +1624,7 @@ for obj in route_obstacles46:
 assert abs(bounds43(bpy.data.objects['JN_北河修桨作坊_引路灯柱'])[0][2]-.12)<.003
 report['waiting_pavilion46']={'new_visible_meshes':9,'source_triangles_added':116,'refined_existing_lane':True,'relocated_existing_lamp_parts':3,'shared_rack_families':3,'risers_m':risers46,'north_bypass_clear_m':lb46[1][1]-sb46[1][1],'support_and_route_rays':support_rays46,'source_closed_positive_volumes':volume46,'new_images_materials_lights':0,'human_approval':'pending','accessibility_ramp':'not implemented','structural_load':'not certified'}
 legacy_expanded_tris=expanded_tris-tris46-8-tris50
-assert legacy_expanded_tris-tris37-tris40-184-tris44==166626,'pre-Round37 source triangle baseline changed'
+assert legacy_expanded_tris-tris37-tris40-184-tris44-bench55_delta_tris==166626,'pre-Round37 source triangle baseline changed'
 assert tris37<=500 and new37,'public repair stop source budget exceeded'
 visible37=[o for o in new37 if not o.hide_render]
 assert len(visible37)==25,len(visible37)
@@ -1656,7 +1671,7 @@ mapping39=next(n for n in mat39.node_tree.nodes if n.type=='VECT_MATH' and n.ope
 assert all(abs(v-2.4)<1e-5 for v in mapping39.inputs[1].default_value)
 bump39=next(n for n in mat39.node_tree.nodes if n.type=='BUMP')
 assert abs(bump39.inputs['Distance'].default_value-.003)<1e-6
-assert legacy_expanded_tris-tris40-184-tris44==167094
+assert legacy_expanded_tris-tris40-184-tris44-bench55_delta_tris==167094
 report['quay_stone39']={'visible_users':23,'hidden_prototypes':2,'source_triangles':expanded_tris,'new_geometry':0,'new_materials':1,'new_images':0,'repeat_per_local_m':2.4,'nominal_repeat_m':1/2.4,'roughness':.88,'bump_distance_m':.003,'human_approval':'pending'}
 visible40=[o for o in new40 if not o.hide_render]
 assert len(new40)==17 and len(visible40)==13 and tris40==888,(len(new40),len(visible40),tris40)

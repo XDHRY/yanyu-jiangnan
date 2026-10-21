@@ -3090,9 +3090,39 @@ def town_east_rope_bench40():
     for o in made:o['JN_asset_family']='east-rope-bench40'
     S['JN_east_rope_bench40']='static_rope_eye_preparation_bench_no_rope_physics'
 
+def house03_bench55_parts():
+    """Metre-scale local parts for one isolated Ming-style bench in house03."""
+    return [
+        ('seat',-.80,-.20,.54,1.30,.32,.08),
+        *[('leg',x,y,.38,.09,.09,.24) for x in (-1.30,-.30) for y in (-.31,-.09)],
+        *[('long_apron',-.80,y,.455,1.09,.055,.11) for y in (-.335,-.065)],
+        *[('end_apron',x,-.20,.455,.055,.23,.11) for x in (-1.345,-.255)],
+        *[('long_stretcher',-.80,y,.34,1.02,.050,.060) for y in (-.31,-.09)],
+        *[('end_stretcher',x,-.20,.34,.050,.18,.060) for x in (-1.30,-.30)],
+    ]
+
 def refine_village_house03_study():
     """Give the existing third west-bank house a restrained reading destination."""
     c=C['water']; wood=M['wood']; paper=bpy.data.materials['JN_纸坊楮皮宣纸']
+    # Isolate only house03's old two-slab bench instance. Seven sibling houses
+    # and the hidden shared prototype keep their original mesh datablock.
+    bench03=bpy.data.objects[PREFIX+'村落民居_03_长凳']
+    inherited_bench=bench03.data
+    verts=[];faces=[]
+    for label,x,y,z,dx,dy,dz in house03_bench55_parts():
+        k=len(verts)
+        verts.extend([(x+a*dx/2,y+b*dy/2,z+d*dz/2) for a,b,d in
+                      [(-1,-1,-1),(1,-1,-1),(1,1,-1),(-1,1,-1),
+                       (-1,-1,1),(1,-1,1),(1,1,1),(-1,1,1)]])
+        faces.extend([tuple(k+j for j in face) for face in
+                      [(0,3,2,1),(4,5,6,7),(0,1,5,4),(1,2,6,5),(2,3,7,6),(3,0,4,7)]])
+    bench_mesh=bpy.data.meshes.new(PREFIX+'村落民居_03_明式细腿凳')
+    bench_mesh.from_pydata(verts,[],faces);bench_mesh.update();bench_mesh.materials.append(wood)
+    bench03.data=bench_mesh
+    bevel=bench03.modifiers.new('书户明式凳浅倒角','BEVEL');bevel.width=.004;bevel.segments=1
+    bench03['JN_bench55']='isolated_four_legs_aprons_stretchers'
+    bench03['JN_bench55_part_count']=len(house03_bench55_parts())
+    bench03['JN_bench55_inherited_users_after_isolation']=inherited_bench.users
     def linked_boxes(label,centers,size,mat):
         proto=box('西岸书户_'+label+'原型',(0,0,0),size,mat,c)
         proto.hide_render=True;proto.hide_viewport=True
@@ -3135,6 +3165,7 @@ def refine_village_house03_study():
     bpy.data.lights['JN_村落民居_03_室内灯火'].energy=65
     S['JN_house03_study']='writing_desk_open_book_cabinet_v1'
     S['JN_house03_study_new_image_bytes']=0
+    S['JN_house03_bench55']='one_existing_instance_isolated_four_legs_four_aprons_four_stretchers'
 
 def refine_village_house05_rest():
     """A domestic resting room, not a second copy of house03's study."""

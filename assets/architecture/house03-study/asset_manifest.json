@@ -1,20 +1,62 @@
 {
   "asset_id": "west-house03-study",
   "generator": "jiangnan.py::refine_village_house03_study",
-  "source_baseline": "f7dfabd4942f3a041c3f3cde601b5991d9473e40",
+  "source_baseline": "4272d50f8cb2de6158d880eba045513e5e287f7a",
   "units": "metre",
   "existing_house": 3,
   "purpose": "A visible domestic writing and reading destination behind an existing open door",
-  "geometry": {"cabinet_feet": 4, "cabinet_shelves": 3, "linked_books": 5, "desk_apron": 1, "desk_stretchers": 2, "writing_sheet": 1, "inkstone": 1, "inkstick": 1, "brush": 1, "brush_rest": 1, "door_stiles": 2, "door_rails": 2, "door_ring_and_pin": 1},
-  "materials": ["existing wood", "existing darkstone", "existing edge", "existing bronze", "existing project mulberry paper"],
+  "geometry": {
+    "cabinet_feet": 4,
+    "cabinet_shelves": 3,
+    "linked_books": 5,
+    "desk_apron": 1,
+    "desk_stretchers": 2,
+    "writing_sheet": 1,
+    "inkstone": 1,
+    "inkstick": 1,
+    "brush": 1,
+    "brush_rest": 1,
+    "door_stiles": 2,
+    "door_rails": 2,
+    "door_ring_and_pin": 1,
+    "house03_local_bench": {
+      "existing_object_replaced": 1,
+      "parts": 13,
+      "seat": 1,
+      "legs": 4,
+      "aprons": 4,
+      "stretchers": 4,
+      "source_triangles": 156,
+      "shallow_bevel_m": 0.004,
+      "other_shared_houses_unchanged": 7
+    }
+  },
+  "materials": [
+    "existing wood",
+    "existing darkstone",
+    "existing edge",
+    "existing bronze",
+    "existing project mulberry paper"
+  ],
   "textures": [],
   "new_bitmap_bytes": 0,
   "shared_repeat_families": 8,
   "nominal_door_width_m": 1.144,
-  "minimum_hardware_inclusive_conservative_width_m": 1.00,
+  "minimum_hardware_inclusive_conservative_width_m": 1,
   "uv": "Existing project wood mapping and procedural paper; no new bitmap",
-  "normals": "Closed low-poly boxes and low-resolution fitting curves; no dense subdivision",
-  "lod": "Diagnostic source tier; five linked books; production LOD and exported normals remain pending",
+  "normals": "Round55 local bench uses 13 closed outward-wound cuboids; one-segment 4 mm bevel is evaluated at export; no dense subdivision",
+  "lod": "Diagnostic source tier; house03 bench isolated from seven shared siblings; production LOD and exported-normal determinism remain pending",
   "license": "Project-authored procedural geometry, no paid generation",
-  "human_gates": {"function": "pending", "form": "pending", "runtime": "pending"}
+  "human_gates": {
+    "function": "pending",
+    "form": "pending",
+    "runtime": "pending"
+  },
+  "round55": {
+    "scope": "one existing house03 bench mesh only",
+    "new_objects": 0,
+    "new_materials": 0,
+    "new_bitmaps": 0,
+    "license": "project-authored procedural geometry"
+  }
 }

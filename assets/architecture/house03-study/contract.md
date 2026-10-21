@@ -27,3 +27,23 @@ these checks do not stand in for production collision/navigation approval.
 Eight repeat families use shared Mesh data. Nominal aperture width is 1.144 m;
 the second build also measures a conservative hardware-inclusive width and
 requires at least 1.00 m, rather than presenting the aperture as runtime proof.
+
+
+## Round55 local bench joinery refinement
+
+Only the existing house03 bench object's mesh is isolated from the inherited
+eight-house furniture family. The hidden prototype and houses 01, 02, 04–08
+retain the previous 24-vertex two-slab mesh. House03 keeps the same object,
+transform, seat envelope, 0.26 m floor contact and 0.58 m seat top.
+
+The replacement is one editable 13-part mesh: one seat, four 90 mm legs, four
+aprons and four low stretchers. Aprons overlap the seat underside by 10 mm and
+stretchers enter the legs; these controlled intersections express joined load
+paths rather than floating decoration. A 4 mm one-segment bevel is silhouette
+softening, not a high-density subdivision. Source mesh is 104 vertices,
+78 quads / 156 triangles before the evaluated bevel. No object, material,
+bitmap, light, opening or building is added.
+
+Camera16 remains exactly the Round54 portal camera for a valid before/after.
+Automated contact, topology, scope and budget checks do not substitute for the
+pending human Function/Form/Runtime approvals.
