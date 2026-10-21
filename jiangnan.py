@@ -14,6 +14,16 @@ PARAMS = dict(seed=36, weather=0, wind=0.7, blossom_density=1.3,
               stage=5, render=False, output_dir=_DEFAULT_OUT)
 # weather: 0 = mist / rain, 1 = snow; stage: 1 courtyard,2 plants,3 weather,4 sky,5 light
 P=PARAMS; PREFIX='JN_'; SCENE='烟雨江南 · 雪月江南'
+def boundary58_contract():
+    """Keep the complete town and the locked overview camera inside its backdrop."""
+    return {
+        'water_center':(0,25,-.6),
+        'water_size':(260,260,.1),
+        'panorama_radius':180,
+        'locked_overview_camera':(95,-85,115),
+        'new_objects':0,
+        'new_images':0,
+    }
 def enum(obj, prop, value):
     items=obj.bl_rna.properties[prop].enum_items
     if value in [i.identifier for i in items]: setattr(obj,prop,value)
@@ -423,7 +433,10 @@ def sky():
             driven(o,'location',0,f'0.6*sin(frame*0.006+{j})')
     fog=volume_material('庭院轻岚',(.38,.49,.56),.006)
     box('轻岚',(0,5,4),(45,50,14),fog,c)
-    box('院外水天',(0,25,-.6),(160,160,.1),M['water'],c)
+    boundary=boundary58_contract()
+    S['JN_boundary58']=json.dumps(boundary,ensure_ascii=False)
+    water=box('院外水天',boundary['water_center'],boundary['water_size'],M['water'],c)
+    water['JN_boundary58']=json.dumps(boundary,ensure_ascii=False)
 def atmosphere():
     o=bpy.data.objects.get(PREFIX+'施工柔光')
     if o:bpy.data.objects.remove(o,do_unlink=True)
@@ -634,9 +647,11 @@ def art_upgrade():
             for i in range(65):
                 # Keep the image-backed horizon outside the expanding settlement.
                 # The former 65 m radius crossed the Round 13 north district at y=75 m.
-                a=-1.05+2.1*i/64;v.append((120*sin(a),120*cos(a),-10+j*43));uvs.append((i/64,j))
+                a=-1.05+2.1*i/64
+                radius=boundary58_contract()['panorama_radius']
+                v.append((radius*sin(a),radius*cos(a),-10+j*43));uvs.append((i/64,j))
                 if j and i:a0=i-1;f.append((a0,a0+1,a0+66,a0+65))
-        o=mesh('远山环幕_生成贴图',v,f,m,C['sky']);uv_layer=o.data.uv_layers.new(name='远山全景UV')
+        o=mesh('远山环幕_生成贴图',v,f,m,C['sky']);o['JN_boundary58']=json.dumps(boundary58_contract(),ensure_ascii=False);uv_layer=o.data.uv_layers.new(name='远山全景UV')
         for loop in o.data.loops:uv_layer.data[loop.index].uv=uvs[loop.vertex_index]
     # Layered lighting: reduce frontal flattening, preserve readable penumbrae.
     bpy.data.objects[PREFIX+'天光_暗部细节'].data.energy=850

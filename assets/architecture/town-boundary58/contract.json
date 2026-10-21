@@ -1,0 +1,13 @@
+{
+  "schema":"jiangnan-town-boundary-v1",
+  "round":58,
+  "baseline":"bab6dbbe58e93f9eec484d372d8b0c85c2ce4734",
+  "purpose":"remove the visible rectangular stage edge in the locked full-town overview without hiding architecture or adding a sky proxy",
+  "scope":{"refined_existing_objects":["JN_院外水天","JN_远山环幕_生成贴图"],"new_objects":0,"new_images":0,"new_materials":0,"new_triangles":0},
+  "dimensions":{"water_before_m":[160,160,0.1],"water_after_m":[260,260,0.1],"water_center_m":[0,25,-0.6],"panorama_radius_before_m":120,"panorama_radius_after_m":180},
+  "camera":{"strict_before_after":"15_town_overview","location_m":[95,-85,115],"target_m":[3,50,0],"lens_mm":50,"ortho_scale_m":200,"cameras_01_16_unchanged":true,"resolution":[1024,640],"formal_36_views":false},
+  "materials":{"water":"existing JN_water","panorama":"existing project-authored landscape.png; UV and 1254x418 packed image unchanged"},
+  "budgets":{"source_triangles_max":170000,"web_triangles_max":629155,"attribute_index_bytes_max":30000000,"images_max":15,"rgba8_bytes_max":46652816,"paid_credits":0},
+  "gates":{"function":"pending human approval","form":"pending human approval","runtime":"pending human approval"},
+  "pending":["full 360-degree authored panorama","terrain perimeter geometry and shoreline variation","physical phone FPS","LOD and collision/navigation"]
+}

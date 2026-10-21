@@ -87,6 +87,22 @@ report['residential_floor_material'].update({'new_images':3,'normal_source':'per
 background54=next(im for im in bpy.data.images if 'landscape' in im.name.lower())
 assert tuple(background54.size)==(1254,418) and background54.packed_file,'resampled background must survive blend reload, not just metadata'
 assert len(image_inventory)==15
+boundary58=json.loads(S['JN_boundary58'])
+water58=bpy.data.objects['JN_院外水天']
+water_points=[water58.matrix_world @ Vector(corner) for corner in water58.bound_box]
+water_lo=[min(p[i] for p in water_points) for i in range(3)]
+water_hi=[max(p[i] for p in water_points) for i in range(3)]
+assert all(abs(a-b)<.001 for a,b in zip(water_lo,(-130,-105,-.65))),water_lo
+assert all(abs(a-b)<.001 for a,b in zip(water_hi,(130,155,-.55))),water_hi
+panorama58=bpy.data.objects['JN_远山环幕_生成贴图']
+panorama_radii=[(v.co.x*v.co.x+v.co.y*v.co.y)**.5 for v in panorama58.data.vertices]
+assert max(abs(r-boundary58['panorama_radius']) for r in panorama_radii)<.001
+overview_xy=(boundary58['locked_overview_camera'][0]**2+boundary58['locked_overview_camera'][1]**2)**.5
+assert overview_xy<boundary58['panorama_radius'] and water_lo[0]<95<water_hi[0] and water_lo[1]<-85<water_hi[1]
+water_meta=json.loads(water58['JN_boundary58']);panorama_meta=json.loads(panorama58['JN_boundary58'])
+assert water_meta==panorama_meta
+assert water_meta['water_size']==boundary58['water_size'] and water_meta['panorama_radius']==boundary58['panorama_radius']
+report['town_boundary58']={'water_bounds_m':[water_lo,water_hi],'panorama_radius_m':boundary58['panorama_radius'],'overview_camera_xy_radius_m':overview_xy,'existing_objects_refined':2,'new_objects_images_materials_triangles':0,'human_form_runtime_approval':'pending'}
 roof_pbr=bpy.data.materials['JN_绣户黛瓦PBR']
 roof_users=[o for o in S.objects if o.type=='MESH' and roof_pbr in list(o.data.materials) and not o.hide_render]
 assert [o.name for o in roof_users]==['JN_村落民居_06_屋面']
