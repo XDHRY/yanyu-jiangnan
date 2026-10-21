@@ -1350,6 +1350,8 @@ bench_bounds=world_bounds(bench03)
 assert bench03.get('JN_bench55')=='isolated_four_legs_aprons_stretchers'
 assert bench03.get('JN_bench55_part_count')==13
 assert len(bench03.data.vertices)==104 and len(bench03.data.polygons)==78 and len(bench03.data.loop_triangles)==156
+bench55_delta_tris=len(bench03.data.loop_triangles)-36
+assert bench55_delta_tris==120
 assert abs(bench_bounds[0][2]-floor03[1][2])<.0001 and abs(bench_bounds[1][2]-.58)<.0001
 other_benches=[bpy.data.objects[f'JN_村落民居_{i:02d}_长凳'] for i in (1,2,4,5,6,7,8)]
 assert len({o.data.as_pointer() for o in other_benches})==1
@@ -1622,7 +1624,7 @@ for obj in route_obstacles46:
 assert abs(bounds43(bpy.data.objects['JN_北河修桨作坊_引路灯柱'])[0][2]-.12)<.003
 report['waiting_pavilion46']={'new_visible_meshes':9,'source_triangles_added':116,'refined_existing_lane':True,'relocated_existing_lamp_parts':3,'shared_rack_families':3,'risers_m':risers46,'north_bypass_clear_m':lb46[1][1]-sb46[1][1],'support_and_route_rays':support_rays46,'source_closed_positive_volumes':volume46,'new_images_materials_lights':0,'human_approval':'pending','accessibility_ramp':'not implemented','structural_load':'not certified'}
 legacy_expanded_tris=expanded_tris-tris46-8-tris50
-assert legacy_expanded_tris-tris37-tris40-184-tris44==166626,'pre-Round37 source triangle baseline changed'
+assert legacy_expanded_tris-tris37-tris40-184-tris44-bench55_delta_tris==166626,'pre-Round37 source triangle baseline changed'
 assert tris37<=500 and new37,'public repair stop source budget exceeded'
 visible37=[o for o in new37 if not o.hide_render]
 assert len(visible37)==25,len(visible37)
