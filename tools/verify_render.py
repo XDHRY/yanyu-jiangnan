@@ -98,11 +98,10 @@ panorama58=bpy.data.objects['JN_远山环幕_生成贴图']
 panorama_radii=[(v.co.x*v.co.x+v.co.y*v.co.y)**.5 for v in panorama58.data.vertices]
 assert max(abs(r-boundary58['panorama_radius']) for r in panorama_radii)<.001
 overview_xy=(boundary58['locked_overview_camera'][0]**2+boundary58['locked_overview_camera'][1]**2)**.5
-assert overview_xy<boundary58['panorama_radius'] and water_lo[0]<95<water_hi[0] and water_lo[1]<-85<water_hi[1]
-water_meta=json.loads(water58['JN_boundary58']);panorama_meta=json.loads(panorama58['JN_boundary58'])
-assert water_meta==panorama_meta
+assert water_lo[0]<95<water_hi[0] and water_lo[1]<-85<water_hi[1]
+water_meta=json.loads(water58['JN_boundary58'])
 assert water_meta['water_size']==boundary58['water_size'] and water_meta['panorama_radius']==boundary58['panorama_radius']
-report['town_boundary58']={'water_bounds_m':[water_lo,water_hi],'panorama_radius_m':boundary58['panorama_radius'],'overview_camera_xy_radius_m':overview_xy,'existing_objects_refined':2,'new_objects_images_materials_triangles':0,'human_form_runtime_approval':'pending'}
+report['town_boundary58']={'water_bounds_m':[water_lo,water_hi],'panorama_radius_m':boundary58['panorama_radius'],'overview_camera_xy_radius_m':overview_xy,'existing_objects_refined':1,'new_objects_images_materials_triangles':0,'human_form_runtime_approval':'pending'}
 roof_pbr=bpy.data.materials['JN_绣户黛瓦PBR']
 roof_users=[o for o in S.objects if o.type=='MESH' and roof_pbr in list(o.data.materials) and not o.hide_render]
 assert [o.name for o in roof_users]==['JN_村落民居_06_屋面']

@@ -19,7 +19,7 @@ def boundary58_contract():
     return {
         'water_center':(0,25,-.6),
         'water_size':(260,260,.1),
-        'panorama_radius':180,
+        'panorama_radius':120,
         'locked_overview_camera':(95,-85,115),
         'new_objects':0,
         'new_images':0,
@@ -647,11 +647,9 @@ def art_upgrade():
             for i in range(65):
                 # Keep the image-backed horizon outside the expanding settlement.
                 # The former 65 m radius crossed the Round 13 north district at y=75 m.
-                a=-1.05+2.1*i/64
-                radius=boundary58_contract()['panorama_radius']
-                v.append((radius*sin(a),radius*cos(a),-10+j*43));uvs.append((i/64,j))
+                a=-1.05+2.1*i/64;v.append((120*sin(a),120*cos(a),-10+j*43));uvs.append((i/64,j))
                 if j and i:a0=i-1;f.append((a0,a0+1,a0+66,a0+65))
-        o=mesh('远山环幕_生成贴图',v,f,m,C['sky']);o['JN_boundary58']=json.dumps(boundary58_contract(),ensure_ascii=False);uv_layer=o.data.uv_layers.new(name='远山全景UV')
+        o=mesh('远山环幕_生成贴图',v,f,m,C['sky']);uv_layer=o.data.uv_layers.new(name='远山全景UV')
         for loop in o.data.loops:uv_layer.data[loop.index].uv=uvs[loop.vertex_index]
     # Layered lighting: reduce frontal flattening, preserve readable penumbrae.
     bpy.data.objects[PREFIX+'天光_暗部细节'].data.energy=850
