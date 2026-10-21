@@ -19,7 +19,7 @@
 - 纯源码测试：11 项通过；Python 编译通过。
 - CI 39545868107、Blender Smoke 39545868228、Spatial 39545868164、Web 39545868124、Offline 39545868149 全部 success。
 - 空间诊断 artifact 12321602985，16 张 1024×640 Eevee Next 原图，总渲染 254.49 秒；16 号近景 9.84 秒。
-- Web artifact 12321723475；Offline artifact 12321941248。离线 HTML 70,048,366 字节，SHA256 907d17f1bf76a62203766cce0a19e3c0914bd3b487e4bda601b4a302da69c581；内嵌 GLB SHA256 b6f7a04062857cd9d9eaf00e2176eb70c1defe16d2ea03dec7e8be14dd159077，模型未二次修改。
+- Web artifact 12321723475；Offline artifact 12321941248。独立终版审阅包 \`yanyu-round56-live-review.zip\` 为 52,049,043 字节，SHA256 5e34f5e6c7240a73c621c0b4c9a319e90d8e527fd951fadcd690d63acf642eb8，已持久保存；同时保存可直接下载的 \`yanyu-live.html\`。离线 HTML 70,048,366 字节，SHA256 907d17f1bf76a62203766cce0a19e3c0914bd3b487e4bda601b4a302da69c581；内嵌 GLB SHA256 b6f7a04062857cd9d9eaf00e2176eb70c1defe16d2ea03dec7e8be14dd159077，模型未二次修改。
 - 浏览器实测：file:// 离线加载、零外部请求、零页面错误；雨/雪/晴、昼夜、暂停恢复、19 区域跳转、10 水面法线波、390×844 手机折叠/沉浸界面通过。同机位运动差 1212 像素；这不是 FPS 基准。GLB 仍为 0 动画片段，当前动效属于查看器运行时水波与局部天气。
 - 场景：4644 对象；3124 Mesh / 1427 Curve；171386 顶点；99884 面；168702 源三角；56 材质；48 灯；4444 对象驱动；1697 唯一 Mesh；3127 估算 draw calls。
 - 贴图：12 张，基础 RGBA8 估算 41.49 MiB；不是显存峰值或设备 FPS。
