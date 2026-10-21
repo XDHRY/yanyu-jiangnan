@@ -1,10 +1,21 @@
 {
-  "schema":"jiangnan-web-budget-v1",
-  "baseline_round":34,
-  "baseline_source":"9d2e5625b7d9cbd5e2034ac9502b6e4e45334778",
-  "baseline_run":39091885332,
-  "baseline":{"instance_triangles":628311,"glb_bytes":52973096,"attribute_index_bytes":29827470,"images":9,"rgba8_bytes":44554784},
-  "limits":{"instance_triangles":629155,"glb_bytes":54000000,"attribute_index_bytes":30000000,"images":12,"rgba8_bytes":44554784},
-  "scope":"Round54 explicit image-count reallocation9→12 after real closeup reveals coarse albedo: far-background2172x724→1254x418 funds three512x512 stone maps (sRGB BaseColor, Non-Color micro Normal/ORM). Geometry, GLB bytes, attribute/index bytes and total RGBA byte ceilings unchanged. Source cap170000 remains. Actual exports must pass; image count alone is not memory usage or GPU performance."
+  "schema": "jiangnan-web-budget-v1",
+  "baseline_round": 34,
+  "baseline_source": "9d2e5625b7d9cbd5e2034ac9502b6e4e45334778",
+  "baseline_run": 39091885332,
+  "baseline": {
+    "instance_triangles": 628311,
+    "glb_bytes": 52973096,
+    "attribute_index_bytes": 29827470,
+    "images": 9,
+    "rgba8_bytes": 44554784
+  },
+  "limits": {
+    "instance_triangles": 629155,
+    "glb_bytes": 54000000,
+    "attribute_index_bytes": 30000000,
+    "images": 15,
+    "rgba8_bytes": 46652816
+  },
+  "scope": "Round57 controlled image-count reallocation12→15 for one existing house03 bench: three project-authored512x512 wood maps (sRGB BaseColor, tangent Normal, ORM) add exactly3145728 RGBA8 bytes; total exact cap46652816 (44.49MiB). Geometry, GLB bytes, attribute/index bytes and source triangle cap170000 remain unchanged. Actual exports must pass; image count and RGBA8 estimates are not GPU FPS or exact VRAM residency."
 }
-
