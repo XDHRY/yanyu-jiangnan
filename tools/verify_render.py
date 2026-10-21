@@ -1671,7 +1671,7 @@ mapping39=next(n for n in mat39.node_tree.nodes if n.type=='VECT_MATH' and n.ope
 assert all(abs(v-2.4)<1e-5 for v in mapping39.inputs[1].default_value)
 bump39=next(n for n in mat39.node_tree.nodes if n.type=='BUMP')
 assert abs(bump39.inputs['Distance'].default_value-.003)<1e-6
-assert legacy_expanded_tris-tris40-184-tris44==167094
+assert legacy_expanded_tris-tris40-184-tris44-bench55_delta_tris==167094
 report['quay_stone39']={'visible_users':23,'hidden_prototypes':2,'source_triangles':expanded_tris,'new_geometry':0,'new_materials':1,'new_images':0,'repeat_per_local_m':2.4,'nominal_repeat_m':1/2.4,'roughness':.88,'bump_distance_m':.003,'human_approval':'pending'}
 visible40=[o for o in new40 if not o.hide_render]
 assert len(new40)==17 and len(visible40)==13 and tris40==888,(len(new40),len(visible40),tris40)
