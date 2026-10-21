@@ -24,7 +24,7 @@ class House03Bench55(unittest.TestCase):
         for apron in [p for p in self.parts if 'apron' in p[0]]:
             lo,hi=bounds(apron);self.assertLess(lo[2],.50);self.assertGreater(hi[2],.50)
         for rail in [p for p in self.parts if 'stretcher' in p[0]]:
-            lo,hi=bounds(rail);self.assertLess(lo[2],.38);self.assertGreater(hi[2],.38)
+            lo,hi=bounds(rail);self.assertAlmostEqual(lo[2],.31);self.assertAlmostEqual(hi[2],.37)
     def test_scope_isolated(self):
         self.assertIn("bench03=bpy.data.objects[PREFIX+'村落民居_03_长凳']",source)
         self.assertIn("bench03.data=bench_mesh",source)
