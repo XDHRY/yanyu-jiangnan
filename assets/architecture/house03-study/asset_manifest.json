@@ -1,7 +1,7 @@
 {
   "asset_id": "west-house03-study",
   "generator": "jiangnan.py::refine_village_house03_study",
-  "source_baseline": "4272d50f8cb2de6158d880eba045513e5e287f7a",
+  "source_baseline": "e4c6e0de90b09b4044034518a66b211e9b2c2c27",
   "units": "metre",
   "existing_house": 3,
   "purpose": "A visible domestic writing and reading destination behind an existing open door",
@@ -26,9 +26,13 @@
       "legs": 4,
       "aprons": 4,
       "stretchers": 4,
-      "source_triangles": 156,
+      "source_triangles": 204,
       "shallow_bevel_m": 0.004,
-      "other_shared_houses_unchanged": 7
+      "other_shared_houses_unchanged": 7,
+      "vertices": 128,
+      "polygons": 90,
+      "leg_splay_m": 0.018,
+      "scalloped_aprons": 4
     }
   },
   "materials": [
@@ -44,8 +48,8 @@
   "nominal_door_width_m": 1.144,
   "minimum_hardware_inclusive_conservative_width_m": 1,
   "uv": "Existing project wood mapping and procedural paper; no new bitmap",
-  "normals": "Round55 local bench uses 13 closed outward-wound cuboids; one-segment 4 mm bevel is evaluated at export; no dense subdivision",
-  "lod": "Diagnostic source tier; house03 bench isolated from seven shared siblings; production LOD and exported-normal determinism remain pending",
+  "normals": "Round56 local bench uses outward-wound tapered leg prisms, concave seven-point apron extrusions, boxes and a one-segment 4 mm evaluated bevel; no dense subdivision",
+  "lod": "Diagnostic source tier; silhouette geometry is intentional; production LOD and exported-normal determinism remain pending",
   "license": "Project-authored procedural geometry, no paid generation",
   "human_gates": {
     "function": "pending",
@@ -57,6 +61,15 @@
     "new_objects": 0,
     "new_materials": 0,
     "new_bitmaps": 0,
+    "license": "project-authored procedural geometry"
+  },
+  "round56": {
+    "scope": "same existing house03 bench mesh plus one rotating diagnostic camera",
+    "new_objects": 0,
+    "new_materials": 0,
+    "new_bitmaps": 0,
+    "leg_splay_m": 0.018,
+    "apron_arch_rise_m": 0.035,
     "license": "project-authored procedural geometry"
   }
 }

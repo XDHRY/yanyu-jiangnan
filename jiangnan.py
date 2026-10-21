@@ -3091,7 +3091,7 @@ def town_east_rope_bench40():
     S['JN_east_rope_bench40']='static_rope_eye_preparation_bench_no_rope_physics'
 
 def house03_bench55_parts():
-    """Metre-scale local parts for one isolated Ming-style bench in house03."""
+    """Metre-scale local parts retained as the Round55 semantic hierarchy."""
     return [
         ('seat',-.80,-.20,.54,1.30,.32,.08),
         *[('leg',x,y,.38,.09,.09,.24) for x in (-1.30,-.30) for y in (-.31,-.09)],
@@ -3101,6 +3101,54 @@ def house03_bench55_parts():
         *[('end_stretcher',x,-.20,.34,.050,.18,.060) for x in (-1.30,-.30)],
     ]
 
+def house03_bench56_mesh():
+    """Editable low-poly bench: splayed legs and shallow scalloped apron soffits."""
+    verts=[];faces=[]
+    def add_box(x,y,z,dx,dy,dz):
+        k=len(verts)
+        verts.extend([(x+a*dx/2,y+b*dy/2,z+d*dz/2) for a,b,d in
+                      [(-1,-1,-1),(1,-1,-1),(1,1,-1),(-1,1,-1),
+                       (-1,-1,1),(1,-1,1),(1,1,1),(-1,1,1)]])
+        faces.extend([tuple(k+j for j in f) for f in
+                      [(0,3,2,1),(4,5,6,7),(0,1,5,4),(1,2,6,5),(2,3,7,6),(3,0,4,7)]])
+    def add_leg(x,y):
+        k=len(verts);sx=-1 if x<-.8 else 1;sy=-1 if y<-.2 else 1
+        bx=x+sx*.018;by=y+sy*.018;h=.045
+        verts.extend([(bx-h,by-h,.26),(bx+h,by-h,.26),(bx+h,by+h,.26),(bx-h,by+h,.26),
+                      (x-h,y-h,.50),(x+h,y-h,.50),(x+h,y+h,.50),(x-h,y+h,.50)])
+        faces.extend([tuple(k+j for j in f) for f in
+                      [(0,3,2,1),(4,5,6,7),(0,1,5,4),(1,2,6,5),(2,3,7,6),(3,0,4,7)]])
+    def add_scalloped_apron(axis,centre,depth,length):
+        # Seven-point concave lower profile makes the shallow arch explicit geometry.
+        half=length/2;inner=min(.18,half*.36)
+        profile=[(-half,.51),(half,.51),(half,.40),(inner,.40),(0,.435),(-inner,.40),(-half,.40)]
+        k=len(verts)
+        for side in (-depth/2,depth/2):
+            for q,z in profile:
+                verts.append((q,side,z) if axis=='x' else (side,q,z))
+        if axis=='x':
+            faces.append(tuple(k+i for i in reversed(range(7))))
+            faces.append(tuple(k+7+i for i in range(7)))
+        else:
+            faces.append(tuple(k+i for i in range(7)))
+            faces.append(tuple(k+7+i for i in reversed(range(7))))
+        for i in range(7):
+            j=(i+1)%7
+            faces.append((k+i,k+j,k+7+j,k+7+i) if axis=='x'
+                         else (k+i,k+7+i,k+7+j,k+j))
+    add_box(-.80,-.20,.54,1.30,.32,.08)
+    for x in (-1.30,-.30):
+        for y in (-.31,-.09):add_leg(x,y)
+    for y in (-.335,-.065):
+        before=len(verts);add_scalloped_apron('x',(-.80,y),.055,1.09)
+        for i in range(before,len(verts)):verts[i]=(verts[i][0]-.80,verts[i][1]+y,verts[i][2])
+    for x in (-1.345,-.255):
+        before=len(verts);add_scalloped_apron('y',(x,-.20),.055,.23)
+        for i in range(before,len(verts)):verts[i]=(verts[i][0]+x,verts[i][1]-.20,verts[i][2])
+    for y in (-.31,-.09):add_box(-.80,y,.34,1.02,.050,.060)
+    for x in (-1.30,-.30):add_box(x,-.20,.34,.050,.18,.060)
+    return verts,faces
+
 def refine_village_house03_study():
     """Give the existing third west-bank house a restrained reading destination."""
     c=C['water']; wood=M['wood']; paper=bpy.data.materials['JN_纸坊楮皮宣纸']
@@ -3108,20 +3156,14 @@ def refine_village_house03_study():
     # and the hidden shared prototype keep their original mesh datablock.
     bench03=bpy.data.objects[PREFIX+'村落民居_03_长凳']
     inherited_bench=bench03.data
-    verts=[];faces=[]
-    for label,x,y,z,dx,dy,dz in house03_bench55_parts():
-        k=len(verts)
-        verts.extend([(x+a*dx/2,y+b*dy/2,z+d*dz/2) for a,b,d in
-                      [(-1,-1,-1),(1,-1,-1),(1,1,-1),(-1,1,-1),
-                       (-1,-1,1),(1,-1,1),(1,1,1),(-1,1,1)]])
-        faces.extend([tuple(k+j for j in face) for face in
-                      [(0,3,2,1),(4,5,6,7),(0,1,5,4),(1,2,6,5),(2,3,7,6),(3,0,4,7)]])
+    verts,faces=house03_bench56_mesh()
     bench_mesh=bpy.data.meshes.new(PREFIX+'村落民居_03_明式细腿凳')
     bench_mesh.from_pydata(verts,[],faces);bench_mesh.update();bench_mesh.materials.append(wood)
     bench03.data=bench_mesh
     bevel=bench03.modifiers.new('书户明式凳浅倒角','BEVEL');bevel.width=.004;bevel.segments=1
     bench03['JN_bench55']='isolated_four_legs_aprons_stretchers'
     bench03['JN_bench55_part_count']=len(house03_bench55_parts())
+    bench03['JN_bench56']='splayed_legs_shallow_scalloped_aprons'
     bench03['JN_bench55_inherited_users_after_isolation']=inherited_bench.users
     def linked_boxes(label,centers,size,mat):
         proto=box('西岸书户_'+label+'原型',(0,0,0),size,mat,c)
