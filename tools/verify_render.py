@@ -86,7 +86,7 @@ assert tuple(bpy.data.images['stone54_basecolor'].size)==(512,512) and bpy.data.
 report['residential_floor_material'].update({'new_images':3,'normal_source':'periodic metric height derivative; not albedo or high-low bake','albedo_source':'quiet irregular procedural mineral colour, no directional lighting','albedo_period_local_m':1.28})
 background54=next(im for im in bpy.data.images if 'landscape' in im.name.lower())
 assert tuple(background54.size)==(1254,418) and background54.packed_file,'resampled background must survive blend reload, not just metadata'
-assert len(image_inventory)==12
+assert len(image_inventory)==15
 roof_pbr=bpy.data.materials['JN_绣户黛瓦PBR']
 roof_users=[o for o in S.objects if o.type=='MESH' and roof_pbr in list(o.data.materials) and not o.hide_render]
 assert [o.name for o in roof_users]==['JN_村落民居_06_屋面']
