@@ -15,7 +15,7 @@ assert upstream['conclusion']=='success' and upstream['model_source']==upstream[
 assert manifest['source_commit']==audit['source_commit']==budget['source_commit']
 assert budget['passed'] and audit['procedural_palette53']['passed']
 assert audit['stone54']['passed'] and audit['stone54']['users']==8
-assert audit['procedural_palette53']['visible_users']==321
+assert audit['procedural_palette53']['visible_users']==322
 bundle=html.split('<script>window.JIANGNAN_GLB_BASE64=',1)[1].split('</script><script>',1)[1].split('</script>',1)[0]
 expected='e89147df3342e51c8abe4bef21b31009adc49f4a528d28dce46a9cbf35d60c49'
 assert hashlib.sha256(bundle.encode()).hexdigest()==expected,'Unrecognized source bundle; do not guess private aliases'

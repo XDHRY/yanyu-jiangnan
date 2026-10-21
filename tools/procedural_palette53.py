@@ -1,4 +1,4 @@
-"""Authored linear colours/roughness; source-native shaders remain unchanged."""
+"""Authored linear colours/roughness; source-native shaders remain unchanged.\nRound59 counts both the terrain surface and its shared-material waterline bank.\n"""
 PALETTE={
  'JN_moss':((.065,.12,.064,1),.88,214),
  'JN_酒坊粗陶':((.18,.105,.055,1),.64,4),
