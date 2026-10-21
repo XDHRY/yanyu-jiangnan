@@ -3170,18 +3170,18 @@ def house03_wood57_maps(size=512):
     rng=np.random.default_rng(5701)
     raw=rng.normal(0,1,(size,size))
     fine=(raw+np.roll(raw,1,1)+np.roll(raw,-1,1)+np.roll(raw,2,1)+np.roll(raw,-2,1))/5
-    warp=.55*np.sin(2*np.pi*(u*1.7+.12*np.sin(2*np.pi*v)))
-    grain=np.sin(2*np.pi*(18*v+warp))+.42*np.sin(2*np.pi*(43*v+.22*np.sin(2*np.pi*u)))
-    grain=.60*grain+.18*fine
+    warp=.36*np.sin(2*np.pi*(u*1.35+.10*np.sin(2*np.pi*v)))
+    grain=np.sin(2*np.pi*(9*v+warp))+.24*np.sin(2*np.pi*(31*v+.18*np.sin(2*np.pi*u)))
+    grain=.34*grain+.08*fine
     # Sparse elongated pores and restrained knots; BaseColor contains no lighting.
     pores=np.zeros_like(u)
-    for cx,cy,rx,ry,amp in ((.24,.28,.12,.035,-.52),(.72,.66,.16,.045,-.44),(.50,.83,.08,.025,-.32)):
+    for cx,cy,rx,ry,amp in ((.24,.28,.15,.050,-.34),(.72,.66,.18,.060,-.28),(.50,.83,.10,.035,-.20)):
         dx=(u-cx+.5)%1-.5;dy=(v-cy+.5)%1-.5
         pores+=amp*np.exp(-(dx*dx/(2*rx*rx)+dy*dy/(2*ry*ry)))
-    value=np.clip(.54+.12*grain+.10*pores,.22,.76)
-    rgb=np.stack((.44*value+.055,.235*value+.030,.105*value+.018),axis=-1)
+    value=np.clip(.55+.045*grain+.035*pores,.42,.66)
+    rgb=np.stack((.34*value+.045,.22*value+.035,.14*value+.025),axis=-1)
     base=np.concatenate((np.clip(rgb,0,1),np.ones((*u.shape,1))),axis=-1).astype(np.float32)
-    height=.000085*grain+.000055*pores
+    height=.000035*grain+.000025*pores
     du=.64/size;dv=.18/size
     dx=(np.roll(height,-1,1)-np.roll(height,1,1))/(2*du)
     dy=(np.roll(height,-1,0)-np.roll(height,1,0))/(2*dv)
@@ -3210,7 +3210,7 @@ def house03_wood57_material(uv_name,size=512):
         links.new(uv.outputs['UV'],node.inputs['Vector']);tex.append(node)
     links.new(tex[0].outputs['Color'],bsdf.inputs['Base Color'])
     normal=nodes.new('ShaderNodeNormalMap');normal.space='TANGENT';normal.uv_map=uv_name
-    normal.inputs['Strength'].default_value=.72
+    normal.inputs['Strength'].default_value=.45
     links.new(tex[1].outputs['Color'],normal.inputs['Color']);links.new(normal.outputs['Normal'],bsdf.inputs['Normal'])
     channels=nodes.new('ShaderNodeSeparateRGB');links.new(tex[2].outputs['Color'],channels.inputs[0])
     links.new(channels.outputs['G'],bsdf.inputs['Roughness']);links.new(channels.outputs['B'],bsdf.inputs['Metallic'])
@@ -3287,7 +3287,7 @@ def refine_village_house03_study():
     S['JN_house03_study']='writing_desk_open_book_cabinet_v1'
     S['JN_house03_study_new_image_bytes']=512*512*4*3
     S['JN_house03_bench55']='one_existing_instance_isolated_four_legs_four_aprons_four_stretchers'
-    S['JN_house03_bench57']=json.dumps({'users':1,'uv':'JN_BENCH57_MetreUV','basecolor_size':512,'normal_size':512,'orm_size':512,'uv_period_m':[.64,.18],'normal_height_m':.00014,'ao':'analytic micro-cavity; not baked scene AO','license':'project-authored'},ensure_ascii=False)
+    S['JN_house03_bench57']=json.dumps({'users':1,'uv':'JN_BENCH57_MetreUV','basecolor_size':512,'normal_size':512,'orm_size':512,'uv_period_m':[.64,.18],'normal_height_m':.00006,'ao':'analytic micro-cavity; not baked scene AO','license':'project-authored'},ensure_ascii=False)
 
 def refine_village_house05_rest():
     """A domestic resting room, not a second copy of house03's study."""
