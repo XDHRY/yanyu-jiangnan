@@ -47,3 +47,18 @@ bitmap, light, opening or building is added.
 Camera16 remains exactly the Round54 portal camera for a valid before/after.
 Automated contact, topology, scope and budget checks do not substitute for the
 pending human Function/Form/Runtime approvals.
+
+
+## Round56 visible silhouette and review camera
+
+The same house03 bench remains one editable object and the same 13-part semantic
+assembly. Four legs now splay 18 mm outward from top to foot. Each of the four
+aprons is a concave seven-point extrusion whose lower edge rises 35 mm at the
+centre; this is visible silhouette geometry, not a normal-map claim. The source
+mesh is 128 vertices, 90 polygons and 204 triangles before the existing 4 mm
+one-segment bevel. Other houses and the hidden inherited prototype are unchanged.
+
+Rotating diagnostic camera 16 is raised and aimed at z=0.44 m so the complete
+seat, legs, apron soffit, stretchers and floor contact fit together. Cameras
+01–15 remain unchanged. Automated framing, topology and contact evidence does
+not imply human Function, Form or Runtime approval.
