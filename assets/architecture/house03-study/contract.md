@@ -74,7 +74,7 @@ so legs read vertically while seat, aprons and stretchers follow their member
 length instead of sharing an arbitrary object projection.
 
 Three deterministic 512 square images are created by the Blender source and
-packed: neutral-light BaseColor, a tangent normal derived from a 0.14 mm
+packed: neutral-light BaseColor, a tangent normal derived from a restrained 0.06 mm
 analytic grain height field, and glTF ORM with analytic micro-cavity,
 roughness 0.38–0.62 and metallic zero. They are project-authored and use no
 copied or paid texture source. The cavity channel is micro-scale material
