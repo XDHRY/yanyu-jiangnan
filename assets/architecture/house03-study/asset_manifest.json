@@ -55,7 +55,7 @@
       "name": "bench57_normal",
       "role": "tangent Normal",
       "size": [512, 512],
-      "source": "analytic derivatives of the authored 0.14 mm grain height field",
+      "source": "analytic derivatives of the authored 0.06 mm grain height field",
       "mapping": "same metre UV",
       "license": "project-authored"
     },
@@ -105,7 +105,7 @@
     "new_bitmap_rgba8_bytes": 3145728,
     "texture_resolution": [512, 512],
     "uv_period_m": [0.64, 0.18],
-    "normal_height_m": 0.00014,
+    "normal_height_m": 0.00006,
     "license": "project-authored analytic texture data"
   }
 }
