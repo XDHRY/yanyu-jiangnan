@@ -1670,7 +1670,12 @@ for obj in route_obstacles46:
     assert not (hi[0]>-.50 and lo[0]<3.70 and hi[1]>71.295 and lo[1]<72.495 and hi[2]>.121),(obj.name,'north bypass obstruction')
 assert abs(bounds43(bpy.data.objects['JN_北河修桨作坊_引路灯柱'])[0][2]-.12)<.003
 report['waiting_pavilion46']={'new_visible_meshes':9,'source_triangles_added':116,'refined_existing_lane':True,'relocated_existing_lamp_parts':3,'shared_rack_families':3,'risers_m':risers46,'north_bypass_clear_m':lb46[1][1]-sb46[1][1],'support_and_route_rays':support_rays46,'source_closed_positive_volumes':volume46,'new_images_materials_lights':0,'human_approval':'pending','accessibility_ramp':'not implemented','structural_load':'not certified'}
-legacy_expanded_tris=expanded_tris-tris46-8-tris50
+perimeter59_delta=terrain59_tris+bank59_tris-perimeter59['baseline_surface_triangles']
+assert perimeter59_delta==-3672
+# Round59 deliberately removes the old courtyard grid.  Normalize that scoped
+# reduction before comparing the older pre-Round37 historical baseline; global
+# source/Web ceilings remain unchanged and still measure the actual new scene.
+legacy_expanded_tris=expanded_tris-tris46-8-tris50-perimeter59_delta
 assert legacy_expanded_tris-tris37-tris40-184-tris44-bench55_delta_tris==166626,'pre-Round37 source triangle baseline changed'
 assert tris37<=500 and new37,'public repair stop source budget exceeded'
 visible37=[o for o in new37 if not o.hide_render]
