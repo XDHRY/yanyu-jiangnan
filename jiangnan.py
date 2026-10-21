@@ -3149,6 +3149,79 @@ def house03_bench56_mesh():
     for x in (-1.30,-.30):add_box(x,-.20,.34,.050,.18,.060)
     return verts,faces
 
+def house03_wood57_uvs(verts,faces):
+    """Metric face UVs: each timber's longest visible face axis carries grain."""
+    result=[]
+    for face in faces:
+        spans=[]
+        for axis in range(3):
+            values=[verts[i][axis] for i in face]
+            spans.append(max(values)-min(values))
+        axes=sorted(range(3),key=lambda axis:(spans[axis],axis),reverse=True)
+        u_axis,v_axis=axes[:2]
+        result.append([(verts[i][u_axis]/.64,verts[i][v_axis]/.18) for i in face])
+    return result
+
+def house03_wood57_maps(size=512):
+    """Original quarter-sawn walnut-like colour, tangent normal and ORM maps."""
+    import numpy as np
+    uv=(np.arange(size,dtype=np.float64)+.5)/size
+    u,v=np.meshgrid(uv,uv)
+    rng=np.random.default_rng(5701)
+    raw=rng.normal(0,1,(size,size))
+    fine=(raw+np.roll(raw,1,1)+np.roll(raw,-1,1)+np.roll(raw,2,1)+np.roll(raw,-2,1))/5
+    warp=.55*np.sin(2*np.pi*(u*1.7+.12*np.sin(2*np.pi*v)))
+    grain=np.sin(2*np.pi*(18*v+warp))+.42*np.sin(2*np.pi*(43*v+.22*np.sin(2*np.pi*u)))
+    grain=.60*grain+.18*fine
+    # Sparse elongated pores and restrained knots; BaseColor contains no lighting.
+    pores=np.zeros_like(u)
+    for cx,cy,rx,ry,amp in ((.24,.28,.12,.035,-.52),(.72,.66,.16,.045,-.44),(.50,.83,.08,.025,-.32)):
+        dx=(u-cx+.5)%1-.5;dy=(v-cy+.5)%1-.5
+        pores+=amp*np.exp(-(dx*dx/(2*rx*rx)+dy*dy/(2*ry*ry)))
+    value=np.clip(.54+.12*grain+.10*pores,.22,.76)
+    rgb=np.stack((.44*value+.055,.235*value+.030,.105*value+.018),axis=-1)
+    base=np.concatenate((np.clip(rgb,0,1),np.ones((*u.shape,1))),axis=-1).astype(np.float32)
+    height=.000085*grain+.000055*pores
+    du=.64/size;dv=.18/size
+    dx=(np.roll(height,-1,1)-np.roll(height,1,1))/(2*du)
+    dy=(np.roll(height,-1,0)-np.roll(height,1,0))/(2*dv)
+    normal=np.stack((-dx,-dy,np.ones_like(height)),axis=-1)
+    normal/=np.linalg.norm(normal,axis=-1,keepdims=True)
+    normal=np.concatenate((normal*.5+.5,np.ones((*u.shape,1))),axis=-1).astype(np.float32)
+    cavity=np.clip((np.percentile(height,55)-height)/.00024,0,1)
+    rough=np.clip(.46+.075*cavity+.025*fine,.38,.62)
+    orm=np.stack((1-.10*cavity,rough,np.zeros_like(height),np.ones_like(height)),axis=-1).astype(np.float32)
+    return base,normal,orm
+
+def house03_wood57_material(uv_name,size=512):
+    """Create and pack a bench-only editable PBR material from authored maps."""
+    mat=bpy.data.materials.new(PREFIX+'书户明式凳木作PBR57');mat.use_nodes=True
+    nodes=mat.node_tree.nodes;links=mat.node_tree.links;nodes.clear()
+    out=nodes.new('ShaderNodeOutputMaterial');bsdf=nodes.new('ShaderNodeBsdfPrincipled')
+    links.new(bsdf.outputs['BSDF'],out.inputs['Surface'])
+    uv=nodes.new('ShaderNodeUVMap');uv.uv_map=uv_name
+    tex=[]
+    for name,values,colour in zip(('bench57_basecolor','bench57_normal','bench57_orm'),house03_wood57_maps(size),(True,False,False)):
+        image=bpy.data.images.new(name,width=size,height=size,alpha=True)
+        image.colorspace_settings.name='sRGB' if colour else 'Non-Color'
+        image.pixels.foreach_set(values.ravel());image.update()
+        image.filepath_raw=os.path.join(P['output_dir'],'textures',name+'.png');image.file_format='PNG';image.save();image.pack()
+        node=nodes.new('ShaderNodeTexImage');node.image=image;node.extension='REPEAT'
+        links.new(uv.outputs['UV'],node.inputs['Vector']);tex.append(node)
+    links.new(tex[0].outputs['Color'],bsdf.inputs['Base Color'])
+    normal=nodes.new('ShaderNodeNormalMap');normal.space='TANGENT';normal.uv_map=uv_name
+    normal.inputs['Strength'].default_value=.72
+    links.new(tex[1].outputs['Color'],normal.inputs['Color']);links.new(normal.outputs['Normal'],bsdf.inputs['Normal'])
+    channels=nodes.new('ShaderNodeSeparateRGB');links.new(tex[2].outputs['Color'],channels.inputs[0])
+    links.new(channels.outputs['G'],bsdf.inputs['Roughness']);links.new(channels.outputs['B'],bsdf.inputs['Metallic'])
+    group=bpy.data.node_groups.new('JN_Bench57_glTF_Material_Output','ShaderNodeTree')
+    group.interface.new_socket(name='Occlusion',in_out='INPUT',socket_type='NodeSocketFloat')
+    group.nodes.new('NodeGroupInput');settings=nodes.new('ShaderNodeGroup');settings.node_tree=group
+    links.new(channels.outputs['R'],settings.inputs['Occlusion'])
+    mat['JN_source57']='project-authored analytic wood maps; no copied albedo'
+    mat['JN_uv_period57_m']=(.64,.18);mat['JN_license57']='project-authored'
+    return mat
+
 def refine_village_house03_study():
     """Give the existing third west-bank house a restrained reading destination."""
     c=C['water']; wood=M['wood']; paper=bpy.data.materials['JN_纸坊楮皮宣纸']
@@ -3158,12 +3231,18 @@ def refine_village_house03_study():
     inherited_bench=bench03.data
     verts,faces=house03_bench56_mesh()
     bench_mesh=bpy.data.meshes.new(PREFIX+'村落民居_03_明式细腿凳')
-    bench_mesh.from_pydata(verts,[],faces);bench_mesh.update();bench_mesh.materials.append(wood)
+    bench_mesh.from_pydata(verts,[],faces);bench_mesh.update()
+    uv_name='JN_BENCH57_MetreUV';uv=bench_mesh.uv_layers.new(name=uv_name)
+    authored_uv=house03_wood57_uvs(verts,faces)
+    for poly,coords in zip(bench_mesh.polygons,authored_uv):
+        for loop_index,coord in zip(poly.loop_indices,coords):uv.data[loop_index].uv=coord
+    bench_mesh.materials.append(house03_wood57_material(uv_name))
     bench03.data=bench_mesh
     bevel=bench03.modifiers.new('书户明式凳浅倒角','BEVEL');bevel.width=.004;bevel.segments=1
     bench03['JN_bench55']='isolated_four_legs_aprons_stretchers'
     bench03['JN_bench55_part_count']=len(house03_bench55_parts())
     bench03['JN_bench56']='splayed_legs_shallow_scalloped_aprons'
+    bench03['JN_bench57']='metric_uv_basecolor_normal_orm'
     bench03['JN_bench55_inherited_users_after_isolation']=inherited_bench.users
     def linked_boxes(label,centers,size,mat):
         proto=box('西岸书户_'+label+'原型',(0,0,0),size,mat,c)
@@ -3206,8 +3285,9 @@ def refine_village_house03_study():
     # Reuse the existing physical oil lamp instead of adding an unmotivated fixture.
     bpy.data.lights['JN_村落民居_03_室内灯火'].energy=65
     S['JN_house03_study']='writing_desk_open_book_cabinet_v1'
-    S['JN_house03_study_new_image_bytes']=0
+    S['JN_house03_study_new_image_bytes']=512*512*4*3
     S['JN_house03_bench55']='one_existing_instance_isolated_four_legs_four_aprons_four_stretchers'
+    S['JN_house03_bench57']=json.dumps({'users':1,'uv':'JN_BENCH57_MetreUV','basecolor_size':512,'normal_size':512,'orm_size':512,'uv_period_m':[.64,.18],'normal_height_m':.00014,'ao':'analytic micro-cavity; not baked scene AO','license':'project-authored'},ensure_ascii=False)
 
 def refine_village_house05_rest():
     """A domestic resting room, not a second copy of house03's study."""
@@ -3862,6 +3942,7 @@ if __name__=='__main__':
         rdir=os.path.join(P['output_dir'],'renders');os.makedirs(rdir,exist_ok=True)
         for name in ['正面','顶视','三分之四']:
             S.camera=bpy.data.objects[PREFIX+name];S.render.filepath=os.path.join(rdir,name+'.png');bpy.ops.render.render(write_still=True)
+
 
 
 
