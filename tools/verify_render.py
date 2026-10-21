@@ -1344,7 +1344,20 @@ door_hardware=[o for o in S.objects if o.name.startswith(('JN_西岸书户_门�
 min_north_edge=min([door03[0][1]]+[world_bounds(o)[0][1] for o in door_hardware])
 conservative_width=min_north_edge-(20.1-.55*1.04)
 assert conservative_width>=1.00,conservative_width
-report['house03_study']={'grounded_cabinet_feet':4,'shelves':3,'supported_linked_books':5,'linked_repeat_families':8,'tabletop_contact_passed':True,'door_mount_contact_passed':True,'architectural_door_width_m':1.144,'hardware_inclusive_conservative_width_m':round(conservative_width,4),'new_bitmap_bytes':0}
+bench03=bpy.data.objects['JN_村落民居_03_长凳']
+bench03.data.calc_loop_triangles()
+bench_bounds=world_bounds(bench03)
+assert bench03.get('JN_bench55')=='isolated_four_legs_aprons_stretchers'
+assert bench03.get('JN_bench55_part_count')==13
+assert len(bench03.data.vertices)==104 and len(bench03.data.polygons)==78 and len(bench03.data.loop_triangles)==156
+assert abs(bench_bounds[0][2]-floor03[1][2])<.0001 and abs(bench_bounds[1][2]-.58)<.0001
+other_benches=[bpy.data.objects[f'JN_村落民居_{i:02d}_长凳'] for i in (1,2,4,5,6,7,8)]
+assert len({o.data.as_pointer() for o in other_benches})==1
+assert bench03.data.as_pointer()!=other_benches[0].data.as_pointer()
+assert all(len(o.data.vertices)==24 for o in other_benches)
+assert bench03.get('JN_bench55_inherited_users_after_isolation')==8
+assert S['JN_house03_bench55']=='one_existing_instance_isolated_four_legs_four_aprons_four_stretchers'
+report['house03_study']={'grounded_cabinet_feet':4,'shelves':3,'supported_linked_books':5,'linked_repeat_families':8,'tabletop_contact_passed':True,'door_mount_contact_passed':True,'architectural_door_width_m':1.144,'hardware_inclusive_conservative_width_m':round(conservative_width,4),'bench55_parts':13,'bench55_source_triangles':156,'bench55_other_shared_houses_unchanged':7,'new_bitmap_bytes':0}
 
 floor05=world_bounds(bpy.data.objects['JN_村落民居_05_室内地坪'])
 rest_feet=[o for o in objs('JN_东岸起居户_榻足_') if not o.hide_render]
