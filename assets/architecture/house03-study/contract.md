@@ -62,3 +62,27 @@ Rotating diagnostic camera 16 is raised and aimed at z=0.44 m so the complete
 seat, legs, apron soffit, stretchers and floor contact fit together. Cameras
 01–15 remain unchanged. Automated framing, topology and contact evidence does
 not imply human Function, Form or Runtime approval.
+
+
+## Round57 bench-only metric wood PBR
+
+Only the already isolated house03 bench changes material assignment. Its mesh,
+transform, thirteen-part topology, floor contact and bevel remain Round56.
+Every polygon receives an explicit metre UV whose longest in-plane axis carries
+the grain. The authored repeat is 0.64 m along grain and 0.18 m across grain,
+so legs read vertically while seat, aprons and stretchers follow their member
+length instead of sharing an arbitrary object projection.
+
+Three deterministic 512 square images are created by the Blender source and
+packed: neutral-light BaseColor, a tangent normal derived from a 0.14 mm
+analytic grain height field, and glTF ORM with analytic micro-cavity,
+roughness 0.38–0.62 and metallic zero. They are project-authored and use no
+copied or paid texture source. The cavity channel is micro-scale material
+variation, not a claim of baked scene AO.
+
+This adds one local material and three images but no object, vertex, triangle,
+light, opening or building. Other wood users and all seven inherited benches
+stay on their existing material and shared mesh. Human Function/Form/Runtime,
+physical-phone FPS and production LOD remain pending regardless of automated
+render or export success.
+
