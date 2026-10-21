@@ -1,7 +1,7 @@
 {
   "asset_id": "west-house03-study",
   "generator": "jiangnan.py::refine_village_house03_study",
-  "source_baseline": "e4c6e0de90b09b4044034518a66b211e9b2c2c27",
+  "source_baseline": "7dcc864b6297ed0b4893de14e8923067de37195c",
   "units": "metre",
   "existing_house": 3,
   "purpose": "A visible domestic writing and reading destination behind an existing open door",
@@ -36,18 +36,43 @@
     }
   },
   "materials": [
-    "existing wood",
+    "bench-only authored wood PBR57",
     "existing darkstone",
     "existing edge",
     "existing bronze",
     "existing project mulberry paper"
   ],
-  "textures": [],
-  "new_bitmap_bytes": 0,
+  "textures": [
+    {
+      "name": "bench57_basecolor",
+      "role": "BaseColor",
+      "size": [512, 512],
+      "source": "deterministic project-authored analytic grain; no copied albedo",
+      "mapping": "JN_BENCH57_MetreUV; 0.64 m along grain x 0.18 m across grain",
+      "license": "project-authored"
+    },
+    {
+      "name": "bench57_normal",
+      "role": "tangent Normal",
+      "size": [512, 512],
+      "source": "analytic derivatives of the authored 0.06 mm grain height field",
+      "mapping": "same metre UV",
+      "license": "project-authored"
+    },
+    {
+      "name": "bench57_orm",
+      "role": "Occlusion/Roughness/Metallic",
+      "size": [512, 512],
+      "source": "analytic micro-cavity, roughness 0.38-0.62, metallic 0",
+      "mapping": "same metre UV",
+      "license": "project-authored"
+    }
+  ],
+  "new_bitmap_bytes": 3145728,
   "shared_repeat_families": 8,
   "nominal_door_width_m": 1.144,
   "minimum_hardware_inclusive_conservative_width_m": 1,
-  "uv": "Existing project wood mapping and procedural paper; no new bitmap",
+  "uv": "Bench-only face UV selects each polygon's longest in-plane axis for grain; explicit physical periods 0.64 m x 0.18 m",
   "normals": "Round56 local bench uses outward-wound tapered leg prisms, concave seven-point apron extrusions, boxes and a one-segment 4 mm evaluated bevel; no dense subdivision",
   "lod": "Diagnostic source tier; silhouette geometry is intentional; production LOD and exported-normal determinism remain pending",
   "license": "Project-authored procedural geometry, no paid generation",
@@ -71,5 +96,17 @@
     "leg_splay_m": 0.018,
     "apron_arch_rise_m": 0.035,
     "license": "project-authored procedural geometry"
+  },
+  "round57": {
+    "scope": "same existing house03 bench material and UV only",
+    "new_objects": 0,
+    "new_materials": 1,
+    "new_bitmaps": 3,
+    "new_bitmap_rgba8_bytes": 3145728,
+    "texture_resolution": [512, 512],
+    "uv_period_m": [0.64, 0.18],
+    "normal_height_m": 0.00006,
+    "license": "project-authored analytic texture data"
   }
 }
+
