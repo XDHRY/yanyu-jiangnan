@@ -1349,6 +1349,7 @@ bench03.data.calc_loop_triangles()
 bench_bounds=world_bounds(bench03)
 assert bench03.get('JN_bench55')=='isolated_four_legs_aprons_stretchers'
 assert bench03.get('JN_bench56')=='splayed_legs_shallow_scalloped_aprons'
+assert bench03.get('JN_bench57')=='metric_uv_basecolor_normal_orm'
 assert bench03.get('JN_bench55_part_count')==13
 assert len(bench03.data.vertices)==128 and len(bench03.data.polygons)==90 and len(bench03.data.loop_triangles)==204
 bench55_delta_tris=len(bench03.data.loop_triangles)-36
@@ -1360,7 +1361,14 @@ assert bench03.data.as_pointer()!=other_benches[0].data.as_pointer()
 assert all(len(o.data.vertices)==24 for o in other_benches)
 assert bench03.get('JN_bench55_inherited_users_after_isolation')>=8
 assert S['JN_house03_bench55']=='one_existing_instance_isolated_four_legs_four_aprons_four_stretchers'
-report['house03_study']={'grounded_cabinet_feet':4,'shelves':3,'supported_linked_books':5,'linked_repeat_families':8,'tabletop_contact_passed':True,'door_mount_contact_passed':True,'architectural_door_width_m':1.144,'hardware_inclusive_conservative_width_m':round(conservative_width,4),'bench55_parts':13,'bench55_source_triangles':204,'bench55_other_shared_houses_unchanged':7,'bench56_splayed_legs':4,'bench56_scalloped_aprons':4,'new_bitmap_bytes':0}
+bench_mat=bench03.data.materials[0]
+assert bench_mat.name=='JN_书户明式凳木作PBR57'
+assert bench_mat.get('JN_uv_period57_m')==[.64,.18] or tuple(bench_mat.get('JN_uv_period57_m'))==(.64,.18)
+assert len(bench03.data.uv_layers)==1 and bench03.data.uv_layers[0].name=='JN_BENCH57_MetreUV'
+bench_images=[bpy.data.images.get(name) for name in ('bench57_basecolor','bench57_normal','bench57_orm')]
+assert all(im and tuple(im.size)==(512,512) and im.packed_file for im in bench_images)
+assert S['JN_house03_study_new_image_bytes']==512*512*4*3
+report['house03_study']={'grounded_cabinet_feet':4,'shelves':3,'supported_linked_books':5,'linked_repeat_families':8,'tabletop_contact_passed':True,'door_mount_contact_passed':True,'architectural_door_width_m':1.144,'hardware_inclusive_conservative_width_m':round(conservative_width,4),'bench55_parts':13,'bench55_source_triangles':204,'bench55_other_shared_houses_unchanged':7,'bench56_splayed_legs':4,'bench56_scalloped_aprons':4,'bench57_uv_layers':1,'bench57_pbr_images':3,'bench57_texture_rgba8_bytes':512*512*4*3,'new_bitmap_bytes':512*512*4*3}
 
 floor05=world_bounds(bpy.data.objects['JN_村落民居_05_室内地坪'])
 rest_feet=[o for o in objs('JN_东岸起居户_榻足_') if not o.hide_render]
@@ -1900,6 +1908,7 @@ else:
 with open(os.path.join(VALIDATION,'validation.json'),'w',encoding='utf-8') as f:json.dump(report,f,ensure_ascii=False,indent=2)
 weather(0);S.camera=bpy.data.objects['JN_三分之四'];S.frame_set(80)
 print('ALL_RENDER_JOBS_COMPLETED' if formal_render else 'ALL_ASSERTIONS_COMPLETED',json.dumps(report,ensure_ascii=False))
+
 
 
 
