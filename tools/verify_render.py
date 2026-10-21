@@ -111,7 +111,7 @@ assert bank59_tris==perimeter59['bank_triangles']==72
 assert terrain59_tris+bank59_tris<perimeter59['baseline_surface_triangles']
 terrain_xy=[terrain59.matrix_world@v.co for v in terrain59.data.vertices]
 terrain_x=[v.x for v in terrain_xy];terrain_y=[v.y for v in terrain_xy]
-assert min(terrain_x)<-21 and max(terrain_x)>22 and min(terrain_y)<-27 and max(terrain_y)>14
+assert min(terrain_x)<-19 and max(terrain_x)>20 and min(terrain_y)<-24 and max(terrain_y)>19
 bank_world=[bank59.matrix_world@v.co for v in bank59.data.vertices]
 toe=bank_world[perimeter59['segments']:]
 assert max(abs(v.z-perimeter59['bank_toe_z']) for v in toe)<1e-6

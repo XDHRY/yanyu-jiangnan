@@ -30,7 +30,7 @@ def courtyard_perimeter59_contract():
         'center':(0,-6.5),
         'segments':36,
         'rings':10,
-        'radius':(23,21.5),
+        'radius':(21,19),
         'surface_z':-.085,
         'bank_toe_z':-.53,
         'bank_width':1.35,
@@ -44,14 +44,19 @@ def courtyard_perimeter59_mesh(contract=None):
     c=contract or courtyard_perimeter59_contract()
     cx,cy=c['center'];seg=c['segments'];rings=c['rings'];rx,ry=c['radius']
     def edge(a):
-        ex=rx*(1+.055*sin(3*a+.4)+.03*sin(7*a-.2))
-        ey=ry*(1+.045*sin(4*a+1.1)-.025*cos(9*a))
-        return ex,ey
+        # Deliberately asymmetric: a northward land tongue joins the town edge,
+        # while mixed low harmonics keep the waterline from reading as an ellipse.
+        radial=1+.10*sin(a+.25)+.075*sin(2*a-1.15)+.04*sin(5*a+.3)
+        dx=rx*radial*cos(a)+1.8*sin(2*a-.6)
+        dy=ry*(1+.06*sin(3*a+.8))*radial*sin(a)
+        north=max(0,sin(a))**6
+        west=max(0,-cos(a))**8
+        return dx-1.2*north+1.2*west,dy+4.8*north-1.4*west
     surface=[(cx,cy,c['surface_z'])];faces=[]
     for ring in range(1,rings+1):
         t=ring/rings
         for i in range(seg):
-            a=2*pi*i/seg;ex,ey=edge(a);x=cx+t*ex*cos(a);y=cy+t*ey*sin(a)
+            a=2*pi*i/seg;dx,dy=edge(a);x=cx+t*dx;y=cy+t*dy
             outer=max(0,(t-.5)/.5)
             z=c['surface_z']+outer*.055*sin(x*.57)*cos(y*.41)
             surface.append((x,y,z))
@@ -63,12 +68,12 @@ def courtyard_perimeter59_mesh(contract=None):
             faces.extend((prev+i,start+i,start+(i+1)%seg,prev+(i+1)%seg) for i in range(seg))
     bank=[];bank_faces=[]
     for i in range(seg):
-        a=2*pi*i/seg;ex,ey=edge(a);x=cx+ex*cos(a);y=cy+ey*sin(a)
+        a=2*pi*i/seg;dx,dy=edge(a);x=cx+dx;y=cy+dy
         z=c['surface_z']+.055*sin(x*.57)*cos(y*.41)
         bank.append((x,y,z))
     for i in range(seg):
-        a=2*pi*i/seg;x,y,_=bank[i]
-        bank.append((x+c['bank_width']*cos(a),y+c['bank_width']*sin(a),c['bank_toe_z']))
+        x,y,_=bank[i];dx=x-cx;dy=y-cy;length=(dx*dx+dy*dy)**.5
+        bank.append((x+c['bank_width']*dx/length,y+c['bank_width']*dy/length,c['bank_toe_z']))
     for i in range(seg):
         j=(i+1)%seg;bank_faces.append((i,seg+i,seg+j,j))
     assert len(faces)==360 and len(bank_faces)==36

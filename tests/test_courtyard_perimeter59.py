@@ -21,7 +21,10 @@ class CourtyardPerimeter59(unittest.TestCase):
         self.assertEqual(tris,c['surface_triangles'])
         boundary=vertices[-c['segments']:]
         radii=[math.hypot(x-c['center'][0],y-c['center'][1]) for x,y,_ in boundary]
-        self.assertGreater(max(radii)-min(radii),2.0)
+        self.assertGreater(max(radii)-min(radii),8.0)
+        north=max(y-c['center'][1] for _,y,_ in boundary)
+        south=max(c['center'][1]-y for _,y,_ in boundary)
+        self.assertGreater(north-south,6.0)
 
     def test_bank_reaches_waterline_with_small_budget(self):
         _,_,vertices,faces=self.mesh;c=self.contract
