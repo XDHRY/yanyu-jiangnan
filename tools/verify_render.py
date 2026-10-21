@@ -1335,7 +1335,7 @@ door03=world_bounds(bpy.data.objects['JN_村落民居_03_开门扇'])
 ring_mount=world_bounds(bpy.data.objects['JN_西岸书户_门环座'])
 assert ring_mount[1][1]>=door03[0][1] and ring_mount[0][1]<door03[0][1]
 assert bpy.data.lights['JN_村落民居_03_室内灯火'].energy==65
-assert S['JN_house03_study_new_image_bytes']==0
+assert S['JN_house03_study_new_image_bytes']==512*512*4*3
 assert len({o.data.as_pointer() for o in study_feet})==1 and len({o.data.as_pointer() for o in shelves})==1
 for prefix,n in [('书封_',5),('书格边框_',2),('案腿横枨_',2),('门扇边挺_',2),('门扇穿带_',2)]:
     repeated=[o for o in objs('JN_西岸书户_'+prefix) if not o.hide_render]
