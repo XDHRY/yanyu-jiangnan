@@ -102,6 +102,29 @@ assert water_lo[0]<95<water_hi[0] and water_lo[1]<-85<water_hi[1]
 water_meta=json.loads(water58['JN_boundary58'])
 assert water_meta['water_size']==boundary58['water_size'] and water_meta['panorama_radius']==boundary58['panorama_radius']
 report['town_boundary58']={'water_bounds_m':[water_lo,water_hi],'panorama_radius_m':boundary58['panorama_radius'],'overview_camera_xy_radius_m':overview_xy,'existing_objects_refined':1,'new_objects_images_materials_triangles':0,'human_form_runtime_approval':'pending'}
+perimeter59=json.loads(S['JN_courtyard_perimeter59'])
+terrain59=bpy.data.objects['JN_庭院延展地形'];bank59=bpy.data.objects['JN_庭院湿土岸坡']
+terrain59.data.calc_loop_triangles();bank59.data.calc_loop_triangles()
+terrain59_tris=len(terrain59.data.loop_triangles);bank59_tris=len(bank59.data.loop_triangles)
+assert terrain59_tris==perimeter59['surface_triangles']==684
+assert bank59_tris==perimeter59['bank_triangles']==72
+assert terrain59_tris+bank59_tris<perimeter59['baseline_surface_triangles']
+terrain_xy=[terrain59.matrix_world@v.co for v in terrain59.data.vertices]
+terrain_x=[v.x for v in terrain_xy];terrain_y=[v.y for v in terrain_xy]
+assert min(terrain_x)<-21 and max(terrain_x)>22 and min(terrain_y)<-27 and max(terrain_y)>14
+bank_world=[bank59.matrix_world@v.co for v in bank59.data.vertices]
+toe=bank_world[perimeter59['segments']:]
+assert max(abs(v.z-perimeter59['bank_toe_z']) for v in toe)<1e-6
+assert len(bank59.data.polygons)==perimeter59['segments']
+assert terrain59.data.materials[0]==bank59.data.materials[0]==bpy.data.materials['JN_庭外湿土']
+assert json.loads(terrain59['JN_perimeter59'])==perimeter59
+report['courtyard_perimeter59']={
+    'surface_triangles':terrain59_tris,'bank_triangles':bank59_tris,
+    'baseline_surface_triangles':perimeter59['baseline_surface_triangles'],
+    'triangle_delta':terrain59_tris+bank59_tris-perimeter59['baseline_surface_triangles'],
+    'surface_bounds_m':[[min(terrain_x),min(terrain_y),min(v.z for v in terrain_xy)],[max(terrain_x),max(terrain_y),max(v.z for v in terrain_xy)]],
+    'bank_toe_z_m':perimeter59['bank_toe_z'],'camera':perimeter59['camera'],
+    'new_images_materials_lights':0,'human_form_runtime_approval':'pending'}
 roof_pbr=bpy.data.materials['JN_绣户黛瓦PBR']
 roof_users=[o for o in S.objects if o.type=='MESH' and roof_pbr in list(o.data.materials) and not o.hide_render]
 assert [o.name for o in roof_users]==['JN_村落民居_06_屋面']
