@@ -1,0 +1,59 @@
+{
+  "schema": "jiangnan-courtyard-shore-v1",
+  "round": 60,
+  "baseline": "86a538f03aa47251da21d977752f76ab8fa26919",
+  "purpose": "break the dark flat wet-bank silhouette with restrained waterline stones and moss contact detail",
+  "function": {
+    "hero": "existing courtyard peninsula and readable stone-soil-water transition",
+    "circulation": "north land connection and every existing path, gate and step remain clear",
+    "collision": "diagnostic source geometry only; runtime collision and navigation remain pending"
+  },
+  "scope": {
+    "new_objects": {"shore_stones": 14, "moss_cushions": 6},
+    "shared_mesh_families": 3,
+    "new_images": 0,
+    "new_materials": 0,
+    "new_lights": 0,
+    "new_buildings": 0,
+    "paid_credits": 0
+  },
+  "geometry": {
+    "stone_mesh_variants": 2,
+    "stone_triangles_each": 32,
+    "moss_triangles_each": 16,
+    "source_triangle_delta": 544,
+    "bank_offset_m": 0.75,
+    "north_connection_clear_degrees": [50, 110]
+  },
+  "materials": {
+    "stone": "existing project-generated JN_stone image material",
+    "moss": "existing project-generated JN_moss procedural colour",
+    "new_bitmap_bytes": 0
+  },
+  "camera": {
+    "locked_overview": "15_town_overview",
+    "rotating_focus": "16_courtyard_wet_bank",
+    "core_views_01_14_unchanged": true,
+    "resolution": [1024, 640],
+    "formal_36_views": false
+  },
+  "runtime": {
+    "input_behavior": "existing orbit, area navigation, weather, day-night and pause controls unchanged",
+    "readiness": "diagnostic offline HTML only; production deployment and physical-device FPS pending"
+  },
+  "budgets": {
+    "source_triangles_max": 170000,
+    "web_triangles_max": 629155,
+    "attribute_index_bytes_max": 30000000,
+    "images_max": 15,
+    "rgba8_bytes_max": 46652816
+  },
+  "gates": {"function": "pending human approval", "form": "pending human approval", "runtime": "pending human approval"},
+  "rejection_criteria": [
+    "stones form a regular necklace around the island",
+    "north land connection or an existing route is obstructed",
+    "stones float above the bank or waterline",
+    "the locked overview camera changes",
+    "texture, source triangle or web triangle budget is loosened"
+  ]
+}

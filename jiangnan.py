@@ -78,6 +78,61 @@ def courtyard_perimeter59_mesh(contract=None):
         j=(i+1)%seg;bank_faces.append((i,seg+i,seg+j,j))
     assert len(faces)==360 and len(bank_faces)==36
     return surface,faces,bank,bank_faces
+def courtyard_shore60_contract():
+    """Round60: restrained stone and moss transition on the authored wet bank."""
+    return {
+        'stone_count':14,
+        'moss_count':6,
+        'stone_mesh_variants':2,
+        'stone_triangles_each':32,
+        'moss_triangles_each':16,
+        'triangle_delta':544,
+        'bank_offset_m':.75,
+        'clear_north_degrees':(50,110),
+        'camera':'16_courtyard_wet_bank',
+    }
+def courtyard_shore60_meshes():
+    """Return two closed boulder meshes plus one closed low moss cushion."""
+    variants=[]
+    for variant in range(2):
+        lower=[];upper=[]
+        phase=.57*variant
+        for i in range(8):
+            a=2*pi*i/8
+            wobble=1+.11*sin(3*a+phase)+.055*cos(5*a-.4*variant)
+            lower.append((wobble*cos(a),.72*wobble*sin(a),-.18+.035*sin(2*a+phase)))
+            upper.append((.73*wobble*cos(a)+.06*cos(2*a+phase),.53*wobble*sin(a),.20+.045*sin(3*a-phase)))
+        vertices=lower+upper+[(.03*variant,-.02,-.48),(.08-.04*variant,-.04,.50)]
+        faces=[]
+        for i in range(8):
+            j=(i+1)%8
+            faces.extend(((16,j,i),(i,j,8+j,8+i),(8+i,8+j,17)))
+        variants.append((vertices,faces))
+    moss=[(cos(2*pi*i/8),.72*sin(2*pi*i/8),0) for i in range(8)]+[(0,0,-.10),(0,0,.20)]
+    moss_faces=[]
+    for i in range(8):
+        j=(i+1)%8;moss_faces.extend(((8,j,i),(i,j,9)))
+    return variants,(moss,moss_faces)
+def courtyard_shore60_layout(perimeter=None,contract=None):
+    """Place detail on the bank while leaving the north land connection open."""
+    p=perimeter or courtyard_perimeter59_contract();c=contract or courtyard_shore60_contract()
+    surface,_,_,_=courtyard_perimeter59_mesh(p);boundary=surface[-p['segments']:]
+    indices=(13,15,17,19,21,23,25,27,29,31,33,35,1,3)
+    stones=[]
+    for n,i in enumerate(indices):
+        x,y,z=boundary[i];dx=x-p['center'][0];dy=y-p['center'][1];length=(dx*dx+dy*dy)**.5
+        sx=.66+.08*sin(n*1.71);sy=.43+.055*cos(n*1.29);sz=.36+.045*sin(n*1.13+.4)
+        stones.append({'index':n+1,'edge_index':i,'variant':n%2,
+            'location':(x+c['bank_offset_m']*dx/length,y+c['bank_offset_m']*dy/length,-.16),
+            'scale':(sx,sy,sz),'rotation_z':(n*37%180)*pi/180})
+    moss=[]
+    for j,stone_index in enumerate((1,3,5,7,9,11)):
+        s=stones[stone_index]
+        moss.append({'index':j+1,'stone_index':stone_index+1,
+            'location':(s['location'][0]+.04*cos(j),s['location'][1]+.025*sin(j),s['location'][2]+.44*s['scale'][2]),
+            'scale':(.20+.025*(j%3),.15+.018*((j+1)%3),.065),'rotation_z':s['rotation_z']+.31})
+    assert len(stones)==c['stone_count'] and len(moss)==c['moss_count']
+    return {'stones':stones,'moss':moss}
 def enum(obj, prop, value):
     items=obj.bl_rna.properties[prop].enum_items
     if value in [i.identifier for i in items]: setattr(obj,prop,value)
@@ -667,6 +722,33 @@ def art_upgrade():
     terrain['JN_perimeter59']=json.dumps(perimeter59,ensure_ascii=False)
     bank['JN_perimeter59']='continuous_sloped_bank_to_waterline'
     S['JN_courtyard_perimeter59']=json.dumps(perimeter59,ensure_ascii=False)
+    # Round60 gives the dark bank a readable construction-scale transition:
+    # texture-backed low stones interrupt the waterline and small moss cushions
+    # bridge stone to soil.  Two shared stone meshes plus one shared moss mesh
+    # keep the silhouette authored without multiplying source topology.
+    shore60=courtyard_shore60_contract();layout60=courtyard_shore60_layout(perimeter59,shore60)
+    stone_meshes,moss_mesh=courtyard_shore60_meshes();stone_data={}
+    for spec in layout60['stones']:
+        variant=spec['variant'];name='庭院湿岸石_%02d'%spec['index']
+        if variant not in stone_data:
+            obj=mesh(name,*stone_meshes[variant],M['stone'],C['water']);stone_data[variant]=obj.data
+        else:
+            obj=bpy.data.objects.new(PREFIX+name,stone_data[variant]);C['water'].objects.link(obj)
+        obj.location=spec['location'];obj.scale=spec['scale'];obj.rotation_euler[2]=spec['rotation_z']
+        obj['JN_shore60']='shared_closed_bank_stone'
+        for polygon in obj.data.polygons:polygon.use_smooth=True
+    moss_data=None
+    for spec in layout60['moss']:
+        name='庭院湿岸苔_%02d'%spec['index']
+        if moss_data is None:
+            obj=mesh(name,*moss_mesh,M['moss'],C['water']);moss_data=obj.data
+        else:
+            obj=bpy.data.objects.new(PREFIX+name,moss_data);C['water'].objects.link(obj)
+        obj.location=spec['location'];obj.scale=spec['scale'];obj.rotation_euler[2]=spec['rotation_z']
+        obj['JN_shore60']='shared_closed_moss_cushion'
+        for polygon in obj.data.polygons:polygon.use_smooth=True
+    shore60['layout']=layout60
+    S['JN_courtyard_shore60']=json.dumps(shore60,ensure_ascii=False)
     # A single old lateral bough, the brushstroke that draws the eye towards the gate.
     c=C['tree'];root=Vector((-3.35,1.7,3.05))
     pivot=bpy.data.objects.new(PREFIX+'主景横斜梅_风动',None);c.objects.link(pivot);pivot.location=root
