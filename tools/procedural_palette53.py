@@ -1,6 +1,6 @@
-"""Authored linear colours/roughness; source-native shaders remain unchanged.\nRound59 counts both the terrain surface and its shared-material waterline bank.\n"""
+"""Authored linear colours/roughness; source-native shaders remain unchanged.\nRound60 includes six shared-material wet-bank moss cushions.\n"""
 PALETTE={
- 'JN_moss':((.065,.12,.064,1),.88,214),
+ 'JN_moss':((.065,.12,.064,1),.88,220),
  'JN_酒坊粗陶':((.18,.105,.055,1),.64,4),
  'JN_米行旧木板':((.105,.061,.032,1),.68,5),
  'JN_米行麻布':((.42,.32,.17,1),.84,8),
@@ -34,5 +34,5 @@ def verify_palette(g,rows):
         users=[n['name'] for n in g['nodes'] if 'mesh' in n and any(p.get('material')==index for p in g['meshes'][n['mesh']]['primitives'])]
         assert len(users)==count,(name,len(users),count)
         result.append({'source_material':name,'base_color_factor':list(colour),'roughness':rough,'visible_users':sorted(users)})
-    assert sum(len(r['visible_users']) for r in result)==322
+    assert sum(len(r['visible_users']) for r in result)==328
     return result

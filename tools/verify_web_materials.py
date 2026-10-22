@@ -167,9 +167,9 @@ if rows53:
 from procedural_palette53 import verify_palette
 palette53=verify_palette(g,report.get('materials',[]))
 if palette53:
-    report['procedural_palette53']={'passed':True,'materials':palette53,'visible_users':322,
+    report['procedural_palette53']={'passed':True,'materials':palette53,'visible_users':328,
         'new_images':0,'scope':'source flat colour, procedural noise and true PBR bake pending'}
     (root/'material-audit.json').write_text(json.dumps(report,ensure_ascii=False,indent=2))
-    print('PROCEDURAL_PALETTE53_OK',len(palette53),322)
+    print('PROCEDURAL_PALETTE53_OK',len(palette53),328)
 
 

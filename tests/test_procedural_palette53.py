@@ -14,7 +14,7 @@ class ProceduralPalette53(unittest.TestCase):
             g['nodes'].extend({'name':name+str(j),'mesh':i} for j in range(count))
             rows.append({'source_material':name,'source_images':[],'base_color_factor':list(colour)})
         return g,rows
-    def test_all_13_colours_and_322_users(self):
+    def test_all_13_colours_and_328_users(self):
         g,rows=self.fixture();self.assertEqual(len(palette.verify_palette(g,rows)),13)
     def test_reject_any_white_fallback(self):
         g,rows=self.fixture();g['materials'][4]['pbrMetallicRoughness'].pop('baseColorFactor')
