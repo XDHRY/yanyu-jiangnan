@@ -24,6 +24,60 @@ def boundary58_contract():
         'new_objects':0,
         'new_images':0,
     }
+def courtyard_perimeter59_contract():
+    """Round59: replace the rectangular display plinth with an authored bank."""
+    return {
+        'center':(0,-6.5),
+        'segments':36,
+        'rings':10,
+        'radius':(21,19),
+        'surface_z':-.085,
+        'bank_toe_z':-.53,
+        'bank_width':1.35,
+        'surface_triangles':684,
+        'bank_triangles':72,
+        'baseline_surface_triangles':4428,
+        'camera':'15_town_overview',
+    }
+def courtyard_perimeter59_mesh(contract=None):
+    """Return deterministic terrain and sloped-bank meshes in metre units."""
+    c=contract or courtyard_perimeter59_contract()
+    cx,cy=c['center'];seg=c['segments'];rings=c['rings'];rx,ry=c['radius']
+    def edge(a):
+        # Deliberately asymmetric: a northward land tongue joins the town edge,
+        # while mixed low harmonics keep the waterline from reading as an ellipse.
+        radial=1+.10*sin(a+.25)+.075*sin(2*a-1.15)+.04*sin(5*a+.3)
+        dx=rx*radial*cos(a)+1.8*sin(2*a-.6)
+        dy=ry*(1+.06*sin(3*a+.8))*radial*sin(a)
+        north=max(0,sin(a))**6
+        west=max(0,-cos(a))**8
+        return dx-1.2*north+1.2*west,dy+4.8*north-1.4*west
+    surface=[(cx,cy,c['surface_z'])];faces=[]
+    for ring in range(1,rings+1):
+        t=ring/rings
+        for i in range(seg):
+            a=2*pi*i/seg;dx,dy=edge(a);x=cx+t*dx;y=cy+t*dy
+            outer=max(0,(t-.5)/.5)
+            z=c['surface_z']+outer*.055*sin(x*.57)*cos(y*.41)
+            surface.append((x,y,z))
+        start=1+(ring-1)*seg
+        if ring==1:
+            faces.extend((0,start+i,start+(i+1)%seg) for i in range(seg))
+        else:
+            prev=start-seg
+            faces.extend((prev+i,start+i,start+(i+1)%seg,prev+(i+1)%seg) for i in range(seg))
+    bank=[];bank_faces=[]
+    for i in range(seg):
+        a=2*pi*i/seg;dx,dy=edge(a);x=cx+dx;y=cy+dy
+        z=c['surface_z']+.055*sin(x*.57)*cos(y*.41)
+        bank.append((x,y,z))
+    for i in range(seg):
+        x,y,_=bank[i];dx=x-cx;dy=y-cy;length=(dx*dx+dy*dy)**.5
+        bank.append((x+c['bank_width']*dx/length,y+c['bank_width']*dy/length,c['bank_toe_z']))
+    for i in range(seg):
+        j=(i+1)%seg;bank_faces.append((i,seg+i,seg+j,j))
+    assert len(faces)==360 and len(bank_faces)==36
+    return surface,faces,bank,bank_faces
 def enum(obj, prop, value):
     items=obj.bl_rna.properties[prop].enum_items
     if value in [i.identifier for i in items]: setattr(obj,prop,value)
@@ -600,16 +654,19 @@ def art_upgrade():
         cap=uv('湖石残雪',(x+.05,y,h+.02),(.30,.21,.07),M['snow'],C['cover'],16,8);weather_visibility(cap,True)
     S['JN_scholar_stone_noise_seed']=P['seed']
     S['JN_scholar_stone_boolean_solver']='MANIFOLD'
-    # Continuous site terrain prevents a floating display-plinth appearance.
+    # Round59 replaces the old 54 x 41 m rectangular grid with a lower-cost,
+    # asymmetric island surface and a continuous bank down to the waterline.
+    # The broad centre stays flat and load-bearing; only the outer half gains
+    # small metre-scale height variation.  This fixes silhouette and contact
+    # geometrically instead of hiding the stage edge with colour or fog.
     ground=material('庭外湿土',(.032,.052,.038),.93,16)
-    vv=[];ff=[];nx=55;ny=42
-    for j in range(ny):
-        y=-28+j
-        for i in range(nx):
-            x=-27+i;outside=min(1,max(0,(abs(x)-10)/4,(abs(y+1)-10)/5))
-            vv.append((x,y,-.085+outside*.13*sin(x*.67)*cos(y*.43)))
-            if i and j:a=j*nx+i;ff.append((a,a-1,a-1-nx,a-nx))
-    mesh('庭院延展地形',vv,ff,ground,C['water'])
+    perimeter59=courtyard_perimeter59_contract()
+    vv,ff,bv,bf=courtyard_perimeter59_mesh(perimeter59)
+    terrain=mesh('庭院延展地形',vv,ff,ground,C['water'])
+    bank=mesh('庭院湿土岸坡',bv,bf,ground,C['water'])
+    terrain['JN_perimeter59']=json.dumps(perimeter59,ensure_ascii=False)
+    bank['JN_perimeter59']='continuous_sloped_bank_to_waterline'
+    S['JN_courtyard_perimeter59']=json.dumps(perimeter59,ensure_ascii=False)
     # A single old lateral bough, the brushstroke that draws the eye towards the gate.
     c=C['tree'];root=Vector((-3.35,1.7,3.05))
     pivot=bpy.data.objects.new(PREFIX+'主景横斜梅_风动',None);c.objects.link(pivot);pivot.location=root

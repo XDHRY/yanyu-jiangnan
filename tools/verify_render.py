@@ -102,6 +102,29 @@ assert water_lo[0]<95<water_hi[0] and water_lo[1]<-85<water_hi[1]
 water_meta=json.loads(water58['JN_boundary58'])
 assert water_meta['water_size']==boundary58['water_size'] and water_meta['panorama_radius']==boundary58['panorama_radius']
 report['town_boundary58']={'water_bounds_m':[water_lo,water_hi],'panorama_radius_m':boundary58['panorama_radius'],'overview_camera_xy_radius_m':overview_xy,'existing_objects_refined':1,'new_objects_images_materials_triangles':0,'human_form_runtime_approval':'pending'}
+perimeter59=json.loads(S['JN_courtyard_perimeter59'])
+terrain59=bpy.data.objects['JN_庭院延展地形'];bank59=bpy.data.objects['JN_庭院湿土岸坡']
+terrain59.data.calc_loop_triangles();bank59.data.calc_loop_triangles()
+terrain59_tris=len(terrain59.data.loop_triangles);bank59_tris=len(bank59.data.loop_triangles)
+assert terrain59_tris==perimeter59['surface_triangles']==684
+assert bank59_tris==perimeter59['bank_triangles']==72
+assert terrain59_tris+bank59_tris<perimeter59['baseline_surface_triangles']
+terrain_xy=[terrain59.matrix_world@v.co for v in terrain59.data.vertices]
+terrain_x=[v.x for v in terrain_xy];terrain_y=[v.y for v in terrain_xy]
+assert min(terrain_x)<-19 and max(terrain_x)>20 and min(terrain_y)<-24 and max(terrain_y)>19
+bank_world=[bank59.matrix_world@v.co for v in bank59.data.vertices]
+toe=bank_world[perimeter59['segments']:]
+assert max(abs(v.z-perimeter59['bank_toe_z']) for v in toe)<1e-6
+assert len(bank59.data.polygons)==perimeter59['segments']
+assert terrain59.data.materials[0]==bank59.data.materials[0]==bpy.data.materials['JN_庭外湿土']
+assert json.loads(terrain59['JN_perimeter59'])==perimeter59
+report['courtyard_perimeter59']={
+    'surface_triangles':terrain59_tris,'bank_triangles':bank59_tris,
+    'baseline_surface_triangles':perimeter59['baseline_surface_triangles'],
+    'triangle_delta':terrain59_tris+bank59_tris-perimeter59['baseline_surface_triangles'],
+    'surface_bounds_m':[[min(terrain_x),min(terrain_y),min(v.z for v in terrain_xy)],[max(terrain_x),max(terrain_y),max(v.z for v in terrain_xy)]],
+    'bank_toe_z_m':perimeter59['bank_toe_z'],'camera':perimeter59['camera'],
+    'new_images_materials_lights':0,'human_form_runtime_approval':'pending'}
 roof_pbr=bpy.data.materials['JN_绣户黛瓦PBR']
 roof_users=[o for o in S.objects if o.type=='MESH' and roof_pbr in list(o.data.materials) and not o.hide_render]
 assert [o.name for o in roof_users]==['JN_村落民居_06_屋面']
@@ -1647,7 +1670,12 @@ for obj in route_obstacles46:
     assert not (hi[0]>-.50 and lo[0]<3.70 and hi[1]>71.295 and lo[1]<72.495 and hi[2]>.121),(obj.name,'north bypass obstruction')
 assert abs(bounds43(bpy.data.objects['JN_北河修桨作坊_引路灯柱'])[0][2]-.12)<.003
 report['waiting_pavilion46']={'new_visible_meshes':9,'source_triangles_added':116,'refined_existing_lane':True,'relocated_existing_lamp_parts':3,'shared_rack_families':3,'risers_m':risers46,'north_bypass_clear_m':lb46[1][1]-sb46[1][1],'support_and_route_rays':support_rays46,'source_closed_positive_volumes':volume46,'new_images_materials_lights':0,'human_approval':'pending','accessibility_ramp':'not implemented','structural_load':'not certified'}
-legacy_expanded_tris=expanded_tris-tris46-8-tris50
+perimeter59_delta=terrain59_tris+bank59_tris-perimeter59['baseline_surface_triangles']
+assert perimeter59_delta==-3672
+# Round59 deliberately removes the old courtyard grid.  Normalize that scoped
+# reduction before comparing the older pre-Round37 historical baseline; global
+# source/Web ceilings remain unchanged and still measure the actual new scene.
+legacy_expanded_tris=expanded_tris-tris46-8-tris50-perimeter59_delta
 assert legacy_expanded_tris-tris37-tris40-184-tris44-bench55_delta_tris==166626,'pre-Round37 source triangle baseline changed'
 assert tris37<=500 and new37,'public repair stop source budget exceeded'
 visible37=[o for o in new37 if not o.hide_render]
