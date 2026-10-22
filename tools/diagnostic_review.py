@@ -198,6 +198,27 @@ def fit_focus54(cam,index):
         bounds=[min(p.x for p in q),max(p.x for p in q),min(p.y for p in q),max(p.y for p in q)]
         assert min(bounds[0],bounds[2])>.045 and max(bounds[1],bounds[3])<.955,bounds
         return {'fixed_envelope_m':[[-24,-12,-.5],[30,115,12]],'projected_bounds':bounds,'hidden_objects':[],'proxy_geometry_created':False}
+    if index==15:
+        # Round60 rotates the second focus slot from the study bench to the
+        # south-east wet bank. Fit only the authored near-bank detail; all
+        # other scene objects remain rendered and no fog/cloud is hidden.
+        selected=[]
+        for o in S.objects:
+            if not o.name.startswith(('JN_庭院湿岸石_','JN_庭院湿岸苔_')) or o.hide_render:continue
+            centre=sum((o.matrix_world@Vector(c) for c in o.bound_box),Vector((0,0,0)))/8
+            if centre.x>-7 and centre.y<-18:selected.append(o)
+        assert len(selected)>=5
+        pts=[o.matrix_world@Vector(c) for o in selected for c in o.bound_box]
+        for _ in range(6):
+            q=[world_to_camera_view(S,cam,p) for p in pts]
+            assert min(p.z for p in q)>cam.data.clip_start
+            bounds=[min(p.x for p in q),max(p.x for p in q),min(p.y for p in q),max(p.y for p in q)]
+            factor=max(abs(v-.5) for v in bounds)/.445
+            if factor<=1:break
+            cam.data.lens/=factor*1.01;bpy.context.view_layer.update()
+        assert cam.data.lens>=22 and min(bounds[0],bounds[2])>.045 and max(bounds[1],bounds[3])<.955,bounds
+        return {'objects':len(selected),'projected_bounds':bounds,'fitted_lens_mm':cam.data.lens,
+            'wet_bank_detail_bounds':True,'hidden_objects':[],'proxy_geometry_created':False}
     dg=bpy.context.evaluated_depsgraph_get();hits=[]
     for x in (-.4,-1.,-1.6):
         point=Vector((x,19.85,.26));direction=(point-cam.location).normalized()
