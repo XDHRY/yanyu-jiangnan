@@ -3834,6 +3834,44 @@ def stone_color54(size=512):
     rgb=np.stack((.60+variation,.64+variation,.63+variation),axis=-1)
     return np.concatenate((rgb,np.ones((*u.shape,1))),axis=-1).astype(np.float32)
 
+def stone_floor61_contract():
+    """Metric staggered stone-floor contract; shared by all eight residential instances."""
+    width,depth,joint=4.72,3.76,.022
+    source_triangles,baseline_triangles,users=276,12,8
+    return {
+        'width_m':width,'depth_m':depth,'rows':4,'nominal_columns':5,
+        'joint_width_m':joint,'joint_recess_m':.008,'substrate_z_m':[.24,.252],
+        'slab_z_m':[.252,.26],'staggered_rows':[1,3],'slab_count':22,
+        'source_triangles':source_triangles,'baseline_source_triangles':baseline_triangles,
+        'linked_users':users,'expanded_triangle_delta':(source_triangles-baseline_triangles)*users,
+        'new_objects':0,'new_mesh_datablocks':0,'new_materials':0,'new_images':0,'new_lights':0,
+    }
+
+def stone_floor61_mesh():
+    """One supported substrate plus 22 closed slab boxes; joints are real voids above the substrate."""
+    c=stone_floor61_contract();width=c['width_m'];depth=c['depth_m'];joint=c['joint_width_m']
+    vertices=[];faces=[]
+    def add_box(cx,cy,cz,sx,sy,sz):
+        base=len(vertices);x0,x1=cx-sx/2,cx+sx/2;y0,y1=cy-sy/2,cy+sy/2;z0,z1=cz-sz/2,cz+sz/2
+        vertices.extend(((x0,y0,z0),(x1,y0,z0),(x1,y1,z0),(x0,y1,z0),
+                         (x0,y0,z1),(x1,y0,z1),(x1,y1,z1),(x0,y1,z1)))
+        faces.extend(tuple(base+i for i in face) for face in
+            ((0,3,2,1),(4,5,6,7),(0,1,5,4),(1,2,6,5),(2,3,7,6),(3,0,4,7)))
+    add_box(0,0,.246,width,depth,.012)
+    pitch_y=(depth+joint)/4
+    for row in range(4):
+        y0=-depth/2+row*pitch_y+(joint/2 if row else 0)
+        y1=-depth/2+(row+1)*pitch_y-(joint/2 if row<3 else 0)
+        offset=-.5 if row in c['staggered_rows'] else 0
+        centres=[-width/2+(i+offset)*((width+joint)/5) for i in range(1,5+(1 if offset else 0))]
+        centres=[x for x in centres if -width/2+joint/2<x<width/2-joint/2]
+        starts=[-width/2]+[x+joint/2 for x in centres]
+        ends=[x-joint/2 for x in centres]+[width/2]
+        for x0,x1 in zip(starts,ends):
+            add_box((x0+x1)/2,(y0+y1)/2,.256,(x1-x0),(y1-y0),.008)
+    assert len(vertices)==184 and len(faces)==138
+    return vertices,faces
+
 def refine_stone_floor54():
     """Late isolated material edit: derivative maps on eight existing linked floors."""
     mat=bpy.data.materials['JN_民居细磨青石'];nodes=mat.node_tree.nodes;links=mat.node_tree.links
@@ -3841,6 +3879,13 @@ def refine_stone_floor54():
     assert len(floors)==8 and all(o.name.endswith('_室内地坪') for o in floors)
     assert len({o.data.as_pointer() for o in floors})==1
     data=floors[0].data
+    contract61=stone_floor61_contract();vertices61,faces61=stone_floor61_mesh()
+    assert len(data.loop_triangles)==0 or len(data.loop_triangles)==12
+    data.clear_geometry();data.from_pydata(vertices61,[],faces61);data.update()
+    data['JN_stone_floor61']=json.dumps(contract61,ensure_ascii=False)
+    data.calc_loop_triangles()
+    assert len(data.loop_triangles)==contract61['source_triangles']
+    S['JN_stone_floor61']=json.dumps(contract61,ensure_ascii=False)
     # Existing box helper may wind inward. Repair only this shared target, never positions.
     data.calc_loop_triangles()
     volume=sum(data.vertices[t.vertices[0]].co.dot(data.vertices[t.vertices[1]].co.cross(data.vertices[t.vertices[2]].co))/6 for t in data.loop_triangles)
