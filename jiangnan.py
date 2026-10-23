@@ -3859,9 +3859,10 @@ def stone_floor61_mesh():
             ((0,3,2,1),(4,5,6,7),(0,1,5,4),(1,2,6,5),(2,3,7,6),(3,0,4,7)))
     add_box(0,0,.246,width,depth,.012)
     pitch_y=(depth+joint)/4
-    for row in range(4):
-        y0=-depth/2+row*pitch_y+(joint/2 if row else 0)
-        y1=-depth/2+(row+1)*pitch_y-(joint/2 if row<3 else 0)
+    y_centres=[-depth/2+i*pitch_y for i in range(1,4)]
+    y_starts=[-depth/2]+[y+joint/2 for y in y_centres]
+    y_ends=[y-joint/2 for y in y_centres]+[depth/2]
+    for row,(y0,y1) in enumerate(zip(y_starts,y_ends)):
         offset=-.5 if row in c['staggered_rows'] else 0
         centres=[-width/2+(i+offset)*((width+joint)/5) for i in range(1,5+(1 if offset else 0))]
         centres=[x for x in centres if -width/2+joint/2<x<width/2-joint/2]
