@@ -4,13 +4,13 @@
   "source": "jiangnan.py::declare_procedural_palette53 and start",
   "palette": "tools/procedural_palette53.py",
   "native_shader_changes": 0,
-  "new_geometry_materials_images_lights": 0,
+  "new_geometry_materials_images_lights": "0 geometry / 1 material / 0 images / 0 lights",
   "mapping": "constant authored linear diffuse colour for untextured procedural shaders only; existing UV and geometry retained",
   "source_images": [],
   "license": "Existing project-authored procedural values; no external or paid asset",
-  "intended_materials": 13,
-  "baseline_exported_mesh_users": 321,
-  "uv_normals_lod": "No new topology/UV/normal data. Existing geometry normals retained; true procedural PBR bake and LOD remain pending.",
+  "intended_materials": 14,
+  "baseline_exported_mesh_users": 328,
+  "uv_normals_lod": "Round60 adds one shared procedural shoreline-moss material and no topology beyond the separately declared shore meshes; no bitmap UV/normal/AO map or LOD is added. Existing geometry normals retained; true procedural PBR bake and LOD remain pending.",
   "verification": "Actual Blender export, complete CI, material count/factor/user guard, independent GLB comparison and loaded browser screenshots required; final IDs in iteration handoff",
   "approval": "human final-art/runtime acceptance pending"
 }

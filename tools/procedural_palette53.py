@@ -1,6 +1,7 @@
 """Authored linear colours/roughness; source-native shaders remain unchanged.\nRound60 includes six shared-material wet-bank moss cushions.\n"""
 PALETTE={
- 'JN_moss':((.065,.12,.064,1),.88,220),
+ 'JN_moss':((.065,.12,.064,1),.88,214),
+ 'JN_shoremoss':((.22,.42,.10,1),.92,6),
  'JN_酒坊粗陶':((.18,.105,.055,1),.64,4),
  'JN_米行旧木板':((.105,.061,.032,1),.68,5),
  'JN_米行麻布':((.42,.32,.17,1),.84,8),
