@@ -9,7 +9,7 @@ permissions:
 jobs:
   offline-runtime:
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
@@ -26,7 +26,11 @@ jobs:
           from pathlib import Path
           repo=os.environ['GITHUB_REPOSITORY'];head=os.environ['JN_HEAD'];branch=os.environ['JN_BRANCH']
           def get(path):return json.loads(subprocess.check_output(['gh','api',path]))
-          deadline=time.monotonic()+1200
+          # The verified Web job currently needs about 22 minutes on a cold
+          # runner (apt + Chromium dominate).  A 20 minute poll window made
+          # the offline gate fail just before the same-head artifact arrived.
+          # Keep one producer and wait within this job's bounded 40 min SLA.
+          deadline=time.monotonic()+1620
           while time.monotonic()<deadline:
               runs=get(f'repos/{repo}/actions/runs?per_page=100')['workflow_runs']
               candidates=[r for r in runs if r['name']=='Jiangnan Web 3D Viewer' and r['head_sha']==head and r['head_branch']==branch and r['event']=='pull_request']

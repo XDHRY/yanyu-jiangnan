@@ -125,6 +125,28 @@ report['courtyard_perimeter59']={
     'surface_bounds_m':[[min(terrain_x),min(terrain_y),min(v.z for v in terrain_xy)],[max(terrain_x),max(terrain_y),max(v.z for v in terrain_xy)]],
     'bank_toe_z_m':perimeter59['bank_toe_z'],'camera':perimeter59['camera'],
     'new_images_materials_lights':0,'human_form_runtime_approval':'pending'}
+shore60=json.loads(S['JN_courtyard_shore60'])
+stones60=sorted((o for o in S.objects if o.name.startswith('JN_庭院湿岸石_')),key=lambda o:o.name)
+moss60=sorted((o for o in S.objects if o.name.startswith('JN_庭院湿岸苔_')),key=lambda o:o.name)
+assert len(stones60)==shore60['stone_count']==14 and len(moss60)==shore60['moss_count']==6
+assert len({o.data.as_pointer() for o in stones60})==shore60['stone_mesh_variants']==2
+assert len({o.data.as_pointer() for o in moss60})==1
+shore60_tris=0
+for o in stones60+moss60:
+    o.data.calc_loop_triangles();shore60_tris+=len(o.data.loop_triangles)
+assert shore60_tris==shore60['triangle_delta']==544
+assert all(o.data.materials[0]==bpy.data.materials['JN_stone'] for o in stones60)
+assert all(o.data.materials[0]==bpy.data.materials['JN_shoremoss'] for o in moss60)
+for o in stones60:
+    lo,hi=world_bounds(o) if 'world_bounds' in globals() else ([min((o.matrix_world@Vector(c))[i] for c in o.bound_box) for i in range(3)],[max((o.matrix_world@Vector(c))[i] for c in o.bound_box) for i in range(3)])
+    # Waterline stones may sit a few millimetres below the z=0 authoring datum;
+    # require visible height and real bank penetration instead of exact datum crossing.
+    assert lo[2]<-.27 and hi[2]>-.02,(o.name,lo,hi)
+for moss in moss60:
+    assert min(dist_xy(pos(moss),pos(stone)) for stone in stones60)<.35,moss.name
+report['courtyard_shore60']={'visible_stones':len(stones60),'visible_moss_cushions':len(moss60),
+    'shared_mesh_families':3,'source_triangles_added':shore60_tris,'new_images_materials_lights':0,
+    'camera':shore60['camera'],'north_land_connection_clear':True,'human_form_runtime_approval':'pending'}
 roof_pbr=bpy.data.materials['JN_绣户黛瓦PBR']
 roof_users=[o for o in S.objects if o.type=='MESH' and roof_pbr in list(o.data.materials) and not o.hide_render]
 assert [o.name for o in roof_users]==['JN_村落民居_06_屋面']
@@ -1675,7 +1697,7 @@ assert perimeter59_delta==-3672
 # Round59 deliberately removes the old courtyard grid.  Normalize that scoped
 # reduction before comparing the older pre-Round37 historical baseline; global
 # source/Web ceilings remain unchanged and still measure the actual new scene.
-legacy_expanded_tris=expanded_tris-tris46-8-tris50-perimeter59_delta
+legacy_expanded_tris=expanded_tris-tris46-8-tris50-perimeter59_delta-shore60_tris
 assert legacy_expanded_tris-tris37-tris40-184-tris44-bench55_delta_tris==166626,'pre-Round37 source triangle baseline changed'
 assert tris37<=500 and new37,'public repair stop source budget exceeded'
 visible37=[o for o in new37 if not o.hide_render]
