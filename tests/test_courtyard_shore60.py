@@ -51,3 +51,10 @@ class CourtyardShore60(unittest.TestCase):
     def test_moss_is_bound_to_named_stones(self):
         self.assertEqual([m['stone_index'] for m in self.layout['moss']],[2,4,6,8,10,12])
         self.assertEqual(self.contract['camera'],'16_courtyard_wet_bank')
+        stones=self.layout['stones']
+        for moss in self.layout['moss']:
+            stone=stones[moss['stone_index']-1]
+            self.assertGreaterEqual(moss['scale'][2],.20)
+            moss_bottom=moss['location'][2]-.10*moss['scale'][2]
+            stone_top=stone['location'][2]+.50*stone['scale'][2]
+            self.assertLessEqual(abs(moss_bottom-stone_top),.02)

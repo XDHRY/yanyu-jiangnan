@@ -25,7 +25,7 @@ class Waiting46(unittest.TestCase):
         ]
         self.assertEqual([v[:5] for v in views[:14]],expected)
         self.assertEqual([v[0] for v in views[14:]],['15_town_overview','16_courtyard_wet_bank'])
-        self.assertEqual(views[15][1:5],((20.0,-30.0,5.2),(10.9,-21.0,-.05),60,0))
+        self.assertEqual(views[15][1:5],((20.0,-30.0,4.8),(10.9,-21.0,.35),62,0))
 
 class WaitingLayout46(unittest.TestCase):
     def test_historical_totals_use_one_scoped_delta(self):
