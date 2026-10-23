@@ -29,7 +29,7 @@ VIEWS=[
     ('13_canal_bridge',(13.2,11.2,8.6),(7.3,15.1,.9),46,0,'水巷木桥：高位斜俯视完整检查桥板、栏柱、双岸驳岸、桥头落地与临水民居尺度'),
     ('14_village_waterfront',(7.3,29.0,2.25),(7.3,16.0,1.35),40,0,'临水回望：检查八栋民居沿水巷的聚落节奏、河埠和木桥是否形成江南村落层次'),
     ('15_town_overview',(95,-85,115),(3,50,0),50,200,'全镇斜俯总览：庭院—双岸街巷—北河作坊与染纸院的实际连通，不隐藏建筑'),
-    ('16_courtyard_wet_bank',(16.0,-25.0,2.1),(12.0,-20.2,.08),72,0,'庭院湿岸沿岸低斜近景：正面检查同簇岸石、专用粗糙苔垫、湿土岸坡与水线接缝，避免俯视空岸和月影主导，不隐藏任何对象'),
+    ('16_courtyard_wet_bank',(-12.2,-27.8,1.4),(-8.95,-24.2,.02),70,0,'庭院湿岸沿岸低斜近景：正面检查同簇岸石、专用粗糙苔垫、湿土岸坡与水线接缝，避免俯视空岸和月影主导，不隐藏任何对象'),
 ]
 
 for o in list(bpy.data.objects):
@@ -209,8 +209,9 @@ def fit_focus54(cam,index):
             # Keep the fitted envelope local to one authored cluster.  The
             # previous x>-7 selection spanned ~17 m and forced a 25 mm lens,
             # turning the requested contact close-up back into an empty-bank
-            # survey. This final proof isolates one stone and its side moss.
-            if centre.x>11.5 and centre.y<-18:selected.append(o)
+            # survey. This final proof isolates one west-bank stone and its side moss,
+            # clear of the south-east moon reflection.
+            if centre.x<-8.5 and centre.y<-20:selected.append(o)
         assert len(selected)==2
         pts=[o.matrix_world@Vector(c) for o in selected for c in o.bound_box]
         for _ in range(6):

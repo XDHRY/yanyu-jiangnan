@@ -131,8 +131,8 @@ def courtyard_shore60_layout(perimeter=None,contract=None):
     for j,stone_index in enumerate((1,3,5,7,9,11)):
         s=stones[stone_index]
         moss.append({'index':j+1,'stone_index':stone_index+1,
-            'location':(s['location'][0]+.18*cos(j),s['location'][1]+.12*sin(j),s['location'][2]+.56*s['scale'][2]),
-            'scale':(.44+.035*(j%3),.32+.025*((j+1)%3),.20),'rotation_z':s['rotation_z']+.31})
+            'location':(s['location'][0]+.35*cos(j),s['location'][1]+.22*sin(j),s['location'][2]+.56*s['scale'][2]),
+            'scale':(.26+.02*(j%3),.18+.015*((j+1)%3),.20),'rotation_z':s['rotation_z']+.31})
     assert len(stones)==c['stone_count'] and len(moss)==c['moss_count']
     return {'stones':stones,'moss':moss}
 def enum(obj, prop, value):
@@ -225,7 +225,7 @@ def start():
       'plaster':((.62,.66,.62),.82,5),'tile':((.045,.067,.075),.3,12),'edge':((.16,.20,.20),.58,14),
       'stone':((.27,.31,.29),.38,8),'darkstone':((.07,.105,.10),.52,8),'wood':((.075,.043,.025),.55,7),
       'bronze':((.28,.18,.07),.28,0,.7),'moss':((.065,.12,.064),.88,18),
-      'shoremoss':((.22,.42,.10),.92,22),
+      'shoremoss':((.12,.24,.07),.92,22),
       'bark':((.11,.074,.050),.82,13),'pink':((.67,.19,.25),.4,0),'ivory':((.91,.65,.62),.46,0),
       'gold':((.7,.39,.12),.45,0),'paper':((1,.42,.10),.6,0,0,2.4),'snow':((.8,.87,.91),.7,25),
       'water':((.055,.13,.145),.14,0,.35),'dew':((.66,.84,.85),.07,0),
