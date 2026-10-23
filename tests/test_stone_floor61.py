@@ -22,8 +22,8 @@ class StoneFloor61(unittest.TestCase):
 
     def test_exact_floor_envelope_and_supported_joint_depth(self):
         xs=[p[0] for p in self.vertices];ys=[p[1] for p in self.vertices];zs=[p[2] for p in self.vertices]
-        self.assertEqual((min(xs),max(xs)),(-2.36,2.36))
-        self.assertEqual((min(ys),max(ys)),(-1.88,1.88))
+        self.assertAlmostEqual(min(xs),-2.36);self.assertAlmostEqual(max(xs),2.36)
+        self.assertAlmostEqual(min(ys),-1.88);self.assertAlmostEqual(max(ys),1.88)
         self.assertAlmostEqual(min(zs),.24);self.assertAlmostEqual(max(zs),.26)
         self.assertAlmostEqual(self.contract['substrate_z_m'][1],self.contract['slab_z_m'][0])
         self.assertGreater(self.contract['substrate_z_m'][1],.24)
