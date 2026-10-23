@@ -44,6 +44,9 @@ class CourtyardShore60(unittest.TestCase):
         degrees=[s['edge_index']*10 for s in self.layout['stones']]
         self.assertTrue(all(not lo<=d<=hi for d in degrees))
         self.assertEqual(len(set(degrees)),14)
+        gaps=[(degrees[(i+1)%len(degrees)]-degrees[i])%360 for i in range(len(degrees))]
+        self.assertGreaterEqual(gaps.count(10),4)
+        self.assertGreaterEqual(max(gaps),30)
 
     def test_moss_is_bound_to_named_stones(self):
         self.assertEqual([m['stone_index'] for m in self.layout['moss']],[2,4,6,8,10,12])
