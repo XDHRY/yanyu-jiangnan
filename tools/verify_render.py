@@ -136,7 +136,7 @@ for o in stones60+moss60:
     o.data.calc_loop_triangles();shore60_tris+=len(o.data.loop_triangles)
 assert shore60_tris==shore60['triangle_delta']==544
 assert all(o.data.materials[0]==bpy.data.materials['JN_stone'] for o in stones60)
-assert all(o.data.materials[0]==bpy.data.materials['JN_moss'] for o in moss60)
+assert all(o.data.materials[0]==bpy.data.materials['JN_shoremoss'] for o in moss60)
 for o in stones60:
     lo,hi=world_bounds(o) if 'world_bounds' in globals() else ([min((o.matrix_world@Vector(c))[i] for c in o.bound_box) for i in range(3)],[max((o.matrix_world@Vector(c))[i] for c in o.bound_box) for i in range(3)])
     # Waterline stones may sit a few millimetres below the z=0 authoring datum;
