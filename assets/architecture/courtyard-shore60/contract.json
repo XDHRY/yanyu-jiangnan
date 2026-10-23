@@ -12,7 +12,7 @@
     "new_objects": {"shore_stones": 14, "moss_cushions": 6},
     "shared_mesh_families": 3,
     "new_images": 0,
-    "new_materials": 0,
+    "new_materials": 1,
     "new_lights": 0,
     "new_buildings": 0,
     "paid_credits": 0
@@ -27,7 +27,7 @@
   },
   "materials": {
     "stone": "existing project-generated JN_stone image material",
-    "moss": "existing project-generated JN_moss procedural colour",
+    "moss": "new project-generated JN_shoremoss procedural colour; brighter rough bank-only material, no bitmap",
     "new_bitmap_bytes": 0
   },
   "camera": {

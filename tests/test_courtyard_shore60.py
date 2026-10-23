@@ -58,3 +58,6 @@ class CourtyardShore60(unittest.TestCase):
             moss_bottom=moss['location'][2]-.10*moss['scale'][2]
             stone_top=stone['location'][2]+.50*stone['scale'][2]
             self.assertLessEqual(abs(moss_bottom-stone_top),.02)
+        src=(ROOT/'jiangnan.py').read_text(encoding='utf-8')
+        self.assertIn("'shoremoss':((.22,.42,.10),.92,22)",src)
+        self.assertIn("M['shoremoss']",src)

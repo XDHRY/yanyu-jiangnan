@@ -225,6 +225,7 @@ def start():
       'plaster':((.62,.66,.62),.82,5),'tile':((.045,.067,.075),.3,12),'edge':((.16,.20,.20),.58,14),
       'stone':((.27,.31,.29),.38,8),'darkstone':((.07,.105,.10),.52,8),'wood':((.075,.043,.025),.55,7),
       'bronze':((.28,.18,.07),.28,0,.7),'moss':((.065,.12,.064),.88,18),
+      'shoremoss':((.22,.42,.10),.92,22),
       'bark':((.11,.074,.050),.82,13),'pink':((.67,.19,.25),.4,0),'ivory':((.91,.65,.62),.46,0),
       'gold':((.7,.39,.12),.45,0),'paper':((1,.42,.10),.6,0,0,2.4),'snow':((.8,.87,.91),.7,25),
       'water':((.055,.13,.145),.14,0,.35),'dew':((.66,.84,.85),.07,0),
@@ -235,6 +236,7 @@ def start():
     # Procedural vegetation colour is not representable by glTF's node subset.
     # Declare the authored linear colour at source, not only in one HTML wrapper.
     M['moss']['JN_web_base_color_factor']=list(M['moss'].diffuse_color)
+    M['shoremoss']['JN_web_base_color_factor']=list(M['shoremoss'].diffuse_color)
     for n in M['plaster'].node_tree.nodes:
         if n.type=='VALTORGB':n.color_ramp.elements[0].color=(.51,.55,.51,1)
         if n.type=='BUMP':n.inputs['Strength'].default_value=.12;n.inputs['Distance'].default_value=.018
@@ -745,7 +747,7 @@ def art_upgrade():
     for spec in layout60['moss']:
         name='庭院湿岸苔_%02d'%spec['index']
         if moss_data is None:
-            obj=mesh(name,*moss_mesh,M['moss'],C['water']);moss_data=obj.data
+            obj=mesh(name,*moss_mesh,M['shoremoss'],C['water']);moss_data=obj.data
         else:
             obj=bpy.data.objects.new(PREFIX+name,moss_data);C['water'].objects.link(obj)
         obj.location=spec['location'];obj.scale=spec['scale'];obj.rotation_euler[2]=spec['rotation_z']
