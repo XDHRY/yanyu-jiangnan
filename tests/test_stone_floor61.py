@@ -15,8 +15,8 @@ class StoneFloor61(unittest.TestCase):
         c=self.contract
         self.assertEqual((c['rows'],c['nominal_columns'],c['slab_count']),(4,5,22))
         self.assertEqual(c['staggered_rows'],[1,3])
-        self.assertAlmostEqual(c['joint_width_m'],.022)
-        self.assertAlmostEqual(c['joint_recess_m'],.008)
+        self.assertAlmostEqual(c['joint_width_m'],.018)
+        self.assertAlmostEqual(c['joint_recess_m'],.004)
         self.assertEqual(c['linked_users'],8)
         self.assertEqual(c['new_objects']+c['new_mesh_datablocks']+c['new_materials']+c['new_images']+c['new_lights'],0)
 
@@ -26,14 +26,16 @@ class StoneFloor61(unittest.TestCase):
         self.assertAlmostEqual(min(ys),-1.88);self.assertAlmostEqual(max(ys),1.88)
         self.assertAlmostEqual(min(zs),.24);self.assertAlmostEqual(max(zs),.26)
         self.assertAlmostEqual(self.contract['substrate_z_m'][1],self.contract['slab_z_m'][0])
+        self.assertAlmostEqual(self.contract['joint_bed_z_m'][1],.256)
+        self.assertAlmostEqual(self.contract['top_chamfer_m'],.008)
         self.assertGreater(self.contract['substrate_z_m'][1],.24)
 
     def test_closed_component_and_triangle_budget(self):
-        self.assertEqual((len(self.vertices),len(self.faces)),(184,138))
+        self.assertEqual((len(self.vertices),len(self.faces)),(280,232))
         self.assertTrue(all(len(f)==4 for f in self.faces))
         self.assertEqual(sum(len(f)-2 for f in self.faces),self.contract['source_triangles'])
-        self.assertEqual(self.contract['source_triangles'],276)
-        self.assertEqual(self.contract['expanded_triangle_delta'],2112)
-        self.assertLessEqual(self.contract['expanded_triangle_delta'],2200)
+        self.assertEqual(self.contract['source_triangles'],464)
+        self.assertEqual(self.contract['expanded_triangle_delta'],3616)
+        self.assertLessEqual(self.contract['expanded_triangle_delta'],3700)
 
 if __name__=='__main__':unittest.main()

@@ -3836,12 +3836,12 @@ def stone_color54(size=512):
 
 def stone_floor61_contract():
     """Metric staggered stone-floor contract; shared by all eight residential instances."""
-    width,depth,joint=4.72,3.76,.022
-    source_triangles,baseline_triangles,users=276,12,8
+    width,depth,joint=4.72,3.76,.018
+    source_triangles,baseline_triangles,users=464,12,8
     return {
         'width_m':width,'depth_m':depth,'rows':4,'nominal_columns':5,
-        'joint_width_m':joint,'joint_recess_m':.008,'substrate_z_m':[.24,.252],
-        'slab_z_m':[.252,.26],'staggered_rows':[1,3],'slab_count':22,
+        'joint_width_m':joint,'joint_recess_m':.004,'substrate_z_m':[.24,.252],
+        'joint_bed_z_m':[.252,.256],'slab_z_m':[.252,.26],'top_chamfer_m':.008,'staggered_rows':[1,3],'slab_count':22,'support_components':2,
         'source_triangles':source_triangles,'baseline_source_triangles':baseline_triangles,
         'linked_users':users,'expanded_triangle_delta':(source_triangles-baseline_triangles)*users,
         'new_objects':0,'new_mesh_datablocks':0,'new_materials':0,'new_images':0,'new_lights':0,
@@ -3857,7 +3857,17 @@ def stone_floor61_mesh():
                          (x0,y0,z1),(x1,y0,z1),(x1,y1,z1),(x0,y1,z1)))
         faces.extend(tuple(base+i for i in face) for face in
             ((0,3,2,1),(4,5,6,7),(0,1,5,4),(1,2,6,5),(2,3,7,6),(3,0,4,7)))
+    def add_slab(x0,x1,y0,y1):
+        base=len(vertices);inset=min(.008,(x1-x0)*.2,(y1-y0)*.2)
+        vertices.extend(((x0,y0,.252),(x1,y0,.252),(x1,y1,.252),(x0,y1,.252),
+                         (x0,y0,.258),(x1,y0,.258),(x1,y1,.258),(x0,y1,.258),
+                         (x0+inset,y0+inset,.26),(x1-inset,y0+inset,.26),
+                         (x1-inset,y1-inset,.26),(x0+inset,y1-inset,.26)))
+        faces.extend(tuple(base+i for i in face) for face in
+            ((0,3,2,1),(0,1,5,4),(1,2,6,5),(2,3,7,6),(3,0,4,7),
+             (4,5,9,8),(5,6,10,9),(6,7,11,10),(7,4,8,11),(8,9,10,11)))
     add_box(0,0,.246,width,depth,.012)
+    add_box(0,0,.254,width,depth,.004)
     pitch_y=(depth+joint)/4
     y_centres=[-depth/2+i*pitch_y for i in range(1,4)]
     y_starts=[-depth/2]+[y+joint/2 for y in y_centres]
@@ -3869,8 +3879,8 @@ def stone_floor61_mesh():
         starts=[-width/2]+[x+joint/2 for x in centres]
         ends=[x-joint/2 for x in centres]+[width/2]
         for x0,x1 in zip(starts,ends):
-            add_box((x0+x1)/2,(y0+y1)/2,.256,(x1-x0),(y1-y0),.008)
-    assert len(vertices)==184 and len(faces)==138
+            add_slab(x0,x1,y0,y1)
+    assert len(vertices)==280 and len(faces)==232
     return vertices,faces
 
 def refine_stone_floor54():

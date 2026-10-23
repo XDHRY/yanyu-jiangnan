@@ -100,12 +100,12 @@
   },
   "round61_delta": {
     "scope": "8 existing linked residential floors; shared mesh datablock preserved",
-    "geometry": "supported 4x5 nominal staggered slab layout with 22 closed slabs over one continuous substrate",
-    "joint_width_m": 0.022,
-    "joint_recess_m": 0.008,
-    "source_triangles": 276,
+    "geometry": "supported 4x5 nominal staggered layout: 22 chamfered closed slabs over a continuous substrate and recessed joint bed",
+    "joint_width_m": 0.018,
+    "joint_recess_m": 0.004,
+    "source_triangles": 464,
     "baseline_source_triangles": 12,
-    "expanded_triangle_delta": 2112,
+    "expanded_triangle_delta": 3616,
     "new_objects": 0,
     "new_mesh_datablocks": 0,
     "new_materials": 0,
@@ -113,6 +113,7 @@
     "new_lights": 0,
     "uv": "existing metric JN_STONE_MicroUV54 and JN_STONE_ColourUV54 regenerated from new geometry",
     "pbr": "existing project-authored 512px BaseColor/Normal/ORM retained",
-    "lod": "shared source mesh is diagnostic/runtime LOD0; production LOD and collision pending"
+    "lod": "shared source mesh is diagnostic/runtime LOD0; production LOD and collision pending",
+    "top_chamfer_m": 0.008
   }
 }
