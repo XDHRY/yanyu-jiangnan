@@ -36,7 +36,7 @@ permissions:
 jobs:
   build-web-viewer:
     runs-on: ubuntu-24.04
-    timeout-minutes: 25
+    timeout-minutes: 35
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
