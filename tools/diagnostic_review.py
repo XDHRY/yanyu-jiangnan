@@ -29,7 +29,7 @@ VIEWS=[
     ('13_canal_bridge',(13.2,11.2,8.6),(7.3,15.1,.9),46,0,'水巷木桥：高位斜俯视完整检查桥板、栏柱、双岸驳岸、桥头落地与临水民居尺度'),
     ('14_village_waterfront',(7.3,29.0,2.25),(7.3,16.0,1.35),40,0,'临水回望：检查八栋民居沿水巷的聚落节奏、河埠和木桥是否形成江南村落层次'),
     ('15_town_overview',(95,-85,115),(3,50,0),50,200,'全镇斜俯总览：庭院—双岸街巷—北河作坊与染纸院的实际连通，不隐藏建筑'),
-    ('16_courtyard_wet_bank',(21.0,-38.0,8.2),(2.0,-27.0,-.12),58,0,'庭院湿岸斜俯近景：收紧检查成组岸石、苔痕、湿土岸坡与水线接触，并保留少量庭院空间参照，不隐藏任何对象'),
+    ('16_courtyard_wet_bank',(20.0,-30.0,5.2),(10.9,-21.0,-.05),60,0,'庭院湿岸斜俯近景：收紧检查东南岸同簇岸石、苔痕、湿土岸坡与水线接触，并保留少量庭院空间参照，不隐藏任何对象'),
 ]
 
 for o in list(bpy.data.objects):
@@ -206,8 +206,12 @@ def fit_focus54(cam,index):
         for o in S.objects:
             if not o.name.startswith(('JN_庭院湿岸石_','JN_庭院湿岸苔_')) or o.hide_render:continue
             centre=sum((o.matrix_world@Vector(c) for c in o.bound_box),Vector((0,0,0)))/8
-            if centre.x>-7 and centre.y<-18:selected.append(o)
-        assert len(selected)>=5
+            # Keep the fitted envelope local to one authored cluster.  The
+            # previous x>-7 selection spanned ~17 m and forced a 25 mm lens,
+            # turning the requested contact close-up back into an empty-bank
+            # survey.  This cluster contains two stones and their moss cushion.
+            if centre.x>8 and centre.y<-18:selected.append(o)
+        assert len(selected)==3
         pts=[o.matrix_world@Vector(c) for o in selected for c in o.bound_box]
         for _ in range(6):
             q=[world_to_camera_view(S,cam,p) for p in pts]
