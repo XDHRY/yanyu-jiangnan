@@ -1272,18 +1272,18 @@ for rail in rails:
         assert abs(rail.data.vertices[4*k].co.z-z)<1e-5
         assert abs(rail.data.vertices[4*k].co.y-y)<1e-5
 for rib in ribs:
-    bottom=.19+.03*(abs(rib.location.y-102.65)/.72)+.035
+    bottom=.19+.03*(abs(pos(rib).y-102.65)/.72)+.035
     lo,hi=world_bounds(rib)
     assert abs(lo[2]-bottom)<.001 and abs(hi[2]-.455)<.001
     for x in (-.1,.1):
-        hit,where,normal,face=sampan.ray_cast(Vector((x,rib.location.y-102.65,bottom+.002)),Vector((0,0,-1)),distance=.006)
+        hit,where,normal,face=sampan.ray_cast(Vector((x,pos(rib).y-102.65,bottom+.002)),Vector((0,0,-1)),distance=.006)
         assert hit and abs(where.z-bottom)<.001,('rib missing actual inner-floor support',rib.name)
     rb=bmesh.new();rb.from_mesh(rib.data)
     assert all(e.is_manifold for e in rb.edges) and rb.calc_volume(signed=True)>0
     rb.free()
 for seat in seats:
-    support=min(ribs,key=lambda r:abs(r.location.y-seat.location.y))
-    assert abs(support.location.y-seat.location.y)<.001
+    support=min(ribs,key=lambda r:abs(pos(r).y-pos(seat).y))
+    assert abs(pos(support).y-pos(seat).y)<.001
     assert abs(world_bounds(seat)[0][2]-world_bounds(support)[1][2])<.001
 report['sampan_shell42']={'hull_vertices':40,'hull_quads':38,'hull_triangles':76,'added_source_triangles':184,'axis_inset_m':.035,'closed_positive_volume':True,'shared_tapered_ribs':3,'supported_seats':2,'rib_top_m':.455,'shared_contoured_rails':2,'rail_prototype_vertices':20,'rail_prototype_quads':18,'rail_width_m':.04,'rail_height_m':.04,'shared_oars':3,'oar_prototype_vertices':16,'oar_prototype_faces':10,'buoyancy_seaworthiness':'not validated','human_approval':'pending'}
 
@@ -1308,7 +1308,7 @@ aboard42=bpy.data.objects['JN_北河转水埠_共享船桨_舢板']
 for seat in seats:
     top=world_bounds(seat)[1][2]
     assert abs(world_bounds(aboard42)[0][2]-top)<.001,'aboard oar floats over seats'
-    point=Vector((7.28+__import__('math').tan(.16)*(seat.location.y-102.65),seat.location.y,top+.003))
+    point=Vector((7.28+__import__('math').tan(.16)*(pos(seat).y-102.65),pos(seat).y,top+.003))
     hit,where,normal,face=aboard42.ray_cast(aboard42.matrix_world.inverted()@point,Vector((0,0,-1)),distance=.008)
     assert hit and abs((aboard42.matrix_world@where).z-top)<.001,'missing actual oar/seat contact'
 report['sampan_shell42']['oar_seat_contacts']=2
@@ -1324,6 +1324,40 @@ report['sampan_shell42']['stored_oar_floor_and_rack_contacts']=2
 assert len(wet_marks)==4 and all(o.data.as_pointer()==wet_proto.data.as_pointer() for o in wet_marks)
 assert all(world_bounds(o)[0][2]>.58 for o in wet_marks)
 assert bpy.data.objects.get('JN_北河转水埠_借用架盘绳') and bpy.data.objects.get('JN_北河转水埠_舢板系缆')
+
+# Round 64 native motion: all aboard parts pivot at the boat-end rope point.
+anchor64=bpy.data.objects['JN_北河转水埠_停泊舢板系泊锚64']
+assert anchor64.type=='EMPTY' and tuple(round(v,3) for v in anchor64.location)==(7.3,103.78,.45)
+parts64=[sampan,*rails,*seats,*ribs,aboard42]
+assert len(parts64)==9 and all(o.parent==anchor64 for o in parts64)
+rope64=bpy.data.objects['JN_北河转水埠_舢板系缆']
+rope_start64=rope64.matrix_world @ rope64.data.splines[0].bezier_points[0].co
+assert (rope_start64-anchor64.matrix_world.translation).length<1e-6
+assert anchor64.animation_data and anchor64.animation_data.action
+action64=anchor64.animation_data.action
+assert action64.name=='JN_Action_北河转水埠_系泊舢板轻摇64'
+curves64={(fc.data_path,fc.array_index):fc for fc in action64.fcurves}
+assert set(curves64)=={('rotation_euler',0),('rotation_euler',2)}
+frames64=[1,40,80,120,160,200,240]
+expected64={0:[0,.006,0,-.006,0,.006,0],2:[0,.010,0,-.010,0,.010,0]}
+for index64,values64 in expected64.items():
+    points64=[(round(k.co.x),round(k.co.y,6)) for k in curves64[('rotation_euler',index64)].keyframe_points]
+    assert points64==list(zip(frames64,values64)),points64
+clearances64=[];bounds64=[]
+for frame64 in (40,80,120,200):
+    S.frame_set(frame64);bpy.context.view_layer.update()
+    sb64=world_bounds(sampan);clear64=bridge_y_min-sb64[1][1]
+    assert sb64[0][0]>=turning_water[0][0] and sb64[1][0]<=turning_water[1][0]
+    assert sb64[0][1]>=turning_water[0][1] and sb64[1][1]<=turning_water[1][1]
+    assert clear64>=.24,(frame64,clear64,sb64)
+    assert (rope_start64-anchor64.matrix_world.translation).length<1e-6
+    clearances64.append(round(clear64,4));bounds64.append([[round(v,4) for v in sb64[0]],[round(v,4) for v in sb64[1]]])
+S.frame_set(80);bpy.context.view_layer.update()
+assert abs(anchor64.rotation_euler.x)<1e-6 and abs(anchor64.rotation_euler.z)<1e-6
+report['native_sampan_animation64']={'object':anchor64.name,'action':action64.name,'channels':['rotation_euler.x','rotation_euler.z'],
+    'frames':frames64,'pitch_rad':expected64[0],'yaw_rad':expected64[2],'boat_parts':len(parts64),
+    'rope_endpoint_fixed':True,'bridge_clearance_m_by_frame':clearances64,'hull_bounds_m_by_frame':bounds64,
+    'source_triangles_added':0,'new_materials_images':0,'human_function_form_runtime_approval':'pending'}
 
 # Portable quay tea service: the shoulder-load must remain wholly in the west
 # public pocket, clear both the through street and existing stone bench.  Its
