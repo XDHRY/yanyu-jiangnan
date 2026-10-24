@@ -3837,18 +3837,20 @@ def stone_color54(size=512):
 def stone_floor61_contract():
     """Metric staggered stone-floor contract; shared by all eight residential instances."""
     width,depth,joint=4.72,3.76,.018
-    source_triangles,baseline_triangles,users=464,12,8
+    source_triangles,baseline_triangles,users=276,12,8
     return {
         'width_m':width,'depth_m':depth,'rows':4,'nominal_columns':5,
-        'joint_width_m':joint,'joint_recess_m':.004,'substrate_z_m':[.24,.252],
-        'joint_bed_z_m':[.252,.256],'slab_z_m':[.252,.26],'top_chamfer_m':.008,'staggered_rows':[1,3],'slab_count':22,'support_components':2,
+        'joint_width_m':joint,'joint_recess_m':.004,'substrate_z_m':[.24,.256],
+        'joint_bed_z_m':[.252,.256],'joint_bed_integrated':True,'slab_z_m':[.256,.26],
+        'top_chamfer_m':.008,'staggered_rows':[1,3],'slab_count':22,'support_components':1,
         'source_triangles':source_triangles,'baseline_source_triangles':baseline_triangles,
         'linked_users':users,'expanded_triangle_delta':(source_triangles-baseline_triangles)*users,
+        'round62_reclaimed_source_triangles':188,'round62_reclaimed_expanded_triangles':1504,
         'new_objects':0,'new_mesh_datablocks':0,'new_materials':0,'new_images':0,'new_lights':0,
     }
 
 def stone_floor61_mesh():
-    """One supported substrate plus 22 closed slab boxes; joints are real voids above the substrate."""
+    """One closed support plus 22 closed chamfered slabs; joints remain real recessed gaps."""
     c=stone_floor61_contract();width=c['width_m'];depth=c['depth_m'];joint=c['joint_width_m']
     vertices=[];faces=[]
     def add_box(cx,cy,cz,sx,sy,sz):
@@ -3859,15 +3861,14 @@ def stone_floor61_mesh():
             ((0,3,2,1),(4,5,6,7),(0,1,5,4),(1,2,6,5),(2,3,7,6),(3,0,4,7)))
     def add_slab(x0,x1,y0,y1):
         base=len(vertices);inset=min(.008,(x1-x0)*.2,(y1-y0)*.2)
-        vertices.extend(((x0,y0,.252),(x1,y0,.252),(x1,y1,.252),(x0,y1,.252),
-                         (x0,y0,.258),(x1,y0,.258),(x1,y1,.258),(x0,y1,.258),
+        vertices.extend(((x0,y0,.256),(x1,y0,.256),(x1,y1,.256),(x0,y1,.256),
                          (x0+inset,y0+inset,.26),(x1-inset,y0+inset,.26),
                          (x1-inset,y1-inset,.26),(x0+inset,y1-inset,.26)))
         faces.extend(tuple(base+i for i in face) for face in
-            ((0,3,2,1),(0,1,5,4),(1,2,6,5),(2,3,7,6),(3,0,4,7),
-             (4,5,9,8),(5,6,10,9),(6,7,11,10),(7,4,8,11),(8,9,10,11)))
-    add_box(0,0,.246,width,depth,.012)
-    add_box(0,0,.254,width,depth,.004)
+            ((0,3,2,1),(0,1,5,4),(1,2,6,5),(2,3,7,6),(3,0,4,7),(4,5,6,7)))
+    # The former separate substrate and joint-bed boxes overlapped visually.
+    # One closed support ends at the same .256 m joint surface; no visible cavity changes.
+    add_box(0,0,.248,width,depth,.016)
     pitch_y=(depth+joint)/4
     y_centres=[-depth/2+i*pitch_y for i in range(1,4)]
     y_starts=[-depth/2]+[y+joint/2 for y in y_centres]
@@ -3880,9 +3881,8 @@ def stone_floor61_mesh():
         ends=[x-joint/2 for x in centres]+[width/2]
         for x0,x1 in zip(starts,ends):
             add_slab(x0,x1,y0,y1)
-    assert len(vertices)==280 and len(faces)==232
+    assert len(vertices)==184 and len(faces)==138
     return vertices,faces
-
 def refine_stone_floor54():
     """Late isolated material edit: derivative maps on eight existing linked floors."""
     mat=bpy.data.materials['JN_民居细磨青石'];nodes=mat.node_tree.nodes;links=mat.node_tree.links
