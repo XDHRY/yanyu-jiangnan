@@ -115,5 +115,30 @@
     "pbr": "existing project-authored 512px BaseColor/Normal/ORM retained",
     "lod": "shared source mesh is diagnostic/runtime LOD0; production LOD and collision pending",
     "top_chamfer_m": 0.008
+  },
+  "round62_delta": {
+    "scope": "8 existing linked residential floors; visible envelope, 18mm joints, 4mm recess, UVs and PBR unchanged",
+    "optimization": "merge the separate substrate and joint-bed boxes into one closed support; start each closed slab at the support surface so hidden lower slab walls are removed",
+    "support_components_before": 2,
+    "support_components_after": 1,
+    "source_triangles_before": 464,
+    "source_triangles_after": 276,
+    "source_triangles_reclaimed": 188,
+    "expanded_triangles_before": 3616,
+    "expanded_triangles_after": 2112,
+    "expanded_triangles_reclaimed": 1504,
+    "slab_count": 22,
+    "new_objects": 0,
+    "new_mesh_datablocks": 0,
+    "new_materials": 0,
+    "new_images": 0,
+    "new_lights": 0,
+    "pbr": "Round54 project-authored 512px BaseColor/Normal/ORM retained; UV layers regenerated",
+    "lod": "LOD0 budget reclaim only; production LOD and collision remain pending",
+    "human_gates": {
+      "function": "pending",
+      "form": "pending",
+      "runtime": "pending"
+    }
   }
 }
