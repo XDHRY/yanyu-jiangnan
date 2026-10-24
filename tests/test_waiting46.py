@@ -24,8 +24,8 @@ class Waiting46(unittest.TestCase):
             ('14_village_waterfront',(7.3,29.,2.25),(7.3,16.,1.35),40,0),
         ]
         self.assertEqual([v[:5] for v in views[:14]],expected)
-        self.assertEqual([v[0] for v in views[14:]],['15_town_overview','16_stone_floor'])
-        self.assertEqual(views[15][1:5],((.70,19.85,.95),(-1.2,19.85,.26),46,0))
+        self.assertEqual([v[0] for v in views[14:]],['15_town_overview','16_moored_sampan'])
+        self.assertEqual(views[15][1:5],((13.6,99.4,4.2),(8.3,103.4,.55),50,0))
 
 class WaitingLayout46(unittest.TestCase):
     def test_historical_totals_use_one_scoped_delta(self):

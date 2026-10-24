@@ -74,6 +74,19 @@ with open(os.path.join(WEB,'material-audit.json'),'w',encoding='utf-8') as f:
     json.dump({'source_commit':os.environ.get('GITHUB_SHA'),**material_report},f,ensure_ascii=False,indent=2)
 
 path = os.path.join(WEB, 'jiangnan-town.glb')
+# ACTIVE_ACTIONS combines actions from different objects into one generic clip.
+# Stage each authored action on its own named NLA track so glTF preserves two
+# independently addressable clips without changing the verified source scene.
+for anchor_name64 in ('JN_北河修桨作坊_工作纱灯摆动锚63','JN_北河转水埠_停泊舢板系泊锚64'):
+    anchor_export64=bpy.data.objects[anchor_name64]
+    data_export64=anchor_export64.animation_data
+    action_export64=data_export64.action
+    assert action_export64
+    while data_export64.nla_tracks:
+        data_export64.nla_tracks.remove(data_export64.nla_tracks[0])
+    track_export64=data_export64.nla_tracks.new();track_export64.name=action_export64.name
+    track_export64.strips.new(action_export64.name,int(action_export64.frame_range[0]),action_export64)
+    data_export64.action=None
 kwargs = dict(
     filepath=path,
     export_format='GLB',
@@ -82,7 +95,7 @@ kwargs = dict(
     export_lights=False,
     export_extras=True,
     export_animations=True,
-    export_animation_mode='ACTIVE_ACTIONS',
+    export_animation_mode='NLA_TRACKS',
     export_force_sampling=False,
     export_apply=True,
 )
@@ -99,15 +112,17 @@ from web_shared_streams48 import share_static_streams
 raw,sharing48=share_static_streams(raw)
 topology_report['static_stream_sharing48']=sharing48
 gltf63,_=decode(raw)
-clips63=gltf63.get('animations',[])
-assert len(clips63)==1,('expected one native animation clip',len(clips63),[a.get('name') for a in clips63])
-targets63=[]
-for channel in clips63[0]['channels']:
-    target=channel['target'];node=gltf63['nodes'][target['node']]
-    targets63.append({'node':node.get('name',''),'path':target['path']})
-assert any('工作纱灯摆动锚63' in row['node'] and row['path']=='rotation' for row in targets63),targets63
-topology_report['native_animation63']={'clips':len(clips63),'name':clips63[0].get('name',''),'targets':targets63,
-    'policy':'one existing lantern shade; zero new render triangles; transform animation only'}
+clips64=gltf63.get('animations',[])
+assert len(clips64)==2,('expected lantern and sampan native clips',len(clips64),[a.get('name') for a in clips64])
+targets64=[]
+for clip64 in clips64:
+    for channel64 in clip64['channels']:
+        target64=channel64['target'];node64=gltf63['nodes'][target64['node']]
+        targets64.append({'clip':clip64.get('name',''),'node':node64.get('name',''),'path':target64['path']})
+assert any('工作纱灯摆动锚63' in row['node'] and row['path']=='rotation' for row in targets64),targets64
+assert any('停泊舢板系泊锚64' in row['node'] and row['path']=='rotation' for row in targets64),targets64
+topology_report['native_animations64']={'clips':len(clips64),'names':[clip.get('name','') for clip in clips64],'targets':targets64,
+    'policy':'existing lantern and complete moored sampan hierarchy; zero new render triangles; transform animation only'}
 topology_report['source_commit']=os.environ.get('GITHUB_SHA')
 with open(os.path.join(WEB,'topology-audit.json'),'w',encoding='utf-8') as f:
     json.dump(topology_report,f,ensure_ascii=False,indent=2)
@@ -126,9 +141,9 @@ meta = {
     'selected_objects':len(selected),
     'glb_bytes':os.path.getsize(path),
     'presets':preset_meta,
-    'native_animation_clips':len(clips63),
-    'native_animation_targets':targets63,
-    'note':'Browser review export omits weather particles, fog cards, moon and Blender lights; geometry/materials plus one authored lantern transform clip are exported from the verified scene.'
+    'native_animation_clips':len(clips64),
+    'native_animation_targets':targets64,
+    'note':'Browser review export omits weather particles, fog cards, moon and Blender lights; geometry/materials plus independently named lantern and moored-sampan transform clips are exported from the verified scene.'
 }
 with open(os.path.join(WEB,'viewer_manifest.json'),'w',encoding='utf-8') as f:
     json.dump(meta,f,ensure_ascii=False,indent=2)

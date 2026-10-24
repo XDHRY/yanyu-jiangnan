@@ -1,0 +1,104 @@
+{
+  "id": "north-turning-quay-moored-sampan-motion64",
+  "round": 64,
+  "repository": "XDHRY/yanyu-jiangnan",
+  "source": "jiangnan.py",
+  "location": "北河转水埠",
+  "purpose": "subtle native motion on the existing moored sampan without adding render geometry",
+  "hierarchy": {
+    "pivot": "JN_北河转水埠_停泊舢板系泊锚64",
+    "pivot_world_m": [
+      7.3,
+      103.78,
+      0.45
+    ],
+    "pivot_contract": "identical to the boat-end control point of JN_北河转水埠_舢板系缆",
+    "parented_parts": 9
+  },
+  "action": {
+    "name": "JN_Action_北河转水埠_系泊舢板轻摇64",
+    "channels": [
+      "rotation_euler.x",
+      "rotation_euler.z"
+    ],
+    "frame_range": [
+      1,
+      240
+    ],
+    "fps": 24,
+    "neutral_diagnostic_frame": 80,
+    "keyframes": [
+      {
+        "frame": 1,
+        "pitch_rad": 0,
+        "yaw_rad": 0
+      },
+      {
+        "frame": 40,
+        "pitch_rad": 0.006,
+        "yaw_rad": 0.01
+      },
+      {
+        "frame": 80,
+        "pitch_rad": 0,
+        "yaw_rad": 0
+      },
+      {
+        "frame": 120,
+        "pitch_rad": -0.006,
+        "yaw_rad": -0.01
+      },
+      {
+        "frame": 160,
+        "pitch_rad": 0,
+        "yaw_rad": 0
+      },
+      {
+        "frame": 200,
+        "pitch_rad": 0.006,
+        "yaw_rad": 0.01
+      },
+      {
+        "frame": 240,
+        "pitch_rad": 0,
+        "yaw_rad": 0
+      }
+    ]
+  },
+  "constraints": {
+    "rope_endpoint_fixed": true,
+    "minimum_bridge_clearance_m": 0.24,
+    "terminal_water_containment": true,
+    "buoyancy_physics": "not simulated"
+  },
+  "budget_delta": {
+    "objects": 1,
+    "meshes": 0,
+    "source_triangles": 0,
+    "materials": 0,
+    "images": 0,
+    "estimated_texture_vram_bytes": 0
+  },
+  "export": {
+    "format": "glTF/GLB",
+    "expected_total_native_clips": 2,
+    "expected_rotation_target_contains": "停泊舢板系泊锚64"
+  },
+  "provenance": {
+    "asset_reuse": "existing repo-authored sampan, shared rails/seats/ribs and aboard oar",
+    "external_sources": [],
+    "license": "repository project license"
+  },
+  "quality_gates": {
+    "automated": [
+      "hierarchy and keyframes",
+      "rope pivot identity",
+      "extreme-frame water containment",
+      "bridge clearance",
+      "GLB clip/target",
+      "lossless animation fingerprints",
+      "offline visible motion and pause"
+    ],
+    "human_function_form_runtime": "pending"
+  }
+}

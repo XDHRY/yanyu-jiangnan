@@ -15,13 +15,13 @@ const {chromium}=require('playwright');
   const source=await page.evaluate(()=>({meta:window.JN_LIVE_MODEL_META,badge:document.getElementById('liveSourceBadge')?.textContent}));
   if(!source.meta||!source.badge.includes(source.meta.source.slice(0,10))||!source.badge.includes(String(source.meta.web_run)))throw Error('visible model source does not match verified provenance');
   if(!s.water_meshes.length||s.areas.length<15)throw Error('missing real water/whole-town navigation');
-  if(s.model_animation_clips!==1||!s.native_animation_target?.includes('工作纱灯摆动锚63'))throw Error('missing native lantern animation evidence');
+  if(s.model_animation_clips!==2||!s.native_animation_target?.includes('工作纱灯摆动锚63')||!s.native_sampan_target?.includes('停泊舢板系泊锚64'))throw Error('missing native lantern or sampan animation evidence');
   await page.locator('#livePanel').evaluate(e=>e.open=true);
   await page.screenshot({path:path.join(out,'desktop-rain-a.png')});
-  const t=s.time,angle=s.lantern_angle;await page.waitForFunction(({t,angle})=>{const q=JIANGNAN_LIVE.snapshot();return q.time>t+.7&&Math.abs(q.lantern_angle-angle)>.004;},{t,angle},{timeout:60000});
+  const t=s.time,angle=s.lantern_angle,pitch=s.sampan_pitch,yaw=s.sampan_yaw;await page.waitForFunction(({t,angle,pitch,yaw})=>{const q=JIANGNAN_LIVE.snapshot();return q.time>t+.7&&Math.abs(q.lantern_angle-angle)>.004&&Math.abs(q.sampan_pitch-pitch)>.0005&&Math.abs(q.sampan_yaw-yaw)>.0008;},{t,angle,pitch,yaw},{timeout:60000});
   await page.screenshot({path:path.join(out,'desktop-rain-b.png')});
   await page.locator('#livePause').click();const frozen=await page.evaluate(()=>JIANGNAN_LIVE.snapshot());
-  await page.waitForTimeout(600);{const paused=await page.evaluate(()=>JIANGNAN_LIVE.snapshot());if(paused.time!==frozen.time||paused.lantern_angle!==frozen.lantern_angle)throw Error('pause did not freeze runtime and lantern animation');}
+  await page.waitForTimeout(600);{const paused=await page.evaluate(()=>JIANGNAN_LIVE.snapshot());if(paused.time!==frozen.time||paused.lantern_angle!==frozen.lantern_angle||paused.sampan_pitch!==frozen.sampan_pitch||paused.sampan_yaw!==frozen.sampan_yaw)throw Error('pause did not freeze runtime, lantern and sampan animation');}
   await page.screenshot({path:path.join(out,'desktop-paused.png')});
   await page.locator('#liveSnow').click();await page.locator('#livePause').click();await page.locator('#liveDay').click();
   await page.waitForFunction(()=>JIANGNAN_LIVE.snapshot().weather==='snow'&&JIANGNAN_LIVE.snapshot().night);

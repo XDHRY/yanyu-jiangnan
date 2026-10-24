@@ -15,7 +15,7 @@ const panel=document.createElement('details');panel.id='livePanel';panel.classNa
 <div class="row"><button id="liveRain" class="active">雨</button><button id="liveSnow">雪</button><button id="liveClear">晴</button></div>
 <select id="liveAreas" aria-label="跳转建模区域"><option value="">跳转到已建区域…</option></select>
 <p>单指旋转、双指缩放/平移。原有工具、机位均可折叠；沉浸模式隐藏全部面板。</p>
-<p>本版新增 1 个 GLB 原生工作纱灯轻摆 clip，并在离线审阅器中同步播放；另有实时水面法线波、局部雨雪、昼夜预览。不是流体/积雪模拟；没有人物或船只行走动画。网页光照不等于 Blender。</p>`;
+<p>本版新增 2 个 GLB 原生 clip（工作纱灯轻摆、系泊舢板轻摇），并在离线审阅器中同步播放；另有实时水面法线波、局部雨雪、昼夜预览。不是流体/积雪模拟；没有人物或船只行走动画。网页光照不等于 Blender。</p>`;
 document.body.appendChild(panel);
 const meta=window.JN_LIVE_MODEL_META;
 if(!meta||!/^[a-f0-9]{40}$/.test(meta.source))throw Error('Missing verified model source');
@@ -27,7 +27,7 @@ function closeOtherPanels(keep){
 }
 panel.addEventListener('toggle',()=>{if(panel.open&&matchMedia('(max-width:760px)').matches)closeOtherPanels('livePanel');});
 for(const [id,button] of [['topPanel','topToggle'],['scenePanel','sceneToggle'],['helpPanel','helpToggle']])document.getElementById(button).addEventListener('click',()=>{if(matchMedia('(max-width:760px)').matches){panel.open=false;closeOtherPanels(id);}});
-const $=s=>document.querySelector(s),S={ready:false,playing:true,time:0,weather:'rain',night:false,water:[],areas:[],tour:false,tourClock:0,tourIndex:0,frames:0,lantern:null,lanternBaseX:0};
+const $=s=>document.querySelector(s),S={ready:false,playing:true,time:0,weather:'rain',night:false,water:[],areas:[],tour:false,tourClock:0,tourIndex:0,frames:0,lantern:null,lanternBaseX:0,sampan:null,sampanBaseX:0,sampanBaseZ:0};
 let last=performance.now(),rain,snow;
 const N=700,positions=new Float32Array(N*6),flakes=new Float32Array(N*3),seed=new Float32Array(N*3);
 let rng=5391;function random(){rng=(Math.imul(rng,1664525)+1013904223)>>>0;return rng/4294967296;}
@@ -35,8 +35,8 @@ for(let i=0;i<N;i++){seed[i*3]=(random()-.5)*34;seed[i*3+1]=random()*22;seed[i*3
 const waterUniform={value:0};
 function attach(){
  const root=E.root();if(!root)return false;
- root.traverse(o=>{if(o.name.includes('工作纱灯摆动锚63')){S.lantern=o;S.lanternBaseX=o.rotation.x;}});
- if(!S.lantern)throw Error('Missing native lantern animation target');
+ root.traverse(o=>{if(o.name.includes('工作纱灯摆动锚63')){S.lantern=o;S.lanternBaseX=o.rotation.x;}if(o.name.includes('停泊舢板系泊锚64')){S.sampan=o;S.sampanBaseX=o.rotation.x;S.sampanBaseZ=o.rotation.z;}});
+ if(!S.lantern||!S.sampan)throw Error('Missing native lantern or sampan animation target');
  root.traverse(o=>{
   if(!o.isMesh)return;
   const mats=Array.isArray(o.material)?o.material:[o.material];
@@ -76,7 +76,7 @@ $('#liveDay').onclick=()=>{S.night=!S.night;$('#liveDay').textContent=S.night?'�
 $('#liveTour').onclick=()=>{S.tour=!S.tour;S.tourClock=0;$('#liveTour').classList.toggle('active',S.tour);if(S.tour){S.tourIndex=0;goArea(0);}};
 function frame(now){requestAnimationFrame(frame);const dt=Math.min(.05,(now-last)/1000);last=now;
  if(!S.ready){attach();return;}
- if(S.playing){S.time+=dt;waterUniform.value=S.time;S.lantern.rotation.x=S.lanternBaseX+Math.sin(S.time*Math.PI*.3)*.045;}
+ if(S.playing){S.time+=dt;waterUniform.value=S.time;S.lantern.rotation.x=S.lanternBaseX+Math.sin(S.time*Math.PI*.3)*.045;S.sampan.rotation.x=S.sampanBaseX+Math.sin(S.time*Math.PI*.3)*.006;S.sampan.rotation.z=S.sampanBaseZ+Math.sin(S.time*Math.PI*.3)*.010;}
  const show=E.root().visible;rain.visible=show&&S.weather==='rain';snow.visible=show&&S.weather==='snow';
  if(S.tour&&S.playing){S.tourClock+=dt;if(S.tourClock>=7){S.tourClock=0;goArea(++S.tourIndex%S.areas.length);}}
  const cam=E.camera(),cx=cam.position.x,cz=cam.position.z;
@@ -89,7 +89,7 @@ function frame(now){requestAnimationFrame(frame);const dt=Math.min(.05,(now-last
  }
  rain.geometry.attributes.position.needsUpdate=true;snow.geometry.attributes.position.needsUpdate=true;S.frames++;
 }
-window.JIANGNAN_LIVE={setWeather:weather,goArea,snapshot:()=>({ready:S.ready,playing:S.playing,time:S.time,weather:S.weather,night:S.night,frames:S.frames,water_meshes:S.water,areas:S.areas.map(a=>({label:a.label,tag:a.tag,mesh_count:a.count})),rain_segments:N,snow_points:N,additional_draw_calls:1,model_animation_clips:1,native_animation_target:S.lantern?.name||null,lantern_angle:S.lantern?.rotation.x??null,scope:'one native GLB lantern clip mirrored on its exported target; viewer-side normal waves, camera-local precipitation and daylight controls; no fluid, accumulation, roof collision, character or boat animation'})};
+window.JIANGNAN_LIVE={setWeather:weather,goArea,snapshot:()=>({ready:S.ready,playing:S.playing,time:S.time,weather:S.weather,night:S.night,frames:S.frames,water_meshes:S.water,areas:S.areas.map(a=>({label:a.label,tag:a.tag,mesh_count:a.count})),rain_segments:N,snow_points:N,additional_draw_calls:1,model_animation_clips:2,native_animation_target:S.lantern?.name||null,native_sampan_target:S.sampan?.name||null,lantern_angle:S.lantern?.rotation.x??null,sampan_pitch:S.sampan?.rotation.x??null,sampan_yaw:S.sampan?.rotation.z??null,scope:'two native GLB clips mirrored on exported lantern and moored-sampan targets; viewer-side normal waves, camera-local precipitation and daylight controls; no fluid, accumulation, roof collision, character or boat animation'})};
 requestAnimationFrame(frame);
 })();
 
