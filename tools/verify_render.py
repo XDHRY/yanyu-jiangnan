@@ -1242,7 +1242,10 @@ assert S['JN_scholar_stone_boolean_solver']=='MANIFOLD'
 
 # Quay boat gear: the sampan must remain in the terminal water south of the
 # bridge; the open lending rack has grounded load paths, and all repeated close
-# props must actually share their mesh datablocks.
+# props must actually share their mesh datablocks. Static construction contacts
+# are evaluated at the locked neutral review frame; the motion block below still
+# samples every positive/negative excursion independently.
+S.frame_set(80);bpy.context.view_layer.update()
 sampan=bpy.data.objects['JN_北河转水埠_停泊舢板船壳'];sampan_bounds=world_bounds(sampan)
 assert sampan_bounds[0][0]>=turning_water[0][0] and sampan_bounds[1][0]<=turning_water[1][0]
 assert sampan_bounds[0][1]>=turning_water[0][1] and sampan_bounds[1][1]<=turning_water[1][1]
