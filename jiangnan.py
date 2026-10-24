@@ -2429,8 +2429,37 @@ def town_phase11_west_oar_workshop():
         line(f'北河丝行_悬绢包边_{i}',[(16.32,y-.15,1.08),(16.32,y-.15,2.08),(16.32,y+.15,2.08),(16.32,y+.15,1.08)],.009,mat,c,res=1,bevel_res=1)
         box(f'北河丝行_悬绢坠边_{i}',(16.32,y,1.08),(.025,.32,.035),mat,c,.002)
     line('北河丝行_招幌挑杆',[(13.55,70.88,2.45),(12.72,70.88,2.45),(12.72,70.88,2.28)],.022,wood,c,res=2,bevel_res=1)
-    box('北河丝行_木质招幌牌',(12.72,70.88,1.88),(.09,.58,.70),wood,c,.012)
+    sign65=box('北河丝行_木质招幌牌',(12.72,70.88,1.88),(.09,.58,.70),wood,c,.012)
     for y in (70.66,71.10):line('北河丝行_招幌流苏',[(12.72,y,1.53),(12.72,y,1.28)],.012,bpy.data.materials[PREFIX+'丝行绛红绢'],c,res=1,bevel_res=1)
+    # Round65: pivot the existing signboard and its two tassels at the existing
+    # bracket endpoint.  This adds no render geometry; the full assembly keeps
+    # its authored support and moves as one restrained wind-loaded unit.
+    anchor65=bpy.data.objects.new(PREFIX+'北河丝行_木质招幌摆动锚65',None);c.objects.link(anchor65)
+    anchor65.empty_display_type='ARROWS';anchor65.empty_display_size=.14
+    anchor65.location=(12.72,70.88,2.28);anchor65.rotation_mode='XYZ'
+    tassels65=sorted([o for o in c.objects if o.name.startswith(PREFIX+'北河丝行_招幌流苏')],key=lambda o:o.name)
+    sign_parts65=[sign65,*tassels65]
+    assert len(tassels65)==2
+    bpy.context.view_layer.update()
+    for part65 in sign_parts65:
+        world65=part65.matrix_world.copy();local65=anchor65.matrix_world.inverted() @ world65
+        part65.parent=anchor65;part65.matrix_parent_inverse.identity();part65.matrix_basis=local65
+        bpy.context.view_layer.update()
+        assert (part65.matrix_world.translation-world65.translation).length<1e-5,part65.name
+    action65=bpy.data.actions.new(PREFIX+'Action_北河丝行_木质招幌轻摆65')
+    anchor65.animation_data_create();anchor65.animation_data.action=action65
+    for frame65,angle65 in ((1,0),(40,.025),(80,0),(120,-.025),(160,0),(200,.025),(240,0)):
+        anchor65.rotation_euler[1]=angle65
+        anchor65.keyframe_insert(data_path='rotation_euler',index=1,frame=frame65,group='silk_shop_sign65')
+    for curve65 in action65.fcurves:
+        for key65 in curve65.keyframe_points:key65.interpolation='BEZIER'
+    anchor65.rotation_euler[1]=0
+    anchor65['JN_function']='existing_silk_shop_sign_sway_at_bracket_endpoint'
+    anchor65['JN_motion65']='rotation_y_0.025rad_neutral_frame80'
+    S['JN_silk_sign_motion65']=json.dumps({'pivot':[12.72,70.88,2.28],
+        'parts':[o.name for o in sign_parts65],'frames':[1,40,80,120,160,200,240],
+        'rotation_y_rad':[0,.025,0,-.025,0,.025,0],'source_triangles_added':0,
+        'new_materials_images':0,'human_function_form_runtime_approval':'pending'},ensure_ascii=False)
     line('北河丝行_账房灯悬绳',[(19.45,70.40,2.62),(19.45,70.40,2.30)],.010,wood,c,res=1,bevel_res=1)
     uv('北河丝行_账房纱灯',(19.45,70.40,2.12),(.11,.11,.17),M['paper'],c,12,8)
     light('北河丝行_账房灯火',(19.45,70.40,2.10),(1,.43,.18),44,.18,kind='POINT')

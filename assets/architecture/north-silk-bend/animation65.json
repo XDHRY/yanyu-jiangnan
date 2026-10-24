@@ -1,0 +1,46 @@
+{
+  "id": "north-silk-shop-hanging-sign-motion65",
+  "round": 65,
+  "source": "repo-authored existing north silk shop sign assembly",
+  "purpose": "subtle native wind sway on the existing hanging shop sign without adding render geometry",
+  "scale_units": "metres",
+  "pivot": {
+    "name": "JN_北河丝行_木质招幌摆动锚65",
+    "location_m": [12.72, 70.88, 2.28],
+    "support": "existing bracket endpoint"
+  },
+  "action": {
+    "name": "JN_Action_北河丝行_木质招幌轻摆65",
+    "channel": "rotation_euler.y",
+    "frames": [1, 40, 80, 120, 160, 200, 240],
+    "values_rad": [0, 0.025, 0, -0.025, 0, 0.025, 0],
+    "fps": 24,
+    "neutral_diagnostic_frame": 80
+  },
+  "existing_parts": [
+    "JN_北河丝行_木质招幌牌",
+    "JN_北河丝行_招幌流苏",
+    "JN_北河丝行_招幌流苏.001"
+  ],
+  "budget": {
+    "new_objects": 1,
+    "new_empties": 1,
+    "new_actions": 1,
+    "new_meshes": 0,
+    "new_source_triangles": 0,
+    "new_materials": 0,
+    "new_images": 0,
+    "new_lights": 0
+  },
+  "checks": [
+    "three existing parts share one pivot",
+    "parenting preserves world transforms within 0.00001 m",
+    "pivot equals existing bracket endpoint",
+    "full-swing world bounds remain inside the declared facade-side envelope",
+    "GLB exports an independent named rotation clip",
+    "offline pause freezes sign rotation together with all existing motion"
+  ],
+  "physics_claim": "authored transform animation only; no cloth, wind or rigid-body simulation",
+  "human_function_form_runtime_approval": "pending",
+  "license": "repository-authored source; no external asset"
+}
