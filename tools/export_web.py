@@ -75,9 +75,9 @@ with open(os.path.join(WEB,'material-audit.json'),'w',encoding='utf-8') as f:
 
 path = os.path.join(WEB, 'jiangnan-town.glb')
 # ACTIVE_ACTIONS combines actions from different objects into one generic clip.
-# Stage each authored action on its own named NLA track so glTF preserves two
+# Stage each authored action on its own named NLA track so glTF preserves three
 # independently addressable clips without changing the verified source scene.
-for anchor_name64 in ('JN_北河修桨作坊_工作纱灯摆动锚63','JN_北河转水埠_停泊舢板系泊锚64'):
+for anchor_name64 in ('JN_北河修桨作坊_工作纱灯摆动锚63','JN_北河转水埠_停泊舢板系泊锚64','JN_北河丝行_木质招幌摆动锚65'):
     anchor_export64=bpy.data.objects[anchor_name64]
     data_export64=anchor_export64.animation_data
     action_export64=data_export64.action
@@ -113,7 +113,7 @@ raw,sharing48=share_static_streams(raw)
 topology_report['static_stream_sharing48']=sharing48
 gltf63,_=decode(raw)
 clips64=gltf63.get('animations',[])
-assert len(clips64)==2,('expected lantern and sampan native clips',len(clips64),[a.get('name') for a in clips64])
+assert len(clips64)==3,('expected lantern, sampan and silk-shop sign native clips',len(clips64),[a.get('name') for a in clips64])
 targets64=[]
 for clip64 in clips64:
     for channel64 in clip64['channels']:
@@ -121,8 +121,9 @@ for clip64 in clips64:
         targets64.append({'clip':clip64.get('name',''),'node':node64.get('name',''),'path':target64['path']})
 assert any('工作纱灯摆动锚63' in row['node'] and row['path']=='rotation' for row in targets64),targets64
 assert any('停泊舢板系泊锚64' in row['node'] and row['path']=='rotation' for row in targets64),targets64
-topology_report['native_animations64']={'clips':len(clips64),'names':[clip.get('name','') for clip in clips64],'targets':targets64,
-    'policy':'existing lantern and complete moored sampan hierarchy; zero new render triangles; transform animation only'}
+assert any('木质招幌摆动锚65' in row['node'] and row['path']=='rotation' for row in targets64),targets64
+topology_report['native_animations65']={'clips':len(clips64),'names':[clip.get('name','') for clip in clips64],'targets':targets64,
+    'policy':'existing lantern, complete moored sampan hierarchy and three-part silk-shop sign; zero new render triangles; transform animation only'}
 topology_report['source_commit']=os.environ.get('GITHUB_SHA')
 with open(os.path.join(WEB,'topology-audit.json'),'w',encoding='utf-8') as f:
     json.dump(topology_report,f,ensure_ascii=False,indent=2)
@@ -143,7 +144,7 @@ meta = {
     'presets':preset_meta,
     'native_animation_clips':len(clips64),
     'native_animation_targets':targets64,
-    'note':'Browser review export omits weather particles, fog cards, moon and Blender lights; geometry/materials plus independently named lantern and moored-sampan transform clips are exported from the verified scene.'
+    'note':'Browser review export omits weather particles, fog cards, moon and Blender lights; geometry/materials plus independently named lantern, moored-sampan and silk-shop-sign transform clips are exported from the verified scene.'
 }
 with open(os.path.join(WEB,'viewer_manifest.json'),'w',encoding='utf-8') as f:
     json.dump(meta,f,ensure_ascii=False,indent=2)
