@@ -2399,8 +2399,26 @@ def town_phase11_west_oar_workshop():
 
     # A single task lantern and a low guide lamp preserve the moonlit hierarchy.
     line('北河修桨作坊_工作灯挑杆',[(-3.35,74.60,2.96),(-3.35,73.38,2.96),(-3.35,73.38,2.48)],.020,wood,c,res=2,bevel_res=1)
-    uv('北河修桨作坊_工作纱灯',(-3.35,73.38,2.27),(.12,.12,.18),M['paper'],c,12,8)
+    shade63=uv('北河修桨作坊_工作纱灯',(-3.35,73.38,2.27),(.12,.12,.18),M['paper'],c,12,8)
     light('北河修桨作坊_工作灯火',(-3.35,73.38,2.24),(1,.45,.20),76,.24,kind='POINT')
+    # Round63: one zero-triangle suspension pivot gives the existing shade a
+    # six-second, low-amplitude native transform animation.  Frame80 is neutral
+    # so all fixed diagnostic renders remain directly comparable with Round62.
+    anchor63=bpy.data.objects.new(PREFIX+'北河修桨作坊_工作纱灯摆动锚63',None);c.objects.link(anchor63)
+    anchor63.location=(-3.35,73.38,2.48);anchor63.rotation_mode='XYZ'
+    bpy.context.view_layer.update();shade63_world=shade63.matrix_world.copy()
+    shade63.parent=anchor63;shade63.matrix_world=shade63_world
+    for frame,angle in ((1,0),(40,.045),(80,0),(120,-.045),(160,0),(200,.045),(240,0)):
+        anchor63.rotation_euler[0]=angle;anchor63.keyframe_insert(data_path='rotation_euler',index=0,frame=frame,group='LanternSwing63')
+    action63=anchor63.animation_data.action;action63.name=PREFIX+'Action_北河修桨作坊_工作纱灯轻摆63'
+    for fcurve in action63.fcurves:
+        for point in fcurve.keyframe_points:point.interpolation='BEZIER'
+    anchor63.rotation_euler[0]=0
+    anchor63['JN_native_animation63']='existing_work_lantern_swing'
+    anchor63['JN_pivot_height_m']=2.48;anchor63['JN_peak_angle_rad']=.045;anchor63['JN_period_frames']=160
+    S['JN_native_animation63']=json.dumps({'clip':action63.name,'target':anchor63.name,'child':shade63.name,
+        'frames':[1,40,80,120,160,200,240],'angles_rad':[0,.045,0,-.045,0,.045,0],
+        'fps':24,'new_triangles':0,'new_images':0,'new_materials':0,'human_runtime_approval':'pending'},ensure_ascii=False)
     line('北河修桨作坊_引路灯柱',[(1.95,71.45,.12),(1.95,71.45,.86)],.035,wood,c,res=1,bevel_res=1)
     uv('北河修桨作坊_引路纱灯',(1.95,71.45,1.00),(.10,.10,.14),M['paper'],c,10,6)
     light('北河修桨作坊_引路灯火',(1.95,71.45,.98),(1,.40,.17),36,.18,kind='POINT')
