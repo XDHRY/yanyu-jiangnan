@@ -81,14 +81,16 @@ kwargs = dict(
     export_cameras=True,
     export_lights=False,
     export_extras=True,
-    export_animations=False,
+    export_animations=True,
+    export_animation_mode='ACTIVE_ACTIONS',
+    export_force_sampling=False,
     export_apply=True,
 )
 bpy.ops.export_scene.gltf(**kwargs)
 from web_material_factors import apply_factors
 with open(path,'rb') as f:raw=f.read()
 raw,factor_materials=apply_factors(raw,material_report['materials'])
-from web_topology import remove_coincident_triangles
+from web_topology import remove_coincident_triangles, decode
 raw,topology_report=remove_coincident_triangles(raw)
 from web_shared_streams45 import share_workshop_streams
 raw,sharing_report=share_workshop_streams(raw)
@@ -96,6 +98,16 @@ topology_report['scoped_stream_sharing45']=sharing_report
 from web_shared_streams48 import share_static_streams
 raw,sharing48=share_static_streams(raw)
 topology_report['static_stream_sharing48']=sharing48
+gltf63,_=decode(raw)
+clips63=gltf63.get('animations',[])
+assert len(clips63)==1,('expected one native animation clip',len(clips63),[a.get('name') for a in clips63])
+targets63=[]
+for channel in clips63[0]['channels']:
+    target=channel['target'];node=gltf63['nodes'][target['node']]
+    targets63.append({'node':node.get('name',''),'path':target['path']})
+assert any('工作纱灯摆动锚63' in row['node'] and row['path']=='rotation' for row in targets63),targets63
+topology_report['native_animation63']={'clips':len(clips63),'name':clips63[0].get('name',''),'targets':targets63,
+    'policy':'one existing lantern shade; zero new render triangles; transform animation only'}
 topology_report['source_commit']=os.environ.get('GITHUB_SHA')
 with open(os.path.join(WEB,'topology-audit.json'),'w',encoding='utf-8') as f:
     json.dump(topology_report,f,ensure_ascii=False,indent=2)
@@ -114,7 +126,9 @@ meta = {
     'selected_objects':len(selected),
     'glb_bytes':os.path.getsize(path),
     'presets':preset_meta,
-    'note':'Browser review export omits weather particles, fog cards, moon and Blender lights; geometry/materials are exported from the verified scene.'
+    'native_animation_clips':len(clips63),
+    'native_animation_targets':targets63,
+    'note':'Browser review export omits weather particles, fog cards, moon and Blender lights; geometry/materials plus one authored lantern transform clip are exported from the verified scene.'
 }
 with open(os.path.join(WEB,'viewer_manifest.json'),'w',encoding='utf-8') as f:
     json.dump(meta,f,ensure_ascii=False,indent=2)

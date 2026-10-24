@@ -2,7 +2,7 @@
 import copy,struct,sys,unittest
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
-from web_shared_streams48 import share_static_streams,semantic_fingerprint
+from web_shared_streams48 import share_static_streams,semantic_fingerprint,animation_fingerprint
 from web_topology import decode,encode
 
 def fixture():
@@ -51,9 +51,18 @@ class GlobalStreams48(unittest.TestCase):
         out,_=share_static_streams(encode(g,b));n,_=decode(out)
         self.assertNotEqual(n['meshes'][0]['primitives'][0]['attributes']['TEXCOORD_0'],n['meshes'][1]['primitives'][0]['attributes']['TEXCOORD_0'])
     def test_unknown_top_consumers_rejected(self):
-        for field in ['animations','skins','extensions']:
+        for field in ['skins','extensions']:
             g,b=decode(fixture());g[field]=[]
             with self.assertRaises(AssertionError):share_static_streams(encode(g,b))
+    def test_animation_accessors_and_payload_survive_remap(self):
+        g,b=decode(fixture())
+        g['animations']=[{'name':'lantern','samplers':[{'input':0,'output':1,'interpolation':'LINEAR'}],
+            'channels':[{'sampler':0,'target':{'node':0,'path':'rotation'}}]}]
+        before=animation_fingerprint(g,b)
+        out,r=share_static_streams(encode(g,b));n,nb=decode(out)
+        self.assertEqual(before,animation_fingerprint(n,nb))
+        self.assertEqual(r['animation_clips_preserved'],1)
+        self.assertEqual(r['animation_fingerprint_before'],r['animation_fingerprint_after'])
     def test_sparse_and_extension_consumers_rejected(self):
         for field in ['sparse','extensions']:
             g,b=decode(fixture());g['accessors'][0][field]={'unsafe':1}

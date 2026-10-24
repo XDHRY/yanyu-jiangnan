@@ -10,7 +10,7 @@ from web_topology import decode, encode
 
 TOP = {'asset','extensionsUsed','extensionsRequired','scene','scenes','nodes',
        'cameras','materials','meshes','textures','images','accessors',
-       'bufferViews','samplers','buffers'}
+       'bufferViews','samplers','buffers','animations'}
 MATERIAL_EXTENSIONS = {'KHR_materials_clearcoat','KHR_materials_transmission',
     'KHR_materials_emissive_strength','KHR_materials_specular','KHR_materials_ior',
     'KHR_materials_unlit'}
@@ -31,6 +31,24 @@ def semantic_fingerprint(g, binary):
                     hashlib.sha256(binary[s:s+v['byteLength']]).hexdigest()]);count+=1
             rows.append([mi,pi,{k:x for k,x in p.items() if k not in ('attributes','indices')},streams])
     return hashlib.sha256(json.dumps(rows,sort_keys=True,separators=(',',':')).encode()).hexdigest(),count
+
+
+def animation_fingerprint(g,binary):
+    rows=[]
+    for animation in g.get('animations',[]):
+        samplers=[]
+        for sampler in animation.get('samplers',[]):
+            streams=[]
+            for label,ai in (('input',sampler['input']),('output',sampler['output'])):
+                a=g['accessors'][ai];v=g['bufferViews'][a['bufferView']];s=v.get('byteOffset',0)
+                streams.append([label,{k:x for k,x in a.items() if k!='bufferView'},
+                    {k:x for k,x in v.items() if k!='byteOffset'},
+                    hashlib.sha256(binary[s:s+v['byteLength']]).hexdigest()])
+            samplers.append([sampler.get('interpolation','LINEAR'),streams])
+        channels=[[ch['sampler'],g['nodes'][ch['target']['node']].get('name',''),ch['target']['path']]
+                  for ch in animation.get('channels',[])]
+        rows.append([animation.get('name',''),samplers,channels])
+    return hashlib.sha256(json.dumps(rows,sort_keys=True,separators=(',',':')).encode()).hexdigest(),len(rows)
 
 
 def _validate(g, binary):
@@ -77,6 +95,15 @@ def _validate(g, binary):
     for im in g.get('images',[]):
         assert not im.get('extensions') and 'uri' not in im and 'bufferView' in im, 'packed image required'
         assert 0<=im['bufferView']<len(g['bufferViews'])
+    for animation in g.get('animations',[]):
+        assert not animation.get('extensions') and animation.get('samplers') and animation.get('channels')
+        for sampler in animation['samplers']:
+            assert 0<=sampler['input']<len(g['accessors']) and 0<=sampler['output']<len(g['accessors'])
+            assert sampler.get('interpolation','LINEAR') in {'LINEAR','STEP','CUBICSPLINE'}
+        for channel in animation['channels']:
+            assert 0<=channel['sampler']<len(animation['samplers'])
+            target=channel['target']
+            assert 0<=target['node']<len(g['nodes']) and target['path'] in {'rotation','translation','scale'}
 
 
 def share_static_streams(data):
@@ -101,11 +128,15 @@ def share_static_streams(data):
             p['attributes']={s:shared(ai,s,mi,pi) for s,ai in p['attributes'].items()}
             p['indices']=shared(p['indices'],'INDICES',mi,pi)
     used={i for m in g['meshes'] for p in m['primitives'] for i in [*p['attributes'].values(),p['indices']]}
+    used.update(i for a in g.get('animations',[]) for s in a['samplers'] for i in (s['input'],s['output']))
     dropped=candidates-used
     amap={i:j for j,i in enumerate(i for i in range(len(old['accessors'])) if i not in dropped)}
     for m in g['meshes']:
         for p in m['primitives']:
             p['attributes']={s:amap[i] for s,i in p['attributes'].items()};p['indices']=amap[p['indices']]
+    for animation in g.get('animations',[]):
+        for sampler in animation['samplers']:
+            sampler['input']=amap[sampler['input']];sampler['output']=amap[sampler['output']]
     g['accessors']=[a for i,a in enumerate(g['accessors']) if i not in dropped]
     candidate_views={old['accessors'][i]['bufferView'] for i in dropped}
     retained_views={a['bufferView'] for a in g['accessors']}|{im['bufferView'] for im in g.get('images',[])}
@@ -121,7 +152,10 @@ def share_static_streams(data):
     result=encode(g,bytes(out));_validate(g,bytes(out)+b'\0'*((-len(out))%4))
     original_fingerprint,consumers=semantic_fingerprint(old,binary)
     final_fingerprint,count=semantic_fingerprint(g,bytes(out))
+    original_animation_fingerprint,animation_count=animation_fingerprint(old,binary)
+    final_animation_fingerprint,final_animation_count=animation_fingerprint(g,bytes(out))
     assert original_fingerprint==final_fingerprint and consumers==count
+    assert original_animation_fingerprint==final_animation_fingerprint and animation_count==final_animation_count
     for i,j in vmap.items():
         v=g['bufferViews'][j]
         assert out[v['byteOffset']:v['byteOffset']+v['byteLength']]==payload(i)
@@ -138,7 +172,7 @@ def share_static_streams(data):
                 ov=old['bufferViews'][aa['bufferView']];nv=g['bufferViews'][bb['bufferView']]
                 assert {k:v for k,v in ov.items() if k!='byteOffset'}=={k:v for k,v in nv.items() if k!='byteOffset'}
                 assert payload(aa['bufferView'])==out[nv['byteOffset']:nv['byteOffset']+nv['byteLength']]
-    for k in TOP-{'accessors','bufferViews','buffers','meshes','images'}:assert old.get(k)==g.get(k),k
+    for k in TOP-{'accessors','bufferViews','buffers','meshes','images','animations'}:assert old.get(k)==g.get(k),k
     for a,b in zip(old.get('images',[]),g.get('images',[])):
         assert {k:v for k,v in a.items() if k!='bufferView'}=={k:v for k,v in b.items() if k!='bufferView'}
         v=g['bufferViews'][b['bufferView']];assert payload(a['bufferView'])==out[v['byteOffset']:v['byteOffset']+v['byteLength']]
@@ -148,7 +182,8 @@ def share_static_streams(data):
         'removed_accessors':len(dropped),'removed_buffer_views':len(dropped_views),
         'retained_view_payloads':len(vmap),'all_primitive_streams_metadata_bit_identical':True,
         'primitive_stream_consumers':consumers,'semantic_fingerprint_before':original_fingerprint,
-        'semantic_fingerprint_after':final_fingerprint,
+        'semantic_fingerprint_after':final_fingerprint,'animation_clips_preserved':animation_count,
+        'animation_fingerprint_before':original_animation_fingerprint,'animation_fingerprint_after':final_animation_fingerprint,
         'nodes_mesh_count_materials_cameras_images_preserved':True,'bytes_before':len(data),'bytes_after':len(result),
         'binary_bytes_saved':len(binary)-(len(out)+(-len(out))%4),
         'source_sha256':hashlib.sha256(data).hexdigest(),'result_sha256':hashlib.sha256(result).hexdigest()}

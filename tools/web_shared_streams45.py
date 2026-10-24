@@ -18,7 +18,7 @@ def share_workshop_streams(data):
     assert set(g) <= {'asset', 'extensionsUsed', 'extensionsRequired', 'scene',
                       'scenes', 'nodes', 'cameras', 'materials', 'meshes',
                       'textures', 'images', 'accessors', 'bufferViews',
-                      'samplers', 'buffers'}, 'unknown accessor consumer'
+                      'samplers', 'buffers', 'animations'}, 'unknown accessor consumer'
     assert len(g['buffers']) == 1 and 'uri' not in g['buffers'][0]
     assert not any(n.get('extensions') or 'skin' in n for n in g['nodes'])
     for mesh in g['meshes']:
@@ -32,6 +32,14 @@ def share_workshop_streams(data):
         assert v.get('byteOffset', 0) + v['byteLength'] <= len(binary)
     for image in g.get('images', []):
         assert not image.get('extensions')
+    for animation in g.get('animations', []):
+        assert not animation.get('extensions')
+        for sampler in animation.get('samplers', []):
+            assert 0<=sampler['input']<len(g['accessors']) and 0<=sampler['output']<len(g['accessors'])
+        for channel in animation.get('channels', []):
+            target=channel['target']
+            assert 0<=channel['sampler']<len(animation['samplers'])
+            assert 0<=target['node']<len(g['nodes']) and target['path'] in {'rotation','translation','scale'}
 
     def payload(i):
         v = old['bufferViews'][i]
@@ -72,6 +80,9 @@ def share_workshop_streams(data):
             used.update(p['attributes'].values())
             if 'indices' in p:
                 used.add(p['indices'])
+    for animation in g.get('animations', []):
+        for sampler in animation.get('samplers', []):
+            used.update((sampler['input'],sampler['output']))
     dropped = candidates - used
     amap = {i: j for j, i in enumerate(i for i in range(len(g['accessors']))
                                      if i not in dropped)}
@@ -80,6 +91,9 @@ def share_workshop_streams(data):
             p['attributes'] = {k: amap[v] for k, v in p['attributes'].items()}
             if 'indices' in p:
                 p['indices'] = amap[p['indices']]
+    for animation in g.get('animations', []):
+        for sampler in animation.get('samplers', []):
+            sampler['input']=amap[sampler['input']];sampler['output']=amap[sampler['output']]
     g['accessors'] = [a for i, a in enumerate(g['accessors']) if i not in dropped]
     candidate_views = {old['accessors'][i]['bufferView'] for i in dropped}
     used_views = {a['bufferView'] for a in g['accessors'] if 'bufferView' in a}
@@ -119,6 +133,7 @@ def share_workshop_streams(data):
         'bytes_after': len(result), 'binary_bytes_saved': len(binary) - len(out),
         'all_retained_payloads_bit_identical': True,
         'nodes_materials_cameras_unchanged': True,
+        'animation_clips_preserved': len(g.get('animations',[])),
         'source_sha256': hashlib.sha256(data).hexdigest(),
         'result_sha256': hashlib.sha256(result).hexdigest(),
     }
