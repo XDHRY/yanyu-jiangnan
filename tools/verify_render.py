@@ -82,11 +82,11 @@ floor_users[0].data.calc_loop_triangles()
 data=floor_users[0].data
 floor61=json.loads(S['JN_stone_floor61'])
 assert floor61==json.loads(data['JN_stone_floor61'])
-assert len(data.loop_triangles)==floor61['source_triangles']==464
+assert len(data.loop_triangles)==floor61['source_triangles']==276
 assert floor61['slab_count']==22 and floor61['linked_users']==8
 assert floor61['joint_width_m']==.018 and floor61['joint_recess_m']==.004 and floor61['top_chamfer_m']==.008
 floor61_delta=floor61['expanded_triangle_delta']
-assert floor61_delta==3616
+assert floor61_delta==2112\nassert floor61['support_components']==1 and floor61['joint_bed_integrated']\nassert floor61['round62_reclaimed_expanded_triangles']==1504
 report['residential_floor_geometry61']=floor61
 assert sum(data.vertices[t.vertices[0]].co.dot(data.vertices[t.vertices[1]].co.cross(data.vertices[t.vertices[2]].co))/6 for t in data.loop_triangles)>0
 report['residential_floor_material']=json.loads(S['JN_stone54'])
