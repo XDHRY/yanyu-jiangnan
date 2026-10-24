@@ -15,6 +15,23 @@ def pos(o):
 def objs(prefix):return sorted([o for o in S.objects if o.name.startswith(prefix)],key=lambda o:pos(o).y)
 def dist_xy(a,b):return ((a.x-b.x)**2+(a.y-b.y)**2)**0.5
 report={}
+# Round 63: one real object-level Blender action on the existing work lantern.
+# Frame 80 is neutral so the locked diagnostic render remains comparable.
+anchor63=bpy.data.objects['JN_北河修桨作坊_工作纱灯摆动锚63']
+shade63=bpy.data.objects['JN_北河修桨作坊_工作纱灯']
+assert anchor63.type=='EMPTY' and shade63.parent==anchor63
+assert anchor63.animation_data and anchor63.animation_data.action
+action63=anchor63.animation_data.action
+assert action63.name=='JN_Action_北河修桨作坊_工作纱灯轻摆63'
+curves63=[fc for fc in action63.fcurves if fc.data_path=='rotation_euler' and fc.array_index==0]
+assert len(curves63)==1
+points63=[(round(k.co.x),round(k.co.y,6)) for k in curves63[0].keyframe_points]
+expected63=[(1,0.0),(40,0.045),(80,0.0),(120,-0.045),(160,0.0),(200,0.045),(240,0.0)]
+assert points63==expected63,points63
+assert action63.frame_range[:]==(1.0,240.0)
+S.frame_set(80);bpy.context.view_layer.update()
+assert abs(anchor63.rotation_euler.x)<1e-6
+report['native_lantern_animation63']={'object':anchor63.name,'action':action63.name,'channel':'rotation_euler.x','keyframes':points63,'frame_range':[1,240],'neutral_diagnostic_frame':80,'source_triangles_added':0,'new_materials_images':0,'human_form_runtime_approval':'pending'}
 for state in [0,1]:
     weather(state)
     report['weather_'+str(state)]={k:count('JN_'+k) for k in ['雨丝','雨落涟漪','雪粒','瓦上薄雪','汀步薄雪']}
