@@ -1,0 +1,87 @@
+{
+  "id": "west-oar-workshop-lantern-sway63",
+  "round": 63,
+  "repository": "XDHRY/yanyu-jiangnan",
+  "source": "jiangnan.py",
+  "location": "北河修桨作坊",
+  "objects": {
+    "existing_shade": "JN_北河修桨作坊_工作纱灯",
+    "new_pivot": "JN_北河修桨作坊_工作纱灯摆动锚63",
+    "pivot_type": "EMPTY"
+  },
+  "action": {
+    "name": "JN_Action_北河修桨作坊_工作纱灯轻摆63",
+    "channel": "rotation_euler.x",
+    "frame_range": [
+      1,
+      240
+    ],
+    "fps": 24,
+    "loop_seconds": 10,
+    "diagnostic_neutral_frame": 80,
+    "keyframes": [
+      {
+        "frame": 1,
+        "radians": 0
+      },
+      {
+        "frame": 40,
+        "radians": 0.045
+      },
+      {
+        "frame": 80,
+        "radians": 0
+      },
+      {
+        "frame": 120,
+        "radians": -0.045
+      },
+      {
+        "frame": 160,
+        "radians": 0
+      },
+      {
+        "frame": 200,
+        "radians": 0.045
+      },
+      {
+        "frame": 240,
+        "radians": 0
+      }
+    ],
+    "interpolation": "BEZIER"
+  },
+  "budget_delta": {
+    "objects": 1,
+    "meshes": 0,
+    "source_triangles": 0,
+    "materials": 0,
+    "images": 0,
+    "estimated_vram_bytes": 0
+  },
+  "export": {
+    "format": "glTF/GLB",
+    "animation_mode": "ACTIVE_ACTIONS",
+    "force_sampling": false,
+    "expected_clips": 1,
+    "expected_rotation_target_contains": "工作纱灯摆动锚63"
+  },
+  "offline_preview": {
+    "behavior": "mirrors the authored period and amplitude on the exported target node because the bundled viewer does not expose loader AnimationMixer state",
+    "pause_verified_by": "Playwright offline runtime proof"
+  },
+  "provenance": {
+    "asset_reuse": "existing repo-authored lantern geometry and materials",
+    "external_sources": [],
+    "license": "repository project license"
+  },
+  "quality_gates": {
+    "automated": [
+      "Blender action/keyframe assertion",
+      "GLB clip/target assertion",
+      "lossless stream animation fingerprint",
+      "offline visible motion and pause"
+    ],
+    "human_function_form_runtime": "pending"
+  }
+}
