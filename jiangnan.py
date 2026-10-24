@@ -3083,6 +3083,36 @@ def town_phase18_quay_boat_gear():
     line('北河转水埠_借用架盘绳',coil,.018,jute,c,res=1,bevel_res=0)
     line('北河转水埠_舢板系缆',[(7.30,103.78,.45),(8.55,104.72,.34),(10.32,105.48,.42)],.014,jute,c,res=1,bevel_res=0)
 
+    # Round 64: the complete existing sampan hierarchy rocks around the boat-end
+    # mooring point. The first rope control point and pivot are identical, so the
+    # taut line never detaches. Frame 80 remains neutral for locked diagnostics.
+    anchor64=bpy.data.objects.new(PREFIX+'北河转水埠_停泊舢板系泊锚64',None);c.objects.link(anchor64)
+    anchor64.empty_display_type='ARROWS';anchor64.empty_display_size=.18
+    anchor64.location=(7.30,103.78,.45);anchor64.rotation_mode='XYZ'
+    boat_parts64=[
+        PREFIX+'北河转水埠_停泊舢板船壳',
+        PREFIX+'北河转水埠_共享舢板舷条_1',PREFIX+'北河转水埠_共享舢板舷条_2',
+        PREFIX+'北河转水埠_共享舢板坐板_1',PREFIX+'北河转水埠_共享舢板坐板_2',
+        PREFIX+'北河转水埠_共享舢板横肋_1',PREFIX+'北河转水埠_共享舢板横肋_2',PREFIX+'北河转水埠_共享舢板横肋_3',
+        PREFIX+'北河转水埠_共享船桨_舢板',
+    ]
+    for name64 in boat_parts64:
+        part64=bpy.data.objects[name64];world64=part64.matrix_world.copy()
+        part64.parent=anchor64;part64.matrix_world=world64
+    action64=bpy.data.actions.new(PREFIX+'Action_北河转水埠_系泊舢板轻摇64')
+    anchor64.animation_data_create();anchor64.animation_data.action=action64
+    for frame64,pitch64,yaw64 in ((1,0,0),(40,.006,.010),(80,0,0),(120,-.006,-.010),(160,0,0),(200,.006,.010),(240,0,0)):
+        anchor64.rotation_euler=(pitch64,0,yaw64)
+        anchor64.keyframe_insert(data_path='rotation_euler',index=0,frame=frame64,group='moored_sampan64')
+        anchor64.keyframe_insert(data_path='rotation_euler',index=2,frame=frame64,group='moored_sampan64')
+    for curve64 in action64.fcurves:
+        for key64 in curve64.keyframe_points:key64.interpolation='BEZIER'
+    anchor64['JN_function']='moored_sampan_pivot_at_rope_endpoint'
+    anchor64['JN_motion64']='pitch_0.006rad_yaw_0.010rad_neutral_frame80'
+    S['JN_sampan_motion64']=json.dumps({'pivot':[7.30,103.78,.45],'parts':boat_parts64,'frames':[1,40,80,120,160,200,240],
+        'pitch_rad':[0,.006,0,-.006,0,.006,0],'yaw_rad':[0,.010,0,-.010,0,.010,0],
+        'rope_endpoint_fixed':True,'source_triangles_added':0},ensure_ascii=False)
+
     # Four linked, slightly raised polygon patches catch the existing public
     # light on the bridge surface.  They are deliberately partial stains rather
     # than full slab overlays, avoiding both z-fighting and a tiled appearance.
