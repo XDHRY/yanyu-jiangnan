@@ -31,11 +31,11 @@ class StoneFloor61(unittest.TestCase):
         self.assertGreater(self.contract['substrate_z_m'][1],.24)
 
     def test_closed_component_and_triangle_budget(self):
-        self.assertEqual((len(self.vertices),len(self.faces)),(280,232))
+        self.assertEqual((len(self.vertices),len(self.faces)),(184,138))
         self.assertTrue(all(len(f)==4 for f in self.faces))
         self.assertEqual(sum(len(f)-2 for f in self.faces),self.contract['source_triangles'])
-        self.assertEqual(self.contract['source_triangles'],464)
-        self.assertEqual(self.contract['expanded_triangle_delta'],3616)
-        self.assertLessEqual(self.contract['expanded_triangle_delta'],3700)
+        self.assertEqual(self.contract['source_triangles'],276)
+        self.assertEqual(self.contract['expanded_triangle_delta'],2112)
+        self.assertEqual(self.contract['support_components'],1)\n        self.assertTrue(self.contract['joint_bed_integrated'])\n        self.assertEqual(self.contract['round62_reclaimed_expanded_triangles'],1504)\n        self.assertLessEqual(self.contract['expanded_triangle_delta'],2200)
 
 if __name__=='__main__':unittest.main()
