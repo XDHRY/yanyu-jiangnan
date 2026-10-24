@@ -29,8 +29,8 @@ jobs:
           # The verified Web job currently needs about 22 minutes on a cold
           # runner (apt + Chromium dominate).  A 20 minute poll window made
           # the offline gate fail just before the same-head artifact arrived.
-          # Keep one producer and wait within this job's bounded 40 min SLA.
-          deadline=time.monotonic()+1620
+          # Keep one producer and wait within this job's bounded 40 min SLA; allow a queued cold Web producer up to 35 minutes.
+          deadline=time.monotonic()+2100
           while time.monotonic()<deadline:
               runs=get(f'repos/{repo}/actions/runs?per_page=100')['workflow_runs']
               candidates=[r for r in runs if r['name']=='Jiangnan Web 3D Viewer' and r['head_sha']==head and r['head_branch']==branch and r['event']=='pull_request']

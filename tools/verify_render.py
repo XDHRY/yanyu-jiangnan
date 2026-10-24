@@ -80,6 +80,14 @@ for name in ('stone54_normal','stone54_orm'):
     assert tuple(im.size)==(512,512) and im.packed_file and im.colorspace_settings.name=='Non-Color'
 floor_users[0].data.calc_loop_triangles()
 data=floor_users[0].data
+floor61=json.loads(S['JN_stone_floor61'])
+assert floor61==json.loads(data['JN_stone_floor61'])
+assert len(data.loop_triangles)==floor61['source_triangles']==464
+assert floor61['slab_count']==22 and floor61['linked_users']==8
+assert floor61['joint_width_m']==.018 and floor61['joint_recess_m']==.004 and floor61['top_chamfer_m']==.008
+floor61_delta=floor61['expanded_triangle_delta']
+assert floor61_delta==3616
+report['residential_floor_geometry61']=floor61
 assert sum(data.vertices[t.vertices[0]].co.dot(data.vertices[t.vertices[1]].co.cross(data.vertices[t.vertices[2]].co))/6 for t in data.loop_triangles)>0
 report['residential_floor_material']=json.loads(S['JN_stone54'])
 assert tuple(bpy.data.images['stone54_basecolor'].size)==(512,512) and bpy.data.images['stone54_basecolor'].packed_file
@@ -1697,7 +1705,7 @@ assert perimeter59_delta==-3672
 # Round59 deliberately removes the old courtyard grid.  Normalize that scoped
 # reduction before comparing the older pre-Round37 historical baseline; global
 # source/Web ceilings remain unchanged and still measure the actual new scene.
-legacy_expanded_tris=expanded_tris-tris46-8-tris50-perimeter59_delta-shore60_tris
+legacy_expanded_tris=expanded_tris-tris46-8-tris50-perimeter59_delta-shore60_tris-floor61_delta
 assert legacy_expanded_tris-tris37-tris40-184-tris44-bench55_delta_tris==166626,'pre-Round37 source triangle baseline changed'
 assert tris37<=500 and new37,'public repair stop source budget exceeded'
 visible37=[o for o in new37 if not o.hide_render]
