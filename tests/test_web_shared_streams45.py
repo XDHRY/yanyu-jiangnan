@@ -64,9 +64,15 @@ class SharedStreams45(unittest.TestCase):
         _,r = share_workshop_streams(encode(g,b))
         self.assertNotIn(ai, r['removed_accessors'])
 
-    def test_unknown_accessor_consumer_rejected(self):
-        g,b = decode(self.fixture()); g['animations'] = [{'samplers': [{'input': 0, 'output': 1}]}]
-        with self.assertRaisesRegex(AssertionError, 'unknown accessor'): share_workshop_streams(encode(g,b))
+    def test_animation_accessors_and_target_survive_remap(self):
+        g,b=decode(self.fixture())
+        g['animations']=[{'name':'lantern','samplers':[{'input':0,'output':1,'interpolation':'LINEAR'}],
+            'channels':[{'sampler':0,'target':{'node':0,'path':'rotation'}}]}]
+        out,r=share_workshop_streams(encode(g,b));n,_=decode(out)
+        self.assertEqual(len(n['animations']),1);self.assertEqual(r['animation_clips_preserved'],1)
+        sampler=n['animations'][0]['samplers'][0]
+        self.assertGreaterEqual(sampler['input'],0);self.assertGreaterEqual(sampler['output'],0)
+        self.assertEqual(n['animations'][0]['channels'][0]['target'],{'node':0,'path':'rotation'})
 
     def test_sparse_and_extensions_rejected(self):
         for key in ('sparse', 'extensions'):
