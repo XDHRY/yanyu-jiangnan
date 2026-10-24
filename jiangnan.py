@@ -1,6 +1,3 @@
-Warning: truncated output (original token count: 74060)
-Total output lines: 4249
-
 # 烟雨江南 / 雪月江南 — editable procedural courtyard, Blender 4.5
 # Run in Blender Text Editor. Change this central parameter block and rerun.
 import bpy, math, random, os, json
@@ -1446,7 +1443,1309 @@ def town_phase3_east_wharf():
     light('东岸码头仓屋_工作灯火',(18.22,cy,2.28),(1,.48,.22),82,.28,kind='POINT')
 
     # A supported working wharf reaches the canal without masking the bridge.
-    box('东岸码头仓屋_装卸木台',(11.16,…24060 tokens truncated…),(12.20,.17,.42)),1):
+    box('东岸码头仓屋_装卸木台',(11.16,40.70,.24),(2.18,2.44,.22),wood,c,.010)
+    for x in (10.28,12.04):
+        for y in (39.78,41.62):box('东岸码头仓屋_木台桩',(x,y,-.12),(.20,.20,.94),wood,c,.008)
+    for i,(x,top) in enumerate(((12.34,.18),(12.14,.24)),1):
+        box(f'东岸码头仓屋_装卸踏步_{i}',(x,cy,top/2),(.46,1.48,top),stone,c,.010)
+    for y in (39.96,41.44):
+        box('东岸码头仓屋_系舟桩础',(10.36,y,.20),(.34,.34,.18),stone,c,.012)
+        box('东岸码头仓屋_系舟桩',(10.36,y,.72),(.15,.15,.86),wood,c,.008)
+        line('东岸码头仓屋_系舟桩横销',[(10.15,y,.93),(10.57,y,.93)],.032,wood,c,res=1,bevel_res=1)
+    # One low dock lantern is physically hooked to the southern mooring post.
+    # Its pool separates the dark boat from the canal without flattening the
+    # night hierarchy or competing with the storehouse work light.
+    line('东岸码头仓屋_码头灯挑杆',[(10.36,39.96,1.05),(10.36,39.96,1.48),(10.72,39.96,1.48)],.024,wood,c,res=2,bevel_res=1)
+    uv('东岸码头仓屋_码头纱灯',(10.72,39.96,1.25),(.12,.12,.19),M['paper'],c,12,8)
+    for dz in (-.19,.19):box('东岸码头仓屋_码头纱灯铜口',(10.72,39.96,1.25+dz),(.15,.15,.022),M['bronze'],c)
+    line('东岸码头仓屋_码头灯悬绳',[(10.72,39.96,1.44),(10.72,39.96,1.49)],.008,wood,c,res=1,bevel_res=0)
+    light('东岸码头仓屋_码头灯火',(10.72,39.96,1.24),(1,.43,.18),62,.24,kind='POINT')
+
+    # Open-topped sampan shell: tapered sides, visible bottom boards and three
+    # real transverse seats. It remains north of the bridge approach.
+    bx,by=8.72,40.72
+    sections=[(-2.15,.06,.39),(-1.70,.46,.27),(-.80,.62,.20),(0,.67,.18),(.80,.62,.20),(1.70,.46,.27),(2.15,.06,.39)]
+    vv=[];ff=[]
+    for yy,half,bottom in sections:
+        vv.extend(((bx-half,by+yy,.58),(bx+half,by+yy,.58),(bx-half*.52,by+yy,bottom),(bx+half*.52,by+yy,bottom)))
+    for i in range(len(sections)-1):
+        a=4*i;b=a+4
+        ff.extend(((a,b,b+2,a+2),(a+1,a+3,b+3,b+1),(a+2,b+2,b+3,a+3)))
+    ff.extend(((0,1,3,2),(24,26,27,25)))
+    boat=mesh('东岸码头仓屋_系舟小艇船壳',vv,ff,wood,c)
+    for p in boat.data.polygons:p.use_smooth=len(p.vertices)==4
+    box('东岸码头仓屋_小艇舱底',(bx,by,.34),(.54,3.10,.08),wood,c,.010)
+    for yy in (-.92,0,.92):box('东岸码头仓屋_小艇坐板',(bx,by+yy,.61),(1.03,.22,.08),wood,c,.008)
+    # P1 boat refinement: continuous gunwales, two transverse ribs, a real
+    # stern board and three raised floor battens clarify the shell at close range.
+    for side in (-1,1):
+        line('东岸码头仓屋_小艇舷侧压条',[(bx+side*half,by+yy,.60) for yy,half,_ in sections],.027,M['edge'],c,res=2,bevel_res=1)
+    for yy,half in ((-.80,.62),(.80,.62)):
+        line('东岸码头仓屋_小艇横肋',[(bx-half*.88,by+yy,.53),(bx,by+yy,.39),(bx+half*.88,by+yy,.53)],.024,M['edge'],c,res=2,bevel_res=1)
+    box('东岸码头仓屋_小艇艄板',(bx,by+1.70,.48),(.82,.075,.34),wood,c,.008)
+    for xx in (-.18,0,.18):box('东岸码头仓屋_小艇排水栅条',(bx+xx,by,.405),(.075,2.72,.055),M['edge'],c,.005)
+    line('东岸码头仓屋_系舟缆绳',[(9.10,41.24,.56),(9.65,41.40,.80),(10.36,41.44,.93)],.018,M['edge'],c,res=3,bevel_res=1)
+    line('东岸码头仓屋_竹篙',[(8.14,38.85,.57),(9.26,42.56,.64)],.025,wood,c,res=2,bevel_res=1)
+
+    # Three restrained reed clumps soften the bank while preserving steps,
+    # loading deck and bridge sight lines.
+    reed_paths=[]
+    for x,y in ((10.12,38.35),(10.06,43.12),(9.98,44.12)):
+        for j in range(7):
+            dx=(j-3)*.035;h=.62+.07*(j%3)
+            reed_paths.append([(x+dx,y+.025*(j%2),.02),(x+dx*.7,y,h)])
+    lines('东岸码头仓屋_岸边芦苇',reed_paths,.010,M['moss'],c,res=1,bevel_res=0)
+    S['JN_town_phase']='phase_3_east_wharf_storehouse'
+    S['JN_east_wharf_clear_axis_m']=1.40
+    S['JN_east_wharf_crate_instances']=4
+    S['JN_east_wharf_basket_instances']=3
+    S['JN_east_wharf_boat_detail_revision']='gunwale_ribs_stern_floor_battens_v1'
+    S['JN_east_wharf_lanterns']=2
+    S['JN_east_wharf_new_image_bytes']=0
+
+def town_phase4_east_residence():
+    """Create a connected east-bank weaving household courtyard north of the wharf."""
+    c=C['water'];stone=M['stone'];wood=M['wood'];wetstone=M['darkstone']
+    # Extend the wharf parcel with deliberate overlap and continue the same
+    # water street north. The cross path aligns gate, court and main-hall door.
+    land=box('东岸织户宅院_北段地基',(16.15,49.20,-.30),(11.98,8.95,.60),wetstone,c)
+    land['JN_function']='continuous_land_support';land['JN_ground_top']=0.0
+    box('东岸织户宅院_北延石街',(12.40,49.20,.06),(2.20,8.95,.12),stone,c,.012)
+    box('东岸织户宅院_入院横径',(14.70,49.20,.06),(2.70,1.32,.12),stone,c,.012)
+    box('东岸织户宅院_院坪',(14.96,49.20,.06),(1.72,5.18,.12),stone,c,.012)
+
+    # A thick west wall is split around a real 1.44 m gate. Timber jambs,
+    # parked-open leaf, threshold and a solidified roof make the destination
+    # legible from the street instead of presenting a decorative false door.
+    wall_x=14.05;gate_y=49.20
+    for tag,y,length in (('南段',47.415,2.13),('北段',50.99,2.14)):
+        box('东岸织户宅院_西院墙_'+tag,(wall_x,y,1.05),(.24,length,2.10),M['plaster'],c,.018)
+        box('东岸织户宅院_西院墙压顶_'+tag,(wall_x,y,2.14),(.34,length+.08,.09),M['tile'],c,.010)
+    for y in (48.45,49.95):box('东岸织户宅院_门楼木柱',(wall_x,y,1.32),(.20,.20,2.48),wood,c,.008)
+    box('东岸织户宅院_门楼额枋',(wall_x,gate_y,2.50),(.22,1.72,.20),wood,c,.008)
+    box('东岸织户宅院_门槛',(13.99,gate_y,.13),(.34,1.34,.08),wood,c,.006)
+    box('东岸织户宅院_开门扇',(14.58,48.49,1.21),(1.08,.075,2.08),wood,c,.010)
+    gv=[(13.42,48.16,2.55),(14.68,48.16,2.55),(13.42,50.24,2.55),(14.68,50.24,2.55),
+        (14.05,48.16,2.91),(14.05,50.24,2.91)]
+    gate_roof=mesh('东岸织户宅院_门楼瓦面',gv,[(0,2,5,4),(4,5,3,1)],M['tile'],c)
+    solid=gate_roof.modifiers.new('宅院门楼真实屋面厚度','SOLIDIFY');solid.thickness=.065;solid.offset=-1
+    box('东岸织户宅院_南界粉墙',(17.60,46.24,.88),(7.34,.20,1.76),M['plaster'],c,.018)
+    box('东岸织户宅院_南界压顶',(17.60,46.24,1.80),(7.46,.28,.09),M['tile'],c,.010)
+    # The north boundary is also split: its opening leads directly into the
+    # working veranda rather than trapping it beyond a decorative wall.
+    for tag,x,length in (('西段',15.39,2.92),('东段',19.76,3.02)):
+        box('东岸织户宅院_北界粉墙_'+tag,(x,52.16,.88),(length,.20,1.76),M['plaster'],c,.018)
+        box('东岸织户宅院_北界压顶_'+tag,(x,52.16,1.80),(length+.08,.28,.09),M['tile'],c,.010)
+    for x in (16.85,18.25):box('东岸织户宅院_织廊入口柱',(x,52.16,1.18),(.16,.16,2.20),wood,c,.006)
+    box('东岸织户宅院_织廊入口额枋',(17.55,52.16,2.26),(1.56,.18,.16),wood,c,.006)
+
+    # Reuse the proven village-house structural family at a slightly reduced
+    # scale. The west-facing main hall retains a 1.01 m through-door, two true
+    # windows, interior floor, furniture and an open leaf.
+    hx,hy,hs=18.25,49.20,.92
+    def source(name):return bpy.data.objects[PREFIX+name]
+    for proto_name,label,z in [
+        ('村落民居台基_原型','台基',.12),('村落民居墙体_原型','墙体',0),
+        ('村落民居山墙_高脊原型','山墙',0),('村落民居室内地坪_原型','室内地坪',0),
+        ('村落民居案几_原型','案几',0),('村落民居长凳_原型','长凳',0),
+        ('村落民居承檩_高脊原型','承檩',0),('村落民居黛瓦屋面_高脊原型','屋面',3.30)]:
+        proto=source(proto_name);o=bpy.data.objects.new(PREFIX+'东岸织户宅院_正房_'+label,proto.data);c.objects.link(o)
+        o.location=(hx,hy,z);o.scale=(hs,hs,1)
+        if label in ('墙体','山墙','案几','长凳','承檩'):o.rotation_euler.z=pi
+        if label=='屋面':
+            mod=o.modifiers.new('织户正房黛瓦屋面厚度','SOLIDIFY');mod.thickness=.07;mod.offset=-1
+    for side in (-1,1):
+        proto=source('村落民居深檐_原型');o=bpy.data.objects.new(PREFIX+f'东岸织户宅院_正房深檐_{side:+d}',proto.data);c.objects.link(o)
+        o.location=(hx,hy+side*2.24*hs,3.34);o.scale=(hs,1,1)
+    proto=source('村落民居正脊_原型');o=bpy.data.objects.new(PREFIX+'东岸织户宅院_正房正脊',proto.data);c.objects.link(o);o.location=(hx,hy,4.57);o.scale=(hs,1,1)
+    for proto_name,label in (('村落民居檐椽列_原型','檐椽列'),('村落民居瓦当列_原型','瓦当列')):
+        proto=source(proto_name);o=bpy.data.objects.new(PREFIX+'东岸织户宅院_正房'+label,proto.data);c.objects.link(o);o.location=(hx,hy,0);o.scale=(hs,hs,1)
+    for wy in (-1.82,1.82):
+        proto=source('村落民居墙角木柱_原型');o=bpy.data.objects.new(PREFIX+f'东岸织户宅院_正房墙角柱_{wy:+.2f}',proto.data);c.objects.link(o);o.location=(hx-2.63*hs,hy+wy*hs,1.64)
+    for wy in (-1.27,1.27):box('东岸织户宅院_正房青石勒脚',(hx-2.61*hs,hy+wy*hs,.30),(.16,1.44*hs,.36),wetstone,c)
+    proto=source('村落民居檐下额枋_原型');o=bpy.data.objects.new(PREFIX+'东岸织户宅院_正房檐下额枋',proto.data);c.objects.link(o);o.location=(hx-2.64*hs,hy,3.08);o.scale=(1,hs,1)
+    for proto_name,label,wy in [('村落民居门框_原型','门框',0),('村落民居开门扇_原型','开门扇',0),('村落民居窗框_原型','窗框_南',-1.30),('村落民居窗框_原型','窗框_北',1.30)]:
+        proto=source(proto_name);o=bpy.data.objects.new(PREFIX+'东岸织户宅院_正房_'+label,proto.data);c.objects.link(o)
+        o.location=(hx,hy-wy*hs,0);o.scale=(hs,hs,1);o.rotation_euler.z=pi
+    for wy in (-1.30,1.30):
+        proto=source('村落民居格窗棂_原型');o=bpy.data.objects.new(PREFIX+f'东岸织户宅院_正房格窗棂_{wy:+.2f}',proto.data);c.objects.link(o)
+        o.location=(hx-2.70*hs,hy+wy*hs,1.75);o.scale=(1,.72*hs,1)
+    box('东岸织户宅院_正房门槛',(hx-2.53*hs,hy,.27),(.28*hs,1.10*hs,.02),wood,c)
+    box('东岸织户宅院_正房入户踏步',(hx-2.99*hs,hy,.06),(.38*hs,1.30*hs,.12),stone,c)
+    hall=bpy.data.objects[PREFIX+'东岸织户宅院_正房_墙体'];hall['JN_door_clear_width']=1.10*hs;hall['JN_door_clear_height']=2.22;hall['JN_interior_depth']=4.72*hs
+
+    # A compact weaving veranda replaces an ornamental side wing: four posts
+    # on shoes, two beams and a solid sloped roof shelter a linked loom frame.
+    vx,vy=17.55,53.00
+    box('东岸织户宅院_织廊台基',(vx,vy,.10),(4.45,1.34,.20),stone,c,.014)
+    for j,x in enumerate((15.82,19.28),1):
+        for side,y in enumerate((52.57,53.43),1):
+            box(f'东岸织户宅院_织廊柱础_{j}_{side}',(x,y,.27),(.28,.28,.14),stone,c,.012)
+            box(f'东岸织户宅院_织廊木柱_{j}_{side}',(x,y,1.43),(.15,.15,2.18),wood,c,.006)
+    for y in (52.57,53.43):box('东岸织户宅院_织廊檐枋',(vx,y,2.55),(3.72,.17,.17),wood,c,.006)
+    rv=[(15.55,52.38,2.62),(19.55,52.38,2.62),(15.55,53.62,2.92),(19.55,53.62,2.92)]
+    roof_obj=mesh('东岸织户宅院_织廊瓦面',rv,[(0,1,3,2)],M['tile'],c);mod=roof_obj.modifiers.new('织廊真实屋面厚度','SOLIDIFY');mod.thickness=.06;mod.offset=-1
+    for x in (16.48,18.62):
+        box('东岸织户宅院_织机立柱',(x,vy,.78),(.10,.10,1.18),wood,c)
+    box('东岸织户宅院_织机上梁',(17.55,vy,1.39),(2.30,.12,.12),wood,c)
+    box('东岸织户宅院_织机坐梁',(17.55,52.86,.58),(2.16,.10,.10),wood,c)
+    for yy in (52.80,52.92,53.04,53.16):line('东岸织户宅院_织机经线',[(16.56,yy,.72),(18.54,yy,1.30)],.007,M['paper'],c,res=1,bevel_res=0)
+
+    # P1 domestic weaving detail: linked cloth rolls, a low shuttle and two
+    # bobbins make the loom read as an active household tool rather than an
+    # empty frame.  All repeats share mesh data and add no bitmap textures.
+    roll_proto=uv('东岸织户宅院_织布卷原型',(0,0,0),(.16,.16,.46),M['ivory'],c,12,6)
+    roll_proto.hide_render=True;roll_proto.hide_viewport=True
+    for j,(x,y,z,ang) in enumerate(((16.05,52.73,.52,pi/2),(19.02,53.22,.52,pi/2)),1):
+        o=bpy.data.objects.new(PREFIX+f'东岸织户宅院_织布卷_{j}',roll_proto.data);c.objects.link(o);o.location=(x,y,z);o.rotation_euler.y=ang
+    shuttle=mesh('东岸织户宅院_织梭',[(17.25,52.68,.69),(17.85,52.68,.69),(17.68,52.84,.76),(17.25,52.84,.76)],[(0,1,2,3)],wood,c)
+    for x in (16.30,18.80):uv('东岸织户宅院_线轴',(x,53.26,.54),(.08,.08,.16),M['wood'],c,10,5)
+
+    # Domestic water and warm light stay off the gate-to-hall axis.
+    box('东岸织户宅院_石水槽底',(15.15,50.70,.18),(1.18,.62,.14),wetstone,c,.010)
+    for x in (14.61,15.69):box('东岸织户宅院_石水槽长壁',(x,50.70,.37),(.10,.66,.45),wetstone,c,.008)
+    for y in (50.44,50.96):box('东岸织户宅院_石水槽端壁',(15.15,y,.37),(.98,.10,.45),wetstone,c,.008)
+    box('东岸织户宅院_石水槽水面',(15.15,50.70,.42),(.96,.46,.02),M['water'],c)
+    line('东岸织户宅院_院灯挑杆',[(14.05,50.00,1.82),(14.62,50.00,1.82),(14.62,50.00,1.55)],.022,wood,c,res=2,bevel_res=1)
+    uv('东岸织户宅院_院灯纱罩',(14.62,50.00,1.36),(.12,.12,.19),M['paper'],c,12,8)
+    light('东岸织户宅院_院灯火',(14.62,50.00,1.35),(1,.47,.21),58,.22,kind='POINT')
+    S['JN_town_phase']='phase_4_east_residential_courtyard'
+    S['JN_east_residence_gate_clear_width_m']=1.44
+    S['JN_east_residence_hall_door_clear_width_m']=round(1.10*hs,3)
+    S['JN_east_residence_loom_posts']=4
+    S['JN_east_residence_cloth_rolls']=2
+    S['JN_east_residence_new_image_bytes']=0
+
+def town_phase5_cloth_finish_yard():
+    """Extend the east-bank household into a connected rinsing and cloth-finishing yard."""
+    c=C['water'];stone=M['stone'];wood=M['wood'];wetstone=M['darkstone']
+    # The parcel deliberately overlaps the weaving veranda and continues the
+    # water street.  This is one navigable production sequence, not a detached set.
+    land=box('东岸晒布后园_北段地基',(16.15,58.10,-.30),(11.98,9.25,.60),wetstone,c)
+    land['JN_function']='connected_cloth_finish_land';land['JN_ground_top']=0.0
+    box('东岸晒布后园_北延石街',(12.40,58.10,.06),(2.20,9.25,.12),stone,c,.012)
+    box('东岸晒布后园_门内横径',(14.88,57.40,.06),(3.18,1.28,.12),stone,c,.012)
+    box('东岸晒布后园_织廊接径',(17.55,54.05,.06),(1.28,1.40,.12),stone,c,.012)
+    box('东岸晒布后园_院坪',(17.50,57.35,.06),(6.10,5.20,.12),stone,c,.012)
+
+    # Thick west wall split around a 1.64 m real gate.  The gate axis terminates
+    # at an open three-bay finishing hall, so the aperture has a visible purpose.
+    wall_x=14.05;gate_y=57.40
+    for tag,y,length in (('南段',55.00,3.00),('北段',60.06,3.82)):
+        box('东岸晒布后园_西院墙_'+tag,(wall_x,y,1.02),(.24,length,2.04),M['plaster'],c,.018)
+        box('东岸晒布后园_西院墙压顶_'+tag,(wall_x,y,2.10),(.34,length+.08,.09),M['tile'],c,.010)
+    for y in (56.50,58.30):box('东岸晒布后园_门楼木柱',(wall_x,y,1.30),(.20,.20,2.44),wood,c,.008)
+    box('东岸晒布后园_门楼额枋',(wall_x,gate_y,2.48),(.22,2.02,.20),wood,c,.008)
+    box('东岸晒布后园_门槛',(13.99,gate_y,.13),(.34,1.54,.08),wood,c,.006)
+    box('东岸晒布后园_开门扇',(14.60,56.56,1.20),(1.18,.075,2.06),wood,c,.010)
+    gv=[(13.38,56.20,2.53),(14.72,56.20,2.53),(13.38,58.60,2.53),(14.72,58.60,2.53),
+        (14.05,56.20,2.92),(14.05,58.60,2.92)]
+    gate_roof=mesh('东岸晒布后园_门楼瓦面',gv,[(0,2,5,4),(4,5,3,1)],M['tile'],c)
+    mod=gate_roof.modifiers.new('晒布后园门楼真实屋面厚度','SOLIDIFY');mod.thickness=.065;mod.offset=-1
+    box('东岸晒布后园_北界粉墙',(18.05,62.62,.90),(7.76,.20,1.80),M['plaster'],c,.018)
+    box('东岸晒布后园_北界压顶',(18.05,62.62,1.84),(7.86,.28,.09),M['tile'],c,.010)
+    box('东岸晒布后园_东界粉墙',(21.94,58.10,.90),(.20,9.04,1.80),M['plaster'],c,.018)
+    box('东岸晒布后园_东界压顶',(21.94,58.10,1.84),(.28,9.12,.09),M['tile'],c,.010)
+
+    # Open three-bay finishing hall: six posts transfer through six shoes to a
+    # stone platform.  The solid gabled roof and ring beams carry a clear load path.
+    hx,hy=18.25,57.40
+    box('东岸晒布后园_整布厅台基',(hx,hy,.14),(5.70,3.72,.28),stone,c,.018)
+    for j,x in enumerate((15.92,18.25,20.58),1):
+        for side,y in enumerate((55.95,58.85),1):
+            box(f'东岸晒布后园_整布厅柱础_{j}_{side}',(x,y,.38),(.38,.38,.20),wetstone,c,.015)
+            box(f'东岸晒布后园_整布厅木柱_{j}_{side}',(x,y,1.72),(.18,.18,2.48),wood,c,.008)
+    for y in (55.95,58.85):box('东岸晒布后园_整布厅檐枋',(hx,y,2.94),(5.18,.20,.20),wood,c,.008)
+    for x in (15.92,18.25,20.58):box('东岸晒布后园_整布厅穿枋',(x,hy,2.84),(.18,3.12,.18),wood,c,.008)
+    rv=[(15.45,55.55,3.02),(21.05,55.55,3.02),(15.45,59.25,3.02),(21.05,59.25,3.02),
+        (18.25,55.55,4.08),(18.25,59.25,4.08)]
+    hall_roof=mesh('东岸晒布后园_整布厅黛瓦屋面',rv,[(0,2,5,4),(4,5,3,1)],M['tile'],c)
+    mod=hall_roof.modifiers.new('整布厅真实屋面厚度','SOLIDIFY');mod.thickness=.075;mod.offset=-1
+    line('东岸晒布后园_整布厅正脊',[(18.25,55.38,4.10),(18.25,59.42,4.10)],.085,M['edge'],c,res=1,bevel_res=1)
+    box('东岸晒布后园_整布长案',(18.25,57.40,1.02),(2.80,.82,.15),wood,c,.025)
+    for x in (17.12,19.38):box('东岸晒布后园_整布案腿',(x,57.40,.58),(.16,.66,.82),wood,c,.012)
+    # A physically hung work lantern lifts the central bay without flattening
+    # the surrounding moonlit walls and makes the pale cloth read as cloth.
+    line('东岸晒布后园_整布厅吊灯杆',[(18.25,56.55,2.82),(18.25,56.55,2.38)],.018,wood,c,res=2,bevel_res=1)
+    uv('东岸晒布后园_整布厅工作纱灯',(18.25,56.55,2.19),(.15,.15,.21),M['paper'],c,12,8)
+    light('东岸晒布后园_整布厅工作灯火',(18.25,56.55,2.16),(1,.50,.24),92,.28,kind='POINT')
+
+    # Six linked cloth sheets hang from three supported drying frames.  The
+    # shallow center fold gives readable depth while keeping topology tiny.
+    cv=[(-.46,0,0),(.46,0,0),(-.46,0,-1.36),(0,.055,-1.42),(.46,0,-1.36)]
+    cloth=mesh('东岸晒布后园_晾布原型',cv,[(0,1,4,3,2)],M['ivory'],c);cloth.hide_render=True;cloth.hide_viewport=True
+    for row,y in enumerate((60.05,61.18),1):
+        for x in (15.72,18.25,20.78):
+            box(f'东岸晒布后园_晾架柱_{row}',(x,y,1.56),(.13,.13,2.56),wood,c,.006)
+            box(f'东岸晒布后园_晾架柱础_{row}',(x,y,.20),(.28,.28,.16),stone,c,.010)
+        box(f'东岸晒布后园_晾架横杆_{row}',(18.25,y,2.50),(5.25,.13,.13),wood,c,.006)
+        for col,x in enumerate((16.55,17.70,18.85,20.00),1):
+            o=bpy.data.objects.new(PREFIX+f'东岸晒布后园_晾布_{row}_{col}',cloth.data);c.objects.link(o);o.location=(x,y,2.43)
+
+    # Rinsing trough, narrow stone drain and a pair of cloth baskets occupy the
+    # south work edge, leaving the gate-to-hall axis clear.
+    tx,ty=19.90,54.45
+    box('东岸晒布后园_漂洗槽底',(tx,ty,.18),(2.25,.92,.14),wetstone,c,.010)
+    for x in (18.82,20.98):box('东岸晒布后园_漂洗槽长壁',(x,ty,.42),(.12,.98,.55),wetstone,c,.008)
+    for y in (54.02,54.88):box('东岸晒布后园_漂洗槽端壁',(tx,y,.42),(2.04,.12,.55),wetstone,c,.008)
+    box('东岸晒布后园_漂洗槽水面',(tx,ty,.47),(1.98,.74,.02),M['water'],c)
+    box('东岸晒布后园_排水石槽',(16.70,54.45,.10),(4.10,.34,.18),wetstone,c,.008)
+    box('东岸晒布后园_排水水线',(16.70,54.45,.20),(3.88,.16,.015),M['water'],c)
+    line('东岸晒布后园_工作灯挑杆',[(14.05,58.38,1.82),(14.64,58.38,1.82),(14.64,58.38,1.54)],.022,wood,c,res=2,bevel_res=1)
+    uv('东岸晒布后园_工作灯纱罩',(14.64,58.38,1.34),(.12,.12,.19),M['paper'],c,12,8)
+    light('东岸晒布后园_工作灯火',(14.64,58.38,1.33),(1,.47,.21),56,.22,kind='POINT')
+
+    S['JN_town_phase']='phase_5_east_cloth_finish_yard'
+    S['JN_east_cloth_gate_clear_width_m']=1.64
+    S['JN_east_cloth_hall_posts']=6
+    S['JN_east_cloth_linked_sheets']=8
+    S['JN_east_cloth_work_lanterns']=2
+    S['JN_east_cloth_new_image_bytes']=0
+
+def town_phase6_west_wine_court():
+    """Rebalance the town with a connected west-bank wine yard and a third bridge."""
+    c=C['water'];stone=M['stone'];wood=M['wood'];wetstone=M['darkstone']
+    # Overlap the north tea-market land and continue the west water street so
+    # the new parcel is physically part of the settlement rather than a set.
+    land=box('西岸酒坊院_北段地基',(-1.98,44.20,-.30),(12.84,15.00,.60),wetstone,c)
+    land['JN_function']='connected_west_wine_court_land';land['JN_ground_top']=0.0
+    box('西岸酒坊院_北延石街',(3.50,44.20,.06),(1.82,15.00,.12),stone,c,.012)
+    box('西岸酒坊院_门前横径',(2.10,44.20,.06),(3.30,1.34,.12),stone,c,.012)
+    box('西岸酒坊院_院坪',(-2.75,44.20,.06),(7.30,8.70,.12),stone,c,.012)
+
+    # East-facing split wall and a real 1.70 m opening. A parked leaf and
+    # threshold make the doorway legible without obstructing the arrival axis.
+    wall_x=1.15;gate_y=44.20
+    for tag,y,length in (('南段',39.90,6.80),('北段',48.50,6.80)):
+        box('西岸酒坊院_东院墙_'+tag,(wall_x,y,1.02),(.24,length,2.04),M['plaster'],c,.018)
+        box('西岸酒坊院_东院墙压顶_'+tag,(wall_x,y,2.10),(.34,length+.08,.09),M['tile'],c,.010)
+    for y in (43.25,45.15):box('西岸酒坊院_门楼木柱',(wall_x,y,1.30),(.20,.20,2.44),wood,c,.008)
+    box('西岸酒坊院_门楼额枋',(wall_x,gate_y,2.48),(.22,2.14,.20),wood,c,.008)
+    box('西岸酒坊院_门槛',(1.21,gate_y,.13),(.34,1.60,.08),wood,c,.006)
+    box('西岸酒坊院_开门扇',(.57,43.31,1.20),(1.20,.075,2.06),wood,c,.010)
+    gv=[(.48,42.92,2.53),(1.82,42.92,2.53),(.48,45.48,2.53),(1.82,45.48,2.53),
+        (1.15,42.92,2.94),(1.15,45.48,2.94)]
+    gate_roof=mesh('西岸酒坊院_门楼瓦面',gv,[(0,2,5,4),(4,5,3,1)],M['tile'],c)
+    mod=gate_roof.modifiers.new('酒坊院门楼真实屋面厚度','SOLIDIFY');mod.thickness=.065;mod.offset=-1
+    box('西岸酒坊院_西界粉墙',(-8.30,44.20,.90),(.20,14.70,1.80),M['plaster'],c,.018)
+    box('西岸酒坊院_西界压顶',(-8.30,44.20,1.84),(.28,14.78,.09),M['tile'],c,.010)
+    box('西岸酒坊院_北界粉墙',(-3.55,51.55,.90),(9.70,.20,1.80),M['plaster'],c,.018)
+    box('西岸酒坊院_北界压顶',(-3.55,51.55,1.84),(9.80,.28,.09),M['tile'],c,.010)
+
+    # Six-column open fermentation hall. Every timber column lands on a stone
+    # shoe and the complete beam ring supports a solidified gabled roof.
+    hx,hy=-4.55,44.20
+    box('西岸酒坊院_酿酒厅台基',(hx,hy,.14),(5.35,5.10,.28),stone,c,.018)
+    for j,x in enumerate((-6.45,-4.55,-2.65),1):
+        for side,y in enumerate((42.25,46.15),1):
+            box(f'西岸酒坊院_酿酒厅柱础_{j}_{side}',(x,y,.38),(.38,.38,.20),wetstone,c,.015)
+            box(f'西岸酒坊院_酿酒厅木柱_{j}_{side}',(x,y,1.72),(.18,.18,2.48),wood,c,.008)
+    for y in (42.25,46.15):box('西岸酒坊院_酿酒厅檐枋',(hx,y,2.94),(4.36,.20,.20),wood,c,.008)
+    for x in (-6.45,-4.55,-2.65):box('西岸酒坊院_酿酒厅穿枋',(x,hy,2.84),(.18,4.12,.18),wood,c,.008)
+    rv=[(-6.95,41.82,3.02),(-2.15,41.82,3.02),(-6.95,46.58,3.02),(-2.15,46.58,3.02),
+        (-4.55,41.82,4.02),(-4.55,46.58,4.02)]
+    hall_roof=mesh('西岸酒坊院_酿酒厅黛瓦屋面',rv,[(0,2,5,4),(4,5,3,1)],M['tile'],c)
+    mod=hall_roof.modifiers.new('酿酒厅真实屋面厚度','SOLIDIFY');mod.thickness=.075;mod.offset=-1
+    line('西岸酒坊院_酿酒厅正脊',[(-4.55,41.68,4.05),(-4.55,46.72,4.05)],.085,M['edge'],c,res=1,bevel_res=1)
+
+    # Four linked open fermentation vats carry real liquid surfaces. Their
+    # low-poly walls are shared, keeping the production cluster inexpensive.
+    vatmat=material('酒坊粗陶',(.18,.105,.055),.64,12)
+    seg=16;vv=[];vf=[]
+    for r,z in ((.48,0),(.54,.12),(.58,.76),(.54,.86),(.46,.86)):
+        vv.extend((r*cos(2*pi*i/seg),r*sin(2*pi*i/seg),z) for i in range(seg))
+    for row in range(4):
+        for i in range(seg):
+            a=row*seg+i;b=row*seg+(i+1)%seg;vf.append((a,b,b+seg,a+seg))
+    vat=mesh('西岸酒坊院_发酵酒缸原型',vv,vf,vatmat,c);vat.hide_render=True;vat.hide_viewport=True
+    for j,(x,y) in enumerate(((-5.82,43.20),(-4.45,43.20),(-5.82,45.12),(-4.45,45.12)),1):
+        o=bpy.data.objects.new(PREFIX+f'西岸酒坊院_发酵酒缸_{j}',vat.data);c.objects.link(o);o.location=(x,y,.28)
+        uv(f'西岸酒坊院_酒醅液面_{j}',(x,y,1.115),(.43,.43,.025),M['water'],c,16,3)
+
+    # A masonry stove and copper steaming pot form the hot-work corner. The
+    # supported mixing table and hanging lantern complete the readable craft.
+    box('西岸酒坊院_蒸酒灶台',(-2.75,47.95,.48),(1.55,1.35,.96),wetstone,c,.035)
+    box('西岸酒坊院_蒸酒灶口',(-2.75,47.24,.47),(.62,.08,.56),M['darkstone'],c,.010)
+    uv('西岸酒坊院_蒸酒铜锅',(-2.75,47.95,1.08),(.64,.64,.38),M['bronze'],c,18,8)
+    line('西岸酒坊院_蒸酒弯管',[(-2.75,47.95,1.42),(-2.75,48.48,1.72),(-1.90,48.48,1.42)],.045,M['bronze'],c,res=3,bevel_res=2)
+    box('西岸酒坊院_拌曲案面',(-5.65,48.55,.96),(2.65,.88,.14),wood,c,.018)
+    for x in (-6.62,-4.68):
+        for y in (48.27,48.83):box('西岸酒坊院_拌曲案腿',(x,y,.52),(.14,.14,.82),wood,c,.008)
+    line('西岸酒坊院_工作灯挑杆',[(-2.65,46.15,2.72),(-2.05,46.15,2.72),(-2.05,46.15,2.33)],.022,wood,c,res=2,bevel_res=1)
+    uv('西岸酒坊院_工作纱灯',(-2.05,46.15,2.13),(.14,.14,.21),M['paper'],c,12,8)
+    light('西岸酒坊院_工作灯火',(-2.05,46.15,2.10),(1,.48,.20),72,.24,kind='POINT')
+
+    # Third bridge closes the north production loop. Eleven shared deck planks,
+    # rails and three risers per side land on the continuous bank parcels.
+    plank=box('西岸酒坊院_北桥板原型',(0,0,0),(1,1,.14),wood,c,.014);plank.hide_render=True;plank.hide_viewport=True
+    for i in range(11):
+        x=4.60+i*.52
+        o=bpy.data.objects.new(PREFIX+f'西岸酒坊院_北桥板_{i+1:02d}',plank.data);c.objects.link(o);o.location=(x,49.20,.70);o.scale=(.50,1.48,1)
+    for side,y in enumerate((48.43,49.97),1):
+        for i,x in enumerate((4.68,5.72,6.76,7.80,8.84,9.78),1):
+            box(f'西岸酒坊院_北桥栏柱_{side}_{i}',(x,y,1.29),(.12,.12,1.04),wood,c,.006)
+        for z in (1.18,1.65):box('西岸酒坊院_北桥栏杆',(7.23,y,z),(5.22,.10,.10),wood,c,.005)
+    for side,centers in (('西',(3.70,4.02,4.34)),('东',(10.68,10.36,10.04))):
+        for i,x in enumerate(centers,1):box(f'西岸酒坊院_北桥{side}阶_{i}',(x,49.20,.10+.20*(i-1 if side=='西' else 3-i)),(.32,1.62,.20),stone,c,.012)
+
+    S['JN_town_phase']='phase_6_west_wine_court'
+    S['JN_west_wine_gate_clear_width_m']=1.70
+    S['JN_west_wine_hall_posts']=6
+    S['JN_west_wine_linked_vats']=4
+    S['JN_west_wine_bridge_planks']=11
+    S['JN_west_wine_new_image_bytes']=0
+
+def town_phase7_north_granary():
+    """Extend the west-bank supply chain with a raised rice granary and unloading court."""
+    c=C['water'];stone=M['stone'];wood=M['wood'];wetstone=M['darkstone']
+    # A deliberate 0.25 m overlap with Phase 6 keeps both the land and water-street
+    # walking surfaces continuous.  The short cross-lane links the wine back yard,
+    # public street and granary gate as one supply route.
+    land=box('北端米行粮栈_北段地基',(-1.98,57.95,-.30),(12.84,13.00,.60),wetstone,c)
+    land['JN_function']='connected_north_granary_land';land['JN_ground_top']=0.0
+    box('北端米行粮栈_北延石街',(3.50,57.95,.06),(1.82,13.00,.12),stone,c,.012)
+    box('北端米行粮栈_酒坊后巷',(-1.10,52.30,.06),(7.40,1.25,.12),stone,c,.012)
+    box('北端米行粮栈_卸货院坪',(-1.95,57.90,.06),(6.00,6.90,.12),stone,c,.012)
+
+    # Street gate: two independent wall runs leave a measured 1.90 m passage.
+    wall_x=1.15;gate_y=57.90
+    for tag,y,length in (('南段',54.30,5.30),('北段',61.55,5.40)):
+        box('北端米行粮栈_东院墙_'+tag,(wall_x,y,1.02),(.24,length,2.04),M['plaster'],c,.018)
+        box('北端米行粮栈_东院墙压顶_'+tag,(wall_x,y,2.10),(.34,length+.08,.09),M['tile'],c,.010)
+    for y in (56.90,58.90):box('北端米行粮栈_门楼木柱',(wall_x,y,1.30),(.20,.20,2.44),wood,c,.008)
+    box('北端米行粮栈_门楼额枋',(wall_x,gate_y,2.48),(.22,2.24,.20),wood,c,.008)
+    box('北端米行粮栈_门槛',(1.21,gate_y,.13),(.34,1.78,.08),wood,c,.006)
+    box('北端米行粮栈_开门扇',(.57,56.97,1.20),(1.20,.075,2.06),wood,c,.010)
+    gv=[(.48,56.53,2.53),(1.82,56.53,2.53),(.48,59.27,2.53),(1.82,59.27,2.53),
+        (1.15,56.53,2.96),(1.15,59.27,2.96)]
+    gate_roof=mesh('北端米行粮栈_门楼瓦面',gv,[(0,2,5,4),(4,5,3,1)],M['tile'],c)
+    mod=gate_roof.modifiers.new('米行门楼真实屋面厚度','SOLIDIFY');mod.thickness=.065;mod.offset=-1
+    box('北端米行粮栈_西界粉墙',(-8.30,58.00,.90),(.20,12.60,1.80),M['plaster'],c,.018)
+    box('北端米行粮栈_西界压顶',(-8.30,58.00,1.84),(.28,12.68,.09),M['tile'],c,.010)
+    box('北端米行粮栈_北界粉墙',(-3.55,64.35,.90),(9.70,.20,1.80),M['plaster'],c,.018)
+    box('北端米行粮栈_北界压顶',(-3.55,64.35,1.84),(9.80,.28,.09),M['tile'],c,.010)
+
+    # Raised damp-proof granary. Six timber posts land exactly on stone shoes;
+    # the floor sits above splash level and the enclosed plank shell has a true
+    # east-facing doorway instead of a decorative door pasted onto a wall.
+    hx,hy=-4.70,58.60
+    box('北端米行粮栈_粮仓台基',(hx,hy,.20),(5.55,6.10,.40),stone,c,.018)
+    box('北端米行粮栈_架空木地坪',(hx,hy,.69),(5.05,5.55,.22),wood,c,.012)
+    for j,x in enumerate((-6.65,-4.70,-2.75),1):
+        for side,y in enumerate((56.25,60.95),1):
+            box(f'北端米行粮栈_粮仓柱础_{j}_{side}',(x,y,.38),(.40,.40,.36),wetstone,c,.015)
+            box(f'北端米行粮栈_粮仓木柱_{j}_{side}',(x,y,1.76),(.20,.20,2.40),wood,c,.008)
+    for y in (56.25,60.95):box('北端米行粮栈_粮仓檐枋',(hx,y,2.96),(4.30,.22,.22),wood,c,.008)
+    for x in (-6.65,-4.70,-2.75):box('北端米行粮栈_粮仓穿枋',(x,hy,2.86),(.20,4.92,.20),wood,c,.008)
+    # Rear and flank plank walls stop above the ventilated floor. East wall is
+    # split around a 1.42 m door opening centered on the court axis.
+    plankmat=material('米行旧木板',(.105,.061,.032),.68,9)
+    box('北端米行粮栈_粮仓西板墙',(-6.91,hy,1.80),(.16,4.66,2.05),plankmat,c,.008)
+    box('北端米行粮栈_粮仓南板墙',(hx,56.18,1.80),(4.38,.16,2.05),plankmat,c,.008)
+    box('北端米行粮栈_粮仓北板墙',(hx,61.02,1.80),(4.38,.16,2.05),plankmat,c,.008)
+    for tag,y,length in (('南段',57.14,1.38),('北段',60.06,1.38)):
+        box('北端米行粮栈_粮仓东板墙_'+tag,(-2.49,y,1.80),(.16,length,2.05),plankmat,c,.008)
+    box('北端米行粮栈_粮仓门楣',(-2.49,hy,2.80),(.18,1.70,.20),wood,c,.008)
+    box('北端米行粮栈_粮仓开门扇',(-2.58,57.82,1.75),(.08,1.34,1.86),wood,c,.010)
+    box('北端米行粮栈_粮仓门槛',(-2.39,hy,.84),(.30,1.32,.10),wood,c,.006)
+    for i,(x,z) in enumerate(((-1.82,.16),(-2.04,.35),(-2.25,.55)),1):
+        box(f'北端米行粮栈_粮仓上仓踏步_{i}',(x,hy,z),(.44,1.62,.20),stone,c,.012)
+    rv=[(-7.18,55.78,3.04),(-2.22,55.78,3.04),(-7.18,61.42,3.04),(-2.22,61.42,3.04),
+        (-4.70,55.78,4.12),(-4.70,61.42,4.12)]
+    hall_roof=mesh('北端米行粮栈_粮仓黛瓦屋面',rv,[(0,2,5,4),(4,5,3,1)],M['tile'],c)
+    mod=hall_roof.modifiers.new('粮仓真实屋面厚度','SOLIDIFY');mod.thickness=.075;mod.offset=-1
+    line('北端米行粮栈_粮仓正脊',[(-4.70,55.64,4.15),(-4.70,61.56,4.15)],.085,M['edge'],c,res=1,bevel_res=1)
+    # Four narrow screened vents keep the raised store believable without large
+    # dark holes. Each has a sill, reveal and recessed backing plane.
+    for i,y in enumerate((56.92,57.72,59.48,60.28),1):
+        box(f'北端米行粮栈_粮仓通风窗框_{i}',(-6.99,y,2.12),(.10,.52,.48),wood,c,.006)
+        box(f'北端米行粮栈_粮仓通风窗内衬_{i}',(-6.94,y,2.12),(.04,.36,.32),wetstone,c)
+
+    # Shared grain sacks and lidded bins establish scale and inventory while
+    # retaining one mesh datablock per repeated asset family.
+    sackmat=material('米行麻布',(.42,.32,.17),.84,14)
+    ropemat=material('米行麻绳',(.38,.23,.09),.90,8)
+    seg=12;sv=[];sf=[]
+    # Flat base, broad shoulder and pinched tied mouth read as a filled sack
+    # from the gate camera while all six copies still share one mesh datablock.
+    for z,rx,ry in ((0,.28,.22),(.12,.37,.27),(.64,.39,.28),(.84,.29,.22),(.93,.13,.12),(1.05,.06,.05)):
+        sv.extend((rx*cos(2*pi*i/seg),ry*sin(2*pi*i/seg),z) for i in range(seg))
+    sf.append(tuple(range(seg-1,-1,-1)))
+    for row in range(5):
+        for i in range(seg):
+            a=row*seg+i;b=row*seg+(i+1)%seg;sf.append((a,b,b+seg,a+seg))
+    sf.append(tuple(range(5*seg,6*seg)))
+    sack=mesh('北端米行粮栈_粮袋原型',sv,sf,sackmat,c);sack.hide_render=True;sack.hide_viewport=True
+    for i,(x,y,z,rz) in enumerate(((-1.10,56.90,.12,.12),(-.35,57.28,.12,-.18),(-1.05,58.45,.12,.05),(-3.58,57.35,.80,.18),(-4.35,57.30,.80,-.12),(-5.12,57.36,.80,.08)),1):
+        o=bpy.data.objects.new(PREFIX+f'北端米行粮栈_粮袋_{i}',sack.data);c.objects.link(o);o.location=(x,y,z);o.rotation_euler[2]=rz
+        # A real tied neck keeps the brighter sack silhouette from reading as a
+        # sealed clay jar. The closed loop and short free end visibly meet the bag.
+        ring=[(x+.145*cos(2*pi*j/8),y+.145*sin(2*pi*j/8),z+.99) for j in range(9)]
+        line(f'北端米行粮栈_粮袋扎口绳_{i}',ring,.014,ropemat,c,res=1,bevel_res=1)
+        uv(f'北端米行粮栈_粮袋绳结_{i}',(x+.14,y,z+1.00),(.040,.040,.040),ropemat,c,8,4)
+        line(f'北端米行粮栈_粮袋绳尾_{i}',[(x+.14,y,z+1.00),(x+.23,y+.06,z+.87)],.011,ropemat,c,res=1,bevel_res=1)
+    seg=16;bv=[];bf=[]
+    for z,r in ((0,.43),(.74,.46),(.86,.40)):
+        bv.extend((r*cos(2*pi*i/seg),r*sin(2*pi*i/seg),z) for i in range(seg))
+    for row in range(2):
+        for i in range(seg):
+            a=row*seg+i;b=row*seg+(i+1)%seg;bf.append((a,b,b+seg,a+seg))
+    bf.extend((tuple(range(seg-1,-1,-1)),tuple(range(2*seg,3*seg))))
+    grainbin=mesh('北端米行粮栈_粮斗原型',bv,bf,wood,c);grainbin.hide_render=True;grainbin.hide_viewport=True
+    for i,(x,y) in enumerate(((-5.85,59.55),(-4.68,59.55),(-3.51,59.55)),1):
+        o=bpy.data.objects.new(PREFIX+f'北端米行粮栈_粮斗_{i}',grainbin.data);c.objects.link(o);o.location=(x,y,.80)
+
+    # Grounded beam scale: two feet, upright, brace and cross-beam carry a
+    # suspended bronze pan. The rope endpoints visibly meet beam and pan.
+    # Rotate the scale ninety degrees relative to Round 11 so the long beam and
+    # hanging pan present a readable side profile from the east gate camera.
+    box('北端米行粮栈_磅秤底座',(-.35,60.10,.20),(.85,1.55,.28),wetstone,c,.018)
+    for y in (59.82,60.38):box('北端米行粮栈_磅秤支脚',(-.62,y,.52),(.18,.18,.78),wood,c,.008)
+    box('北端米行粮栈_磅秤立柱',(-.62,60.10,1.42),(.20,.20,2.25),wood,c,.008)
+    box('北端米行粮栈_磅秤斜撑',(-.62,60.35,.92),(.16,.62,.14),wood,c,.006)
+    box('北端米行粮栈_磅秤横梁',(-.62,60.78,2.47),(.16,1.78,.16),wood,c,.006)
+    line('北端米行粮栈_秤盘吊索',[(-.62,61.38,2.39),(-.85,61.38,1.72),(-.62,61.38,1.42),(-.39,61.38,1.72),(-.62,61.38,2.39)],.016,M['bronze'],c,res=1,bevel_res=1)
+    uv('北端米行粮栈_铜秤盘',(-.62,61.38,1.40),(.46,.46,.08),M['bronze'],c,16,4)
+    line('北端米行粮栈_工作灯挑杆',[(-2.75,58.60,2.76),(-1.95,58.60,2.76),(-1.95,58.60,2.28)],.024,wood,c,res=2,bevel_res=1)
+    uv('北端米行粮栈_工作纱灯',(-1.95,58.60,2.08),(.15,.15,.22),M['paper'],c,12,8)
+    light('北端米行粮栈_工作灯火',(-1.95,58.60,2.05),(1,.48,.20),92,.28,kind='POINT')
+
+    S['JN_town_phase']='phase_7_north_granary'
+    S['JN_north_granary_gate_clear_width_m']=1.90
+    S['JN_north_granary_hall_posts']=6
+    S['JN_north_granary_linked_sacks']=6
+    S['JN_north_granary_linked_bins']=3
+    S['JN_north_granary_new_image_bytes']=0
+
+def town_phase8_north_grain_wharf():
+    """Repair the northern canal water and add a supported public grain landing."""
+    c=C['water'];stone=M['stone'];wood=M['wood'];wetstone=M['darkstone'];ropemat=bpy.data.materials[PREFIX+'米行麻绳']
+    # Earlier expansion continued buildings and bridges beyond the first water
+    # strip. Restore the actual river surface from the paper-yard overlap to the
+    # granary terminus, while retaining a 0.15 m overlap with the original canal.
+    water=box('北段连续水巷',(7.30,48.70,.03),(5.00,31.70,.06),M['water'],c)
+    water['JN_function']='continuous_north_canal_water';water['JN_overlap_with_original_m']=.15
+
+    # The paved turning pocket links the granary street to a three-rise landing.
+    # Each tread descends toward the water; the timber apron then reaches the boat.
+    box('北粮水埠_桥北转折石坪',(3.48,54.90,.06),(1.86,2.70,.12),stone,c,.012)
+    for i,(x,top) in enumerate(((4.38,.42),(4.72,.28),(5.06,.14)),1):
+        step=box(f'北粮水埠_下水踏步_{i}',(x,54.90,top/2),(.48,1.72,top),stone,c,.012)
+        step['JN_step_top']=top;step['JN_destination']='north_grain_wharf'
+    deck=box('北粮水埠_装卸木台',(5.78,54.90,.31),(2.55,2.46,.18),wood,c,.010)
+    deck['JN_function']='supported_grain_loading_deck'
+    for x in (4.72,6.84):
+        for y in (53.92,55.88):
+            pile=box('北粮水埠_木台桩',(x,y,-.13),(.20,.20,1.02),wood,c,.008)
+            pile['JN_supports']='north_grain_loading_deck'
+    for y in (53.98,55.82):
+        box('北粮水埠_系舟桩础',(6.66,y,.18),(.34,.34,.18),stone,c,.010)
+        box('北粮水埠_系舟桩',(6.66,y,.82),(.16,.16,1.10),wood,c,.008)
+        line('北粮水埠_系舟桩横销',[(6.42,y,1.08),(6.90,y,1.08)],.030,wood,c,res=1,bevel_res=1)
+
+    # A narrow open rice barge leaves the navigation lane clear and remains well
+    # north of the third bridge. The hull, bottom, ribs and seats are all geometry.
+    bx,by=8.02,55.00
+    sections=[(-2.12,.08,.38),(-1.68,.50,.25),(-.82,.67,.19),(0,.72,.17),(.82,.67,.19),(1.68,.50,.25),(2.12,.08,.38)]
+    vv=[];ff=[]
+    for yy,half,bottom in sections:
+        vv.extend(((bx-half,by+yy,.59),(bx+half,by+yy,.59),(bx-half*.52,by+yy,bottom),(bx+half*.52,by+yy,bottom)))
+    for i in range(len(sections)-1):
+        a=4*i;b=a+4
+        ff.extend(((a,b,b+2,a+2),(a+1,a+3,b+3,b+1),(a+2,b+2,b+3,a+3)))
+    ff.extend(((0,1,3,2),(24,26,27,25)))
+    boat=mesh('北粮水埠_米船船壳',vv,ff,wood,c)
+    for p in boat.data.polygons:p.use_smooth=len(p.vertices)==4
+    box('北粮水埠_米船舱底',(bx,by,.35),(.62,3.22,.08),wood,c,.008)
+    for yy in (-.92,0,.92):box('北粮水埠_米船坐板',(bx,by+yy,.62),(1.16,.22,.08),wood,c,.006)
+    for side in (-1,1):
+        line('北粮水埠_米船舷侧压条',[(bx+side*half,by+yy,.61) for yy,half,_ in sections],.027,wetstone,c,res=2,bevel_res=1)
+    for yy,half in ((-.82,.67),(.82,.67)):
+        line('北粮水埠_米船横肋',[(bx-half*.88,by+yy,.54),(bx,by+yy,.40),(bx+half*.88,by+yy,.54)],.024,wetstone,c,res=2,bevel_res=1)
+    for xx in (-.20,0,.20):box('北粮水埠_米船排水栅条',(bx+xx,by,.415),(.075,2.82,.055),wetstone,c,.004)
+    box('北粮水埠_米船艄板',(bx,by+1.68,.49),(.92,.075,.34),wood,c,.006)
+    line('北粮水埠_竹篙',[(7.38,52.88,.58),(8.66,57.20,.66)],.026,wood,c,res=2,bevel_res=1)
+
+    # Mooring endpoints visibly meet the boat and north post. Two wharf sacks
+    # reuse the exact Round 11 grain-sack mesh instead of duplicating geometry.
+    line('北粮水埠_系舟缆绳',[(7.45,54.10,.58),(7.00,53.98,.82),(6.66,53.98,1.08)],.018,wetstone,c,res=3,bevel_res=1)
+    sack_mesh=bpy.data.objects[PREFIX+'北端米行粮栈_粮袋原型'].data
+    for i,(x,y,rz) in enumerate(((5.35,54.20,.12),(5.82,55.35,-.18)),1):
+        o=bpy.data.objects.new(PREFIX+f'北粮水埠_共享粮袋_{i}',sack_mesh);c.objects.link(o);o.location=(x,y,.40);o.rotation_euler[2]=rz
+        ring=[(x+.145*cos(2*pi*j/8),y+.145*sin(2*pi*j/8),1.39) for j in range(9)]
+        line(f'北粮水埠_粮袋扎口绳_{i}',ring,.014,ropemat,c,res=1,bevel_res=1)
+        uv(f'北粮水埠_粮袋绳结_{i}',(x+.14,y,1.40),(.040,.040,.040),ropemat,c,8,4)
+        line(f'北粮水埠_粮袋绳尾_{i}',[(x+.14,y,1.40),(x+.23,y+.06,1.27)],.011,ropemat,c,res=1,bevel_res=1)
+
+    # One restrained dock lamp provides a functional pool without flattening
+    # the moonlit hierarchy or adding bitmap textures.
+    line('北粮水埠_码头灯挑杆',[(6.66,55.82,1.18),(6.66,55.82,1.72),(7.02,55.82,1.72)],.024,wood,c,res=2,bevel_res=1)
+    uv('北粮水埠_码头纱灯',(7.02,55.82,1.48),(.12,.12,.19),M['paper'],c,12,8)
+    line('北粮水埠_码头灯悬绳',[(7.02,55.82,1.67),(7.02,55.82,1.73)],.008,wood,c,res=1,bevel_res=0)
+    light('北粮水埠_码头灯火',(7.02,55.82,1.46),(1,.43,.18),62,.24,kind='POINT')
+
+    S['JN_town_phase']='phase_8_north_grain_wharf'
+    S['JN_north_canal_overlap_m']=.15
+    S['JN_north_grain_wharf_piles']=4
+    S['JN_north_grain_wharf_shared_sacks']=2
+    S['JN_north_grain_wharf_new_image_bytes']=0
+
+def town_phase9_north_silk_bend():
+    """Extend the north canal into a working bend with a raw-silk warehouse and fourth bridge."""
+    c=C['water'];stone=M['stone'];wood=M['wood'];wetstone=M['darkstone']
+    # Both banks overlap the Round 12 terminus. The east parcel deliberately
+    # retreats to x=13.40 around the basin, then returns to the normal bank at
+    # the fourth bridge so the bend reads as water rather than a painted inset.
+    west_land=box('北河丝行_西岸延伸地基',(-1.98,69.90,-.30),(12.84,11.40,.60),wetstone,c)
+    west_land['JN_function']='north_bend_west_support';west_land['JN_ground_top']=0.0
+    east_land=box('北河丝行_东岸原料区地基',(17.77,68.30,-.30),(8.74,11.70,.60),wetstone,c)
+    east_land['JN_function']='recessed_east_silk_parcel';east_land['JN_ground_top']=0.0
+    east_cap=box('北河丝行_第四桥东岸接地',(16.15,74.80,-.30),(11.98,1.50,.60),wetstone,c)
+    east_cap['JN_function']='returned_standard_east_bank';east_cap['JN_ground_top']=0.0
+    water=box('北河丝行_北延水巷',(7.30,70.00,.03),(5.00,11.20,.06),M['water'],c)
+    water['JN_function']='continuous_north_canal_water';water['JN_overlap_with_round12_m']=.15
+    basin=box('北河丝行_东向卸货河湾',(11.60,68.30,.03),(3.60,6.80,.06),M['water'],c)
+    basin['JN_function']='east_loading_basin';basin['JN_width_m']=8.60
+
+    # Continuous public routes: west water street, recessed east silk street and
+    # a north cross-lane returning to the normal east bridge landing.
+    box('北河丝行_西岸北延石街',(3.50,70.00,.06),(1.82,11.20,.12),stone,c,.012)
+    box('北河丝行_东岸丝行石街',(14.45,68.30,.06),(1.82,11.40,.12),stone,c,.012)
+    box('北河丝行_第四桥东接横巷',(13.38,73.82,.06),(3.96,1.36,.12),stone,c,.012)
+
+    # Fourth bridge closes a new pedestrian loop north of the widened basin.
+    plank=box('北河丝行_第四桥板原型',(0,0,0),(1,1,.14),wood,c,.014);plank.hide_render=True;plank.hide_viewport=True
+    for i in range(11):
+        x=4.60+i*.52
+        o=bpy.data.objects.new(PREFIX+f'北河丝行_第四桥板_{i+1:02d}',plank.data);c.objects.link(o);o.location=(x,74.20,.70);o.scale=(.50,1.48,1)
+    for side,y in enumerate((73.43,74.97),1):
+        for i,x in enumerate((4.68,5.72,6.76,7.80,8.84,9.78),1):
+            box(f'北河丝行_第四桥栏柱_{side}_{i}',(x,y,1.29),(.12,.12,1.04),wood,c,.006)
+        for z in (1.18,1.65):box('北河丝行_第四桥栏杆',(7.23,y,z),(5.22,.10,.10),wood,c,.005)
+    for side,centers in (('西',(3.70,4.02,4.34)),('东',(10.68,10.36,10.04))):
+        for i,x in enumerate(centers,1):
+            top=.20+.20*(i-1 if side=='西' else 3-i)
+            box(f'北河丝行_第四桥{side}阶_{i}',(x,74.20,top/2),(.32,1.62,top),stone,c,.012)
+
+    # A small open waiting pavilion supports the public node without competing
+    # with the silk warehouse. Four posts land on four shoes; no wall infill is
+    # placed between them, preserving the river outlook promised by the columns.
+    px,py=.10,68.70
+    box('北河丝行_候船亭台基',(px,py,.16),(4.00,4.50,.32),stone,c,.025)
+    for x in (-1.40,1.60):
+        for y in (67.05,70.35):
+            box('北河丝行_候船亭柱础',(x,y,.41),(.42,.42,.18),wetstone,c,.014)
+            box('北河丝行_候船亭木柱',(x,y,1.78),(.19,.19,2.58),wood,c,.008)
+    for y in (67.05,70.35):box('北河丝行_候船亭檐枋',(px,y,3.08),(3.20,.20,.22),wood,c,.008)
+    for x in (-1.40,1.60):box('北河丝行_候船亭穿枋',(x,py,3.02),(.20,3.50,.20),wood,c,.008)
+    pavilion_roof=roof('北河丝行_候船亭',px,py,3.12,4.70,5.00,c)
+    mod=pavilion_roof.modifiers.new('候船亭真实屋面厚度','SOLIDIFY');mod.thickness=.070;mod.offset=-1
+    box('北河丝行_候船亭长凳',(px,69.55,.66),(2.30,.46,.16),wood,c,.018)
+    for x in (-.78,.98):box('北河丝行_候船亭凳腿',(x,69.55,.37),(.15,.34,.52),wood,c,.008)
+
+    # Thick split west wall creates a measured 1.90 m silk-yard arrival. The
+    # gate looks directly through to an open-front, six-column raw-silk hall.
+    wall_x=13.55;gate_y=68.30
+    for tag,y,length in (('南段',65.32,4.00),('北段',71.28,4.00)):
+        box('北河丝行_西院墙_'+tag,(wall_x,y,1.02),(.24,length,2.04),M['plaster'],c,.018)
+        box('北河丝行_西院墙压顶_'+tag,(wall_x,y,2.10),(.34,length+.08,.09),M['tile'],c,.010)
+    for y in (67.30,69.30):box('北河丝行_门楼木柱',(wall_x,y,1.30),(.20,.20,2.44),wood,c,.008)
+    box('北河丝行_门楼额枋',(wall_x,gate_y,2.48),(.22,2.24,.20),wood,c,.008)
+    box('北河丝行_门槛',(13.49,gate_y,.13),(.34,1.78,.08),wood,c,.006)
+    box('北河丝行_开门扇',(14.18,67.37,1.20),(1.20,.075,2.06),wood,c,.010)
+    gv=[(12.88,66.93,2.53),(14.22,66.93,2.53),(12.88,69.67,2.53),(14.22,69.67,2.53),(13.55,66.93,2.96),(13.55,69.67,2.96)]
+    gate_roof=mesh('北河丝行_门楼瓦面',gv,[(0,2,5,4),(4,5,3,1)],M['tile'],c)
+    mod=gate_roof.modifiers.new('丝行门楼真实屋面厚度','SOLIDIFY');mod.thickness=.065;mod.offset=-1
+    box('北河丝行_东界粉墙',(22.04,68.30,.90),(.20,11.20,1.80),M['plaster'],c,.018)
+    box('北河丝行_东界压顶',(22.04,68.30,1.84),(.28,11.28,.09),M['tile'],c,.010)
+    box('北河丝行_南界粉墙',(18.12,62.55,.90),(7.66,.20,1.80),M['plaster'],c,.018)
+    box('北河丝行_南界压顶',(18.12,62.55,1.84),(7.76,.28,.09),M['tile'],c,.010)
+
+    hx,hy=18.15,68.30
+    box('北河丝行_原料仓台基',(hx,hy,.16),(6.30,5.40,.32),stone,c,.025)
+    box('北河丝行_西入口踏步',(14.82,hy,.09),(.42,1.58,.18),stone,c,.012)
+    for x in (15.52,18.15,20.78):
+        for y in (66.04,70.56):
+            box('北河丝行_原料仓柱础',(x,y,.42),(.38,.38,.20),wetstone,c,.015)
+            box('北河丝行_原料仓木柱',(x,y,1.80),(.20,.20,2.56),wood,c,.008)
+    for y in (66.04,70.56):box('北河丝行_原料仓长檩',(hx,y,3.12),(5.50,.21,.22),wood,c,.008)
+    for x in (15.52,18.15,20.78):box('北河丝行_原料仓穿梁',(x,hy,3.06),(.20,4.72,.20),wood,c,.008)
+    box('北河丝行_原料仓东后墙',(21.00,hy,1.52),(.20,4.62,2.66),M['plaster'],c,.018)
+    for y in (66.00,70.60):box('北河丝行_原料仓侧粉墙',(19.92,y,1.40),(2.30,.18,2.38),M['plaster'],c,.018)
+    warehouse_roof=roof('北河丝行_原料仓',hx,hy,3.20,6.85,5.85,c)
+    mod=warehouse_roof.modifiers.new('丝行原料仓真实屋面厚度','SOLIDIFY');mod.thickness=.080;mod.offset=-1
+
+    # A four-pile east loading deck reaches the basin. Two shallow risers land
+    # back on the recessed east parcel; mooring points retain visible contact.
+    box('北河丝行_河湾装卸木台',(12.20,68.30,.30),(2.40,2.62,.18),wood,c,.010)
+    for x in (11.22,13.18):
+        for y in (67.23,69.37):box('北河丝行_河湾木台桩',(x,y,-.13),(.20,.20,1.02),wood,c,.008)
+    for i,(x,top) in enumerate(((13.42,.18),(13.20,.28)),1):box(f'北河丝行_河湾装卸踏步_{i}',(x,hy,top/2),(.44,1.56,top),stone,c,.010)
+    for y in (67.36,69.24):
+        box('北河丝行_河湾系舟桩础',(11.20,y,.18),(.34,.34,.18),stone,c,.010)
+        box('北河丝行_河湾系舟桩',(11.20,y,.76),(.16,.16,.98),wood,c,.008)
+
+    # Linked raw-silk bales and a real timber reel rack explain the warehouse
+    # function while leaving the 1.40 m gate-to-hall axis unobstructed.
+    balemat=material('丝行原麻绢包',(.49,.38,.20),.86,12)
+    ropemat=bpy.data.materials.get(PREFIX+'米行麻绳') or material('丝行麻绳',(.34,.21,.08),.90,8)
+    # A gently pinched super-ellipse replaces the old rounded box.  The broad
+    # shoulder, softened belly and compressed top read as a tied textile bale,
+    # while every copy still links the same economical mesh datablock.
+    seg=12;bv=[];bf=[]
+    for z,rx,ry,power in ((0,.32,.22,.42),(.10,.42,.30,.36),(.38,.44,.31,.34),(.66,.39,.27,.38),(.74,.29,.19,.48)):
+        for i in range(seg):
+            a=2*pi*i/seg;ca,sa=cos(a),sin(a)
+            bv.append((rx*(1 if ca>=0 else -1)*abs(ca)**power,ry*(1 if sa>=0 else -1)*abs(sa)**power,z))
+    bf.append(tuple(range(seg-1,-1,-1)))
+    for row in range(4):
+        for i in range(seg):
+            a=row*seg+i;b=row*seg+(i+1)%seg;bf.append((a,b,b+seg,a+seg))
+    bf.append(tuple(range(4*seg,5*seg)))
+    bale=mesh('北河丝行_绢包原型',bv,bf,balemat,c);bale.hide_render=True;bale.hide_viewport=True
+    for i,(x,y,z,rz) in enumerate(((17.25,66.78,.16,.10),(18.25,66.78,.16,-.08),(19.25,66.78,.16,.04),(17.45,66.80,.88,-.10),(18.45,66.80,.88,.08),(19.45,66.80,.88,-.03)),1):
+        o=bpy.data.objects.new(PREFIX+f'北河丝行_绢包_{i}',bale.data);c.objects.link(o);o.location=(x,y,z);o.rotation_euler[2]=rz
+        for j,dy in enumerate((-.18,.18),1):
+            loop=[(x-.36,y+dy,z+.14),(x-.41,y+dy,z+.38),(x-.28,y+dy,z+.68),(x+.28,y+dy,z+.68),(x+.41,y+dy,z+.38),(x+.36,y+dy,z+.14),(x-.36,y+dy,z+.14)]
+            line(f'北河丝行_绢包束绳_{i}_{j}',loop,.013,ropemat,c,res=1,bevel_res=1)
+        uv(f'北河丝行_绢包绳结_{i}',(x,y-.19,z+.70),(.035,.035,.035),ropemat,c,8,4)
+    box('北河丝行_络丝架顶梁',(20.15,68.30,2.18),(.18,2.72,.18),wood,c,.008)
+    for y in (67.05,69.55):box('北河丝行_络丝架立柱',(20.15,y,1.28),(.18,.18,1.72),wood,c,.008)
+    for z in (1.12,1.62):box('北河丝行_络丝架横轴',(20.15,68.30,z),(.16,2.36,.16),wood,c,.006)
+    for j,y in enumerate((67.55,68.30,69.05),1):
+        line(f'北河丝行_络丝绞_{j}',[(20.05,y-.18,1.62),(19.92,y,1.44),(20.05,y+.18,1.62),(20.18,y,1.80),(20.05,y-.18,1.62)],.028,balemat,c,res=2,bevel_res=1)
+
+    line('北河丝行_门侧工作灯挑杆',[(13.55,69.30,2.28),(12.92,69.30,2.28),(12.92,69.30,1.82)],.022,wood,c,res=2,bevel_res=1)
+    uv('北河丝行_门侧工作纱灯',(12.92,69.30,1.60),(.13,.13,.20),M['paper'],c,12,8)
+    light('北河丝行_门侧工作灯火',(12.92,69.30,1.58),(1,.46,.20),62,.24,kind='POINT')
+    line('北河丝行_仓内吊灯杆',[(18.15,67.30,3.04),(18.15,67.30,2.52)],.018,wood,c,res=1,bevel_res=1)
+    uv('北河丝行_仓内工作纱灯',(18.15,67.30,2.30),(.15,.15,.22),M['paper'],c,12,8)
+    light('北河丝行_仓内工作灯火',(18.15,67.30,2.28),(1,.50,.24),92,.28,kind='POINT')
+
+    S['JN_town_phase']='phase_9_north_silk_bend'
+    S['JN_north_silk_gate_clear_width_m']=1.90
+    S['JN_north_silk_bridge_planks']=11
+    S['JN_north_silk_linked_bales']=6
+    S['JN_north_silk_new_image_bytes']=0
+
+def town_phase10_silk_trade_finish():
+    """Close the silk trade loop with an open shop bay, account room and basin boat."""
+    c=C['water'];stone=M['stone'];wood=M['wood'];wetstone=M['darkstone']
+    ropemat=bpy.data.materials.get(PREFIX+'米行麻绳') or M['edge']
+
+    # The north bay of the existing six-column hall becomes a real west-facing
+    # shop.  It uses the proven warehouse roof, columns and plinth rather than
+    # adding an unsupported decorative facade.  The gate axis remains clear.
+    shop_y=69.82
+    for y in (69.24,70.40):
+        box('北河丝行_铺面前柱',(15.44,y,1.55),(.16,.16,2.34),wood,c,.007)
+    box('北河丝行_铺面额枋',(15.44,shop_y,2.70),(.18,1.36,.18),wood,c,.007)
+    box('北河丝行_临街交易柜台',(15.52,shop_y,.84),(.48,1.06,.76),wood,c,.018)
+    box('北河丝行_柜台青石脚',(15.58,shop_y,.29),(.38,.92,.22),wetstone,c,.012)
+    # Two solid shutters are shown folded open against the posts; the opening
+    # has physical depth and a visible merchandise destination beyond it.
+    for tag,y in (('南',69.13),('北',70.51)):
+        shutter=box('北河丝行_铺面开启排门_'+tag,(15.35,y,1.72),(.10,.46,1.44),wood,c,.008)
+        shutter['JN_open_state']='folded_open';shutter['JN_destination']='silk_trade_counter'
+    silk_mats=[material('丝行月白绢',(.62,.68,.66),.72,5),material('丝行绛红绢',(.44,.10,.075),.76,5),material('丝行黛青绢',(.12,.24,.27),.78,5)]
+    # Two thin hanging bolts flank the sightline; the red bolt is folded on the
+    # counter so merchandise no longer seals the account-room destination.
+    for i,(y,mat) in enumerate(((69.34,silk_mats[0]),(70.30,silk_mats[2])),1):
+        box(f'北河丝行_铺面绢匹_{i}',(16.38,y,1.58),(.10,.30,1.00),mat,c,.012)
+        box(f'北河丝行_铺面绢匹轴_{i}',(16.38,y,2.12),(.10,.38,.10),wood,c,.004)
+    box('北河丝行_铺面绢匹_3',(15.88,69.82,1.28),(.32,.46,.10),silk_mats[1],c,.012)
+    box('北河丝行_铺面绢匹轴_3',(15.88,69.82,1.34),(.36,.08,.07),wood,c,.003)
+
+    # A timber screen behind the merchandise creates a separate account room.
+    # Its 0.82 m opening has a recessed desk and ledger beyond, so it is a true
+    # destination rather than a dark plane pasted onto the shop wall.
+    sx=18.66;door_y=69.78
+    for y in (69.20,70.36):box('北河丝行_账房隔扇边柱',(sx,y,1.52),(.15,.15,2.24),wood,c,.006)
+    for tag,y,length in (('南段',69.29,.18),('北段',70.26,.20)):
+        box('北河丝行_账房隔扇_'+tag,(sx,y,1.40),(.12,length,1.88),wood,c,.006)
+    box('北河丝行_账房门楣',(sx,door_y,2.52),(.14,1.12,.16),wood,c,.006)
+    # Thin lattice above the low rail preserves sight through the doorway.
+    for y in (69.30,70.25):
+        for z in (1.16,1.54,1.92):box('北河丝行_账房格心',(sx-.01,y,z),(.09,.30,.035),wood,c,.003)
+    box('北河丝行_账房门槛',(sx-.06,door_y,.30),(.28,.78,.08),wood,c,.005)
+    box('北河丝行_账房案桌',(19.68,69.86,.82),(1.22,.62,.12),wood,c,.012)
+    for x in (19.18,20.18):
+        for y in (69.63,70.09):box('北河丝行_账房案腿',(x,y,.49),(.12,.12,.62),wood,c,.005)
+    box('北河丝行_账册一',(19.52,69.82,.91),(.38,.22,.06),silk_mats[2],c,.004)
+    box('北河丝行_账册二',(19.56,69.84,.98),(.34,.20,.06),M['paper'],c,.004)
+    box('北河丝行_算盘框',(19.92,69.83,.94),(.46,.24,.055),wood,c,.005)
+    for j in range(5):
+        box('北河丝行_算盘档杆',(19.74+j*.09,69.83,.975),(.018,.20,.018),M['bronze'],c,.002)
+        for k in range(3):uv('北河丝行_算盘珠',(19.74+j*.09,69.76+k*.07,.99),(.026,.026,.020),M['bronze'],c,8,4)
+    box('北河丝行_账房方凳',(20.26,69.86,.48),(.42,.42,.10),wood,c,.008)
+    for x in (20.10,20.42):
+        for y in (69.70,70.02):box('北河丝行_账房凳腿',(x,y,.25),(.08,.08,.42),wood,c,.004)
+
+    # A narrow open silk boat sits wholly inside the recessed east basin.  Its
+    # west edge stays east of x=9.80, preserving the full 5 m navigation lane.
+    bx,by=10.38,68.28
+    sections=[(-1.70,.05,.39),(-1.30,.34,.28),(-.62,.46,.22),(0,.49,.20),(.62,.46,.22),(1.30,.34,.28),(1.70,.05,.39)]
+    vv=[];ff=[]
+    for yy,half,bottom in sections:
+        vv.extend(((bx-half,by+yy,.60),(bx+half,by+yy,.60),(bx-half*.52,by+yy,bottom),(bx+half*.52,by+yy,bottom)))
+    for i in range(len(sections)-1):
+        a=4*i;b=a+4
+        ff.extend(((a,b,b+2,a+2),(a+1,a+3,b+3,b+1),(a+2,b+2,b+3,a+3)))
+    ff.extend(((0,1,3,2),(24,26,27,25)))
+    boat=mesh('北河丝行_运丝小舟船壳',vv,ff,wood,c)
+    for p in boat.data.polygons:p.use_smooth=len(p.vertices)==4
+    box('北河丝行_运丝小舟舱底',(bx,by,.39),(.42,2.55,.07),wood,c,.006)
+    for yy in (-.62,.62):box('北河丝行_运丝小舟坐板',(bx,by+yy,.63),(.76,.18,.07),wood,c,.005)
+    for side in (-1,1):line('北河丝行_运丝小舟舷压条',[(bx+side*half,by+yy,.61) for yy,half,_ in sections],.021,wetstone,c,res=2,bevel_res=1)
+    for yy,half in ((-.62,.46),(.62,.46)):
+        line('北河丝行_运丝小舟横肋',[(bx-half*.86,by+yy,.55),(bx,by+yy,.42),(bx+half*.86,by+yy,.55)],.020,wetstone,c,res=2,bevel_res=1)
+    box('北河丝行_运丝小舟艄板',(bx,by+1.30,.50),(.58,.06,.30),wood,c,.005)
+    line('北河丝行_运丝小舟竹篙',[(10.02,66.55,.62),(10.76,69.98,.69)],.022,wood,c,res=2,bevel_res=1)
+    line('北河丝行_运丝小舟系缆',[(10.76,67.63,.58),(11.02,67.48,.78),(11.20,67.36,1.25)],.015,ropemat,c,res=2,bevel_res=1)
+    bale_mesh=bpy.data.objects[PREFIX+'北河丝行_绢包原型'].data
+    for i,(y,rz) in enumerate(((67.96,.05),(68.45,-.06)),1):
+        o=bpy.data.objects.new(PREFIX+f'北河丝行_运丝舟共享绢包_{i}',bale_mesh);c.objects.link(o)
+        o.location=(bx,y,.39);o.rotation_euler[2]=rz;o.scale=(.66,.66,.66)
+
+    # Restrained task lighting separates commerce from storage while retaining
+    # the moonlit hierarchy and adding no bitmap textures.
+    line('北河丝行_铺面灯挑杆',[(15.44,70.38,2.62),(14.92,70.38,2.62),(14.92,70.38,2.18)],.020,wood,c,res=2,bevel_res=1)
+    uv('北河丝行_铺面纱灯',(14.92,70.38,1.98),(.12,.12,.18),M['paper'],c,12,8)
+    light('北河丝行_铺面灯火',(14.92,70.38,1.96),(1,.45,.20),74,.25,kind='POINT')
+
+    S['JN_town_phase']='phase_10_silk_trade_finish'
+    S['JN_silk_shop_opening_width_m']=1.00
+    S['JN_silk_account_door_width_m']=.82
+    S['JN_silk_boat_navigation_clearance_m']=.09
+    S['JN_silk_shop_new_image_bytes']=0
+
+def workshop_layout43():
+    """Metre-scale contact contract; source and evaluated mesh checks agree."""
+    return {'floor':.30,'table_top':.98,'table_leg':(.57,.54),
+            'trestle_leg':(.475,.35),'blank_z':.845,'lower_board_z':.36,
+            'upper_board_z':.475,'planer_z':1.045,'mallet_z':1.055,
+            'oil_z':.98+.22*cos(pi/6),'rope_z':.30+.018*cos(pi/6)}
+
+def waiting46_layout():
+    """Metre contract: connected widened apron, two 0.10m risers, small rack."""
+    return {
+        'lane_outline':[(-4.70,70.70),(3.50,70.70),(3.50,72.54),(-1.40,72.54),(-1.40,72.00),(-4.70,72.00)],
+        'step':((.10,71.08,.17),(2.10,.42,.10)),
+        'legs':[(x,y,.52) for x in (1.55,1.87) for y in (69.12,69.68)],
+        'rails':[(x,69.40,.72) for x in (1.55,1.87)],
+        'slats':[(1.71,y,.80) for y in (69.22,69.58)],
+        'leg_size':(.08,.08,.40),'rail_size':(.08,.72,.08),'slat_size':(.50,.32,.08),
+    }
+
+def waiting_pavilion46():
+    """A real entrance and luggage destination, not decorative route clutter."""
+    import bmesh
+    spec=waiting46_layout();c=C['water'];wood=M['wood']
+    lane=bpy.data.objects['JN_北河修桨作坊_候船横巷']
+    ring=spec['lane_outline'];n=len(ring)
+    verts=[(x,y,z) for z in (0,.12) for x,y in ring]
+    faces=[tuple(reversed(range(n))),tuple(range(n,2*n))]
+    faces += [(i,(i+1)%n,(i+1)%n+n,i+n) for i in range(n)]
+    lane.data.clear_geometry();lane.data.from_pydata(verts,[],faces);lane.data.update()
+    lane['JN_route46']='continuous L apron; north bypass >=1.20m; west connection preserved'
+    created=[]
+    step=box('候船整备46_上台踏步',*spec['step'],M['stone'],c,.006);created.append(step)
+    for label,size,places in [('架足',spec['leg_size'],spec['legs']),('承枋',spec['rail_size'],spec['rails']),('搁板',spec['slat_size'],spec['slats'])]:
+        if label=='搁板':size=(size[1],size[0],size[2])
+        first=None
+        for i,place in enumerate(places):
+            if first is None:
+                obj=box('候船整备46_'+label+str(i),(0,0,0),size,wood,c,.004)
+                obj.modifiers[0].segments=1;first=obj
+            else:
+                obj=bpy.data.objects.new(PREFIX+'候船整备46_'+label+str(i),first.data);c.objects.link(obj)
+                mod=obj.modifiers.new('浅倒角','BEVEL');mod.width=.004;mod.segments=1
+            obj.location=place;obj['JN_shared_family46']=label;created.append(obj)
+            if label=='搁板':obj.rotation_euler.z=pi/2
+    for obj in created:
+        obj['JN_asset_family']='waiting-pavilion46';obj['JN_units']='metres'
+    # The old guide lamp stood inside the newly measured bypass. Move the
+    # existing pole, shade AND light together onto the south edge of the lane.
+    for tag in ('引路灯柱','引路纱灯','引路灯火'):
+        obj=bpy.data.objects['JN_北河修桨作坊_'+tag]
+        obj.location.x+=.30;obj.location.y-=.60
+        obj['JN_route46']='relocated together to free the north bypass; no added light'
+    # Repair winding only on this new closed family and the changed lane.
+    for data in {o.data for o in created+[lane]}:
+        bm=bmesh.new();bm.from_mesh(data);bmesh.ops.recalc_face_normals(bm,faces=list(bm.faces));bm.to_mesh(data);bm.free();data.update()
+    S['JN_waiting46_new_objects']=9;S['JN_waiting46_new_images']=0
+
+def workshop_rack44():
+    """Two repeated static seats follow the lowest rotated blade corners."""
+    rows=[]
+    for i,x in enumerate((-6.18,-5.15,-4.10,-3.08),1):
+        angle=-.065 if i%2 else .075
+        bottom=.98-.41*cos(angle)-.1968*abs(sin(angle))
+        rows.append((i,x,angle,bottom))
+    return rows
+
+def town_phase11_west_oar_workshop():
+    """Add a grounded west-bank oar workshop and refine the silk-shop threshold."""
+    c=C['water'];stone=M['stone'];wood=M['wood'];wetstone=M['darkstone']
+    ropemat=bpy.data.materials.get(PREFIX+'米行麻绳') or M['edge']
+    support43=workshop_layout43()
+    # Local donor copy: preserve Blender node shading and all other rope users.
+    rope43=ropemat.copy();rope43.name=PREFIX+'修桨作坊盘绳43'
+    rope43.diffuse_color=(.38,.23,.09,1)
+    rope43['JN_web_base_color_factor']=(.38,.23,.09,1)
+    rope43.roughness=.90
+
+    # A public cross-lane overlaps the proven west water street and opens into
+    # the waiting pavilion.  The repair shed sits wholly on the Round 13 west
+    # parcel, leaving the five-metre canal and bridge approaches untouched.
+    lane=box('北河修桨作坊_候船横巷',(-.60,71.35,.06),(8.20,1.30,.12),stone,c,.012)
+    lane['JN_function']='waiting_pavilion_to_oar_workshop_route'
+    lane['JN_overlap_west_water_street_m']=.91
+    wx,wy=-4.60,73.20
+    box('北河修桨作坊_实体台基',(wx,wy,.15),(5.60,3.55,.30),stone,c,.022)
+    for y,z,w in ((71.55,.12,3.90),(71.28,.06,4.35)):
+        box('北河修桨作坊_入坊踏步',(wx,y,z),(w,.38,.12),stone,c,.012)
+
+    # Four corner posts create one generous 4.22 m south-facing arrival.  The
+    # open bay has a visible workbench destination rather than a false facade.
+    for x in (-6.80,-2.40):
+        for y in (71.80,74.60):
+            box('北河修桨作坊_柱础',(x,y,.39),(.46,.46,.18),wetstone,c,.014)
+            box('北河修桨作坊_木柱',(x,y,1.78),(.18,.18,2.60),wood,c,.008)
+    for y in (71.80,74.60):box('北河修桨作坊_檐枋',(wx,y,3.10),(4.60,.20,.22),wood,c,.008)
+    for x in (-6.80,-2.40):box('北河修桨作坊_穿梁',(x,wy,3.04),(.20,3.04,.20),wood,c,.008)
+    shed_roof=roof('北河修桨作坊_屋面',wx,wy,3.13,6.15,4.25,c)
+    mod=shed_roof.modifiers.new('修桨作坊真实屋面厚度','SOLIDIFY');mod.thickness=.072;mod.offset=-1
+
+    # Workbench, trestles and timber stock make the craft legible while keeping
+    # the centre arrival clear.  Every floor object physically lands on either
+    # the platform or a visible support.
+    box('北河修桨作坊_工作长案',(-5.55,73.52,.91),(2.28,.62,.14),wood,c,.014)
+    def outward44(obj):
+        import bmesh
+        bm=bmesh.new();bm.from_mesh(obj.data)
+        bmesh.ops.recalc_face_normals(bm,faces=list(bm.faces));bm.to_mesh(obj.data);bm.free();obj.data.update()
+        return obj
+    def shared44(label,centers,size,bev=0):
+        # Centred metre-scale coordinates; no scale transforms. Texture phase
+        # becomes common to siblings, not its physical frequency or orientation.
+        first=None
+        for center in centers:
+            if first is None:
+                obj=outward44(box('北河修桨作坊_'+label,(0,0,0),size,wood,c,bev));first=obj
+            else:
+                obj=bpy.data.objects.new(PREFIX+'北河修桨作坊_'+label,first.data);c.objects.link(obj)
+                for modifier in first.modifiers:
+                    m=obj.modifiers.new(modifier.name,modifier.type);m.width=modifier.width;m.segments=modifier.segments
+            obj.location=center;obj['JN_shared_family44']=label
+        return first
+    shared44('长案腿',[(x,y,support43['table_leg'][0]) for x in (-6.40,-4.70) for y in (73.30,73.74)],(.13,.13,support43['table_leg'][1]),.005)
+    for x in (-5.82,-3.88):
+        box('北河修桨作坊_修桨马凳横木',(x,72.36,.72),(.94,.16,.14),wood,c,.008)
+    shared44('修桨马凳腿',[(x+dx,72.36,support43['trestle_leg'][0]) for x in (-5.82,-3.88) for dx in (-.31,.31)],(.12,.12,support43['trestle_leg'][1]),.005)
+    box('北河修桨作坊_待刨桨坯',(-4.85,72.36,support43['blank_z']),(3.20,.16,.11),wood,c,.012)
+    box('北河修桨作坊_备用船板一',(-3.45,73.63,support43['lower_board_z']),(1.95,.34,.12),wood,c,.010)
+    box('北河修桨作坊_备用船板二',(-3.50,73.63,support43['upper_board_z']),(1.72,.30,.11),wood,c,.010)
+
+    # One compact shared oar mesh provides four rack instances.  The blade and
+    # shaft remain real silhouette geometry rather than painted detail.
+    ov=[];of=[]
+    def prism(x0,x1,y0,y1,z0,z1):
+        k=len(ov);ov.extend(((x0,y0,z0),(x0,y0,z1),(x0,y1,z0),(x0,y1,z1),(x1,y0,z0),(x1,y0,z1),(x1,y1,z0),(x1,y1,z1)))
+        of.extend(tuple(k+i for i in f) for f in ((0,4,6,2),(1,3,7,5),(0,1,5,4),(2,6,7,3),(0,2,3,1),(4,5,7,6)))
+    prism(-.034,.034,-.034,.034,0,2.02)
+    k=len(ov);ov.extend(((-.24,-.030,-.50),(-.24,-.030,-.12),(-.07,-.030,.10),(.07,-.030,.10),(.24,-.030,-.12),(.24,-.030,-.50),(-.24,.030,-.50),(-.24,.030,-.12),(-.07,.030,.10),(.07,.030,.10),(.24,.030,-.12),(.24,.030,-.50)))
+    of.extend(tuple(k+i for i in f) for f in ((0,1,2,3,4,5),(11,10,9,8,7,6),(0,6,7,1),(1,7,8,2),(2,8,9,3),(3,9,10,4),(4,10,11,5),(5,11,6,0)))
+    oar=mesh('北河修桨作坊_桨橹原型',ov,of,wood,c);oar.hide_render=True;oar.hide_viewport=True
+    # Both ends overlap the rear posts; the old bars stopped short of them.
+    outward44(box('北河修桨作坊_桨架下枋',(wx,74.53,.88),(4.40,.14,.14),wood,c,.006))
+    outward44(box('北河修桨作坊_桨架上枋',(wx,74.53,2.34),(4.40,.14,.14),wood,c,.006))
+    for i,x in enumerate((-6.18,-5.15,-4.10,-3.08),1):
+        o=bpy.data.objects.new(PREFIX+f'北河修桨作坊_共享桨橹_{i}',oar.data);c.objects.link(o)
+        # Lift the blades above the trestle silhouette and scale the full oars
+        # back under the rear beam, so both blade and shaft read in the human view.
+        o.location=(x,74.24,.98);o.scale=(.82,.82,.82);o.rotation_euler[1]=(-.065 if i%2 else .075)
+
+    # Two handed seat families: broad horizontal bearing beneath the blade,
+    # plus a visible vertical backer lapped into the lower crossbar. No claim
+    # of dynamic fastening or structural load certification.
+    for parity in (1,0):
+        rows=[r for r in workshop_rack44() if r[0]%2==parity]
+        bottom=rows[0][3]
+        seat=shared44('承桨托座'+str(parity),[(x,74.38,bottom-.025) for _,x,_,_ in rows],(.52,.38,.05))
+        # A flat shelf only touched the lowest blade corner. Slope its existing
+        # four top vertices to the actual rotated blade-bottom plane; keep the
+        # underside level, the same 8 vertices/6 faces and the shared family.
+        angle=rows[0][2]
+        for v in seat.data.vertices:
+            if v.co.z>0:
+                v.co.z=.98-.41/cos(angle)-sin(angle)/cos(angle)*v.co.x-(bottom-.025)
+        seat.data.update()
+        shared44('承桨托背'+str(parity),[(x,74.53,(bottom-.05+.95)/2) for _,x,_,_ in rows],(.10,.14,.95-(bottom-.05)))
+
+    # Restrained tools and rope explain active maintenance without visual clutter.
+    box('北河修桨作坊_木刨',(-5.80,73.47,support43['planer_z']),(.42,.18,.13),wetstone,c,.006)
+    box('北河修桨作坊_木槌柄',(-5.30,73.45,support43['mallet_z']),(.52,.07,.07),wood,c,.004)
+    box('北河修桨作坊_木槌头',(-5.53,73.45,support43['mallet_z']),(.18,.16,.15),wood,c,.005)
+    oil43=uv('北河修桨作坊_桐油罐',(-6.34,73.45,support43['oil_z']),(.17,.17,.22),wetstone,c,12,6)
+    # Flatten the bottom fan without adding vertices/faces; a real .085m foot.
+    for v in oil43.data.vertices:v.co.z=max(v.co.z,support43['table_top'])
+    for p in oil43.data.polygons:
+        if all(abs(oil43.data.vertices[i].co.z-support43['table_top'])<1e-5 for i in p.vertices):p.use_smooth=False
+    oil43.data.update()
+    for j,r in enumerate((.34,.25),1):
+        pts=[(-3.20+r*cos(2*pi*i/20),72.76+r*sin(2*pi*i/20),support43['rope_z']) for i in range(21)]
+        line(f'北河修桨作坊_盘绳_{j}',pts,.018,rope43,c,res=1,bevel_res=1)
+
+    # A single task lantern and a low guide lamp preserve the moonlit hierarchy.
+    line('北河修桨作坊_工作灯挑杆',[(-3.35,74.60,2.96),(-3.35,73.38,2.96),(-3.35,73.38,2.48)],.020,wood,c,res=2,bevel_res=1)
+    shade63=uv('北河修桨作坊_工作纱灯',(-3.35,73.38,2.27),(.12,.12,.18),M['paper'],c,12,8)
+    light('北河修桨作坊_工作灯火',(-3.35,73.38,2.24),(1,.45,.20),76,.24,kind='POINT')
+    # Round63: one zero-triangle suspension pivot gives the existing shade a
+    # six-second, low-amplitude native transform animation.  Frame80 is neutral
+    # so all fixed diagnostic renders remain directly comparable with Round62.
+    anchor63=bpy.data.objects.new(PREFIX+'北河修桨作坊_工作纱灯摆动锚63',None);c.objects.link(anchor63)
+    anchor63.location=(-3.35,73.38,2.48);anchor63.rotation_mode='XYZ'
+    bpy.context.view_layer.update();shade63_world=shade63.matrix_world.copy()
+    shade63.parent=anchor63;shade63.matrix_world=shade63_world
+    for frame,angle in ((1,0),(40,.045),(80,0),(120,-.045),(160,0),(200,.045),(240,0)):
+        anchor63.rotation_euler[0]=angle;anchor63.keyframe_insert(data_path='rotation_euler',index=0,frame=frame,group='LanternSwing63')
+    action63=anchor63.animation_data.action;action63.name=PREFIX+'Action_北河修桨作坊_工作纱灯轻摆63'
+    for fcurve in action63.fcurves:
+        for point in fcurve.keyframe_points:point.interpolation='BEZIER'
+    anchor63.rotation_euler[0]=0
+    anchor63['JN_native_animation63']='existing_work_lantern_swing'
+    anchor63['JN_pivot_height_m']=2.48;anchor63['JN_peak_angle_rad']=.045;anchor63['JN_period_frames']=160
+    S['JN_native_animation63']=json.dumps({'clip':action63.name,'target':anchor63.name,'child':shade63.name,
+        'frames':[1,40,80,120,160,200,240],'angles_rad':[0,.045,0,-.045,0,.045,0],
+        'fps':24,'new_triangles':0,'new_images':0,'new_materials':0,'human_runtime_approval':'pending'},ensure_ascii=False)
+    line('北河修桨作坊_引路灯柱',[(1.95,71.45,.12),(1.95,71.45,.86)],.035,wood,c,res=1,bevel_res=1)
+    uv('北河修桨作坊_引路纱灯',(1.95,71.45,1.00),(.10,.10,.14),M['paper'],c,10,6)
+    light('北河修桨作坊_引路灯火',(1.95,71.45,.98),(1,.40,.17),36,.18,kind='POINT')
+
+    # Silk-shop refinements: physical cloth edging, a supported hanging sign,
+    # and one account-room lamp.  None blocks the open shop/account sightline.
+    for i,(y,mat) in enumerate(((69.34,bpy.data.materials[PREFIX+'丝行月白绢']),(70.30,bpy.data.materials[PREFIX+'丝行黛青绢'])),1):
+        line(f'北河丝行_悬绢包边_{i}',[(16.32,y-.15,1.08),(16.32,y-.15,2.08),(16.32,y+.15,2.08),(16.32,y+.15,1.08)],.009,mat,c,res=1,bevel_res=1)
+        box(f'北河丝行_悬绢坠边_{i}',(16.32,y,1.08),(.025,.32,.035),mat,c,.002)
+    line('北河丝行_招幌挑杆',[(13.55,70.88,2.45),(12.72,70.88,2.45),(12.72,70.88,2.28)],.022,wood,c,res=2,bevel_res=1)
+    sign65=box('北河丝行_木质招幌牌',(12.72,70.88,1.88),(.09,.58,.70),wood,c,.012)
+    for y in (70.66,71.10):line('北河丝行_招幌流苏',[(12.72,y,1.53),(12.72,y,1.28)],.012,bpy.data.materials[PREFIX+'丝行绛红绢'],c,res=1,bevel_res=1)
+    # Round65: pivot the existing signboard and its two tassels at the existing
+    # bracket endpoint.  This adds no render geometry; the full assembly keeps
+    # its authored support and moves as one restrained wind-loaded unit.
+    anchor65=bpy.data.objects.new(PREFIX+'北河丝行_木质招幌摆动锚65',None);c.objects.link(anchor65)
+    anchor65.empty_display_type='ARROWS';anchor65.empty_display_size=.14
+    anchor65.location=(12.72,70.88,2.28);anchor65.rotation_mode='XYZ'
+    tassels65=sorted([o for o in c.objects if o.name.startswith(PREFIX+'北河丝行_招幌流苏')],key=lambda o:o.name)
+    sign_parts65=[sign65,*tassels65]
+    assert len(tassels65)==2
+    bpy.context.view_layer.update()
+    for part65 in sign_parts65:
+        world65=part65.matrix_world.copy();local65=anchor65.matrix_world.inverted() @ world65
+        part65.parent=anchor65;part65.matrix_parent_inverse.identity();part65.matrix_basis=local65
+        bpy.context.view_layer.update()
+        assert (part65.matrix_world.translation-world65.translation).length<1e-5,part65.name
+    action65=bpy.data.actions.new(PREFIX+'Action_北河丝行_木质招幌轻摆65')
+    anchor65.animation_data_create();anchor65.animation_data.action=action65
+    for frame65,angle65 in ((1,0),(40,.025),(80,0),(120,-.025),(160,0),(200,.025),(240,0)):
+        anchor65.rotation_euler[1]=angle65
+        anchor65.keyframe_insert(data_path='rotation_euler',index=1,frame=frame65,group='silk_shop_sign65')
+    for curve65 in action65.fcurves:
+        for key65 in curve65.keyframe_points:key65.interpolation='BEZIER'
+    anchor65.rotation_euler[1]=0
+    anchor65['JN_function']='existing_silk_shop_sign_sway_at_bracket_endpoint'
+    anchor65['JN_motion65']='rotation_y_0.025rad_neutral_frame80'
+    S['JN_silk_sign_motion65']=json.dumps({'pivot':[12.72,70.88,2.28],
+        'parts':[o.name for o in sign_parts65],'frames':[1,40,80,120,160,200,240],
+        'rotation_y_rad':[0,.025,0,-.025,0,.025,0],'source_triangles_added':0,
+        'new_materials_images':0,'human_function_form_runtime_approval':'pending'},ensure_ascii=False)
+    line('北河丝行_账房灯悬绳',[(19.45,70.40,2.62),(19.45,70.40,2.30)],.010,wood,c,res=1,bevel_res=1)
+    uv('北河丝行_账房纱灯',(19.45,70.40,2.12),(.11,.11,.17),M['paper'],c,12,8)
+    light('北河丝行_账房灯火',(19.45,70.40,2.10),(1,.43,.18),44,.18,kind='POINT')
+
+    S['JN_town_phase']='phase_11_west_oar_workshop'
+    S['JN_oar_workshop_opening_width_m']=4.22
+    S['JN_oar_workshop_shared_oars']=4
+    S['JN_oar_workshop_new_image_bytes']=0
+
+def town_phase12_north_umbrella_lane():
+    """Close a two-bridge walking loop with a fifth bridge and a front-shop/back-home umbrella house."""
+    c=C['water'];stone=M['stone'];wood=M['wood'];wetstone=M['darkstone']
+
+    # The new substrates overlap the proven Round 14/15 terminus by 0.15 m.
+    # Both parallel streets stay on land, so the fourth and fifth bridges form
+    # a real public loop instead of an isolated scenic endpoint.
+    west_land=box('北河伞巷_西岸北延地基',(-1.98,81.05,-.30),(12.84,11.30,.60),wetstone,c)
+    east_land=box('北河伞巷_东岸北延地基',(16.15,81.05,-.30),(11.98,11.30,.60),wetstone,c)
+    water=box('北河伞巷_北延水巷',(7.30,81.05,.03),(5.00,11.30,.06),M['water'],c)
+    for o,fn in ((west_land,'north_loop_west_support'),(east_land,'north_loop_east_mixed_use_support'),(water,'continuous_north_canal_water')):
+        o['JN_function']=fn;o['JN_overlap_previous_m']=.15
+    west_street=box('北河伞巷_西岸石街',(3.50,81.05,.06),(1.82,11.30,.12),stone,c,.012)
+    east_street=box('北河伞巷_东岸石街',(11.10,81.05,.06),(1.82,11.30,.12),stone,c,.012)
+    east_link=box('北河伞巷_东岸接桥短巷',(11.10,74.95,.06),(1.82,1.10,.12),stone,c,.012)
+    for o in (west_street,east_street,east_link):o['JN_function']='two_bridge_loop_route'
+
+    # Fifth bridge repeats the economical shared-plank grammar of the earlier
+    # bridges.  Eleven linked planks, twelve posts, four rails and three real
+    # risers per bank preserve the established scale and construction logic.
+    by=84.45
+    plank=box('北河伞巷_第五桥板原型',(0,0,0),(1,1,.14),wood,c,.014);plank.hide_render=True;plank.hide_viewport=True
+    for i in range(11):
+        x=4.60+i*.52
+        o=bpy.data.objects.new(PREFIX+f'北河伞巷_第五桥板_{i+1:02d}',plank.data);c.objects.link(o);o.location=(x,by,.70);o.scale=(.50,1.48,1)
+    for side,y in enumerate((by-.77,by+.77),1):
+        for i,x in enumerate((4.68,5.72,6.76,7.80,8.84,9.78),1):
+            box(f'北河伞巷_第五桥栏柱_{side}_{i}',(x,y,1.29),(.12,.12,1.04),wood,c,.006)
+        for z in (1.18,1.65):box('北河伞巷_第五桥栏杆',(7.23,y,z),(5.22,.10,.10),wood,c,.005)
+    for side,centers in (('西',(3.70,4.02,4.34)),('东',(10.68,10.36,10.04))):
+        for i,x in enumerate(centers,1):
+            top=.20+.20*(i-1 if side=='西' else 3-i)
+            box(f'北河伞巷_第五桥{side}阶_{i}',(x,by,top/2),(.32,1.62,top),stone,c,.012)
+
+    # The east-bank house is a small mixed-use type: an open west-facing shop
+    # in front, a measured internal doorway and a furnished sleeping room in
+    # back.  Six columns sit on six shoes; no false wall seals the shopfront.
+    hx,hy=16.65,79.60
+    box('北河伞巷_油纸伞铺实体台基',(hx,hy,.16),(8.40,5.40,.32),stone,c,.025)
+    box('北河伞巷_油纸伞铺入铺踏步',(12.19,hy,.09),(.52,1.72,.18),stone,c,.012)
+    post_xy=((12.65,77.15),(12.65,82.05),(16.55,77.15),(16.55,82.05),(20.45,77.15),(20.45,82.05))
+    for x,y in post_xy:
+        box('北河伞巷_油纸伞铺柱础',(x,y,.42),(.40,.40,.20),wetstone,c,.014)
+        box('北河伞巷_油纸伞铺木柱',(x,y,1.82),(.20,.20,2.60),wood,c,.008)
+    for y in (77.15,82.05):box('北河伞巷_油纸伞铺檐枋',(hx,y,3.16),(8.00,.22,.22),wood,c,.008)
+    for x in (12.65,16.55,20.45):box('北河伞巷_油纸伞铺穿梁',(x,hy,3.10),(.20,5.10,.20),wood,c,.008)
+    shop_roof=roof('北河伞巷_油纸伞铺',hx,hy,3.24,9.05,6.05,c)
+    mod=shop_roof.modifiers.new('油纸伞铺真实屋面厚度','SOLIDIFY');mod.thickness=.078;mod.offset=-1
+
+    # Rear and side plaster are deliberately partial.  The internal partition
+    # is split around a real one-metre door leading to a visible domestic room.
+    box('北河伞巷_油纸伞铺东后墙',(20.66,hy,1.54),(.20,4.86,2.68),M['plaster'],c,.018)
+    for y in (77.04,82.16):box('北河伞巷_油纸伞铺侧粉墙',(19.10,y,1.47),(3.30,.18,2.54),M['plaster'],c,.018)
+    for tag,y,length in (('南段',78.08,1.86),('北段',81.12,1.86)):
+        box('北河伞巷_前铺后宅隔墙_'+tag,(17.55,y,1.46),(.18,length,2.50),M['plaster'],c,.016)
+    box('北河伞巷_后宅门楣',(17.55,79.60,2.50),(.22,1.18,.18),wood,c,.008)
+    box('北河伞巷_后宅门槛',(17.49,79.60,.22),(.30,.94,.08),wood,c,.006)
+
+    # Shop counter leaves a broad line from the public street to the interior
+    # door.  The domestic room contains a Ming-style couch, desk and stool, so
+    # the doorway has a real destination rather than ending at blank plaster.
+    box('北河伞巷_油纸伞铺临街柜台',(13.55,81.12,.92),(1.32,.58,.16),wood,c,.014)
+    for x in (13.15,13.95):
+        for y in (80.94,81.30):box('北河伞巷_油纸伞铺柜腿',(x,y,.53),(.12,.12,.70),wood,c,.005)
+    box('北河伞巷_后宅明式榻',(19.22,79.60,.52),(2.18,1.18,.22),wood,c,.014)
+    for x in (18.34,20.10):
+        for y in (79.19,80.01):box('北河伞巷_后宅榻足',(x,y,.27),(.15,.15,.46),wood,c,.006)
+    box('北河伞巷_后宅小案',(19.20,81.05,.72),(1.10,.54,.14),wood,c,.012)
+    for x in (18.82,19.58):
+        for y in (80.86,81.24):box('北河伞巷_后宅案足',(x,y,.38),(.12,.12,.62),wood,c,.005)
+    box('北河伞巷_后宅方凳',(18.35,81.02,.42),(.45,.45,.13),wood,c,.010)
+    for x in (18.19,18.51):
+        for y in (80.86,81.18):box('北河伞巷_后宅凳足',(x,y,.21),(.09,.09,.36),wood,c,.004)
+    line('北河伞巷_后宅壁灯托架',[(20.48,79.60,2.18),(20.18,79.60,2.18),(20.18,79.60,1.98)],.016,wood,c,res=1,bevel_res=1)
+    # Framed paper shade keeps the rear destination warm without reading as a modern bare bulb.
+    box('北河伞巷_后宅壁灯纸罩',(20.18,79.60,1.80),(.22,.22,.32),M['paper'],c,.025)
+    for z in (1.63,1.97):box('北河伞巷_后宅壁灯横框',(20.18,79.60,z),(.25,.25,.035),wood,c,.006)
+    for x in (20.065,20.295):
+        for y in (79.485,79.715):box('北河伞巷_后宅壁灯竖框',(x,y,1.80),(.025,.025,.35),wood,c,.003)
+    light('北河伞巷_后宅壁灯火',(20.18,79.60,1.79),(1,.40,.16),24,.14,kind='POINT')
+
+    # A twelve-gore shared canopy is silhouette geometry, not a painted disc.
+    # Three linked display umbrellas sit on supported shafts inside the open bay.
+    seg=12;uvs=[(0,0,.30)]+[(.46*cos(2*pi*i/seg),.46*sin(2*pi*i/seg),0) for i in range(seg)]
+    ufaces=[]
+    for i in range(seg):ufaces.append((0,1+i,1+(i+1)%seg))
+    umbrella=mesh('北河伞巷_油纸伞伞面原型',uvs,ufaces,M['paper'],c);umbrella.hide_render=True;umbrella.hide_viewport=True
+    for i,(x,y,z,rz) in enumerate(((15.00,81.25,1.48,.08),(15.90,81.25,1.58,-.08),(16.80,81.25,1.48,.05)),1):
+        o=bpy.data.objects.new(PREFIX+f'北河伞巷_共享油纸伞_{i}',umbrella.data);c.objects.link(o);o.location=(x,y,z);o.rotation_euler[2]=rz
+        line(f'北河伞巷_油纸伞伞柄_{i}',[(x,y,.38),(x,y,z+.30)],.024,wood,c,res=1,bevel_res=1)
+    box('北河伞巷_油纸伞陈列架下枋',(15.90,81.58,.72),(3.45,.16,.14),wood,c,.006)
+    box('北河伞巷_油纸伞陈列架上枋',(15.90,81.58,2.18),(3.45,.16,.14),wood,c,.006)
+    for x in (14.28,17.52):box('北河伞巷_油纸伞陈列架立柱',(x,81.58,1.43),(.14,.14,1.56),wood,c,.005)
+
+    # Restrained river furniture and one task light give the bridge landing a
+    # lived-in scale without introducing a competing lantern corridor.
+    for y in (82.60,85.88):
+        box('北河伞巷_系舟桩础',(10.26,y,.18),(.34,.34,.18),stone,c,.010)
+        box('北河伞巷_系舟桩',(10.26,y,.73),(.16,.16,.92),wood,c,.008)
+    line('北河伞巷_铺面灯挑杆',[(12.65,82.05,2.86),(12.06,82.05,2.86),(12.06,82.05,2.48)],.020,wood,c,res=2,bevel_res=1)
+    uv('北河伞巷_铺面工作纱灯',(12.06,82.05,2.27),(.12,.12,.18),M['paper'],c,12,8)
+    light('北河伞巷_铺面工作灯火',(12.06,82.05,2.24),(1,.43,.18),66,.22,kind='POINT')
+
+    S['JN_town_phase']='phase_12_north_umbrella_lane'
+    S['JN_fifth_bridge_loop_closed']=True
+    S['JN_umbrella_shop_opening_width_m']=4.70
+    S['JN_umbrella_home_door_width_m']=1.00
+    S['JN_umbrella_shop_shared_canopies']=3
+    S['JN_umbrella_lane_new_image_bytes']=0
+
+def town_phase13_north_paper_yard():
+    """Extend the north canal with a west-bank mulberry-paper workshop and drying court."""
+    c=C['water'];stone=M['stone'];wood=M['wood'];wetstone=M['darkstone'];paper=M['paper']
+
+    # Continue both banks and the five-metre canal by 7.90 m.  The 0.10 m
+    # overlap keeps water and both public streets continuous without spending
+    # triangle budget on another bridge in the same visual beat.
+    cy=90.55
+    west_land=box('北河纸坊_西岸北延地基',(-1.98,cy,-.30),(12.84,7.90,.60),wetstone,c)
+    east_land=box('北河纸坊_东岸北延地基',(16.15,cy,-.30),(11.98,7.90,.60),wetstone,c)
+    water=box('北河纸坊_北延水巷',(7.30,cy,.03),(5.00,7.90,.06),M['water'],c)
+    west_street=box('北河纸坊_西岸石街',(3.50,cy,.06),(1.82,7.90,.12),stone,c,.012)
+    east_street=box('北河纸坊_东岸石街',(11.10,cy,.06),(1.82,7.90,.12),stone,c,.012)
+    for o,fn in ((west_land,'paper_workshop_support'),(east_land,'future_east_bank_support'),(water,'continuous_north_canal_water'),(west_street,'north_paper_public_route'),(east_street,'north_paper_public_route')):
+        o['JN_function']=fn;o['JN_overlap_previous_m']=.10
+
+    # Open east-facing craft shed: six posts land on six shoes, two transverse
+    # beams and three tie beams carry a deliberately low-cost solid roof.  The
+    # sparse roof preserves the silhouette and support logic while keeping the
+    # town below the established 170k expanded-triangle ceiling.
+    px,py=-1.60,90.55
+    box('北河纸坊_实体台基',(px,py,.16),(6.70,6.90,.32),stone,c,.022)
+    for i,y in enumerate((87.75,90.55,93.35),1):
+        box(f'北河纸坊_入坊踏步_{i}',(2.00,y,.09),(.52,.92,.18),stone,c,.010)
+    post_xy=tuple((x,y) for x in (-4.45,1.25) for y in (87.75,90.55,93.35))
+    for x,y in post_xy:
+        box('北河纸坊_柱础',(x,y,.42),(.40,.40,.20),wetstone,c,.012)
+        box('北河纸坊_木柱',(x,y,1.82),(.20,.20,2.60),wood,c,.007)
+    for x in (-4.45,1.25):box('北河纸坊_纵向檐枋',(x,py,3.16),(.22,6.00,.22),wood,c,.007)
+    for y in (87.75,90.55,93.35):box('北河纸坊_横向穿梁',(px,y,3.10),(5.90,.20,.20),wood,c,.007)
+
+    # Four-quadrilateral gabled roof with visible ridge/eaves and Solidify:
+    # important profile remains geometric, repeated tile relief stays in the
+    # established material rather than consuming thousands of roof triangles.
+    z=3.22;xl=-4.82;xr=1.62;ymn=87.32;ymx=93.78;ridge=-1.60
+    rv=[(xl,ymn,z),(ridge,ymn,z+1.02),(xr,ymn,z),(xl,ymx,z),(ridge,ymx,z+1.02),(xr,ymx,z)]
+    roof_obj=mesh('北河纸坊_低模实体瓦面',rv,[(0,3,4,1),(1,4,5,2)],M['tile'],c)
+    mod=roof_obj.modifiers.new('纸坊真实屋面厚度','SOLIDIFY');mod.thickness=.075;mod.offset=-1
+    line('北河纸坊_正脊',[(ridge,ymn-.08,z+1.05),(ridge,ymx+.08,z+1.05)],.085,M['edge'],c,res=1,bevel_res=1)
+    for x in (xl,xr):line('北河纸坊_檐口',[(x,ymn-.08,z),(x,ymx+.08,z)],.065,M['edge'],c,res=1,bevel_res=1)
+    box('北河纸坊_西后粉墙',(-4.58,py,1.50),(.18,5.30,2.54),M['plaster'],c,.014)
+    box('北河纸坊_北侧粉墙',(-2.90,93.43,1.42),(3.55,.18,2.38),M['plaster'],c,.014)
+
+    # Wet craft zone: two grounded soaking vats with restrained water planes,
+    # a beating bench and a supported mould.  These are explicit destinations
+    # rather than decorative clutter in the circulation bay.
+    for i,y in enumerate((88.55,90.10),1):
+        box(f'北河纸坊_楮皮浸槽_{i}',(-3.58,y,.48),(1.34,1.06,.62),stone,c,.045)
+        box(f'北河纸坊_浸槽水面_{i}',(-3.58,y,.77),(1.08,.80,.025),M['water'],c,.004)
+    box('北河纸坊_捣浆长案',(-1.38,88.65,.78),(2.20,.72,.16),wood,c,.012)
+    for x in (-2.22,-.54):
+        for y in (88.39,88.91):box('北河纸坊_捣浆案足',(x,y,.43),(.13,.13,.70),wood,c,.004)
+    box('北河纸坊_抄纸帘框',(-1.38,88.65,.91),(1.36,.56,.055),wood,c,.005)
+    for x in (-1.92,-.84):line('北河纸坊_抄纸帘经线',[(x,88.41,.945),(x,88.89,.945)],.006,wetstone,c,res=1,bevel_res=0)
+
+    # Three linked drying frames and three linked paper sheets keep the craft
+    # legible at eye height without multiplying unique meshes.
+    fv=[];ff=[]
+    for cx,cz,sx,sz in ((-.55,0,.08,1.70),(.55,0,.08,1.70),(0,-.80,1.18,.08),(0,.80,1.18,.08)):
+        k=len(fv);x=sx/2;y=.10/2;z0=cz-sz/2;z1=cz+sz/2
+        fv.extend([(cx-x,-y,z0),(cx-x,-y,z1),(cx-x,y,z0),(cx-x,y,z1),(cx+x,-y,z0),(cx+x,-y,z1),(cx+x,y,z0),(cx+x,y,z1)])
+        ff.extend([(k,k+4,k+6,k+2),(k+1,k+3,k+7,k+5),(k,k+1,k+5,k+4),(k+2,k+6,k+7,k+3),(k,k+2,k+3,k+1),(k+4,k+5,k+7,k+6)])
+    frame=mesh('北河纸坊_晒纸架原型',fv,ff,wood,c);frame.hide_render=True;frame.hide_viewport=True
+    sheet=mesh('北河纸坊_湿纸原型',[(-.48,0,-.68),(-.48,0,.68),(.48,0,.68),(.48,0,-.68)],[(0,1,2,3)],M['ivory'],c);sheet.hide_render=True;sheet.hide_viewport=True
+    for i,(x,y,rz) in enumerate(((-4.15,88.95,pi/2),(-4.15,90.55,pi/2),(-4.15,92.15,pi/2)),1):
+        for proto,tag in ((frame,'共享晒纸架'),(sheet,'共享湿纸')):
+            o=bpy.data.objects.new(PREFIX+f'北河纸坊_{tag}_{i}',proto.data);c.objects.link(o);o.location=(x,y,1.22);o.rotation_euler[2]=rz
+
+    # Bark bundles and a framed paper lantern finish the lived-in scale while
+    # leaving the eastern frontage and both 2.60 m work bays unobstructed.
+    for i,y in enumerate((89.65,90.15,90.65),1):line(f'北河纸坊_楮皮束_{i}',[(-4.22,y,.35),(-4.08,y+.08,1.38)],.035,wood,c,res=1,bevel_res=1)
+    line('北河纸坊_湿作吊灯索',[(-1.55,89.28,3.08),(-1.55,89.28,2.62)],.012,wood,c,res=1,bevel_res=0)
+    box('北河纸坊_湿作吊灯纸罩',(-1.55,89.28,2.48),(.25,.25,.30),paper,c,.016)
+    light('北河纸坊_湿作吊灯火',(-1.55,89.28,2.40),(1,.42,.18),82,1.10,target=(-2.25,89.35,.62),kind='AREA')
+    line('北河纸坊_门侧灯挑杆',[(1.25,93.35,2.84),(1.85,93.35,2.84),(1.85,93.35,2.46)],.018,wood,c,res=1,bevel_res=1)
+    box('北河纸坊_门侧纸灯',(1.85,93.35,2.24),(.24,.24,.34),paper,c,.018)
+    for zz in (2.06,2.42):box('北河纸坊_纸灯横框',(1.85,93.35,zz),(.27,.27,.035),wood,c,.004)
+    light('北河纸坊_工作灯火',(1.85,93.35,2.23),(1,.42,.18),42,.18,kind='POINT')
+
+    S['JN_town_phase']='phase_13_north_paper_yard'
+    S['JN_paper_yard_open_bay_m']=2.60
+    S['JN_paper_yard_shared_frames']=3
+    S['JN_paper_yard_new_image_bytes']=0
+
+def town_phase14_east_bindery_shop():
+    """Complete the paper chain with a compact east-bank bindery and paper shop."""
+    c=C['water'];stone=M['stone'];wood=M['wood'];wetstone=M['darkstone']
+    px,py=15.05,90.55
+
+    # Reuse the Round 17 east parcel instead of extending the town again.  A
+    # shallow two-step threshold overlaps the public stone street, making the
+    # destination explicit while keeping the 1.82 m river route continuous.
+    plinth=box('北河纸铺_实体台基',(px,py,.16),(5.80,6.50,.32),stone,c,.022)
+    for i,(x,z,w) in enumerate(((12.02,.08,.54),(12.20,.17,.42)),1):
+        box(f'北河纸铺_临街踏步_{i}',(x,py,z),(w,1.72,.16),stone,c,.012)
+
+    post_xy=tuple((x,y) for x in (12.65,17.45) for y in (87.95,90.55,93.15))
+    for x,y in post_xy:
+        box('北河纸铺_柱础',(x,y,.42),(.40,.40,.20),wetstone,c,.012)
+        box('北河纸铺_木柱',(x,y,1.82),(.20,.20,2.60),wood,c,.007)
+    for x in (12.65,17.45):box('北河纸铺_纵向檐枋',(x,py,3.16),(.22,5.70,.22),wood,c,.007)
+    for y in (87.95,90.55,93.15):box('北河纸铺_横向穿梁',(px,y,3.10),(5.00,.20,.20),wood,c,.007)
+
+    z=3.22;xl=12.28;xr=17.82;ymn=87.52;ymx=93.58;ridge=15.05
+    rv=[(xl,ymn,z),(ridge,ymn,z+.92),(xr,ymn,z),(xl,ymx,z),(ridge,ymx,z+.92),(xr,ymx,z)]
+    roof_obj=mesh('北河纸铺_低模实体瓦面',rv,[(0,3,4,1),(1,4,5,2)],M['tile'],c)
+    mod=roof_obj.modifiers.new('纸铺真实屋面厚度','SOLIDIFY');mod.thickness=.075;mod.offset=-1
+    line('北河纸铺_正脊',[(ridge,ymn-.08,z+.95),(ridge,ymx+.08,z+.95)],.082,M['edge'],c,res=1,bevel_res=1)
+    for x in (xl,xr):line('北河纸铺_檐口',[(x,ymn-.08,z),(x,ymx+.08,z)],.062,M['edge'],c,res=1,bevel_res=1)
+    box('北河纸铺_东后粉墙',(17.58,py,1.50),(.18,5.10,2.54),M['plaster'],c,.014)
+    box('北河纸铺_北侧粉墙',(16.00,93.28,1.42),(3.30,.18,2.38),M['plaster'],c,.014)
+
+    # Front shop counter, east-wall shelves and a real four-post binding press
+    # form a readable sell-store-bind sequence without closing the street bays.
+    box('北河纸铺_临街柜台',(13.48,91.40,.82),(.72,2.20,.18),wood,c,.012)
+    for y in (90.58,92.22):box('北河纸铺_柜台足',(13.48,y,.43),(.16,.16,.78),wood,c,.004)
+    for zz in (.64,1.24,1.84):
+        box('北河纸铺_东墙纸架',(17.24,90.75,zz),(.42,3.25,.12),wood,c,.006)
+    for y in (89.68,91.82):box('北河纸铺_纸架立柱',(17.24,y,1.24),(.14,.14,1.90),wood,c,.004)
+
+    box('北河纸铺_装订压台',(15.45,88.62,.70),(1.52,.78,.18),wood,c,.010)
+    for x in (14.88,16.02):
+        for y in (88.34,88.90):box('北河纸铺_压台足',(x,y,.37),(.13,.13,.66),wood,c,.004)
+    for x in (15.00,15.90):box('北河纸铺_压书立柱',(x,88.62,1.30),(.12,.12,1.12),wood,c,.004)
+    box('北河纸铺_压书横梁',(15.45,88.62,1.82),(1.16,.18,.16),wood,c,.004)
+    line('北河纸铺_压书螺杆',[(15.45,88.62,1.82),(15.45,88.62,1.05)],.035,M['bronze'],c,res=1,bevel_res=1)
+    box('北河纸铺_压书板',(15.45,88.62,1.04),(.92,.58,.08),wetstone,c,.004)
+
+    # One mesh per family, then linked instances.  Paper reams and stitched
+    # books remain economical enough to read at eye height.
+    ream=box('北河纸铺_纸张原型',(0,0,0),(.62,.46,.12),M['ivory'],c,.012);ream.hide_render=True;ream.hide_viewport=True
+    for i,(x,y,z0) in enumerate(((13.50,91.10,.98),(13.50,91.62,.98),(16.98,90.15,.78),(16.98,90.88,.78),(16.98,91.61,1.38),(16.98,92.05,1.98)),1):
+        o=bpy.data.objects.new(PREFIX+f'北河纸铺_共享纸张_{i}',ream.data);c.objects.link(o);o.location=(x,y,z0)
+    bv=[(-.30,-.20,-.06),(-.30,-.20,.06),(-.30,.20,-.06),(-.30,.20,.06),(.30,-.20,-.06),(.30,-.20,.06),(.30,.20,-.06),(.30,.20,.06)]
+    book=mesh('北河纸铺_线装书原型',bv,[(0,4,6,2),(1,3,7,5),(0,1,5,4),(2,6,7,3),(0,2,3,1),(4,5,7,6)],M['ivory'],c);book.hide_render=True;book.hide_viewport=True
+    for i,(x,y,z0,rz) in enumerate(((13.42,90.78,1.08,0),(13.42,91.56,1.08,0),(16.98,89.92,1.34,pi/2),(16.98,90.62,1.94,pi/2),(16.98,91.32,1.94,pi/2)),1):
+        o=bpy.data.objects.new(PREFIX+f'北河纸铺_共享线装书_{i}',book.data);c.objects.link(o);o.location=(x,y,z0);o.rotation_euler[2]=rz
+        for yy in (-.14,.14):line(f'北河纸铺_书脊线_{i}',[(x-.29,y+yy,z0+.07),(x+.29,y+yy,z0+.07)],.008,M['gold'],c,res=1,bevel_res=0)
+
+    line('北河纸铺_柜上吊灯索',[(13.95,91.40,3.08),(13.95,91.40,2.58)],.012,wood,c,res=1,bevel_res=0)
+    box('北河纸铺_柜上吊灯纸罩',(13.95,91.40,2.43),(.25,.25,.30),M['paper'],c,.016)
+    light('北河纸铺_柜上吊灯火',(13.95,91.40,2.35),(1,.42,.18),72,1.0,target=(14.10,90.70,.75),kind='AREA')
+
+    plinth['JN_function']='east_bank_bindery_shop'
+    S['JN_town_phase']='phase_14_east_bindery_shop'
+    S['JN_bindery_shop_front_bays_m']=2.40
+    S['JN_bindery_shop_shared_reams']=6
+    S['JN_bindery_shop_shared_books']=5
+    S['JN_bindery_shop_new_image_bytes']=0
+
+
+def town_phase15_east_dyed_paper_court():
+    """Extend the paper quarter with an open east-bank dyed-paper atelier."""
+    c=C['water'];stone=M['stone'];wood=M['wood'];wetstone=M['darkstone']
+    indigo=material('染纸靛青',(.08,.24,.38),.50,0)
+    madder=material('染纸茜红',(.48,.07,.08),.52,0)
+    cy=97.95
+    west_land=box('北河染纸坊_西岸北延地基',(-1.98,cy,-.30),(12.84,7.10,.60),wetstone,c)
+    east_land=box('北河染纸坊_东岸北延地基',(16.15,cy,-.30),(11.98,7.10,.60),wetstone,c)
+    water=box('北河染纸坊_北延水巷',(7.30,cy,.03),(5.00,7.10,.06),M['water'],c)
+    west_street=box('北河染纸坊_西岸石街',(3.50,cy,.06),(1.82,7.10,.12),stone,c,.012)
+    east_street=box('北河染纸坊_东岸石街',(11.10,cy,.06),(1.82,7.10,.12),stone,c,.012)
+    for o,role in ((west_land,'north_future_support'),(east_land,'dyed_paper_support'),(water,'continuous_north_canal_water'),(west_street,'north_public_route'),(east_street,'north_public_route')):
+        o['JN_function']=role;o['JN_overlap_previous_m']=.10
+    px,py=15.05,98.15
+    plinth=box('北河染纸坊_实体台基',(px,py,.16),(5.80,5.80,.32),stone,c,.022)
+    for i,(x,z,w) in enumerate(((12.02,.08,.54),(12.20,.17,.42)),1):
         box(f'北河染纸坊_临街踏步_{i}',(x,py,z),(w,1.54,.16),stone,c,.012)
     post_xy=tuple((x,y) for x in (12.65,17.45) for y in (96.00,98.15,100.30))
     for x,y in post_xy:
