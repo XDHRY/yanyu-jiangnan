@@ -3096,9 +3096,16 @@ def town_phase18_quay_boat_gear():
         PREFIX+'北河转水埠_共享舢板横肋_1',PREFIX+'北河转水埠_共享舢板横肋_2',PREFIX+'北河转水埠_共享舢板横肋_3',
         PREFIX+'北河转水埠_共享船桨_舢板',
     ]
+    # Use an explicit parent-local matrix. Combining parent inverse and a
+    # matrix_world rewrite is evaluation-order dependent after file reload and
+    # previously mirrored the boat across the mooring point.
+    bpy.context.view_layer.update()
     for name64 in boat_parts64:
         part64=bpy.data.objects[name64];world64=part64.matrix_world.copy()
-        part64.parent=anchor64;part64.matrix_parent_inverse=anchor64.matrix_world.inverted();part64.matrix_world=world64
+        local64=anchor64.matrix_world.inverted() @ world64
+        part64.parent=anchor64;part64.matrix_parent_inverse.identity();part64.matrix_basis=local64
+        bpy.context.view_layer.update()
+        assert (part64.matrix_world.translation-world64.translation).length<1e-5,name64
     action64=bpy.data.actions.new(PREFIX+'Action_北河转水埠_系泊舢板轻摇64')
     anchor64.animation_data_create();anchor64.animation_data.action=action64
     for frame64,pitch64,yaw64 in ((1,0,0),(40,.006,.010),(80,0,0),(120,-.006,-.010),(160,0,0),(200,.006,.010),(240,0,0)):
