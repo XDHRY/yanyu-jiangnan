@@ -3098,7 +3098,7 @@ def town_phase18_quay_boat_gear():
     ]
     for name64 in boat_parts64:
         part64=bpy.data.objects[name64];world64=part64.matrix_world.copy()
-        part64.parent=anchor64;part64.matrix_world=world64
+        part64.parent=anchor64;part64.matrix_parent_inverse=anchor64.matrix_world.inverted();part64.matrix_world=world64
     action64=bpy.data.actions.new(PREFIX+'Action_北河转水埠_系泊舢板轻摇64')
     anchor64.animation_data_create();anchor64.animation_data.action=action64
     for frame64,pitch64,yaw64 in ((1,0,0),(40,.006,.010),(80,0,0),(120,-.006,-.010),(160,0,0),(200,.006,.010),(240,0,0)):
