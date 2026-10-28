@@ -1,0 +1,236 @@
+{
+  "schema": "game-room.room-final-report.v1",
+  "roomId": "yanyu-north-silk-bend-round13",
+  "status": "engineering-verified-modeling-closeout-candidate",
+  "modelSource": "e9d69e60263f6e1b611bdf13fcce730210f46064",
+  "testedMergeRef": "bdf0317126edeac7f160eacce9a30db3d4ed1c8a",
+  "mergedMain": "54debe3e2694e44463d563d2c515ffcc9cd93e92",
+  "gates": {
+    "function": false,
+    "form": false,
+    "runtime": false
+  },
+  "formChecks": {
+    "floorPlanParity": false,
+    "primaryArrival": false,
+    "symmetry": false,
+    "shell": false,
+    "manifold": false,
+    "booleans": false,
+    "collisions": false,
+    "support": false,
+    "attachmentOrientation": false,
+    "ceilingAttachmentOrientation": false,
+    "seatingOrientation": false,
+    "focalDistribution": false,
+    "heroClearance": false,
+    "colonnades": false,
+    "screenClearance": false,
+    "scale": false,
+    "camera": false,
+    "ceilingCoverage": false,
+    "environmentCoverage": false,
+    "provenance": false
+  },
+  "reviewRenders": {
+    "corners": [],
+    "ceiling": [],
+    "environment": {}
+  },
+  "runtimeChecks": {
+    "vlow": false,
+    "textureTiers": false,
+    "lightmap": false,
+    "lightingManifest": false,
+    "performance": false,
+    "browserCapture": "",
+    "errors": []
+  },
+  "scopedChecks": {
+    "nativeSign": {
+      "object": "JN_北河丝行_木质招幌摆动锚65",
+      "action": "JN_Action_北河丝行_木质招幌轻摆65",
+      "channel": "rotation_euler.y",
+      "frames": [
+        1,
+        40,
+        80,
+        120,
+        160,
+        200,
+        240
+      ],
+      "angles_rad": [
+        0,
+        0.025,
+        0,
+        -0.025,
+        0,
+        0.025,
+        0
+      ],
+      "parts": 3,
+      "bracket_endpoint_fixed": true,
+      "full_swing_bounds_m": [
+        [
+          [
+            12.6563,
+            70.59,
+            1.28
+          ],
+          [
+            12.765,
+            71.17,
+            2.2811
+          ]
+        ],
+        [
+          [
+            12.675,
+            70.59,
+            1.28
+          ],
+          [
+            12.765,
+            71.17,
+            2.28
+          ]
+        ],
+        [
+          [
+            12.675,
+            70.59,
+            1.28
+          ],
+          [
+            12.7837,
+            71.17,
+            2.2811
+          ]
+        ],
+        [
+          [
+            12.6563,
+            70.59,
+            1.28
+          ],
+          [
+            12.765,
+            71.17,
+            2.2811
+          ]
+        ]
+      ],
+      "hinge_surface_gaps_m": [
+        0.0,
+        0.0,
+        9.5367431640625e-07,
+        0.0
+      ],
+      "bracket_wall_surface_inset_m": 0.0019998550415039062,
+      "complete_wall_bracket_board_support": true,
+      "source_triangles_added": 0,
+      "new_materials_images": 0,
+      "human_function_form_runtime_approval": "pending"
+    },
+    "diagnosticFocus": {
+      "evaluated_envelope_m": [
+        [
+          12.65656566619873,
+          70.58999633789062,
+          1.2799999713897705
+        ],
+        [
+          13.442496299743652,
+          71.16999816894531,
+          2.4667816162109375
+        ]
+      ],
+      "projected_bounds": [
+        0.41574496030807495,
+        0.5937215685844421,
+        0.25848108530044556,
+        0.7568017244338989
+      ],
+      "fitted_lens_mm": 52.0,
+      "animated_hierarchy": "JN_北河丝行_木质招幌摆动锚65",
+      "evaluated_objects": [
+        "JN_北河丝行_招幌挑杆",
+        "JN_北河丝行_招幌流苏",
+        "JN_北河丝行_招幌流苏.001",
+        "JN_北河丝行_木质招幌牌"
+      ],
+      "sample_frames": [
+        40,
+        80,
+        120,
+        200
+      ],
+      "padding_fraction": 0.045,
+      "hidden_objects": [],
+      "proxy_geometry_created": false
+    },
+    "sourceBudget": {
+      "objects": 4668,
+      "mesh_objects": 3145,
+      "curve_objects": 1427,
+      "triangles_with_instances": 167686,
+      "faces_with_instances": 99554,
+      "vertices_with_instances": 171229,
+      "unique_mesh_datablocks": 1701,
+      "unique_mesh_triangles": 124304,
+      "unique_mesh_faces": 78721,
+      "unique_mesh_vertices": 142423,
+      "materials_used": 58,
+      "images_loaded": 15,
+      "estimated_texture_rgba8_bytes": 46652816,
+      "estimated_texture_rgba8_mib": 44.49,
+      "estimated_mesh_draw_calls": 3148,
+      "object_drivers": 4444,
+      "mesh_objects_using_reused_datablocks": 1571,
+      "instance_reuse_ratio": 0.4995
+    },
+    "webBudget": {
+      "instance_triangles": 625355,
+      "glb_bytes": 51805592,
+      "attribute_index_bytes": 28391234,
+      "images": 15,
+      "rgba8_bytes": 46652816
+    },
+    "nativeClips": 3,
+    "offlinePassed": true,
+    "externalRequests": [],
+    "pageErrors": [],
+    "physicalPhoneTested": false,
+    "humanApprovalInferred": false
+  },
+  "engineeringRuns": {
+    "CI": 40616825327,
+    "Blender Smoke": 40616825357,
+    "Spatial 16 views": 40616825374,
+    "Web Viewer": 40616825435,
+    "Offline Runtime": 40616825324
+  },
+  "deliveryLinks": {
+    "离线交互预览": "https://chatgpt.com/library?file_id=libfile_e0af2c97d93481918c63031962dcbbad&account_id=personal",
+    "完整模型与审阅包": "https://chatgpt.com/library?file_id=libfile_ad4f174bf1e881918181bac4c5d6611e&account_id=personal",
+    "16 图总览": "https://chatgpt.com/library?file_id=libfile_0dd08c6ac85c8191ad82d84c9fc695cf&account_id=personal"
+  },
+  "postmortem": {
+    "observations": [
+      "The focus camera retained an unrelated boat envelope.",
+      "The board top and bracket root each had an unsupported gap, found through both geometry and actual render review."
+    ],
+    "corrections": [
+      "Fit evaluated sign assembly geometry at four swing frames.",
+      "Connect the board top to its hinge and inset the existing bracket into the wall without new triangles."
+    ],
+    "remainingRisks": [
+      "Human Function/Form/Runtime approval pending.",
+      "Legacy skill package lacks plan-metadata and uses old props/layout/openings schemas.",
+      "Full LOD, collision, navigation, material parity and physical-phone FPS unvalidated.",
+      "Sign artwork, town detail density, lighting hierarchy and panorama edge still need art work."
+    ]
+  },
+  "proposedLessons": []
+}

@@ -1,69 +1,49 @@
 # 烟雨江南 · 雪月江南
 
-> 致虚极，守静笃 —— 一庭月色，半池灯影。听雨轩前，梅枝随风。
+可编辑、可从源码重建的江南庭院与水镇 Blender 场景。庭院以斜梅、月门、曲水和听雨轩为中心，向双岸民居、桥梁、茶集、工坊、仓院和码头延伸。
 
-*A fully procedural, editable Jiangnan night courtyard in Blender — moon gate, leaning plum trees, still water and a rain-listening pavilion. One script builds everything; no external game assets.*
+**当前版本：Round 65 建模封顶候选（2026-10-28），已合并 main。** 五项工程检查全部通过。模型源 [`e9d69e6026`](https://github.com/XDHRY/yanyu-jiangnan/commit/e9d69e60263f6e1b611bdf13fcce730210f46064)；详见 [完整交接](docs/iterations/20261028-modeling-closeout.md)。
 
-![正面 · 烟雨](renders/01_rain_front.png)
+- [离线交互预览](https://chatgpt.com/library?file_id=libfile_e0af2c97d93481918c63031962dcbbad&account_id=personal)
+- [完整模型与审阅包](https://chatgpt.com/library?file_id=libfile_ad4f174bf1e881918181bac4c5d6611e&account_id=personal)
+- [16 图总览](https://chatgpt.com/library?file_id=libfile_0dd08c6ac85c8191ad82d84c9fc695cf&account_id=personal)
 
-## 这是什么
+## 当前规模
 
-一座可步入、可停留、可整体重建的江南夜庭院，由单个 Blender Python 脚本（`jiangnan.py`，约 40KB）全参数化生成：
+| 指标 | 实测 |
+|---|---:|
+| 对象 | 4,668 |
+| Mesh / Curve 对象 | 3,145 / 1,427 |
+| 源网格含实例三角面 | 167,686 / 170,000 预算 |
+| 材质 / 打包图像 | 58 / 15 |
+| 图像 RGBA8 趋势估算 | 44.49 MiB |
+| GLB 求值后含实例三角面 | 625,355 |
+| 原生 GLB 动画 | 灯笼、舢板、店幌，共 3 段 |
+| 空间审阅 | 16 张 1024×640 Eevee 图 |
 
-- **场景**：粉墙月洞门（真实贯通几何）、斜梅两株、静水池与汀步、听雨轩、石灯茶案、太湖石三尊、云月与远山。
-- **双天气一键切换**：烟雨（细雨/涟漪/湿石）与雪夜（飘雪/瓦上薄雪/残雪）互斥切换，风力 0–2 可调。
-- **原生驱动动画**：4444 条对象驱动器，240 帧 / 24 fps，花枝摇摆、露珠随枝、雨雪下落、云移水动，无外部缓存。
-- **AI 贴图**：7 张 albedo 贴图（粉墙/苔石/梅皮/黛瓦/老木/花瓣/远山夜景）由 image_gen 按存档提示词生成；Blender 4.5 CI 从源码重建时会全部 pack 进新生成的 `.blend`。
-- **可验证交付**：`tools/verify_render.py` 内置 7 项断言（天气互斥、帧间动态、驱动器有效性、贴图打包、法线朝向等）。
+本轮修复店幌的真实墙体支撑与相机检查阻塞；保持现有建筑范围、三角面和贴图预算。源网格与 GLB 求值几何是不同统计口径；图像估算不等于显存或 FPS。
 
-Blender 4.5.14 CI 重建基线：2924 对象（1464 网格 + 1404 曲线）/ 183539 顶点 / 137577 面 / 22 材质 / 11 集合 / 3 机位 / 11 灯光 / 4444 对象驱动器（详见 `validation/scene_statistics.json`）。
+## 使用与重建
 
-## 快速开始
+- 下载上述模型包后，用 Blender 4.5.14 LTS 打开 `Jiangnan.blend`；纹理已打包。仓库根目录旧 `Jiangnan.blend` 是早期快照，当前权威模型来自与源码提交绑定的 CI 产物。
+- 离线 HTML 约 71 MB，首次载入需要等待；手机请在支持 WebGL 的浏览器中打开。
+- 完整场景、贴图、天气与驱动由 `jiangnan.py` 和 `textures/` 重建。额外 PBR 图会在构建中生成并打包。
 
-1. 推荐从 GitHub Actions 的 **Blender 4.5 Scene Smoke** 下载与当前 commit 绑定的 `Jiangnan-Blender-4.5-*` artifact；其中的 `Jiangnan.blend` 是由当前源码和 `textures/` 从零重建并通过断言的可验证产物。
-2. 也可以用 **Blender 4.5 LTS** 直接运行 `jiangnan.py` 全量重建。根目录现有 `Jiangnan.blend` 保留为历史预览快照，不再视为权威构建产物。
-3. 若提示禁用驱动表达式，选择信任并启用脚本自动运行；播放时间轴（1–240 帧）查看动态，并在 `JN_总控_天气0雨1雪_风力` 上切换 `Weather`（0 雨 / 1 雪）与 `Wind`（0–2）。
-4. 浏览器打开 `renders/gallery.html` 查看现有正式图与构建阶段图；当前不再补齐高成本多机位静帧。\n5. 空间调整优先运行 `tools/diagnostic_review.py`，用 10 个 640×400 Eevee 诊断机位检查路径、尺度、构造和遮挡。
-
-更多操作细节见 [docs/usage.md](docs/usage.md)。
-
-## 重建与二次开发
-
-```python
-# 在 Blender 文本编辑器中打开 jiangnan.py 直接运行即可全量重建。
-# 顶部 PARAMS 集中管理：seed / weather / wind / blossom_density /
-# rain_count / snow_count / resolution / samples / stage / render / output_dir
+```bash
+mkdir -p build/textures
+cp textures/*.png build/textures/
+JN_OUT="$PWD/build" blender --background --python-exit-code 1 --python jiangnan.py
+JN_OUT="$PWD/build" blender --background build/Jiangnan.blend --python-exit-code 1 --python tools/verify_render.py
 ```
 
-- `stage` 1–5 分阶段构建（庭院→植被→雨雪→天空→灯光），调试用低 stage 更快。
-- `render=True` 仍保留为显式人工选项，但默认 `False`；当前迭代不靠批量正式渲染。\n- `tools/verify_render.py` 默认只做断言；只有显式 `JN_FORMAL_RENDER=1` 才会运行旧的正式静帧任务。
-- 输出目录默认取当前 `.blend` 所在目录（仓库内即根目录），需有 `textures/` 子目录；可用环境变量 `JN_OUT` 覆盖。
+控制对象 `JN_总控_天气0雨1雪_风力` 上的 `Weather` 为 0 雨 / 1 雪，`Wind` 为 0–2；时间轴 240 帧 / 24 fps。默认关闭高成本正式静帧，空间检查使用 16 机位诊断。
 
-升级路线、脚本契约与验证清单见 [docs/development.md](docs/development.md)；当前循环见 [docs/iteration-loop.md](docs/iteration-loop.md)；贴图与美术标准见 [docs/art-direction.md](docs/art-direction.md)。
+## 验收范围
 
-## 目录结构
+本轮冻结现有建模范围，交付可审阅候选。人工 Function/Form/Runtime 批准、全场景 LOD、碰撞/导航、完整材质等价性和实体手机 FPS 仍未验收；不宣称达到 3A 成品质量。雨雪、水波、昼夜部分是查看器效果。
 
-```
-├── Jiangnan.blend     # 历史预览快照；权威可验证产物由 CI 从源码重建
-├── jiangnan.py        # 生成脚本 · 权威副本
-├── textures/          # 7 张贴图 + 生成提示词存档
-├── renders/           # 正式静帧 + gallery.html 预览页
-├── validation/        # 场景统计与验证记录
-├── tools/             # verify_render.py（默认只验证）+ diagnostic_review.py（10 机位低成本诊断）
-├── progress/          # 构建过程图与渲染日志
-└── docs/              # usage / art-direction / development
-```
+最新证据见 [交接](docs/iterations/LATEST.md)；历史协议见 [资产生产](docs/asset-production-loop.md) 和 [美术契约](docs/town-art-contract.md)。旧文档的轮次数据应以对应 SHA 的实测产物为准。
 
-## 当前状态与路线
+## 许可与来源
 
-- [x] Blender 4.5.14 CI 从源码全量重建，并通过天气/动态/驱动/贴图打包/法线等场景断言（2026-09-18）
-- [x] 正面烟雨静帧 `01_rain_front.png`
-- [ ] 其余三机位（顶视雪 / 三分之四雨 / 正面雪）—— 运行 `tools/verify_render.py` 补齐，详见 development 指南 §3.1
-- [ ] GPU 渲染配置与 240 帧样片
-
-完整变更记录见 [CHANGELOG.md](CHANGELOG.md)。
-
-## 致谢与许可
-
-- 场景与脚本由 **OpenAI Codex** 经 Blender MCP 工作流生成（2026-09-17/18），灵感方向参考《燕云十六声》与《黑神话：悟空》的美术气质；工作流参考 [newo-ether/blender-mcp](https://github.com/newo-ether/blender-mcp)、[hassledzebra/codex_blender_mcp](https://github.com/hassledzebra/codex_blender_mcp)、[PatrykIti/blender-ai-mcp](https://github.com/PatrykIti/blender-ai-mcp)。
-- 本仓库为私人项目存档，未附带开源许可；如需引用请先联系所有者。
+场景和脚本为本项目程序化创作；AI albedo 提示词在 `textures/generation_prompts.json`。本轮没有外部资产或付费生成。美术方向参考《燕云十六声》和《黑神话：悟空》，不代表成品质量等同。本仓库未附带开源许可，引用请联系所有者。
