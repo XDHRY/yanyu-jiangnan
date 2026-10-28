@@ -29,7 +29,7 @@ VIEWS=[
     ('13_canal_bridge',(13.2,11.2,8.6),(7.3,15.1,.9),46,0,'水巷木桥：高位斜俯视完整检查桥板、栏柱、双岸驳岸、桥头落地与临水民居尺度'),
     ('14_village_waterfront',(7.3,29.0,2.25),(7.3,16.0,1.35),40,0,'临水回望：检查八栋民居沿水巷的聚落节奏、河埠和木桥是否形成江南村落层次'),
     ('15_town_overview',(95,-85,115),(3,50,0),50,200,'全镇斜俯总览：庭院—双岸街巷—北河作坊与染纸院的实际连通，不隐藏建筑'),
-    ('16_moored_sampan',(13.6,99.4,4.2),(8.3,103.4,.55),50,0,'转水埠系泊舢板：检查整船层级轻摇、缆绳端点、桥下净空、水线与东岸距离，不隐藏桥岸或船具'),
+    ('16_silk_shop_sign',(8.6,67.2,3.0),(12.85,70.88,1.82),52,0,'北河丝行招幌：检查挑杆端点、牌面与双流苏整体轻摆、铺面门洞及行人净空，不隐藏支撑或门面'),
 ]
 
 for o in list(bpy.data.objects):
@@ -198,10 +198,24 @@ def fit_focus54(cam,index):
         bounds=[min(p.x for p in q),max(p.x for p in q),min(p.y for p in q),max(p.y for p in q)]
         assert min(bounds[0],bounds[2])>.045 and max(bounds[1],bounds[3])<.955,bounds
         return {'fixed_envelope_m':[[-24,-12,-.5],[30,115,12]],'projected_bounds':bounds,'hidden_objects':[],'proxy_geometry_created':False}
-    # Fixed boat/rope/bollard envelope. No proxy geometry and no hidden bridge
-    # or bank objects; this is a real view of the animated hierarchy at frame 80.
-    lo,hi=(6.65,101.25,.05),(10.55,105.65,1.75)
-    pts=[Vector((x,y,z)) for x in (lo[0],hi[0]) for y in (lo[1],hi[1]) for z in (lo[2],hi[2])]
+    # Bind the rotating slot to its actual subject. A stale Round64 boat
+    # envelope ~33 m away made the Round65 sign camera widen below 22 mm.
+    assert VIEWS[index][0]=='16_silk_shop_sign',('missing focus fitter',VIEWS[index][0])
+    anchor=bpy.data.objects['JN_北河丝行_木质招幌摆动锚65']
+    selected=[bpy.data.objects['JN_北河丝行_招幌挑杆'],*anchor.children]
+    assert len(selected)==4 and all(not o.hide_render for o in selected)
+    pts=[];sample_frames=(40,80,120,200)
+    for frame in sample_frames:
+        S.frame_set(frame);bpy.context.view_layer.update()
+        dg=bpy.context.evaluated_depsgraph_get()
+        for obj in selected:
+            evaluated=obj.evaluated_get(dg);mesh=evaluated.to_mesh()
+            try:pts.extend(evaluated.matrix_world@v.co for v in mesh.vertices)
+            finally:evaluated.to_mesh_clear()
+    S.frame_set(80)
+    assert pts, 'empty sign review geometry'
+    lo=[min(p[i] for p in pts) for i in range(3)]
+    hi=[max(p[i] for p in pts) for i in range(3)]
     bpy.context.view_layer.update()
     for _ in range(8):
         q=[world_to_camera_view(S,cam,p) for p in pts]
@@ -211,8 +225,9 @@ def fit_focus54(cam,index):
         if factor<=1:break
         cam.data.lens/=factor*1.01;bpy.context.view_layer.update()
     assert cam.data.lens>=22 and min(bounds[0],bounds[2])>.045 and max(bounds[1],bounds[3])<.955,bounds
-    return {'fixed_envelope_m':[lo,hi],'projected_bounds':bounds,'fitted_lens_mm':cam.data.lens,
-        'animated_hierarchy':'JN_北河转水埠_停泊舢板系泊锚64','rope_endpoint_visible':True,
+    return {'evaluated_envelope_m':[lo,hi],'projected_bounds':bounds,'fitted_lens_mm':cam.data.lens,
+        'animated_hierarchy':anchor.name,'evaluated_objects':[o.name for o in selected],
+        'sample_frames':list(sample_frames),'padding_fraction':.045,
         'hidden_objects':[],'proxy_geometry_created':False}
 for index in (14,15):
     probe=add_cam(*VIEWS[index][:5]);fit_focus54(probe,index);created.remove(probe)

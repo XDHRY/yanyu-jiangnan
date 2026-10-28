@@ -815,6 +815,60 @@ assert len([o for o in S.objects if o.name.startswith('JN_北河修桨作坊_盘
 assert bpy.data.objects.get('JN_北河修桨作坊_工作纱灯') and bpy.data.objects.get('JN_北河修桨作坊_引路纱灯')
 assert len([o for o in S.objects if o.name.startswith('JN_北河丝行_悬绢包边_')])==2
 assert bpy.data.objects.get('JN_北河丝行_木质招幌牌') and bpy.data.objects.get('JN_北河丝行_账房纱灯')
+# Round65: the existing signboard and its two tassels share one bracket-end
+# pivot. Verify native keys and the complete swing envelope without weakening
+# the unchanged shop-opening/circulation checks above.
+anchor65=bpy.data.objects['JN_北河丝行_木质招幌摆动锚65']
+sign65=bpy.data.objects['JN_北河丝行_木质招幌牌']
+tassels65=sorted([o for o in S.objects if o.name.startswith('JN_北河丝行_招幌流苏')],key=lambda o:o.name)
+parts65=[sign65,*tassels65]
+assert anchor65.type=='EMPTY' and tuple(round(v,3) for v in anchor65.location)==(12.72,70.88,2.28)
+assert len(tassels65)==2 and all(o.parent==anchor65 for o in parts65)
+rod65=bpy.data.objects['JN_北河丝行_招幌挑杆']
+rod_root65=rod65.matrix_world @ rod65.data.splines[0].bezier_points[0].co
+wall65=bpy.data.objects['JN_北河丝行_西院墙_北段']
+wall_eval65=wall65.evaluated_get(bpy.context.evaluated_depsgraph_get())
+wall_hit65,wall_nearest65,_,_=wall_eval65.closest_point_on_mesh(wall_eval65.matrix_world.inverted()@rod_root65)
+wall_gap65=(wall_eval65.matrix_world@wall_nearest65-rod_root65).length
+assert wall_hit65 and wall_gap65<=.005,('sign bracket detached from wall',wall_gap65)
+wall_lo65,wall_hi65=world_bounds(wall65)
+assert all(wall_lo65[i]<rod_root65[i]<wall_hi65[i] for i in range(3)),('bracket root must inset into wall',tuple(rod_root65))
+rod_end65=rod65.matrix_world @ rod65.data.splines[0].bezier_points[-1].co
+assert (rod_end65-anchor65.matrix_world.translation).length<1e-6
+assert anchor65.animation_data and anchor65.animation_data.action
+action65=anchor65.animation_data.action
+assert action65.name=='JN_Action_北河丝行_木质招幌轻摆65'
+curves65={(fc.data_path,fc.array_index):fc for fc in action65.fcurves}
+assert set(curves65)=={('rotation_euler',1)}
+frames65=[1,40,80,120,160,200,240];angles65=[0,.025,0,-.025,0,.025,0]
+points65=[(round(k.co.x),round(k.co.y,6)) for k in curves65[('rotation_euler',1)].keyframe_points]
+assert points65==list(zip(frames65,angles65)),points65
+bounds65=[];hinge_gaps65=[]
+for frame65 in (40,80,120,200):
+    S.frame_set(frame65);bpy.context.view_layer.update()
+    all65=[world_bounds(o) for o in parts65]
+    lo65=[min(b[0][i] for b in all65) for i in range(3)]
+    hi65=[max(b[1][i] for b in all65) for i in range(3)]
+    assert lo65[0]>=12.60 and hi65[0]<=12.82,(frame65,lo65,hi65)
+    assert 70.57<=lo65[1] and hi65[1]<=71.19,(frame65,lo65,hi65)
+    # The repaired board now meets the hinge at 2.28 m; its 90 mm thickness
+    # produces less than 2 mm extra height at the declared swing extremes.
+    assert lo65[2]>=1.25 and hi65[2]<=2.282,(frame65,lo65,hi65)
+    assert (rod_end65-anchor65.matrix_world.translation).length<1e-6
+    evaluated65=sign65.evaluated_get(bpy.context.evaluated_depsgraph_get())
+    found65,nearest65,_,_=evaluated65.closest_point_on_mesh(evaluated65.matrix_world.inverted()@rod_end65)
+    gap65=(evaluated65.matrix_world@nearest65-rod_end65).length
+    assert found65 and gap65<1e-5,('signboard detached from hinge',frame65,gap65)
+    hinge_gaps65.append(gap65)
+    bounds65.append([[round(v,4) for v in lo65],[round(v,4) for v in hi65]])
+S.frame_set(80);bpy.context.view_layer.update()
+assert abs(anchor65.rotation_euler.y)<1e-6
+report['native_silk_sign_animation65']={'object':anchor65.name,'action':action65.name,'channel':'rotation_euler.y',
+    'frames':frames65,'angles_rad':angles65,'parts':len(parts65),'bracket_endpoint_fixed':True,
+    'full_swing_bounds_m':bounds65,'hinge_surface_gaps_m':hinge_gaps65,
+    'bracket_wall_surface_inset_m':wall_gap65,'complete_wall_bracket_board_support':True,
+    'source_triangles_added':0,'new_materials_images':0,
+    'human_function_form_runtime_approval':'pending'}
 report['town_phase11_west_oar_workshop']={'phase':S['JN_town_phase'],'route_overlap_west_water_street_m':round(lane_overlap,3),'shed_within_existing_west_parcel':True,'open_arrival_width_m':round(oar_open,3),'posts_on_shoes':4,'solidified_roof':True,'shared_oars':len(shared_oars),'oar_mesh_polygons':len(oar_proto.data.polygons),'repair_trestles':2,'rope_coils':2,'silk_edge_sets':2,'hanging_shop_signs':1,'new_image_texture_bytes':S['JN_oar_workshop_new_image_bytes']}
 print('TOWN_PHASE11_WEST_OAR_WORKSHOP',json.dumps(report['town_phase11_west_oar_workshop'],ensure_ascii=False))
 # Round43: evaluate real modifier/curve meshes, then ray-cast actual supports.
