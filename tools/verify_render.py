@@ -835,7 +835,7 @@ assert set(curves65)=={('rotation_euler',1)}
 frames65=[1,40,80,120,160,200,240];angles65=[0,.025,0,-.025,0,.025,0]
 points65=[(round(k.co.x),round(k.co.y,6)) for k in curves65[('rotation_euler',1)].keyframe_points]
 assert points65==list(zip(frames65,angles65)),points65
-bounds65=[]
+bounds65=[];hinge_gaps65=[]
 for frame65 in (40,80,120,200):
     S.frame_set(frame65);bpy.context.view_layer.update()
     all65=[world_bounds(o) for o in parts65]
@@ -843,14 +843,22 @@ for frame65 in (40,80,120,200):
     hi65=[max(b[1][i] for b in all65) for i in range(3)]
     assert lo65[0]>=12.60 and hi65[0]<=12.82,(frame65,lo65,hi65)
     assert 70.57<=lo65[1] and hi65[1]<=71.19,(frame65,lo65,hi65)
-    assert lo65[2]>=1.25 and hi65[2]<=2.24,(frame65,lo65,hi65)
+    # The repaired board now meets the hinge at 2.28 m; its 90 mm thickness
+    # produces less than 2 mm extra height at the declared swing extremes.
+    assert lo65[2]>=1.25 and hi65[2]<=2.282,(frame65,lo65,hi65)
     assert (rod_end65-anchor65.matrix_world.translation).length<1e-6
+    evaluated65=sign65.evaluated_get(bpy.context.evaluated_depsgraph_get())
+    found65,nearest65,_,_=evaluated65.closest_point_on_mesh(evaluated65.matrix_world.inverted()@rod_end65)
+    gap65=(evaluated65.matrix_world@nearest65-rod_end65).length
+    assert found65 and gap65<1e-5,('signboard detached from hinge',frame65,gap65)
+    hinge_gaps65.append(gap65)
     bounds65.append([[round(v,4) for v in lo65],[round(v,4) for v in hi65]])
 S.frame_set(80);bpy.context.view_layer.update()
 assert abs(anchor65.rotation_euler.y)<1e-6
 report['native_silk_sign_animation65']={'object':anchor65.name,'action':action65.name,'channel':'rotation_euler.y',
     'frames':frames65,'angles_rad':angles65,'parts':len(parts65),'bracket_endpoint_fixed':True,
-    'full_swing_bounds_m':bounds65,'source_triangles_added':0,'new_materials_images':0,
+    'full_swing_bounds_m':bounds65,'hinge_surface_gaps_m':hinge_gaps65,
+    'source_triangles_added':0,'new_materials_images':0,
     'human_function_form_runtime_approval':'pending'}
 report['town_phase11_west_oar_workshop']={'phase':S['JN_town_phase'],'route_overlap_west_water_street_m':round(lane_overlap,3),'shed_within_existing_west_parcel':True,'open_arrival_width_m':round(oar_open,3),'posts_on_shoes':4,'solidified_roof':True,'shared_oars':len(shared_oars),'oar_mesh_polygons':len(oar_proto.data.polygons),'repair_trestles':2,'rope_coils':2,'silk_edge_sets':2,'hanging_shop_signs':1,'new_image_texture_bytes':S['JN_oar_workshop_new_image_bytes']}
 print('TOWN_PHASE11_WEST_OAR_WORKSHOP',json.dumps(report['town_phase11_west_oar_workshop'],ensure_ascii=False))

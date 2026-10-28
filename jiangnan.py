@@ -2429,7 +2429,9 @@ def town_phase11_west_oar_workshop():
         line(f'北河丝行_悬绢包边_{i}',[(16.32,y-.15,1.08),(16.32,y-.15,2.08),(16.32,y+.15,2.08),(16.32,y+.15,1.08)],.009,mat,c,res=1,bevel_res=1)
         box(f'北河丝行_悬绢坠边_{i}',(16.32,y,1.08),(.025,.32,.035),mat,c,.002)
     line('北河丝行_招幌挑杆',[(13.55,70.88,2.45),(12.72,70.88,2.45),(12.72,70.88,2.28)],.022,wood,c,res=2,bevel_res=1)
-    sign65=box('北河丝行_木质招幌牌',(12.72,70.88,1.88),(.09,.58,.70),wood,c,.012)
+    # Keep the tassel edge at 1.53 m and bring the board top to its 2.28 m
+    # hinge. The previous 2.23 m top left a 50 mm gap below the pivot.
+    sign65=box('北河丝行_木质招幌牌',(12.72,70.88,1.905),(.09,.58,.75),wood,c,.012)
     for y in (70.66,71.10):line('北河丝行_招幌流苏',[(12.72,y,1.53),(12.72,y,1.28)],.012,bpy.data.materials[PREFIX+'丝行绛红绢'],c,res=1,bevel_res=1)
     # Round65: pivot the existing signboard and its two tassels at the existing
     # bracket endpoint.  This adds no render geometry; the full assembly keeps
