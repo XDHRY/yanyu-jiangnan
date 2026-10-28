@@ -59,7 +59,8 @@
     "full-swing world bounds remain inside the declared facade-side envelope",
     "GLB exports an independent named rotation clip",
     "offline pause freezes sign rotation together with all existing motion",
-    "evaluated sign surface contacts bracket endpoint at all four sampled swing frames"
+    "evaluated sign surface contacts bracket endpoint at all four sampled swing frames",
+    "bracket root is inside evaluated wall bounds and within 5 mm of its actual surface"
   ],
   "physics_claim": "authored transform animation only; no cloth, wind or rigid-body simulation",
   "human_function_form_runtime_approval": "pending",
@@ -75,7 +76,14 @@
       0.75
     ],
     "hinge_surface_distance_limit_m": 1e-05,
-    "new_triangles": 0
+    "new_triangles": 0,
+    "bracket_root_m": [
+      13.432,
+      70.88,
+      1.98
+    ],
+    "wall": "JN_北河丝行_西院墙_北段",
+    "wall_inset_m": 0.002
   },
   "diagnostic": {
     "view": "16_silk_shop_sign",

@@ -2428,7 +2428,9 @@ def town_phase11_west_oar_workshop():
     for i,(y,mat) in enumerate(((69.34,bpy.data.materials[PREFIX+'丝行月白绢']),(70.30,bpy.data.materials[PREFIX+'丝行黛青绢'])),1):
         line(f'北河丝行_悬绢包边_{i}',[(16.32,y-.15,1.08),(16.32,y-.15,2.08),(16.32,y+.15,2.08),(16.32,y+.15,1.08)],.009,mat,c,res=1,bevel_res=1)
         box(f'北河丝行_悬绢坠边_{i}',(16.32,y,1.08),(.025,.32,.035),mat,c,.002)
-    line('北河丝行_招幌挑杆',[(13.55,70.88,2.45),(12.72,70.88,2.45),(12.72,70.88,2.28)],.022,wood,c,res=2,bevel_res=1)
+    # Root the existing three-point bracket 2 mm into the west wall face.
+    # Its former root at z=2.45 floated above the 2.145 m wall cap.
+    line('北河丝行_招幌挑杆',[(13.432,70.88,1.98),(12.72,70.88,2.45),(12.72,70.88,2.28)],.022,wood,c,res=2,bevel_res=1)
     # Keep the tassel edge at 1.53 m and bring the board top to its 2.28 m
     # hinge. The previous 2.23 m top left a 50 mm gap below the pivot.
     sign65=box('北河丝行_木质招幌牌',(12.72,70.88,1.905),(.09,.58,.75),wood,c,.012)

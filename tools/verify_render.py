@@ -825,6 +825,14 @@ parts65=[sign65,*tassels65]
 assert anchor65.type=='EMPTY' and tuple(round(v,3) for v in anchor65.location)==(12.72,70.88,2.28)
 assert len(tassels65)==2 and all(o.parent==anchor65 for o in parts65)
 rod65=bpy.data.objects['JN_北河丝行_招幌挑杆']
+rod_root65=rod65.matrix_world @ rod65.data.splines[0].bezier_points[0].co
+wall65=bpy.data.objects['JN_北河丝行_西院墙_北段']
+wall_eval65=wall65.evaluated_get(bpy.context.evaluated_depsgraph_get())
+wall_hit65,wall_nearest65,_,_=wall_eval65.closest_point_on_mesh(wall_eval65.matrix_world.inverted()@rod_root65)
+wall_gap65=(wall_eval65.matrix_world@wall_nearest65-rod_root65).length
+assert wall_hit65 and wall_gap65<=.005,('sign bracket detached from wall',wall_gap65)
+wall_lo65,wall_hi65=world_bounds(wall65)
+assert all(wall_lo65[i]<rod_root65[i]<wall_hi65[i] for i in range(3)),('bracket root must inset into wall',tuple(rod_root65))
 rod_end65=rod65.matrix_world @ rod65.data.splines[0].bezier_points[-1].co
 assert (rod_end65-anchor65.matrix_world.translation).length<1e-6
 assert anchor65.animation_data and anchor65.animation_data.action
@@ -858,6 +866,7 @@ assert abs(anchor65.rotation_euler.y)<1e-6
 report['native_silk_sign_animation65']={'object':anchor65.name,'action':action65.name,'channel':'rotation_euler.y',
     'frames':frames65,'angles_rad':angles65,'parts':len(parts65),'bracket_endpoint_fixed':True,
     'full_swing_bounds_m':bounds65,'hinge_surface_gaps_m':hinge_gaps65,
+    'bracket_wall_surface_inset_m':wall_gap65,'complete_wall_bracket_board_support':True,
     'source_triangles_added':0,'new_materials_images':0,
     'human_function_form_runtime_approval':'pending'}
 report['town_phase11_west_oar_workshop']={'phase':S['JN_town_phase'],'route_overlap_west_water_street_m':round(lane_overlap,3),'shed_within_existing_west_parcel':True,'open_arrival_width_m':round(oar_open,3),'posts_on_shoes':4,'solidified_roof':True,'shared_oars':len(shared_oars),'oar_mesh_polygons':len(oar_proto.data.polygons),'repair_trestles':2,'rope_coils':2,'silk_edge_sets':2,'hanging_shop_signs':1,'new_image_texture_bytes':S['JN_oar_workshop_new_image_bytes']}
