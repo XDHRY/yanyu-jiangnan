@@ -1,12 +1,16 @@
 # Latest iteration handoff
 
-当前最新已验证模型轮次：**Round 64 · 北河转水埠系泊舢板原生轻摇**。
+当前：**Round 65 · 建模封顶候选已完成工程收尾并合并 main**。
 
-- 交接：[`20261024-round64-moored-sampan-motion.md`](20261024-round64-moored-sampan-motion.md)
-- 已验证模型源：`e757bff5374377741effcc77031e7e215bfcebef`
-- PR：[#71](https://github.com/XDHRY/yanyu-jiangnan/pull/71)
-- 结果：CI / Blender Smoke / Spatial 16 图 / Web GLB / Offline Runtime 全部通过；GLB 含 2 个独立原生 rotation clips（Round 63 工作纱灯 + Round 64 系泊舢板）。
-- 本轮舢板：9 个既有部件、0 新三角面，俯仰 ±0.006 rad、偏航 ±0.010 rad；40/80/120/200 帧桥下最小净空均 ≥0.264 m。
-- 下一轮：优先推进零三角店幌或竹帘原生轻摆；若转回静态精修，先修舢板近景前景石坪遮挡与木作层次。
+- 交接：[20261028-modeling-closeout.md](20261028-modeling-closeout.md)
+- 模型源：`e9d69e60263f6e1b611bdf13fcce730210f46064`
+- 合并：[PR #72](https://github.com/XDHRY/yanyu-jiangnan/pull/72)，`54debe3e2694e44463d563d2c515ffcc9cd93e92`
+- CI、Blender Smoke、Spatial 16 图、Web、Offline 五项全部 success。
+- 修复店幌牌顶与挑杆根部悬空，修复诊断相机错用舢板包络；167,686 源网格三角面，0 新三角面/材质/图像/灯。
+- GLB 含 3 个原生 clip；离线播放、暂停、天气、导航和手机尺寸仿真通过。
 
-历史 Round 63：[`20261024-round63-native-lantern-animation.md`](20261024-round63-native-lantern-animation.md)。
+- [离线交互预览](https://chatgpt.com/library?file_id=libfile_e0af2c97d93481918c63031962dcbbad&account_id=personal)
+- [完整模型与审阅包](https://chatgpt.com/library?file_id=libfile_ad4f174bf1e881918181bac4c5d6611e&account_id=personal)
+- [16 图总览](https://chatgpt.com/library?file_id=libfile_0dd08c6ac85c8191ad82d84c9fc695cf&account_id=personal)
+
+本轮建模范围已冻结；人工美术批准、完整 LOD/碰撞/导航及实体手机 FPS 仍未验收。工程收尾不等于 3A 成品或游戏上线验收。
